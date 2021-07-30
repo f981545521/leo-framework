@@ -45,16 +45,14 @@ public class BeanCopyUtil {
         BeanUtils.copyProperties(source, target);
     }
 
-    public static <E> E copyMap(Map m,Class<E> clz){
+    public static <E> E copyMap(Map<?,?> m,Class<E> clz){
         BeanMap beanMap = null;
         try {
             E e = clz.newInstance();
             beanMap = BeanMap.create(e);
             beanMap.putAll(m);
-        } catch (InstantiationException instantiationException) {
+        } catch (InstantiationException | IllegalAccessException instantiationException) {
             instantiationException.printStackTrace();
-        } catch (IllegalAccessException illegalAccessException) {
-            illegalAccessException.printStackTrace();
         }
         return (E) beanMap;
     }
@@ -67,7 +65,7 @@ public class BeanCopyUtil {
         return list;
     }
 
-    public static <E> List<E> copyMapList(List<Map> l, Class<E> clz) {
+    public static <E> List<E> copyMapList(List<Map<?,?>> l, Class<E> clz) {
         List<E> list = new ArrayList<>();
         if (!CollectionUtils.isEmpty(l)) {
             l.forEach(item -> list.add(copyMap(item, clz)));

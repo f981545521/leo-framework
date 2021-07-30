@@ -19,15 +19,13 @@ import java.util.Map;
  */
 public class PageData<T> implements Serializable {
     /**
-     * 注释内容
+     * 序列化版本号
      */
     private static final long serialVersionUID = 1L;
-
     /**
      * 当前页
      */
     private Integer pageNum;
-
     /**
      * 每页显示条数
      */
@@ -36,29 +34,24 @@ public class PageData<T> implements Serializable {
      * 总页数
      */
     private Integer totalPage;
-
     /**
      * 总记录数
      */
     private Long total;
-
     /**
      * 有下一页
      */
     private boolean hasNextPage = true;
-
     /**
      * 返回数据
      */
     private List<T> list = new ArrayList<>();
-
     /**
      * 扩展数据信息（用于数据统计等...）
      */
     private Object extData;
 
-    /* Constructor */
-
+    /** Constructor */
     public PageData(Integer pageNum, Integer pageSize) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
@@ -130,8 +123,7 @@ public class PageData<T> implements Serializable {
         this.totalPage = totalPage;
     }
 
-    /* Process */
-
+    /** Process */
     public void processNextPage() {
         if (this.pageNum != null && this.pageSize != null && this.total != null) {
             int totalPage;
@@ -148,8 +140,7 @@ public class PageData<T> implements Serializable {
         }
     }
 
-    /* ToString */
-
+    /** ToString */
     @Override
     public String toString() {
         return "分页数据 ： " +
@@ -184,7 +175,6 @@ public class PageData<T> implements Serializable {
         resultData.setTotalPage(pageInfo.getPages());
         return resultData;
     }
-
     /**
      * 同上（包含类型转换）
      */
@@ -197,11 +187,10 @@ public class PageData<T> implements Serializable {
         resultData.setTotalPage(pageInfo.getPages());
         return resultData;
     }
-
     /**
      * 同上（包含类型转换-map转换）
      */
-    public static <TAR> PageData<TAR> convertWithMap(PageInfo<Map> pageInfo, Class<TAR> tarClass) {
+    public static <TAR> PageData<TAR> convertWithMap(PageInfo<Map<?,?>> pageInfo, Class<TAR> tarClass) {
         //这里没有数据的时候pageNum是0
         Integer pageNum = pageInfo.getPageNum() != 0 ? pageInfo.getPageNum() : 1;
         PageData<TAR> resultData = new PageData<>(pageNum, pageInfo.getPageSize());
@@ -210,7 +199,6 @@ public class PageData<T> implements Serializable {
         resultData.setTotalPage(pageInfo.getPages());
         return resultData;
     }
-
     /**
      * 提供方法：使用pageHelper时 转 PageData
      * example:
@@ -228,7 +216,6 @@ public class PageData<T> implements Serializable {
         PageInfo<T> pageInfo = new PageInfo<>(dataList);
         return convert(pageInfo);
     }
-
     /**
      * 开启分页
      * 配合：{@link #selectMapper 使用}
@@ -246,7 +233,6 @@ public class PageData<T> implements Serializable {
         PageHelper.startPage(pageNum, pageSize);
         return new PageData<>(pageNum, pageSize);
     }
-
     /**
      * 参考： {@link #startPage(Integer, Integer)}
      * @param pageNum 页码，从1开始
@@ -273,7 +259,6 @@ public class PageData<T> implements Serializable {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         return new PageData<>(pageNum, pageSize);
     }
-
     /**
      * 参考： {@link #startPage(Integer, Integer)}
      * @param pageSo 分页参数
@@ -318,15 +303,14 @@ public class PageData<T> implements Serializable {
         PageInfo<ST> pageInfo = new PageInfo<>(queryList);
         return convert(pageInfo, tarClass);
     }
-
     /**
      * 分页查询（包含类型转换-map转换）
      * @param queryList 查询结果
      * @param tarClass 模板类型
      * @return PageData
      */
-    public <TAR> PageData<TAR> selectMapperWithMap(List<Map> queryList, Class<TAR> tarClass) {
-        PageInfo<Map> pageInfo = new PageInfo<>(queryList);
+    public <TAR> PageData<TAR> selectMapperWithMap(List<Map<?,?>> queryList, Class<TAR> tarClass) {
+        PageInfo<Map<?,?>> pageInfo = new PageInfo<>(queryList);
         return convertWithMap(pageInfo, tarClass);
     }
 }
