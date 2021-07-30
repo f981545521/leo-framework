@@ -220,7 +220,7 @@ public class RandomUtil {
         long end = System.currentTimeMillis() - 31536000000L;
         long rtn = begin + (long) (Math.random() * (end - begin));
         Date date = new Date(rtn);
-        String birth = DateUtil.getDateFormat(date, DateUtil.SHORT_DATE_FORMAT_PATTERN);
+        String birth = DateUtil.getDateFormat(date, DateUtil.FORMAT_SHORT_DATE);
         return randomIdCardNo(birth, male);
     }
 
