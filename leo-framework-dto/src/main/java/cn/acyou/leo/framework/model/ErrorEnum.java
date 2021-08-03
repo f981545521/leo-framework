@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.commons.constant;
+package cn.acyou.leo.framework.model;
 
 /**
  * @author youfang

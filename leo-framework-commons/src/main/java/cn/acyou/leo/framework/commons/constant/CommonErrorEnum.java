@@ -1,11 +1,13 @@
 package cn.acyou.leo.framework.commons.constant;
 
+import cn.acyou.leo.framework.model.ErrorEnum;
+
 /**
  * 统一错误码/错误信息
  * @author youfang
  * @version [1.0.0, 2020/7/9]
  **/
-public enum CommonErrorEnum implements ErrorEnum<CommonErrorEnum>  {
+public enum CommonErrorEnum implements ErrorEnum<CommonErrorEnum> {
     /** 公共 */
     E_PARAM_ERROR(3000, "请求参数错误，请检查！"),
     E_NOT_FOUNT(3010, "请求接口不存在，请检查！"),

@@ -1,6 +1,4 @@
-package cn.acyou.leo.framework.commons.model;
-
-import cn.acyou.leo.framework.commons.constant.ErrorEnum;
+package cn.acyou.leo.framework.model;
 
 import java.io.Serializable;
 
@@ -9,7 +7,6 @@ import java.io.Serializable;
  * @date 2020/03/19 11:59
  **/
 public class Result<T> implements Serializable {
-
     private int code;
     private String message;
     private T data;

@@ -4,7 +4,7 @@ import cn.acyou.leo.framework.commons.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.commons.exception.ServiceException;
 import cn.acyou.leo.framework.commons.model.ClientType;
 import cn.acyou.leo.framework.commons.model.LoginUser;
-import cn.acyou.leo.framework.commons.model.Result;
+import cn.acyou.leo.framework.model.Result;
 
 import java.util.ArrayList;
 import java.util.List;

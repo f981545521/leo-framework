@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.commons.exception;
 
-import cn.acyou.leo.framework.commons.constant.ErrorEnum;
-import cn.acyou.leo.framework.commons.model.Result;
+import cn.acyou.leo.framework.model.ErrorEnum;
+import cn.acyou.leo.framework.model.Result;
 import org.slf4j.helpers.MessageFormatter;
 
 /**
