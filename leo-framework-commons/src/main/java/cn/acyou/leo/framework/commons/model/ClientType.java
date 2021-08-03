@@ -16,6 +16,10 @@ public enum ClientType {
      */
     MINI_PROGRAM(2, "MINI_PROGRAM"),
     /**
+     * 安卓
+     */
+    ANDROID(3, "ANDROID"),
+    /**
      * 未知的
      */
     UNKNOWN(99, "UNKNOWN")
