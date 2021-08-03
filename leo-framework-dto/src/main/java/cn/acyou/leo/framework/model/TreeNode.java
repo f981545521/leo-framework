@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.commons.model;
+package cn.acyou.leo.framework.model;
 
 import java.io.Serializable;
 import java.util.List;

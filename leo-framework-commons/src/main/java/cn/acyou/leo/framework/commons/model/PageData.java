@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.commons.model;
 
 import cn.acyou.leo.framework.commons.util.BeanCopyUtil;
 import cn.acyou.leo.framework.commons.util.SqlUtil;
+import cn.acyou.leo.framework.model.PageSo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 

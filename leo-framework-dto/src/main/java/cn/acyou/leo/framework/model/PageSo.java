@@ -1,6 +1,5 @@
-package cn.acyou.leo.framework.commons.model;
+package cn.acyou.leo.framework.model;
 
-import cn.acyou.leo.framework.commons.util.SqlUtil;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -23,7 +22,7 @@ public class PageSo implements Serializable {
     @ApiModelProperty("分页大小")
     private Integer pageSize = 10;
     /**
-     * 排序 example: createTime-desc,roleCode-asc {@link SqlUtil#convertOrderBy(PageSo)}
+     * 排序 example: createTime-desc,roleCode-asc}
      */
     @ApiModelProperty("排序规则")
     private String sorts;

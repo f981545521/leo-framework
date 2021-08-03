@@ -1,6 +1,6 @@
 package cn.acyou.leo.framework.commons.util;
 
-import cn.acyou.leo.framework.commons.model.TreeNode;
+import cn.acyou.leo.framework.model.TreeNode;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;

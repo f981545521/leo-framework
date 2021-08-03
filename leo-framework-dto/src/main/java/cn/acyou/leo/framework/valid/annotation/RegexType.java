@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.commons.valid.annotation;
+package cn.acyou.leo.framework.valid.annotation;
 
 /**
  * 校验的正则表达式类型

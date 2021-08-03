@@ -25,6 +25,7 @@
 
     <modules>
         <module>leo-framework-commons</module>
+        <module>leo-framework-dto</module>
     </modules>
 
     <dependencyManagement>

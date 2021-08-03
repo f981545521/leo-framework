@@ -2,7 +2,7 @@ package cn.acyou.leo.framework.commons.util;
 
 import cn.acyou.leo.framework.commons.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.commons.exception.ServiceException;
-import cn.acyou.leo.framework.commons.model.PageSo;
+import cn.acyou.leo.framework.model.PageSo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
