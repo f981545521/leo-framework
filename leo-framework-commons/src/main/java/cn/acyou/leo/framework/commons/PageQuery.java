@@ -1,9 +1,9 @@
 package cn.acyou.leo.framework.commons;
 
-import cn.acyou.leo.framework.commons.util.BeanCopyUtil;
-import cn.acyou.leo.framework.commons.util.SqlUtil;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.PageSo;
+import cn.acyou.leo.framework.util.BeanCopyUtil;
+import cn.acyou.leo.framework.util.SqlUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
