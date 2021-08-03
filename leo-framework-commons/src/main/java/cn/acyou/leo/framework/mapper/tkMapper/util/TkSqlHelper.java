@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.mapper.tkMapper.util;
 
-import cn.acyou.leo.framework.mapper.annotation.LogicDelete;
-import cn.acyou.leo.framework.mapper.annotation.SelectiveIgnore;
+import cn.acyou.leo.framework.annotation.mapper.LogicDelete;
+import cn.acyou.leo.framework.annotation.mapper.SelectiveIgnore;
 import tk.mybatis.mapper.LogicDeleteException;
 import tk.mybatis.mapper.annotation.Version;
 import tk.mybatis.mapper.entity.EntityColumn;

@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.service;
 
+import cn.acyou.leo.framework.annotation.mapper.SelectiveIgnore;
 import cn.acyou.leo.framework.mapper.Mapper;
-import cn.acyou.leo.framework.mapper.annotation.SelectiveIgnore;
 import com.google.common.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

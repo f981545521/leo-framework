@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.valid.annotation;
+package cn.acyou.leo.framework.annotation.valid;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
