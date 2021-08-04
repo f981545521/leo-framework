@@ -1,0 +1,8 @@
+
+### 插入订单
+POST http://localhost:8055/order/insert?productId=10
+Content-Type: application/x-www-form-urlencoded
+
+
+
+###
