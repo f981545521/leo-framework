@@ -707,8 +707,8 @@ public class RedisUtils {
      * @param end   结束
      * @return {@link List<String>}
      */
+    @SuppressWarnings({"unchecked"})
     public List<String> listRangeAndRemove(String key, long start, long end){
-
         SessionCallback<List<String>> sessionCallback = new SessionCallback<List<String>>() {
             @Override
             public List<String> execute(RedisOperations operations) throws DataAccessException {
@@ -716,8 +716,7 @@ public class RedisUtils {
                 redisTemplate.opsForList().range(key, start, end);
                 redisTemplate.opsForList().trim(key, end + 1, -1);
                 List<?> exec = operations.exec();
-                List<String> lrangeList = (List<String>) exec.get(0);
-                return lrangeList;
+                return (List<String>) exec.get(0);
             }
         };
         return redisTemplate.execute(sessionCallback);

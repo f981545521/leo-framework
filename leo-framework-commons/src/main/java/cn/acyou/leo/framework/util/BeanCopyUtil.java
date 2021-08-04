@@ -2,7 +2,6 @@ package cn.acyou.leo.framework.util;
 
 import cn.acyou.leo.framework.exception.ServiceException;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cglib.beans.BeanMap;
 import org.springframework.util.CollectionUtils;
 
 import java.beans.BeanInfo;
@@ -11,14 +10,21 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Bean 之间的拷贝
+ *
  * @author acyou
  */
 public class BeanCopyUtil {
 
+    /**
+     * 复制
+     *
+     * @param t   源对象
+     * @param clz 目标对象Class
+     * @return {@link E} 目标对象
+     */
     public static <T, E> E copy(T t, Class<E> clz) {
         if (t == null) {
             return null;
@@ -34,29 +40,13 @@ public class BeanCopyUtil {
         throw new ServiceException("BeanCopy 出错了！");
     }
 
-
     /**
-     * 拷贝并替换相同属性的
+     * 复制对象List
      *
-     * @param source 源
-     * @param target 目标
+     * @param l   源对象集合
+     * @param clz 目标对象Class
+     * @return {@link List<E>} 目标对象集合
      */
-    public static void copyProperties(Object source, Object target) {
-        BeanUtils.copyProperties(source, target);
-    }
-
-    public static <E> E copyMap(Map<?,?> m,Class<E> clz){
-        BeanMap beanMap = null;
-        try {
-            E e = clz.newInstance();
-            beanMap = BeanMap.create(e);
-            beanMap.putAll(m);
-        } catch (InstantiationException | IllegalAccessException instantiationException) {
-            instantiationException.printStackTrace();
-        }
-        return (E) beanMap;
-    }
-
     public static <T, E> List<E> copyList(Collection<T> l, Class<E> clz) {
         List<E> list = new ArrayList<>();
         if (!CollectionUtils.isEmpty(l)) {
@@ -65,13 +55,6 @@ public class BeanCopyUtil {
         return list;
     }
 
-    public static <E> List<E> copyMapList(List<Map<?,?>> l, Class<E> clz) {
-        List<E> list = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(l)) {
-            l.forEach(item -> list.add(copyMap(item, clz)));
-        }
-        return list;
-    }
 
     /**
      * 合并属性
@@ -79,7 +62,7 @@ public class BeanCopyUtil {
      * @param target      目标
      * @param destination 目的
      */
-    public static <M> void merge(M target, M destination)  {
+    public static <M> void merge(M target, M destination) {
         merge(target, destination, false);
     }
 
@@ -96,13 +79,13 @@ public class BeanCopyUtil {
             for (PropertyDescriptor descriptor : beanInfo.getPropertyDescriptors()) {
                 if (descriptor.getWriteMethod() != null) {
                     Object defaultValue = descriptor.getReadMethod().invoke(destination);
-                    if (defaultValue == null && !nullCoverTarget){
+                    if (defaultValue == null && !nullCoverTarget) {
                         continue;
                     }
                     descriptor.getWriteMethod().invoke(target, defaultValue);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
