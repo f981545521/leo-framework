@@ -1,6 +1,8 @@
 package cn.acyou.leo.framework.model;
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,33 +18,26 @@ public class PageData<T> implements Serializable {
      * 序列化版本号
      */
     private static final long serialVersionUID = 1L;
-    /**
-     * 当前页
-     */
+
+    @ApiModelProperty("当前页")
     private Integer pageNum;
-    /**
-     * 每页显示条数
-     */
+
+    @ApiModelProperty("每页显示条数")
     private Integer pageSize;
-    /**
-     * 总页数
-     */
+
+    @ApiModelProperty("总页数")
     private Integer totalPage;
-    /**
-     * 总记录数
-     */
+
+    @ApiModelProperty("总记录数")
     private Long total;
-    /**
-     * 有下一页
-     */
+
+    @ApiModelProperty("有下一页")
     private boolean hasNextPage = true;
-    /**
-     * 返回数据
-     */
+
+    @ApiModelProperty("返回数据")
     private List<T> list = new ArrayList<>();
-    /**
-     * 扩展数据信息（用于数据统计等...）
-     */
+
+    @ApiModelProperty("扩展数据信息（用于数据统计等...）")
     private Object extData;
 
     /**
@@ -54,12 +49,12 @@ public class PageData<T> implements Serializable {
     }
 
     /* GET AND SET **/
-
     public Integer getPageNum() {
         return pageNum;
     }
 
     public void setPageNum(Integer pageNum) {
+        processNextPage();
         this.pageNum = pageNum;
     }
 
@@ -68,6 +63,7 @@ public class PageData<T> implements Serializable {
     }
 
     public void setPageSize(Integer pageSize) {
+        processNextPage();
         this.pageSize = pageSize;
     }
 
@@ -76,6 +72,7 @@ public class PageData<T> implements Serializable {
     }
 
     public void setTotal(Long total) {
+        processNextPage();
         this.total = total;
     }
 
@@ -108,7 +105,7 @@ public class PageData<T> implements Serializable {
     }
 
     /**
-     * Process
+     * 处理 hasNextPage 值
      */
     public void processNextPage() {
         if (this.pageNum != null && this.pageSize != null && this.total != null) {
@@ -131,14 +128,15 @@ public class PageData<T> implements Serializable {
      */
     @Override
     public String toString() {
-        return "分页数据 ： " +
-                "[" +
-                "第 " + pageNum + " 页, " +
-                "每页显示 " + pageSize + " 条, " +
-                "当前页 " + (list != null ? list.size() : 0) + " 条记录，" +
-                "共 " + totalPage + " 页，" +
-                "共 " + total + " 条记录" +
-                "]";
+        return new StringBuilder()
+                .append("分页数据 ： ")
+                .append("[")
+                .append("第 ").append(pageNum).append(" 页, ")
+                .append("每页显示 ").append(pageSize).append(" 条, ")
+                .append("当前页 ").append(list != null ? list.size() : 0).append(" 条记录，")
+                .append("共 ").append(totalPage).append(" 页，")
+                .append("共 ").append(total).append(" 条记录")
+                .append("]").toString();
     }
 
 }
