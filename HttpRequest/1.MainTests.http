@@ -1,8 +1,18 @@
+## MainTests
 
 ### 插入订单
 POST http://localhost:8055/order/insert?productId=10
 Content-Type: application/x-www-form-urlencoded
 
+### 测试接口
+POST http://localhost:8056/student/pageSo
+Content-Type: application/json
 
+{
+  "name": "张飞",
+  "age": 0,
+  "pageNum": 1,
+  "pageSize": 10
+}
 
 ###
