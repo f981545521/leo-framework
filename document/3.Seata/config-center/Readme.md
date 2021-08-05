@@ -11,4 +11,4 @@ python:
 python nacos-config.py localhost:8848
 ```
 
-![](../../images/seata_nacos_1.png)
+![](../../0.images/seata_nacos_1.png)
