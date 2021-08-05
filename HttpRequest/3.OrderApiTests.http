@@ -6,5 +6,7 @@ Content-Type: application/json
 
 
 ### 插入订单
-POST http://localhost:8055/order/insert?productId=1
+POST http://localhost:8055/order/insert?productId=2
 Content-Type: application/x-www-form-urlencoded
+
+
