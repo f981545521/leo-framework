@@ -1,0 +1,33 @@
+spring:
+  cloud:
+    gateway:
+      enabled: true
+      discovery:
+        locator:
+          lower-case-service-id: true
+      routes:
+        # 商品服务路由
+        - id: product-service
+          uri: lb://product-service:8056
+          predicates:
+            - Path=/product/**
+          filters:
+            - StripPrefix=1
+        # 订单服务路由
+        - id: order-service
+          uri: lb://order-service:8055
+          predicates:
+            - Path=/order/**
+          filters:
+              - StripPrefix=1
+          #filters: 作用同上
+          #  - RewritePath=/order/(?<segment>.*), /$\{segment}
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
