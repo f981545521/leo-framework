@@ -2,11 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <!-- SpringBoot 主版本 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
 
     <groupId>cn.acyou</groupId>
@@ -18,7 +19,9 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <!-- SpringBoot 主版本 -->
         <springboot.version>2.4.2</springboot.version>
+        <!-- SpringCloudAlibaba 主版本 -->
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
         <maven.test.skip>true</maven.test.skip>
     </properties>
@@ -30,6 +33,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- 引入 SpringCloudAlibaba Dependencies -->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -37,11 +41,23 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- Swagger Start -->
             <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>1.5.22</version>
             </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.9.2</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>2.9.2</version>
+            </dependency>
+            <!-- Swagger end -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -98,6 +114,24 @@
                 <artifactId>mybatis-spring</artifactId>
                 <version>2.0.6</version>
             </dependency>
+            <!-- 使用了bootstrap.yml文件之后需要引入bootstrap的依赖 -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+                <version>3.0.2</version>
+            </dependency>
+            <!-- Seata start -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-seata</artifactId>
+                <version>2.2.0.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-openfeign-core</artifactId>
+                <version>2.2.9.RELEASE</version>
+            </dependency>
+            <!-- Seata end -->
         </dependencies>
     </dependencyManagement>
 
