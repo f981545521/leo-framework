@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>leo-framework-commons</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>Leo (Service)公共组件</description>
 
