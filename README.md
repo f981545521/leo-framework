@@ -10,9 +10,10 @@ SpringCloud项目
 
 
 #### 安装教程
+为了顺利启动项目，一步一步运行好环境。
 
 #### 必须
-1. 启动Nacos（必须）
+1. 无需配置。直接启动Nacos（必须）
 ```
 执行：`PS D:\developer\cloud\nacos\bin> .\startup.cmd -m standalone`
 
@@ -21,11 +22,22 @@ SpringCloud项目
 默认用户名：nacos/nacos
 ```
 2. 启动Seata Server （必须）
+
+第一步： 修改seata配置文件适用Nacos注册中心与配置中心：
+
+[E:\cloud\seata-server-1.4.2\conf\registry.conf](document/3.Seata/registry.conf)
+
+第二步： 导入配置：[==配置文件==](document/1.Nacos/conf) 下面的所有文件
+> 包含微服务配置与Seata配置
 ```
 配置完成后，
 双击打开：
 D:\developer\cloud\seata-server-1.4.2\bin\seata-server.bat
 ```
+3. 运行RocketMQ(必须)
+
+[参考文档](https://gitee.com/f981545521/scorpio/blob/master/document/notes/mq/2.RocketMq.md)
+
 4. 如果使用网关（需要打开Sentinel）
 ```
 ## 运行网关
