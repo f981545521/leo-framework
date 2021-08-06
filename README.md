@@ -18,10 +18,12 @@ SpringCloud项目
 3. Mysql
 4. [PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md) 一行代码搞定分页
 ```
-    @GetMapping(value = "page")
+    @PostMapping(value = "pageSo")
     @ApiOperation("测试分页")
-    public Result<PageData<Product>> page(Integer pageNum, Integer pageSize) {
-        PageData<Product> convertType = PageQuery.startPage(pageNum, pageSize).selectMapper(productService.selectAll());
+    public Result<PageData<Student>> pageSo(@ParamValid @RequestBody StudentSo studentSo) {
+        PageData<Student> convertType =  
+                PageQuery.startPage(studentSo)
+                .selectMapper(studentService.selectByProperties("name", studentSo.getName(), "age", studentSo.getAge()));
         return Result.success(convertType);
     }
 ```
@@ -30,7 +32,7 @@ SpringCloud项目
     - [通用Mapper](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-commons/src/main/java/cn/acyou/leo/framework/mapper/Mapper.java)
     - 支持乐观锁、逻辑删除....
 6. Mybatis拦截器，继承`BaseEntity`，不用set createTime、createUser、updateUser、updateTime
-7. 增强的参数校验[@EnhanceValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/EnhanceValid.java) 、[BaseValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/BaseValid.java)
+7. 增强的参数校验[@EnhanceValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/EnhanceValid.java) 、[@BaseValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/BaseValid.java)
 8. 
 
 
