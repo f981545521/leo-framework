@@ -6,7 +6,11 @@ SpringCloud项目
 ## 软件架构
 1. Nacos作为注册中心、配置中心
 2. Apache Dubbo作为服务调用（RPC）框架
-3. 
+3. Seata 解决分布式事务
+4. 网关使用`Spring Cloud Gateway`，集成`Sentinel`熔断限流
+5. 使用`RocketMQ`消息队列
+6. 使用`Spring Cloud Sleuth` + `ZipKin` 的链路追踪
+7. 
 
 
 ## 安装教程
