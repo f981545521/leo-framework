@@ -36,7 +36,25 @@ java -Dserver.port=9100 -Dcsp.sentinel.app.type=1 -Dcsp.sentinel.dashboard.serve
 完成后打开：http://localhost:9100/#/dashboard
 默认用户名：sentinel/sentinel
 ```
+5. 链路追踪（根据情况Enable）
 
+```
+bootstrap.yml
+spring:
+  sleuth:
+    enabled: true
+    rpc:
+      enabled: true
+  zipkin:
+    enabled: true
+    base-url: http://localhost:9411/
+
+运行ZipKinServer
+D:\developer\cloud\zipkin>java -jar zipkin-server-2.23.2-exec.jar
+
+完成后打开：http://localhost:9411/zipkin/
+
+```
 
 #### 可选
 3. 启动Dubbo Admin（可选）
