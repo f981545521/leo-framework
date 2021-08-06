@@ -12,6 +12,27 @@ SpringCloud项目
 6. 使用`Spring Cloud Sleuth` + `ZipKin` 的链路追踪
 7. 
 
+#### 微服务：
+1. SpringBoot+SpringMvc+Mybatis
+2. Redis
+3. Mysql
+4. [PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md) 一行代码搞定分页
+```
+    @GetMapping(value = "page")
+    @ApiOperation("测试分页")
+    public Result<PageData<Product>> page(Integer pageNum, Integer pageSize) {
+        PageData<Product> convertType = PageQuery.startPage(pageNum, pageSize).selectMapper(productService.selectAll());
+        return Result.success(convertType);
+    }
+```
+5. [通用Mapper省去单表增删改查](https://gitee.com/free/Mapper/wikis/Home)
+    - [通用Service](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-commons/src/main/java/cn/acyou/leo/framework/service/Service.java)
+    - [通用Mapper](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-commons/src/main/java/cn/acyou/leo/framework/mapper/Mapper.java)
+    - 支持乐观锁、逻辑删除....
+6. Mybatis拦截器，继承`BaseEntity`，不用set createTime、createUser、updateUser、updateTime
+7. 增强的参数校验[@EnhanceValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/EnhanceValid.java) 、[BaseValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/BaseValid.java)
+8. 
+
 
 ## 安装教程
 为了顺利启动项目，一步一步运行好环境。
