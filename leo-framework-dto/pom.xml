@@ -5,11 +5,13 @@
     <parent>
         <artifactId>leo-framework</artifactId>
         <groupId>cn.acyou</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>leo-framework-dto</artifactId>
+    <packaging>jar</packaging>
+    <description>Leo (全工程)公共DTO组件</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

@@ -13,9 +13,10 @@
     <groupId>cn.acyou</groupId>
     <artifactId>leo-framework</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0.RELEASE</version>
     <name>leo-framework</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Leo-Framework 顶级POM</description>
+    <url>依赖管理：https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明</url>
 
     <properties>
         <java.version>1.8</java.version>
@@ -34,6 +35,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- 引入 SpringCloud Dependencies -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -121,12 +123,6 @@
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis-spring</artifactId>
                 <version>2.0.6</version>
-            </dependency>
-            <!-- 使用了bootstrap.yml文件之后需要引入bootstrap的依赖 -->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-bootstrap</artifactId>
-                <version>3.0.2</version>
             </dependency>
             <!-- Seata start -->
             <dependency>
