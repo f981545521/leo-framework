@@ -26,4 +26,8 @@ Content-Type: application/json
 GET http://localhost:12000/order/order/page?pageNum=1&pageSize=10
 Content-Type: application/json
 
+### 测试网关
+POST http://localhost:12000/order/order/insert?productId=2
+Content-Type: application/json
+
 ###
