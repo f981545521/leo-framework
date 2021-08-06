@@ -61,7 +61,7 @@ admin.metadata-report.address=nacos://127.0.0.1:8848?group=dubbo&username=nacos&
 GET http://localhost:8056/product/page?pageNum=1&pageSize=10
 
 ### 订单列表
-GET http://localhost:8056/order/page?pageNum=1&pageSize=10
+GET http://localhost:8055/order/page?pageNum=1&pageSize=10
 
 ### 网关
 GET http://localhost:12000/product/product/page?pageNum=1&pageSize=10
