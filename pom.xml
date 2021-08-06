@@ -19,9 +19,9 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <!-- SpringBoot 主版本 -->
+        <!-- SpringClouds 主版本 -->
         <springboot.version>2.4.2</springboot.version>
-        <!-- SpringCloudAlibaba 主版本 -->
+        <spring-cloud.version>2020.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
         <maven.test.skip>true</maven.test.skip>
     </properties>
@@ -34,6 +34,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- 引入 SpringCloudAlibaba Dependencies -->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>

@@ -126,13 +126,13 @@ public class GatewayConfiguration {
      */
     private void initGatewayRules() {
         Set<GatewayFlowRule> rules = new HashSet<>();
-        rules.add(new GatewayFlowRule("aquarius-order")
+        rules.add(new GatewayFlowRule("order-service")
                 .setCount(10)
                 .setIntervalSec(1)
         );
 
         //资源名称，可以是网关中的 route 名称或者用户自定义的 API 分组名称。
-        rules.add(new GatewayFlowRule("aquarius-product")
+        rules.add(new GatewayFlowRule("product-service")
                 //规则是针对 API Gateway 的 route（RESOURCE_MODE_ROUTE_ID）还是用户在 Sentinel 中定义的 API 分组（RESOURCE_MODE_CUSTOM_API_NAME），默认是 route。
                 //.setResourceMode(SentinelGatewayConstants.RESOURCE_MODE_CUSTOM_API_NAME)
                 .setResourceMode(SentinelGatewayConstants.RESOURCE_MODE_ROUTE_ID)
