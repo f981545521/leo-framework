@@ -71,7 +71,7 @@ D:\developer\cloud\seata-server-1.4.2\bin\seata-server.bat
 
 [参考文档](document/6.ElasticSearch/1.ElasticSearch介绍与相关工具安装.md)
 
-#### 4. 如果使用网关（需要打开Sentinel）
+#### 5. 如果使用网关（需要打开Sentinel）
 ```
 ## 运行网关
 D:\developer\cloud>java -jar leo-gateway-1.0.0.RELEASE.jar
@@ -81,7 +81,7 @@ java -Dserver.port=9100 -Dcsp.sentinel.app.type=1 -Dcsp.sentinel.dashboard.serve
 完成后打开：http://localhost:9100/#/dashboard
 默认用户名：sentinel/sentinel
 ```
-#### 5. 链路追踪（根据情况Enable）
+#### 6. 链路追踪（根据情况Enable）
 
 ```
 bootstrap.yml
