@@ -10,7 +10,7 @@ SpringCloud项目
 4. 网关使用`Spring Cloud Gateway`，集成`Sentinel`熔断限流
 5. 使用`RocketMQ`消息队列
 6. 使用`Spring Cloud Sleuth` + `ZipKin` 的链路追踪
-7. 
+7. 使用`ElasticSearch`全文搜索
 
 #### 微服务：
 1. SpringBoot+SpringMvc+Mybatis
@@ -32,8 +32,10 @@ SpringCloud项目
     - [通用Mapper](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-commons/src/main/java/cn/acyou/leo/framework/mapper/Mapper.java)
     - 支持乐观锁、逻辑删除....
 6. Mybatis拦截器，继承`BaseEntity`，不用set createTime、createUser、updateUser、updateTime
-7. 增强的参数校验[@EnhanceValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/EnhanceValid.java) 、[@BaseValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/BaseValid.java)
-8. 
+7. 增强的参数校验
+    - [@EnhanceValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/EnhanceValid.java) 
+    - [@BaseValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/BaseValid.java)
+8. ElasticSearch全文检索
 
 
 ## 安装教程
@@ -61,9 +63,13 @@ SpringCloud项目
 双击打开：
 D:\developer\cloud\seata-server-1.4.2\bin\seata-server.bat
 ```
-#### 3. 运行RocketMQ(推荐，看工程情况)
+#### 3. 安装与运行RocketMQ(推荐，看工程情况)
 
-[参考文档](https://gitee.com/f981545521/scorpio/blob/master/document/notes/mq/2.RocketMq.md)
+[参考文档](document/5.RocketMQ)
+
+#### 4. 安装与运行ElasticSearch(推荐，看工程情况)
+
+[参考文档](document/6.ElasticSearch)
 
 #### 4. 如果使用网关（需要打开Sentinel）
 ```
