@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.util.BeanCopyUtil;
 import cn.acyou.leo.framework.util.SqlUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,6 +15,26 @@ import java.util.List;
  * @version [1.0.0, 2021-08-03 16:57]
  */
 public class PageQuery {
+
+    /**
+     * 转换 springframework.data.domain.Page 对象为 PageData
+     * example:
+     * <code>
+     *        Page<ProductEo> users = productEsRepository.findAll(PageRequest.of(1, 20));
+     *        PageData<ProductEo> pageData = PageQuery.convert(user);
+     * </code>
+     *
+     * @param springPage spring data的page
+     * @return {@link PageData<T>} PageData
+     */
+    public static <T> PageData<T> convert(Page<T> springPage) {
+        Integer pageNum = springPage.getNumber() != 0 ? springPage.getSize() : 1;
+        PageData<T> resultData = new PageData<>(pageNum, springPage.getSize());
+        resultData.setTotal(springPage.getTotalElements());
+        resultData.setList(springPage.getContent());
+        resultData.setTotalPage(springPage.getTotalPages());
+        return resultData;
+    }
 
     /**
      * 提供方法：使用pageHelper时 转 PageData
