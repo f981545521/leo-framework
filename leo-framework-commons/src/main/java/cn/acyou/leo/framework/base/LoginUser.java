@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.model;
+package cn.acyou.leo.framework.base;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

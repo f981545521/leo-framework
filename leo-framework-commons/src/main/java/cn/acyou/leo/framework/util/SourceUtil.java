@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import cn.acyou.leo.framework.base.ClientType;
 import cn.acyou.leo.framework.exception.ServiceException;
-import cn.acyou.leo.framework.model.ClientType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 

@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.model;
+package cn.acyou.leo.framework.base;
 
 /**
  * 客户端类型

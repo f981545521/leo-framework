@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.mybatis;
 
+import cn.acyou.leo.framework.base.BaseEntity;
 import cn.acyou.leo.framework.context.StaticInfo;
-import cn.acyou.leo.framework.model.BaseEntity;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;

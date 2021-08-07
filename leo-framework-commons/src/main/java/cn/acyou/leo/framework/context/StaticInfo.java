@@ -1,9 +1,9 @@
 package cn.acyou.leo.framework.context;
 
+import cn.acyou.leo.framework.base.ClientType;
+import cn.acyou.leo.framework.base.LoginUser;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ServiceException;
-import cn.acyou.leo.framework.model.ClientType;
-import cn.acyou.leo.framework.model.LoginUser;
 import cn.acyou.leo.framework.model.Result;
 
 import java.util.ArrayList;
