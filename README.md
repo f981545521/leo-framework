@@ -65,11 +65,11 @@ D:\developer\cloud\seata-server-1.4.2\bin\seata-server.bat
 ```
 #### 3. 安装与运行RocketMQ(推荐，看工程情况)
 
-[参考文档](document/5.RocketMQ)
+[参考文档](document/5.RocketMQ/2.RocketMq.md)
 
 #### 4. 安装与运行ElasticSearch(推荐，看工程情况)
 
-[参考文档](document/6.ElasticSearch)
+[参考文档](document/6.ElasticSearch/1.ElasticSearch介绍与相关工具安装.md)
 
 #### 4. 如果使用网关（需要打开Sentinel）
 ```
