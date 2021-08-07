@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.mybatis;
 
 import cn.acyou.leo.framework.base.BaseEntity;
-import cn.acyou.leo.framework.context.StaticInfo;
+import cn.acyou.leo.framework.context.AppContext;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -53,7 +53,7 @@ public class BaseEntityInterceptor implements Interceptor {
             BaseEntity baseEntity = (BaseEntity) parameterObject;
             if (SqlCommandType.INSERT == mappedStatement.getSqlCommandType()) {
                 if (baseEntity.getCreateUser() == null) {
-                    baseEntity.setCreateUser(StaticInfo.getUserId());
+                    baseEntity.setCreateUser(AppContext.getUserId());
                 }
                 if (baseEntity.getCreateTime() == null) {
                     baseEntity.setCreateTime(new Date());
@@ -67,7 +67,7 @@ public class BaseEntityInterceptor implements Interceptor {
             }
             if (SqlCommandType.UPDATE == mappedStatement.getSqlCommandType()) {
                 if (baseEntity.getUpdateUser() == null) {
-                    baseEntity.setUpdateUser(StaticInfo.getUserId());
+                    baseEntity.setUpdateUser(AppContext.getUserId());
                 }
                 if (baseEntity.getUpdateTime() == null) {
                     baseEntity.setUpdateTime(new Date());

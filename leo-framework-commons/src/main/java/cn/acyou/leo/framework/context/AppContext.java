@@ -14,7 +14,7 @@ import java.util.Map;
  * @author youfang
  * @version [1.0.0, 2020/7/8]
  **/
-public class StaticInfo {
+public class AppContext {
     //IP地址
     private static final ThreadLocal<String> IP_TL = new ThreadLocal<>();
     //登录用户信息
