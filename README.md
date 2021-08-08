@@ -58,6 +58,8 @@ public class StudentSo extends PageSo {
 ## 安装教程
 为了顺利启动项目，一步一步运行好环境。
 
+为了快速运行此项目所需的文件，提供相关运行环境文件的下载。请移步：[下载地址](http://dev.acyou.cn)
+
 ### 必须
 #### 1. 无需配置。直接启动Nacos（必须）
 ```
