@@ -6,11 +6,13 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 
 /**
- * 自定义缓存管理器，支持自定义过期时间：
- * <pre>
- *     @Cacheable(value="sys:demo#100", key="#id") 100S过期
- *     @Cacheable(value="sys:demo#-1", key="#id")  永不过期
- * </pre>
+ * <p>自定义缓存管理， 支持自定义过期时间。</p>
+ * <p>example：</p>
+ *
+ *  <pre>
+ *      @Cacheable(value="sys:student#100", key="#id") 100S过期
+ *      @Cacheable(value="sys:student#-1", key="#id")  永不过期
+ *  </pre>
  * @author youfang
  * @version [1.0.0, 2020/7/1]
  **/
