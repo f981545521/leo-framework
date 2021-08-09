@@ -15,10 +15,6 @@ import java.util.concurrent.TimeUnit;
  * @author youfang
  */
 public class AsyncManager {
-    /**
-     * 操作延迟10毫秒
-     */
-    private final int OPERATE_DELAY_TIME = 10;
 
     /**
      * 异步操作任务调度线程池
@@ -80,7 +76,8 @@ public class AsyncManager {
      */
     public void schedule(Runnable task) {
         Assert.notNull(scheduledExecutor, "请先配置线程池：[scheduledExecutorService]");
-        scheduledExecutor.schedule(task, OPERATE_DELAY_TIME, TimeUnit.MILLISECONDS);
+        //操作延迟10毫秒
+        scheduledExecutor.schedule(task, 10, TimeUnit.MILLISECONDS);
     }
 
     /**
