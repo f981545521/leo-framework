@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Bean 之间的拷贝
  *
- * @author acyou
+ * @author youfang
  */
 public class BeanCopyUtil {
 
