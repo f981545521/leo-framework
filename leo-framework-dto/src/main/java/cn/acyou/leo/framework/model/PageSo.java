@@ -32,18 +32,18 @@ public class PageSo implements Serializable {
      * <p>
      * example:
      * <pre>
-     *         Map<String, String> supportFieldMap = new HashMap<>();
+     *         Map&lt;String, String&gt; supportFieldMap = new HashMap&lt;&gt;();
      *         supportFieldMap.put("createTime", "create_time");
      *         supportFieldMap.put("roleCode", "role_code");
      * </pre>
      * example2 支持别名:
      * <pre>
-     *         Map<String, String> supportFieldMap = new HashMap<>();
+     *         Map&lt;String, String&gt; supportFieldMap = new HashMap&lt;&gt;();
      *         supportFieldMap.put("createTime", "p.create_time");
      *         supportFieldMap.put("roleCode", "p.role_code");
      * </pre>
      *
-     * @return Map<K, V> k:页面字段 v:排序的数据库字段}
+     * @return Map k:页面字段 v:排序的数据库字段
      */
     public Map<String, String> supportField() {
         return null;

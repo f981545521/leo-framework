@@ -41,10 +41,10 @@ public class BeanUtil {
     /**
      * Bean 不同的信息
      *
-     *  ex: {姓名=王二 -> 王xiao二, 年龄=3 -> 12}
+     *  ex: {姓名=王二 to 王xiao二, 年龄=3 to 12}
      * @param obj1 obj1
      * @param obj2 obj2
-     * @return {@link Map<String, String>}
+     * @return Map
      */
     public static Map<String, String> differentInfo(Object obj1, Object obj2){
         Map<String, String> resMap = new LinkedHashMap<>();

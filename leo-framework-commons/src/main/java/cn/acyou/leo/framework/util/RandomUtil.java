@@ -71,8 +71,11 @@ public class RandomUtil {
 
 
     private static final String[] TEL_FIRST = "134,135,136,137,138,139,150,151,152,157,158,159,130,131,132,155,156,133,153".split(",");
+
     /**
      * 随机生成手机号码
+     *
+     * @return {@link String}
      */
     public static String randomTelephone() {
         int index = randomRangeNumber(0, TEL_FIRST.length - 1);

@@ -17,16 +17,18 @@ import java.util.List;
 public class PageQuery {
 
     /**
+     * 转换
      * 使用 springframework.data.domain.Page 时转换为 PageData
      *
      * <p>example:</p>
      * <pre>
-     *        Page<ProductEo> users = productEsRepository.findAll(PageRequest.of(1, 20));
-     *        PageData<ProductEo> pageData = PageQuery.convert(user);
+     *        Page&lt;ProductEo&gt; users = productEsRepository.findAll(PageRequest.of(1, 20));
+     *        PageData&lt;ProductEo&gt; pageData = PageQuery.convert(user);
      * </pre>
      *
+     * @param <T> 类型
      * @param springPage spring data的page
-     * @return {@link PageData<T>} PageData
+     * @return PageData
      */
     public static <T> PageData<T> convert(Page<T> springPage) {
         Integer pageNum = springPage.getNumber() != 0 ? springPage.getNumber() : 1;
@@ -43,8 +45,8 @@ public class PageQuery {
      * <p>example:</p>
      * <pre>
      *     PageHelper.startPage(req.getPageNum(), req.getPageSize());
-     *     List<MarketingProductVo> marketingProductList = marketingProductMapper.selectMarketingProduct(req);
-     *     PageData<MarketingProductVo> PageData = PageData.convert(new PageInfo<>(marketingProductList));
+     *     List&lt;MarketingProductVo&gt; marketingProductList = marketingProductMapper.selectMarketingProduct(req);
+     *     PageData&lt;MarketingProductVo&gt; PageData = PageData.convert(new PageInfo&lt;&gt;(marketingProductList));
      * </pre>
      *
      * @param pageInfo pageHelper 分页对象
@@ -63,6 +65,12 @@ public class PageQuery {
 
     /**
      * 使用 PageHelper 时转换为 PageData（包含类型转换）
+     *
+     * @param <T> 目标类型
+     * @param <E> pageInfo类型
+     * @param pageInfo 页面信息
+     * @param tarClass 目标类型Class
+     * @return PageData
      */
     public static <E, T> PageData<T> convert(PageInfo<E> pageInfo, Class<T> tarClass) {
         //这里没有数据的时候pageNum是0
@@ -80,12 +88,12 @@ public class PageQuery {
      * <p>example:</p>
      * <pre>
      *      PageHelper.startPage(req.getPageNum(), req.getPageSize());
-     *      List<MarketingProductVo> marketingProductList = marketingProductMapper.selectMarketingProduct(req);
-     *      PageData<MarketingProductVo> PageData = PageData.convert(marketingProductList);
+     *      List&lt;MarketingProductVo&gt; marketingProductList = marketingProductMapper.selectMarketingProduct(req);
+     *      PageData&lt;MarketingProductVo&gt; PageData = PageData.convert(marketingProductList);
      * </pre>
      *
-     * @param dataList dataList 数据List
      * @param <T>      具体类型
+     * @param dataList dataList 数据List
      * @return PageData
      */
     public static <T> PageData<T> convert(List<T> dataList) {
@@ -100,8 +108,8 @@ public class PageQuery {
      * <p>example:</p>
      *
      * <pre>
-     *    PageData<Student> convert2 =  PageData.startPage(pageNum, pageSize).selectMapper(studentService.selectAll());
-     *    PageData<StudentVo> convertType =  PageData.startPage(pageNum, pageSize).selectMapper(studentService.selectAll(), StudentVo.class);
+     *    PageData&lt;Student&gt; convert2 =  PageData.startPage(pageNum, pageSize).selectMapper(studentService.selectAll());
+     *    PageData&lt;StudentVo&gt; convertType =  PageData.startPage(pageNum, pageSize).selectMapper(studentService.selectAll(), StudentVo.class);
      * </pre>
      *
      * @param pageNum  页码，从1开始
@@ -181,9 +189,10 @@ public class PageQuery {
     /**
      * 分页查询（包含类型转换）
      *
+     * @param <T>      目标类型
+     * @param <E>      结果类型
      * @param queryList 查询结果
      * @param tarClass  模板类型
-     * @param <T>      泛型
      * @return PageData
      */
     public <E, T> PageData<T> selectMapper(List<E> queryList, Class<T> tarClass) {

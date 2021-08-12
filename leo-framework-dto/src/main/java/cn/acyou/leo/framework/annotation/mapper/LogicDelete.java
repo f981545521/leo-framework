@@ -16,11 +16,15 @@ import java.lang.annotation.Target;
 public @interface LogicDelete {
     /**
      * 逻辑未删除值(默认为 0)
+     *
+     * @return int
      */
     int notDeletedVal() default 0;
 
     /**
      * 逻辑已删除值(默认为 1)
+     *
+     * @return int
      */
     int deletedVal() default 1;
 

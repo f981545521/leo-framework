@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * @author youfang
- * @date 2020/03/19 11:59
+ * @since  2020/03/19 11:59
  **/
 public class Result<T> implements Serializable {
     private int code;

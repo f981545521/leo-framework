@@ -41,7 +41,11 @@ public class PageData<T> implements Serializable {
     private Object extData;
 
     /**
+     * 页面数据
      * Constructor
+     *
+     * @param pageNum  页码
+     * @param pageSize 页面大小
      */
     public PageData(Integer pageNum, Integer pageSize) {
         this.pageNum = pageNum;

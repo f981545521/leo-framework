@@ -9,12 +9,13 @@ import java.lang.annotation.Target;
  * 增强实体参数校验
  * 加载请求参数中
  * 使用示例：
+ *
  * <pre>
- *      @EnhanceValid({
- *         @BaseValid(notNull = true, message = "姓名不能为空"),
- *         @BaseValid(maxLength = 10, message = "姓名过长"),
- *         @BaseValid(minLength = 2, message = "姓名过短"),
- *         @BaseValid(range = {"张三", "李四"}, message = "姓名不在范围内")
+ *      #EnhanceValid({
+ *         #BaseValid(notNull = true, message = "姓名不能为空"),
+ *         #BaseValid(maxLength = 10, message = "姓名过长"),
+ *         #BaseValid(minLength = 2, message = "姓名过短"),
+ *         #BaseValid(range = {"张三", "李四"}, message = "姓名不在范围内")
  *     })
  *     private String name;
  * </pre>

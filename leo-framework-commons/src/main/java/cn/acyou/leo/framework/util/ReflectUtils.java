@@ -33,8 +33,14 @@ public class ReflectUtils {
         }
         return null;
     }
+
     /**
+     * 获取字段
      * 根据属性名获取属性
+     *
+     * @param fieldName 字段名
+     * @param clazz     clazz
+     * @return {@link Field}
      */
     public static Field getField(String fieldName, Class<?> clazz) {
         Class<?> old = clazz;
@@ -56,7 +62,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 获取字段
      * 获取目标类的属性
+     *
+     * @param fieldName 字段名
+     * @param className 类名
+     * @return {@link Field}
      */
     public static Field getField(String fieldName, String className) {
         try {
@@ -67,14 +78,24 @@ public class ReflectUtils {
     }
 
     /**
+     * 获取字段
      * 获取目标对象的属性
+     *
+     * @param fieldName 字段名
+     * @param object    对象
+     * @return {@link Field}
      */
     public static Field getField(String fieldName, Object object) {
         return getField(fieldName, object.getClass());
     }
 
     /**
+     * 获取字段
      * 获取当前类的属性 包括父类
+     *
+     * @param clazz     clazz
+     * @param stopClass 停止类
+     * @return list
      */
     public static List<Field> getFields(Class<?> clazz, Class<?> stopClass) {
         try {
@@ -90,13 +111,24 @@ public class ReflectUtils {
     }
 
     /**
+     * 获取字段
      * 获取当前类的属性 包括父类
+     *
+     * @param clazz clazz
+     * @return List
      */
     @Deprecated
     public static List<Field> getFields(Class<?> clazz) {
         return getFields(clazz, Object.class);
     }
 
+    /**
+     * 获得父类
+     *
+     * @param clazz     clazz
+     * @param stopClass 停止类
+     * @return List
+     */
     @SuppressWarnings("unused")
     private static List<Class<?>> getSuperClasses(Class<?> clazz, Class<?> stopClass) {
         List<Class<?>> classes = new ArrayList<>();
@@ -108,7 +140,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 设置字段值
      * 通过属性赋值
+     *
+     * @param fieldName 字段名
+     * @param object    对象
+     * @param value     价值
      */
     public static void setFieldValue(String fieldName, Object object, Object value) {
         Field field = getField(fieldName, object.getClass());
@@ -116,7 +153,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 设置字段值
      * 通过属性赋值
+     *
+     * @param field  场
+     * @param object 对象
+     * @param value  价值
      */
     public static void setFieldValue(Field field, Object object, Object value) {
         try {
@@ -134,7 +176,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 获取字段值
      * 获取属性的值
+     *
+     * @param object    对象
+     * @param fieldName 字段名
+     * @return {@link Object}
      */
     public static Object getFieldValue(Object object, String fieldName) {
         Field field = getField(fieldName, object.getClass());
@@ -142,7 +189,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 获取字段值
      * 获取属性的值
+     *
+     * @param object 对象
+     * @param field  场
+     * @return {@link Object}
      */
     public static Object getFieldValue(Object object, Field field) {
         try {
@@ -161,7 +213,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 设置值的设置方法
      * 通过set方法赋值
+     *
+     * @param fieldName 字段名
+     * @param object    对象
+     * @param value     价值
      */
     public static void setValueBySetMethod(String fieldName, Object object, Object value) {
         if (object == null) {
@@ -180,7 +237,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 设置值的设置方法
      * 通过set方法赋值
+     *
+     * @param field  场
+     * @param object 对象
+     * @param value  价值
      */
     public static void setValueBySetMethod(Field field, Object object, Object value) {
         if (object == null) {
@@ -193,7 +255,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 通过get方法
      * 通过get方法取值
+     *
+     * @param fieldName 字段名
+     * @param object    对象
+     * @return {@link T}
      */
     @SuppressWarnings("unchecked")
     public static <T> T getValueByGetMethod(String fieldName, Object object) {
@@ -211,14 +278,24 @@ public class ReflectUtils {
     }
 
     /**
+     * 通过get方法
      * 通过get方法取值
+     *
+     * @param field  场
+     * @param object 对象
+     * @return {@link T}
      */
     public static <T> T getValueByGetMethod(Field field, Object object) {
         return getValueByGetMethod(field.getName(), object);
     }
 
     /**
+     * get方法
      * 获取某个类的某个方法(当前类和父类)
+     *
+     * @param methodName 方法名称
+     * @param clazz      clazz
+     * @return {@link Method}
      */
     public static Method getMethod(String methodName, Class<?> clazz) {
         Method method = null;
@@ -236,10 +313,11 @@ public class ReflectUtils {
     }
 
     /**
+     * get方法的名字
      * 获取get方法
      *
      * @param fieldName 属性名
-     * @return
+     * @return {@link String}
      */
     public static String getMethodName(String fieldName) {
         String methodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
@@ -247,7 +325,13 @@ public class ReflectUtils {
     }
 
     /**
+     * get方法
      * 获取某个类的某个方法(当前类和父类) 带一个参数
+     *
+     * @param methodName 方法名称
+     * @param clazz      clazz
+     * @param paramType  参数类型
+     * @return {@link Method}
      */
     public static Method getMethod(String methodName, Class<?> clazz, Class<?> paramType) {
         Method method = null;
@@ -267,21 +351,37 @@ public class ReflectUtils {
     }
 
     /**
+     * get方法
      * 获取某个类的某个方法(当前类和父类)
+     *
+     * @param methodName 方法名称
+     * @param obj        obj
+     * @return {@link Method}
      */
     public static Method getMethod(String methodName, Object obj) {
         return getMethod(methodName, obj.getClass());
     }
 
     /**
+     * get方法
      * 获取某个类的某个方法(当前类和父类) 一个参数
+     *
+     * @param methodName 方法名称
+     * @param obj        obj
+     * @param paramType  参数类型
+     * @return {@link Method}
      */
     public static Method getMethod(String methodName, Object obj, Class<?> paramType) {
         return getMethod(methodName, obj.getClass(), paramType);
     }
 
     /**
+     * get方法
      * 获取某个类的某个方法(当前类和父类)
+     *
+     * @param methodName 方法名称
+     * @param clazz      clazz
+     * @return {@link Method}
      */
     public static Method getMethod(String methodName, String clazz) {
         try {
@@ -293,7 +393,13 @@ public class ReflectUtils {
     }
 
     /**
+     * get方法
      * 获取某个类的某个方法(当前类和父类) 一个参数
+     *
+     * @param methodName 方法名称
+     * @param clazz      clazz
+     * @param paramType  参数类型
+     * @return {@link Method}
      */
     public static Method getMethod(String methodName, String clazz, Class<?> paramType) {
         try {
@@ -305,7 +411,12 @@ public class ReflectUtils {
     }
 
     /**
+     * get方法注释
      * 获取方法上的注解
+     *
+     * @param method                方法
+     * @param targetAnnotationClass 目标注释类
+     * @return {@link Annotation}
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static Annotation getMethodAnnotation(Method method, Class targetAnnotationClass) {
@@ -314,7 +425,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 获取字段注释
      * 获取属性上的注解
+     *
+     * @param field                 场
+     * @param targetAnnotationClass 目标注释类
+     * @return {@link Annotation}
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static Annotation getFieldAnnotation(Field field, Class targetAnnotationClass) {
@@ -323,6 +439,7 @@ public class ReflectUtils {
     }
 
     /**
+     * 得到类注释
      * 获取类上的注解
      *
      * @param targetAnnotationClass 目标注解
@@ -336,8 +453,11 @@ public class ReflectUtils {
     }
 
     /**
+     * 得到类注释
      * 获取类上的注解
      *
+     * @param targetAnnotationClass 目标注释类
+     * @param obj                   obj
      * @return 目标注解实例
      */
     @SuppressWarnings("rawtypes")
@@ -346,8 +466,11 @@ public class ReflectUtils {
     }
 
     /**
+     * 得到类注释
      * 获取类上的注解
      *
+     * @param targetAnnotationClass 目标注释类
+     * @param clazz                 clazz
      * @return 目标注解实例
      */
     @SuppressWarnings("rawtypes")
@@ -361,12 +484,12 @@ public class ReflectUtils {
     }
 
     /**
+     * 得到注释的值
      * 获取注解某个属性的值
      *
      * @param methodName 属性名
      * @param annotation 目标注解
-     * @param <T>        返回类型
-     * @throws Exception
+     * @return {@link T}
      */
     @SuppressWarnings("unchecked")
     public static <T> T getAnnotationValue(String methodName, Annotation annotation) {

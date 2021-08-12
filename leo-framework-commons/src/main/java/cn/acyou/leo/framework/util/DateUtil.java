@@ -273,6 +273,10 @@ public final class DateUtil {
 
     /**
      * 比较两个时间相差多少秒
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return long
      */
     public static long getDiffSeconds(Date startDate, Date endDate) {
         return Math.abs((endDate.getTime() - startDate.getTime()) / 1000);
@@ -280,6 +284,10 @@ public final class DateUtil {
 
     /**
      * 比较两个时间相差多少分钟
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return long
      */
     public static long getDiffMinutes(Date startDate, Date endDate) {
         long diffSeconds = getDiffSeconds(startDate, endDate);
@@ -288,11 +296,12 @@ public final class DateUtil {
 
     /**
      * 比较两个时间相差多少天
-     * 如果开始时间<结束时间 返回天数为正值
-     * 如果开始时间>结束时间 返回天数为负值
+     * 如果开始时间 小于 结束时间 返回天数为正值
+     * 如果开始时间 大于 结束时间 返回天数为负值
      *
      * @param startDate 开始时间
      * @param endDate   结束时间
+     * @return long
      */
     public static long getDiffDay(Date startDate, Date endDate) {
         long between = Math.abs((startDate.getTime() - endDate.getTime()) / 1000);
@@ -305,10 +314,11 @@ public final class DateUtil {
 
     /**
      * 比较两个时间相差多少天
-     * 如果开始时间<结束时间 返回天数为正值
-     * 如果开始时间>结束时间 返回天数为负值
+     * 如果开始时间 小于 结束时间 返回天数为正值
+     * 如果开始时间 大于 结束时间 返回天数为负值
      *
      * @param startDate 开始时间
+     * @return long
      */
     public static long getCurrentDiffDay(Date startDate) {
         return getDiffDay(startDate, new Date());
@@ -316,10 +326,11 @@ public final class DateUtil {
 
     /**
      * 比较两个时间相差多少天
-     * 如果开始时间<结束时间 返回天数为正值
-     * 如果开始时间>结束时间 返回天数为负值
+     * 如果开始时间 小于 结束时间 返回天数为正值
+     * 如果开始时间 大于 结束时间 返回天数为负值
      *
      * @param startDate 开始时间
+     * @return long
      */
     public static long getCurrentDiffMinutes(Date startDate) {
         return getDiffMinutes(startDate, new Date());
@@ -327,6 +338,10 @@ public final class DateUtil {
 
     /**
      * 获取两个时间相差月份
+     *
+     * @param start 开始
+     * @param end   结束
+     * @return int
      */
     public static int getDiffMonth(Date start, Date end) {
         Calendar startCalendar = Calendar.getInstance();
@@ -336,8 +351,13 @@ public final class DateUtil {
         return (endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR)) * 12
                 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
     }
+
     /**
      * 获取两个时间相差年份
+     *
+     * @param start 开始
+     * @param end   结束
+     * @return int
      */
     public static int getDiffYear(Date start, Date end) {
         Calendar startCalendar = Calendar.getInstance();
@@ -349,6 +369,9 @@ public final class DateUtil {
 
     /**
      * 返回传入时间月份的第一天
+     *
+     * @param date 日期
+     * @return Date
      */
     public static Date firstDayOfMonth(Date date) {
         Calendar cal = Calendar.getInstance();
@@ -360,6 +383,9 @@ public final class DateUtil {
 
     /**
      * 返回传入时间月份的最后一天
+     *
+     * @param date 日期
+     * @return {@link Date}
      */
     public static Date lastDayOfMonth(Date date) {
         Calendar cal = Calendar.getInstance();
@@ -371,6 +397,9 @@ public final class DateUtil {
 
     /**
      * 判断是否为闰年
+     *
+     * @param year 一年
+     * @return boolean
      */
     public static boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
@@ -587,7 +616,7 @@ public final class DateUtil {
     /**
      * 现在的时间在指定的时间范围内
      * <pre>
-     *      DateUtil.nowInTimeRange("08:00:00", "17:00:00") -> 当前时间是不是在这个范围内
+     *      DateUtil.nowInTimeRange("08:00:00", "17:00:00") == 当前时间是不是在这个范围内
      * </pre>
      *
      * @param timeStart 时间开始  in format "hh:mm:ss"
@@ -609,7 +638,7 @@ public final class DateUtil {
 
     /**
      * 获取上月的第一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-09-01
+     * if today - will 2020-09-21 14:14:14 == 2020-09-01
      * @return {@link Date}
      */
     public static Date getPreviousMonthFirstDayToDate() {
@@ -617,7 +646,7 @@ public final class DateUtil {
     }
     /**
      * 获取上月的最后一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-09-30
+     * if today - will 2020-09-21 14:14:14 == 2020-09-30
      * @return {@link Date}
      */
     public static Date getPreviousMonthLastDayToDate() {
@@ -625,7 +654,7 @@ public final class DateUtil {
     }
     /**
      * 获取上月的第一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-09-01
+     * if today - will 2020-09-21 14:14:14 == 2020-09-01
      * @return {@link String}
      */
     public static String getPreviousMonthFirstDayToString() {
@@ -633,7 +662,7 @@ public final class DateUtil {
     }
     /**
      * 获取上月的最后一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-09-30
+     * if today - will 2020-09-21 14:14:14 == 2020-09-30
      * @return {@link String}
      */
     public static String getPreviousMonthLastDayToString() {
@@ -641,7 +670,7 @@ public final class DateUtil {
     }
     /**
      * 获取当月的第一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-09-01
+     * if today - will 2020-09-21 14:14:14 == 2020-09-01
      * @return {@link Date}
      */
     public static Date getCurrentMonthFirstDayToDate() {
@@ -649,7 +678,7 @@ public final class DateUtil {
     }
     /**
      * 获取当月的最后一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-09-30
+     * if today - will 2020-09-21 14:14:14 == 2020-09-30
      * @return {@link Date}
      */
     public static Date getCurrentMonthLastDayToDate() {
@@ -657,7 +686,7 @@ public final class DateUtil {
     }
     /**
      * 获取当月的第一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-09-01
+     * if today - will 2020-09-21 14:14:14 == 2020-09-01
      * @return {@link String}
      */
     public static String getCurrentMonthFirstDayToString() {
@@ -665,7 +694,7 @@ public final class DateUtil {
     }
     /**
      * 获取当月的最后一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-09-30
+     * if today - will 2020-09-21 14:14:14 == 2020-09-30
      * @return {@link String}
      */
     public static String getCurrentMonthLastDayToString() {
@@ -673,7 +702,7 @@ public final class DateUtil {
     }
     /**
      * 获取下月的第一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-10-01
+     * if today - will 2020-09-21 14:14:14 == 2020-10-01
      * @return {@link Date}
      */
     public static Date getNextMonthFirstDayToDate() {
@@ -681,7 +710,7 @@ public final class DateUtil {
     }
     /**
      * 获取下月的最后一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-10-31
+     * if today - will 2020-09-21 14:14:14 == 2020-10-31
      * @return {@link Date}
      */
     public static Date getNextMonthLastDayToDate() {
@@ -689,7 +718,7 @@ public final class DateUtil {
     }
     /**
      * 获取下月的第一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-10-01
+     * if today - will 2020-09-21 14:14:14 == 2020-10-01
      * @return {@link String}
      */
     public static String getNextMonthFirstDayToString() {
@@ -697,7 +726,7 @@ public final class DateUtil {
     }
     /**
      * 获取下月的最后一天
-     * if today - will 2020-09-21 14:14:14 -> 2020-10-31
+     * if today - will 2020-09-21 14:14:14 == 2020-10-31
      * @return {@link String}
      */
     public static String getNextMonthLastDayToString() {
@@ -717,10 +746,10 @@ public final class DateUtil {
 
     /**
      * 范围内每个月的第一天集合
-     *  6.1 < 7.1 8.1 9.1 < 10.1 ==> 6789月份来算环比
+     *  6.1 小于 7.1 8.1 9.1 小于 10.1 === 6789月份来算环比
      *
-     *  monthFirstDayInRange("2020-12-01", "2020-10-01") -> [2020-12-01]
-     *  monthFirstDayInRange("2020-07-01", "2020-10-01") -> [2020-07-01, 2020-08-01, 2020-09-01]
+     *  monthFirstDayInRange("2020-12-01", "2020-10-01") == [2020-12-01]
+     *  monthFirstDayInRange("2020-07-01", "2020-10-01") == [2020-07-01, 2020-08-01, 2020-09-01]
      * @param startDate 开始日期
      * @param endDate 结束日期
      * @return [startDate, endDate) 左闭右开
@@ -742,8 +771,8 @@ public final class DateUtil {
 
     /**
      * 去年的今天
-     * lastYearTodayMonth("2020-07-01") -> 2019-07-01
-     * lastYearTodayMonth("2020-10-30") -> 2019-10-01
+     * lastYearTodayMonth("2020-07-01") == 2019-07-01
+     * lastYearTodayMonth("2020-10-30") == 2019-10-01
      * @param todayMonth 今天的月份
      * @return 去年的今天的月份
      */

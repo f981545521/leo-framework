@@ -21,9 +21,11 @@ public class BeanCopyUtil {
     /**
      * 复制
      *
+     * @param <E>   目标对象
+     * @param <T>   源对象
      * @param t   源对象
      * @param clz 目标对象Class
-     * @return {@link E} 目标对象
+     * @return 目标对象
      */
     public static <T, E> E copy(T t, Class<E> clz) {
         if (t == null) {
@@ -43,9 +45,11 @@ public class BeanCopyUtil {
     /**
      * 复制对象List
      *
+     * @param <E>   目标对象
+     * @param <T>   源对象
      * @param l   源对象集合
      * @param clz 目标对象Class
-     * @return {@link List<E>} 目标对象集合
+     * @return 目标对象集合
      */
     public static <T, E> List<E> copyList(Collection<T> l, Class<E> clz) {
         List<E> list = new ArrayList<>();
@@ -58,7 +62,7 @@ public class BeanCopyUtil {
 
     /**
      * 合并属性
-     *
+     * @param <M>   对象类型
      * @param target      目标
      * @param destination 目的
      */
@@ -69,6 +73,7 @@ public class BeanCopyUtil {
     /**
      * 合并属性
      *
+     * @param <M>   对象类型
      * @param target          目标
      * @param destination     目的地
      * @param nullCoverTarget 使用null覆盖目标

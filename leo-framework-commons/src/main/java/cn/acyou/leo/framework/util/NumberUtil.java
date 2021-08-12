@@ -29,7 +29,7 @@ public class NumberUtil {
     /**
      * 将阿拉伯数字转换为中文数字
      * <p>
-     * 123 -> 一二三
+     * 123 == 一二三
      *
      * @param srcNum 数字
      * @return 中文数字

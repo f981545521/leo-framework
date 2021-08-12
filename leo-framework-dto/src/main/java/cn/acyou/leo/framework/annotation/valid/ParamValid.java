@@ -7,13 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  * 使用AOP拦截所有controller请求，参数上有@ParamValid注解时，校验此参数
- * {@see cn.com.zhengya.spdapi.aop.ParameterValidateAspect}
  * <p>
  * Examples:
  * <pre>
- *     @PostMapping(value = "validate")
- *     @ResponseBody
- *     public Result<ValidateSo> validate(@ParamValid @RequestBody ValidateSo validateSo) {
+ *     #PostMapping(value = "validate")
+ *     #ResponseBody
+ *     public Result &lt;ValidateSo&gt; validate(#ParamValid #RequestBody ValidateSo validateSo) {
  *         return Result.success();
  *     }
  * </pre>

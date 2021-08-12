@@ -19,7 +19,7 @@ public class PinYinHelper {
     /**
      * 中文转拼音 返回拼音首字母 如 中华人民共和国 返回 ZHRMGHG
      *
-     * @param str
+     * @param str 字符
      * @return 拼音
      */
     public static String transferToPinYin(String str) {
@@ -69,6 +69,7 @@ public class PinYinHelper {
      * parsePinyinAndHead 生成拼音和首字母组合
      * 如：内存 result ：内存,neicun,nc
      *
+     * @param str str
      * @return String
      */
     public static String parsePinyinAndHead(String str) {

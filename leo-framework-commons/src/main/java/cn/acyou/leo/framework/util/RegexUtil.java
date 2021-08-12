@@ -199,7 +199,11 @@ public class RegexUtil {
     }
 
     /**
+     * 是chinese2
      * 适应CJK（中日韩）字符集，部分中日韩的字是一样的
+     *
+     * @param strName str的名字
+     * @return boolean
      */
     public static boolean isChinese2(String strName) {
         char[] ch = strName.toCharArray();

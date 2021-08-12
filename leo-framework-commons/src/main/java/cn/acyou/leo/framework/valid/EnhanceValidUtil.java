@@ -35,11 +35,11 @@ public class EnhanceValidUtil {
      * <p>
      * 支持集合类型：List、Set
      * <pre>
-     *      public Result<?> skuPage(@ParamValid @RequestBody List<GoodsScatteredProcessingReq> processingReq)
+     *      public Result&lt;?&gt; skuPage(@ParamValid @RequestBody List&lt;GoodsScatteredProcessingReq&gt; processingReq)
      * </pre>
      * 支持单个实体
      * <pre>
-     *     public Result<?> updateInfo(@ParamValid @RequestBody GoodsUpdateReq goodsUpdateReq)
+     *     public Result&lt;?&gt; updateInfo(@ParamValid @RequestBody GoodsUpdateReq goodsUpdateReq)
      * </pre>
      *
      * @param object 校验对象

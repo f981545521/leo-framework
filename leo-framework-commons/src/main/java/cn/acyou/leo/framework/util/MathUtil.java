@@ -68,7 +68,7 @@ public class MathUtil {
      * createMaxLong(6)     = 999999
      * createMaxLong(8)     = 99999999
      * </pre>
-     * @param length 长度 <=18
+     * @param length 长度 小于=18
      * @return long
      */
     public static long createMaxLong(int length) {

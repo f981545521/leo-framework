@@ -76,8 +76,8 @@ public class IdCardValidUtil {
      * <p>
      * 5.通过上面得知如果余数是2，就会在身份证的第18位数字上出现罗马数字的Ⅹ。如果余数是10，身份证的最后一位号码就是2。
      *
-     * @param idcard
-     * @return
+     * @param idcard 身份证
+     * @return 是否
      */
     public static boolean validate18Idcard(String idcard) {
         if (idcard == null) {
@@ -150,8 +150,8 @@ public class IdCardValidUtil {
      * 只校验省份和出生年月日
      * </pre>
      *
-     * @param idcard
-     * @return
+     * @param idcard 身份证号
+     * @return 是否
      */
     public static boolean validate15IDCard(String idcard) {
         if (idcard == null) {
@@ -195,8 +195,8 @@ public class IdCardValidUtil {
     /**
      * 将15位的身份证转成18位身份证
      *
-     * @param idcard
-     * @return
+     * @param idcard 身份证号
+     * @return 是否
      */
     public static String convertIdcarBy15bit(String idcard) {
         if (idcard == null) {

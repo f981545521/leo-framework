@@ -50,9 +50,11 @@ public class AsyncManager {
     }
 
     /**
+     * 提交
      * 执行任务 submit
      *
      * @param task 任务
+     * @return 任务
      */
     public Future<?> submit(Runnable task) {
         Assert.notNull(taskExecutor, "请先配置线程池：[threadPoolTaskExecutor]");
@@ -60,9 +62,12 @@ public class AsyncManager {
     }
 
     /**
+     * 提交
      * 执行任务 submit
      *
+     * @param <T> 类型
      * @param task 任务
+     * @return 任务
      */
     public <T> Future<T> submit(Callable<T> task) {
         Assert.notNull(taskExecutor, "请先配置线程池：[threadPoolTaskExecutor]");
