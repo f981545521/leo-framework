@@ -147,6 +147,18 @@
                 <artifactId>rocketmq-spring-boot-starter</artifactId>
                 <version>${rocketmq.version}</version>
             </dependency>
+            <!-- ZipKin Start -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-zipkin</artifactId>
+                <version>2.2.8.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave-instrumentation-dubbo</artifactId>
+                <version>5.13.3</version>
+            </dependency>
+            <!-- ZipKin End -->
         </dependencies>
     </dependencyManagement>
 
