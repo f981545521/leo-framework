@@ -31,6 +31,10 @@ public class RedisUtils {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    public RedisUtils(){
+        log.info("RedisUtils 初始化。");
+    }
+
     /**
      * 获取String 类型
      *
