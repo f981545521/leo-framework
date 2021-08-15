@@ -21,6 +21,7 @@ public final class DateUtil {
     public static final String FORMAT_DEFAULT_DATE = "yyyy-MM-dd";
     public static final String FORMAT_DEFAULT_TIME = "HH:mm:ss";
     public static final String FORMAT_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+    public static final String FORMAT_DATE_TIME_UNSIGNED = "yyyyMMddHHmmss";
     public static final String DATE_DAY_MIN_TIME = " 00:00:00";
     public static final String DATE_DAY_MAX_TIME = " 23:59:59";
     public static final char[] UPPER_NUMBER = "〇一二三四五六七八九十".toCharArray();
