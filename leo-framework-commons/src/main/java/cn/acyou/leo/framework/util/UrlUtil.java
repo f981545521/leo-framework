@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -180,6 +182,38 @@ public class UrlUtil {
             url = url.substring(0, url.length() - 1);
         }
         return url + StringUtils.join(paramList, "");
+    }
+
+    /**
+     * 获取网址的path
+     * https://sale.vmall.com/huaweizone.html?cid=10618
+     *  -> /huaweizone.html
+     * @param url 网址
+     * @return pathname
+     */
+    public static String getPathName(String url) {
+        try {
+            URL url1 = new URL(url);
+            return url1.getPath();
+        } catch (MalformedURLException e) {
+            return "";
+        }
+    }
+
+    /**
+     * 获取网址的path
+     * https://sale.vmall.com/huaweizone.html?cid=10618
+     *  -> cid=10618
+     * @param url 网址
+     * @return pathname
+     */
+    public static String getSearch(String url) {
+        try {
+            URL url1 = new URL(url);
+            return url1.getQuery();
+        } catch (MalformedURLException e) {
+            return "";
+        }
     }
 
     public static void main(String[] args) {
