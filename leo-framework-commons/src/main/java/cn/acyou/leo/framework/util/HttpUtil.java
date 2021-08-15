@@ -2,7 +2,6 @@ package cn.acyou.leo.framework.util;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
-import com.sun.istack.internal.NotNull;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -31,6 +30,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -447,7 +447,7 @@ public class HttpUtil {
      * @param url       url
      * @param path      保存路径
      */
-    public static void download(@NotNull String url, @NotNull String path) throws Exception {
+    public static void download(String url, String path) throws Exception {
         String name = MessageFormat.format("{0}_{1}.{2}",
                 DateUtil.getCurrentDateFormat(DateUtil.FORMAT_DATE_TIME_UNSIGNED),
                 RandomUtil.createRandomStr(4),
@@ -463,7 +463,7 @@ public class HttpUtil {
      * @param imageName 图片的名字
      *                      为空时使用URL上的文件名
      */
-    public static void download(@NotNull String url, @NotNull String path, String imageName) throws Exception {
+    public static void download(String url, String path, @Nullable String imageName) throws Exception {
         URL downloadUrl = new URL(url);
         InputStream inputStream = downloadUrl.openStream();
         File file = new File(path);
