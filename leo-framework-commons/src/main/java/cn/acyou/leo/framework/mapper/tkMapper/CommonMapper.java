@@ -115,6 +115,15 @@ public interface CommonMapper<T> {
     @Options(useGeneratedKeys = true)
     @InsertProvider(type = CommonMapperProvider.class, method = "dynamicSQL")
     int insertListSelective(Collection<? extends T> recordList);
-
+    /**
+     * 批量插入，支持批量插入的数据库可以使用，例如MySQL,H2等，另外该接口限制实体包含`id`属性并且必须为自增列
+     * null 时使用数据库默认值
+     *
+     * @param recordList 记录
+     * @return 影响行数
+     */
+    @Options(useGeneratedKeys = true)
+    @InsertProvider(type = CommonMapperProvider.class, method = "dynamicSQL")
+    int insertIgnoreListSelective(Collection<? extends T> recordList);
 
 }

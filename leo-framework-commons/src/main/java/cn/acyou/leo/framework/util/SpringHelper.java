@@ -42,6 +42,13 @@ public class SpringHelper implements BeanFactoryPostProcessor {
     }
 
     /**
+     * 是否是应用态运行的
+     */
+    public static boolean isApplicationRunning() throws BeansException {
+        return beanFactory != null;
+    }
+
+    /**
      * 包含Bean
      *
      * @param name beanClassName
