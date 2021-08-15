@@ -164,8 +164,9 @@ Content-Type: application/json
 
 ## 使用说明
 
-无
-
+- [微服务使用教程](document/howtouse/微服务使用教程.md)
+- [模板项目-SpringBoot](https://gitee.com/f981545521/leo-user)
+- [模板项目-SpringCloud](https://gitee.com/f981545521/leo-product)
 ## 参与贡献
 
 无需贡献
