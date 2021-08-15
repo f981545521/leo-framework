@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author youfang
@@ -21,6 +23,7 @@ public final class DateUtil {
     public static final String FORMAT_DEFAULT_DATE = "yyyy-MM-dd";
     public static final String FORMAT_DEFAULT_TIME = "HH:mm:ss";
     public static final String FORMAT_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+    public static final String FORMAT_DATE_TIME_2 = "yyyy-M-d HH:mm:ss";
     public static final String FORMAT_DATE_TIME_UNSIGNED = "yyyyMMddHHmmss";
     public static final String DATE_DAY_MIN_TIME = " 00:00:00";
     public static final String DATE_DAY_MAX_TIME = " 23:59:59";
@@ -806,6 +809,54 @@ public final class DateUtil {
      */
     public static boolean isLegalTime(String time){
         return isLegalTime(FORMAT_DEFAULT_TIME, time);
+    }
+
+    /**
+     * 提取日期str
+     * 多个匹配时，取第一个
+     * <code>
+     *     extractDateStr("发表于： 2021-04-08 12:12:12 编辑于： 2020-12-12 12:12:12", DateRegex.DateTime);
+     *     //2021-04-08 12:12:12
+     *     extractDateStr("发表于： 2020-12-08 的清晨", DateRegex.Date);
+     *     //2020-12-08
+     * </code>
+     * @param sourceStr 源str
+     * @param dateRegex 日期正则表达式
+     * @return {@link String}
+     */
+    public static String extractDateStr(String sourceStr, DateRegex dateRegex) {
+        if (StringUtil.isNotNullOrBlank(sourceStr)) {
+            Pattern pattern = dateRegex.getPattern();
+            Matcher matcher = pattern.matcher(sourceStr);
+            if (matcher.find()) {
+                return matcher.group(0);
+            }
+        }
+        return "";
+    }
+
+    public enum DateRegex {
+        /**
+         * yyyy-MM-dd HH:mm:ss
+         */
+        DateTime("[1-9]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])"),
+        /**
+         * yyyy-M-d HH:mm:ss
+         */
+        DateTime2("[1-9]\\d{3}-([1-9]|1[0-2])-([1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])"),
+        /**
+         * yyyy-MM-dd
+         */
+        Date("[1-9]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])");
+        private final Pattern pattern;
+
+        DateRegex(String patternStr) {
+            this.pattern = Pattern.compile(patternStr);
+        }
+
+        public Pattern getPattern() {
+            return this.pattern;
+        }
     }
 
     public static void main(String[] args) {
