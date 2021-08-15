@@ -1,6 +1,9 @@
 package cn.acyou.leo.framework.util;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -12,8 +15,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -185,4 +192,56 @@ public class HttpClientUtil {
         return resultString;
     }
 
+    /**
+     * 下载文件（需要移动端 User-Agent的）
+     *
+     * @param url      网络文件路径
+     * @param filepath 保存路径
+     */
+    public static void downloadMobileFile(String url, String filepath) {
+        try {
+            HttpClient client = HttpClients.createDefault();
+            HttpGet httpget = new HttpGet(url);
+            httpget.addHeader("sdk-version", "1");
+            httpget.addHeader("User-Agent", "Aweme 6.5.0 rv:65014 (iPhone; iOS 12.3.1; en_CN) Cronet");
+            httpget.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            HttpResponse response = client.execute(httpget);
+            HttpEntity entity = response.getEntity();
+            InputStream is = entity.getContent();
+            File file = new File(filepath);
+            boolean mkdirs = file.getParentFile().mkdirs();
+            FileOutputStream fileout = new FileOutputStream(file);
+            IOUtils.copyLarge(is, fileout);
+            is.close();
+            fileout.flush();
+            fileout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param url      网络文件路径
+     * @param filepath 保存路径
+     */
+    public static void downloadFile(String url, String filepath) {
+        try {
+            HttpClient client = HttpClients.createDefault();
+            HttpGet httpget = new HttpGet(url);
+            HttpResponse response = client.execute(httpget);
+            HttpEntity entity = response.getEntity();
+            InputStream is = entity.getContent();
+            File file = new File(filepath);
+            boolean mkdirs = file.getParentFile().mkdirs();
+            FileOutputStream fileout = new FileOutputStream(file);
+            IOUtils.copyLarge(is, fileout);
+            is.close();
+            fileout.flush();
+            fileout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
