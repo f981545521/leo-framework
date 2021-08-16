@@ -1,4 +1,8 @@
-# leo-framework
+# ♌leo-framework
+
+[![Maven Central](https://img.shields.io/maven-central/v/cn.acyou/leo-framework.svg?color=2d545e)](https://search.maven.org/search?q=g:cn.acyou)
+[![JDK support](https://img.shields.io/badge/JDK-8+-green.svg)](https://github.com/alibaba/COLA/releases)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 ## 介绍
 SpringCloud项目
