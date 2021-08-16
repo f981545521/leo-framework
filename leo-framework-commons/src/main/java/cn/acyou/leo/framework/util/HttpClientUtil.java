@@ -15,7 +15,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -211,9 +210,9 @@ public class HttpClientUtil {
             File file = new File(filepath);
             boolean mkdirs = file.getParentFile().mkdirs();
             FileOutputStream fileout = new FileOutputStream(file);
-            IOUtils.copyLarge(is, fileout);
-            is.close();
+            IOUtil.copyLarge(is, fileout);
             fileout.flush();
+            is.close();
             fileout.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -236,9 +235,9 @@ public class HttpClientUtil {
             File file = new File(filepath);
             boolean mkdirs = file.getParentFile().mkdirs();
             FileOutputStream fileout = new FileOutputStream(file);
-            IOUtils.copyLarge(is, fileout);
-            is.close();
+            IOUtil.copyLarge(is, fileout);
             fileout.flush();
+            is.close();
             fileout.close();
         } catch (Exception e) {
             e.printStackTrace();
