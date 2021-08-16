@@ -5,7 +5,7 @@
     <parent>
         <artifactId>leo-framework</artifactId>
         <groupId>cn.acyou</groupId>
-        <version>1.0.0.RELEASE</version>
+        <version>1.0.1.RELEASE</version>
     </parent>
     <artifactId>leo-gateway</artifactId>
     <name>leo-gateway</name>
