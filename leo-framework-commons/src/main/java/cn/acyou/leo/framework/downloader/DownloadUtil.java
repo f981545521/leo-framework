@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -57,7 +55,7 @@ public class DownloadUtil {
      * @param fileName 文件名称
      * @throws Exception 异常
      */
-    public static void download(String fileURL, String dir, String fileName) throws Exception {
+    public static void downloadFile(String fileURL, String dir, String fileName) throws Exception {
         download(fileURL, dir + File.separator + fileName);
     }
 
@@ -69,30 +67,26 @@ public class DownloadUtil {
      * @throws Exception 异常
      */
     public static void download(String fileURL, String fileFullPath) throws Exception {
-        File file = new File(fileFullPath);
-        boolean mkdirs = file.getParentFile().mkdirs();
-        if (mkdirs) {
-            log.info("auto create directory ：{}", file.getParentFile().getAbsolutePath());
-        }
-        byte[] body = restTemplate.execute(fileURL, HttpMethod.GET, null,
-                new ByteArrayResponseExtractor(downloadProgressPrinter));
-        Files.write(Paths.get(fileFullPath), Objects.requireNonNull(body));
+        download(fileURL, fileFullPath, null);
     }
     /**
      * 下载
      *
      * @param fileURL      文件的url
      * @param fileFullPath 文件的完整路径
+     * @param headerMaps headers
      * @throws Exception 异常
      */
-    public static void download2(String fileURL, String fileFullPath, Map<String, String> headerMaps) throws Exception {
+    public static void download(String fileURL, String fileFullPath, Map<String, String> headerMaps) throws Exception {
         File file = new File(fileFullPath);
         boolean mkdirs = file.getParentFile().mkdirs();
         if (mkdirs) {
             log.info("auto create directory ：{}", file.getParentFile().getAbsolutePath());
         }
         HttpHeaders headers = new HttpHeaders();
-        headerMaps.forEach(headers::add);
+        if (headerMaps != null && headerMaps.size() > 0){
+            headerMaps.forEach(headers::add);
+        }
         HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
         ByteArrayResponseExtractor byteArrayResponseExtractor = new ByteArrayResponseExtractor(downloadProgressPrinter);
         RequestCallback requestCallback = restTemplate.httpEntityCallback(requestEntity, ByteArrayResponseExtractor.class);

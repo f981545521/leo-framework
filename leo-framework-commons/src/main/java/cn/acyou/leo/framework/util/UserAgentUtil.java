@@ -11,6 +11,14 @@ import java.util.List;
  * @version [1.0.0, 2020/7/28]
  **/
 public class UserAgentUtil {
+    /**
+     * 移动浏览器
+     */
+    public static final String MOBILE_BROWSER = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
+    /**
+     * PC浏览器
+     */
+    public static final String PC_BROWSER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36";
 
     /**
      * 是否微信浏览器

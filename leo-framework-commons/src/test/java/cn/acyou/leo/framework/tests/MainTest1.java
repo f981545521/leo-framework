@@ -1,12 +1,9 @@
 package cn.acyou.leo.framework.tests;
 
-import cn.acyou.leo.framework.downloader.*;
-import cn.acyou.leo.framework.downloader.support.MultiThreadDownloadProgressPrinter;
-import cn.acyou.leo.framework.util.MathUtil;
+import cn.acyou.leo.framework.downloader.DownloadUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author fangyou
@@ -50,7 +47,7 @@ public class MainTest1 {
         headerMap.put("Content-Type", "Aweme 6.5.0 rv:65014 (iPhone; iOS 12.3.1; en_CN) Cronet");
         long l = System.currentTimeMillis();
         //DownloadUtil.download(fileURL, "D:\\tmp2\\1234_3.mp4");
-        DownloadUtil.download2(fileURL, "D:\\tmp2\\1234_5.mp4", headerMap);
+        DownloadUtil.download(fileURL, "D:\\tmp2\\1234_5.mp4", headerMap);
         System.out.println("结束：" + (System.currentTimeMillis() - l));//结束：1526
 
     }
