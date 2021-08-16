@@ -27,9 +27,12 @@ public class MathUtil {
      * @param denominator 分母
      * @return xx%
      */
-    public static Integer calculationPercent(Integer molecule, Integer denominator) {
-        BigDecimal moleculeDecimal = new BigDecimal(molecule);
-        BigDecimal denominatorDecimal = new BigDecimal(denominator);
+    public static Integer calculationPercent(Number molecule, Number denominator) {
+        if (denominator.longValue() == 0){
+            return 0;
+        }
+        BigDecimal moleculeDecimal = new BigDecimal(molecule.longValue());
+        BigDecimal denominatorDecimal = new BigDecimal(denominator.longValue());
         BigDecimal divide = moleculeDecimal.divide(denominatorDecimal, 2, RoundingMode.HALF_UP);
         return divide.multiply(HUNDRED).intValue();
     }
