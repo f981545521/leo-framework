@@ -4,6 +4,8 @@ import cn.acyou.leo.framework.downloader.*;
 import cn.acyou.leo.framework.downloader.support.MultiThreadDownloadProgressPrinter;
 import cn.acyou.leo.framework.util.MathUtil;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -23,27 +25,33 @@ public class MainTest1 {
         //FileDownloader fileDownloader = new FileDownloader();
         //fileDownloader.download(fileURL, "D:\\tmp2\\");
 
-        //====== 方式三
-        MultiThreadDownloadProgressPrinter downloadProgressPrinter = new MultiThreadDownloadProgressPrinter(5);
-        CompletableFuture.runAsync(() -> {
-            while (true) {
-                long alreadyDownloadLength = downloadProgressPrinter.getAlreadyDownloadLength();
-                long contentLength = downloadProgressPrinter.getContentLength();
-                System.out.println(contentLength + "  =>  " + alreadyDownloadLength + "|" + MathUtil.calculationPercent(alreadyDownloadLength, contentLength) + "%");
-                if (alreadyDownloadLength != 0 && alreadyDownloadLength > contentLength) {
-                    break;
-                }
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
+        //====== 方式三：大文件下载
+        //MultiThreadDownloadProgressPrinter downloadProgressPrinter = new MultiThreadDownloadProgressPrinter(5);
+        //CompletableFuture.runAsync(() -> {
+        //    while (true) {
+        //        long alreadyDownloadLength = downloadProgressPrinter.getAlreadyDownloadLength();
+        //        long contentLength = downloadProgressPrinter.getContentLength();
+        //        System.out.println(contentLength + "  =>  " + alreadyDownloadLength + "|" + MathUtil.calculationPercent(alreadyDownloadLength, contentLength) + "%");
+        //        if (alreadyDownloadLength != 0 && alreadyDownloadLength > contentLength) {
+        //            break;
+        //        }
+        //        try {
+        //            Thread.sleep(1000L);
+        //        } catch (InterruptedException e) {
+        //            e.printStackTrace();
+        //        }
+        //    }
+        //});
+        //long l = System.currentTimeMillis();
+        //MultiThreadFileDownloader fileDownloader = new MultiThreadFileDownloader(5, downloadProgressPrinter);
+        //fileDownloader.download(bigFileURL, "D:\\tmp2\\");
+        //System.out.println("结束：" + (System.currentTimeMillis() - l));//结束：1526
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Content-Type", "Aweme 6.5.0 rv:65014 (iPhone; iOS 12.3.1; en_CN) Cronet");
         long l = System.currentTimeMillis();
-        MultiThreadFileDownloader fileDownloader = new MultiThreadFileDownloader(5, downloadProgressPrinter);
-        fileDownloader.download(bigFileURL, "D:\\tmp2\\");
+        //DownloadUtil.download(fileURL, "D:\\tmp2\\1234_3.mp4");
+        DownloadUtil.download2(fileURL, "D:\\tmp2\\1234_5.mp4", headerMap);
         System.out.println("结束：" + (System.currentTimeMillis() - l));//结束：1526
+
     }
 }
