@@ -15,6 +15,17 @@ import java.security.MessageDigest;
 public class Md5Util {
 
     /**
+     * 校验MD5码
+     *
+     * @param sourceStr 要校验的字符串
+     * @param md5Str  md5值
+     * @return 校验结果
+     */
+    public static boolean valid(String sourceStr, String md5Str) {
+        return md5Str.equalsIgnoreCase(md5(sourceStr));
+    }
+
+    /**
      * 得到对象的md5值
      * <p>原理：转成JSON字符串后再计算MD5值</p>
      *
