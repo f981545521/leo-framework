@@ -23,22 +23,6 @@ public class ReplaceUtil {
      * @return newUrl
      */
     public static String replaceParams(String text, Map<String, String> params) {
-        String newText = text;
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (text.contains(entry.getKey())) {
-                newText = newText.replace(entry.getKey(), entry.getValue());
-            }
-        }
-        return newText;
-    }
-
-    /**
-     * 替换text中的 key value
-     *
-     * @param text text
-     * @return newUrl
-     */
-    public static String replaceParams2(String text, Map<String, String> params) {
         Matcher matcher = REGEX_BRACE.matcher(text);
         String newText = text;
         while (matcher.find()) {
@@ -58,7 +42,7 @@ public class ReplaceUtil {
         params.put("{temp}", "28°");
         params.put("{temp2}", "28°");
         params.put("{real-weather}", "25°");
-        System.out.println(replaceParams2(text, params));
+        System.out.println(replaceParams(text, params));
     }
 
 }
