@@ -164,6 +164,11 @@
                 <version>5.13.3</version>
             </dependency>
             <!-- ZipKin End -->
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>1.11.3</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
