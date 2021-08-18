@@ -200,4 +200,15 @@ public class PageQuery {
         return convert(pageInfo, tarClass);
     }
 
+    /**
+     * 返回空分页
+     * @return 空分页
+     */
+    public static <T> PageData<T> empty() {
+        PageData<T> pageData = new PageData<>(1, 10);
+        pageData.setTotal(0L);
+        pageData.setTotalPage(0);
+        return pageData;
+    }
+
 }
