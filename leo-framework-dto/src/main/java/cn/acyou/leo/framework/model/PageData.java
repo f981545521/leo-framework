@@ -32,7 +32,7 @@ public class PageData<T> implements Serializable {
     private Long total;
 
     @ApiModelProperty("有下一页")
-    private boolean hasNextPage = true;
+    private boolean hasNextPage = false;
 
     @ApiModelProperty("返回数据")
     private List<T> list = new ArrayList<>();
@@ -113,17 +113,17 @@ public class PageData<T> implements Serializable {
      */
     public void processNextPage() {
         if (this.pageNum != null && this.pageSize != null && this.total != null) {
-            int totalPage;
+            long totalPage;
             if (pageSize == 0) {
-                totalPage = this.total.intValue();
+                totalPage = this.total;
                 this.hasNextPage = false;
             } else {
-                totalPage = (int) ((total + pageSize - 1) / pageSize);
-                if (pageNum >= totalPage) {
-                    this.hasNextPage = false;
+                totalPage = ((total + pageSize - 1) / pageSize);
+                if (pageNum < totalPage) {
+                    this.hasNextPage = true;
                 }
             }
-            this.totalPage = totalPage;
+            this.totalPage = (int) totalPage;
         }
     }
 
