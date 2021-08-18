@@ -2,6 +2,7 @@ package cn.acyou.leo.framework.commons;
 
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.PageSo;
+import cn.acyou.leo.framework.util.Assert;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
 import cn.acyou.leo.framework.util.SqlUtil;
 import com.github.pagehelper.PageHelper;
@@ -117,6 +118,7 @@ public class PageQuery {
      * @return PageData
      */
     public static PageQuery startPage(Integer pageNum, Integer pageSize) {
+        judgeNotNull(pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize);
         return new PageQuery();
     }
@@ -132,6 +134,7 @@ public class PageQuery {
      * @return PageData
      */
     public static PageQuery startPage(Integer pageNum, Integer pageSize, Boolean pageSizeZero) {
+        judgeNotNull(pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize, true, null, pageSizeZero);
         return new PageQuery();
     }
@@ -145,6 +148,7 @@ public class PageQuery {
      * @return PageData
      */
     public static PageQuery startPage(Integer pageNum, Integer pageSize, String orderBy) {
+        judgeNotNull(pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize, orderBy);
         return new PageQuery();
     }
@@ -169,6 +173,7 @@ public class PageQuery {
      * @return PageData
      */
     public static PageQuery startPage(PageSo pageSo, Boolean pageSizeZero) {
+        judgeNotNull(pageSo.getPageNum(), pageSo.getPageSize());
         PageHelper.startPage(pageSo.getPageNum(), pageSo.getPageSize(), true, null, pageSizeZero);
         PageHelper.orderBy(SqlUtil.convertOrderBy(pageSo));
         return new PageQuery();
@@ -209,6 +214,17 @@ public class PageQuery {
         pageData.setTotal(0L);
         pageData.setTotalPage(0);
         return pageData;
+    }
+
+    /**
+     * 判断非空
+     *
+     * @param pageNum  页面num
+     * @param pageSize 页面大小
+     */
+    private static void judgeNotNull(Integer pageNum, Integer pageSize){
+        Assert.notNull(pageNum, "[pageNum]不能为空！");
+        Assert.notNull(pageSize, "[pageSize]不能为空！");
     }
 
 }
