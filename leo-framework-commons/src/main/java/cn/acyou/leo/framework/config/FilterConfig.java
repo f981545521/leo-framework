@@ -37,9 +37,7 @@ public class FilterConfig {
         if (StringUtil.isNotNullOrBlank(xssProperty.getExcludes())) {
             initParameters.put("excludes", xssProperty.getExcludes());
         }
-        if (StringUtil.isNotNullOrBlank(xssProperty.getEnabled())) {
-            initParameters.put("enabled", xssProperty.getEnabled());
-        }
+        initParameters.put("enabled", String.valueOf(xssProperty.isEnabled()));
         registration.setInitParameters(initParameters);
         return registration;
     }

@@ -14,7 +14,7 @@ public class XssProperty {
     /**
      * 开启XSS过滤
      */
-    private String enabled = "true";
+    private boolean enabled = true;
     /**
      * XSS过滤排除URL
      */
