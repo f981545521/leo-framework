@@ -58,8 +58,8 @@ public class PageData<T> implements Serializable {
     }
 
     public void setPageNum(Integer pageNum) {
-        processNextPage();
         this.pageNum = pageNum;
+        processNextPage();
     }
 
     public Integer getPageSize() {
@@ -67,8 +67,8 @@ public class PageData<T> implements Serializable {
     }
 
     public void setPageSize(Integer pageSize) {
-        processNextPage();
         this.pageSize = pageSize;
+        processNextPage();
     }
 
     public Long getTotal() {
@@ -76,8 +76,8 @@ public class PageData<T> implements Serializable {
     }
 
     public void setTotal(Long total) {
-        processNextPage();
         this.total = total;
+        processNextPage();
     }
 
     public List<T> getList() {
