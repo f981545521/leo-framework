@@ -774,6 +774,21 @@ public class RedisUtils {
     }
 
     /**
+     * 封装ZSetItem为 TypedTuple类型
+     *
+     * @param zSetItems zset
+     * @return TypedTuple
+     */
+    private Set<TypedTuple<String>> buildTypedTuple(Collection<ZSetItem> zSetItems) {
+        Set<TypedTuple<String>> result = new HashSet<>();
+        for (ZSetItem zSetItem : zSetItems) {
+            TypedTuple<String> typedTuple = new DefaultTypedTuple<>(zSetItem.getValue(), zSetItem.getScore());
+            result.add(typedTuple);
+        }
+        return result;
+    }
+
+    /**
      * 自增 / 自减
      *
      * @param key   key
@@ -857,11 +872,32 @@ public class RedisUtils {
      * 将一个或多个 member 元素及其 score 值加入到有序集 key 当中。
      *
      * @param key         key
-     * @param typedTuples 输入元组
+     * @param zSetItems 输入元组
      * @return {@link Long}
      */
-    public Long zSetAdd(String key, Set<TypedTuple<String>> typedTuples) {
-        return redisTemplate.opsForZSet().add(key, typedTuples);
+    public Long zSetAdd(String key, Collection<ZSetItem> zSetItems) {
+        return redisTemplate.opsForZSet().add(key, buildTypedTuple(zSetItems));
+    }
+    /**
+     * 返回集合 key 的基数(集合中元素的数量)。
+     *
+     * @param key         key
+     * @return 集合中元素的数量
+     */
+    public Long zSetCard(String key) {
+        return redisTemplate.opsForZSet().zCard(key);
+    }
+
+    /**
+     * 返回有序集 key 中， score 值在 min 和 max 之间(默认包括 score 值等于 min 或 max )的成员的数量。
+     *  score 值介于 min 和 max 之间(包括等于 min 或 max )的成员。有序集成员按 score 值递增(从小到大)次序排列。
+     * @param key key
+     * @param min 分数最小值
+     * @param max 分数最大值
+     * @return 集合中元素的数量
+     */
+    public Long zSetCount(String key, double min, double max) {
+        return redisTemplate.opsForZSet().count(key, min, max);
     }
 
     /**
