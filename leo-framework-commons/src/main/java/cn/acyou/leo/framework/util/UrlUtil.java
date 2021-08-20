@@ -181,7 +181,24 @@ public class UrlUtil {
         if (url.endsWith("&")){
             url = url.substring(0, url.length() - 1);
         }
+        if (!url.contains("?")){
+            url = url.concat("?");
+        }
         return url + StringUtils.join(paramList, "");
+    }
+
+    /**
+     * 为URL追加参数
+     *
+     * @param url    url
+     * @param params 参数个数
+     * @return {@link String}
+     */
+    public static <T> String append(String url, Map<String, T> params){
+        for (Map.Entry<String, T> entry : params.entrySet()) {
+            url = append(url, entry.getKey(), entry.getValue().toString());
+        }
+        return url;
     }
 
     /**
