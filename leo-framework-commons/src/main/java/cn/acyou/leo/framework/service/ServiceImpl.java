@@ -33,8 +33,7 @@ public class ServiceImpl<M extends Mapper<T>, T> implements Service<T> {
 
     @SuppressWarnings("unchecked")
     public ServiceImpl() {
-        TypeToken<T> poType = new TypeToken<T>(getClass()) {
-        };
+        TypeToken<T> poType = new TypeToken<T>(getClass()) {};
         clazz = (Class<T>) poType.getRawType();
     }
 

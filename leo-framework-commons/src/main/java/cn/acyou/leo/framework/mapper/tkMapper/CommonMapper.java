@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.mapper.tkMapper;
 
+import cn.acyou.leo.framework.annotation.mapper.LogicDelete;
 import cn.acyou.leo.framework.annotation.mapper.SelectiveIgnore;
 import cn.acyou.leo.framework.mapper.tkMapper.provide.CommonMapperProvider;
 import org.apache.ibatis.annotations.*;

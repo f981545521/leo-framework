@@ -151,7 +151,7 @@ public class EnhanceValidUtil {
                 throw new ServiceException(description);
             }
 
-            if (validValue.toString().length() < baseValid.minLength() && baseValid.minLength() != 0) {
+            if (validValue.toString().length() < baseValid.minLength()) {
                 logger.warn("[数据校验]|{}|{}|{}|{}", "valid failed", currentFieldName, "长度小于了", baseValid.minLength());
                 throw new ServiceException(description);
             }

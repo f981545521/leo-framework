@@ -35,7 +35,7 @@ import java.util.Properties;
  * @author liuzh/abel533/isea533    youfang
  * @version 5.0.0
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes"})
 @Intercepts(
         {
                 @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
@@ -46,7 +46,7 @@ public class MyPageInterceptor implements Interceptor {
     private volatile Dialect dialect;
     private String countSuffix = "_COUNT";
     protected Cache<String, MappedStatement> msCountMap = null;
-    private String default_dialect_class = "com.github.pagehelper.PageHelper";
+    private final String default_dialect_class = "com.github.pagehelper.PageHelper";
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {

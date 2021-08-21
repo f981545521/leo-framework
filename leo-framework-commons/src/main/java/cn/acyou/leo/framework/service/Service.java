@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.service;
 
+import cn.acyou.leo.framework.annotation.mapper.SelectiveIgnore;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -125,7 +127,7 @@ public interface Service<T> {
 
     /**
      * 根据Example条件更新实体`record`包含的不是null的属性值 （根据注解忽略）
-     * {@link cn.com.zhengya.framework.mapper.tkMapper.annotation.SelectiveIgnore}
+     * {@link SelectiveIgnore}
      *     在属性字段上加上注解，不会忽略null值
      *     - @SelectiveIgnore
      * @param record 记录
@@ -151,7 +153,7 @@ public interface Service<T> {
     int updateByPrimaryKeySelective(T record);
     /**
      * 根据主键更新属性不为null的值 （根据注解忽略）
-     * {@link cn.com.zhengya.framework.mapper.tkMapper.annotation.SelectiveIgnore}
+     * {@link SelectiveIgnore}
      *     在属性字段上加上注解，不会忽略null值
      *     - @SelectiveIgnore
      * @param record 记录
