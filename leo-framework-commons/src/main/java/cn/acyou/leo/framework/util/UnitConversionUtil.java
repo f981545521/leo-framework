@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import org.joda.time.DateTime;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,7 +41,7 @@ public class UnitConversionUtil {
      * <p>转换时间，为：时/分/秒/毫秒</p>
      *
      * <pre>
-     *     convertTime(33333, TimeUnit.MILLISECONDS) = |时:0|分:0|秒:33|毫秒:333|
+     *     convertTime(333333, TimeUnit.MILLISECONDS) = |0:5:33.333|
      * </pre>
      *
      * @param duration 持续时间
@@ -60,7 +62,7 @@ public class UnitConversionUtil {
         if (seconds > 0) {
             milliseconds = milliseconds - (seconds * 1000);
         }
-        return String.format("|时:%s|分:%s|秒:%s|毫秒:%s|", hours, minutes, seconds, milliseconds);
+        return String.format("|%s:%s:%s.%s|", hours, minutes, seconds, milliseconds);
     }
 
 }
