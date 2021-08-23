@@ -26,7 +26,7 @@ public class HttpUtil2 {
 
     static {
         restTemplate = new RestTemplateBuilder()
-                .messageConverters(getJsonMessageConvert())
+                .messageConverters(getFastJsonMessageConvert())
                 .setConnectTimeout(Duration.ofMinutes(5))
                 .build();
     }
@@ -118,13 +118,21 @@ public class HttpUtil2 {
         return result.getBody();
     }
 
+    /**
+     * post TODO： ？？？？？？？？？？
+     *
+     * @param url        url
+     * @param paramsMap  参数映射
+     * @param headersMap 头图
+     * @param resType    res类型
+     * @return {@link T}
+     */
     public static <T> T post(String url, Map<String, Object> paramsMap, Map<String, String> headersMap, Class<T> resType){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         if (headersMap != null && !headersMap.isEmpty()) {
             headersMap.forEach(headers::add);
         }
-
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         if (paramsMap != null && !paramsMap.isEmpty()) {
             for (Map.Entry<String, Object> stringObjectEntry : paramsMap.entrySet()) {
@@ -157,7 +165,12 @@ public class HttpUtil2 {
         System.out.println(s);
     }
 
-    private static HttpMessageConverter getJsonMessageConvert(){
+    /**
+     * 获取 FastJson消息转换器
+     *
+     * @return FastJson消息转换器
+     */
+    private static FastJsonHttpMessageConverter getFastJsonMessageConvert(){
         FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);

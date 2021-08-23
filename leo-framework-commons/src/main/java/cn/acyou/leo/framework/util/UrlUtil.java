@@ -194,8 +194,8 @@ public class UrlUtil {
      * @param params 参数个数
      * @return {@link String}
      */
-    public static <T> String append(String url, Map<String, T> params){
-        for (Map.Entry<String, T> entry : params.entrySet()) {
+    public static String append(String url, Map<String, ?> params){
+        for (Map.Entry<String, ?> entry : params.entrySet()) {
             url = append(url, entry.getKey(), entry.getValue().toString());
         }
         return url;
