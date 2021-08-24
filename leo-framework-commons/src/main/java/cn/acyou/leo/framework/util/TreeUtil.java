@@ -1,12 +1,10 @@
 package cn.acyou.leo.framework.util;
 
-import cn.acyou.leo.framework.model.TreeNode;
-import org.apache.commons.collections4.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import cn.acyou.leo.framework.model.TreeNode;
 
 /**
  * 构建树形结构工具

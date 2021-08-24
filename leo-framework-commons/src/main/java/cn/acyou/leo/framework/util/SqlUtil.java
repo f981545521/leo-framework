@@ -3,8 +3,6 @@ package cn.acyou.leo.framework.util;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.PageSo;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;

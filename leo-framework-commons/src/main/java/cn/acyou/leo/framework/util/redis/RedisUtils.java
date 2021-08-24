@@ -1,8 +1,8 @@
 package cn.acyou.leo.framework.util.redis;
 
 import cn.acyou.leo.framework.exception.ServiceException;
+import cn.acyou.leo.framework.util.CollectionUtils;
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

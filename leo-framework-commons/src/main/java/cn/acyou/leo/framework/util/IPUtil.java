@@ -1,7 +1,5 @@
 package cn.acyou.leo.framework.util;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
