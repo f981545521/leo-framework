@@ -1,19 +1,19 @@
 package cn.acyou.leo.framework.util.redis;
 
 import cn.acyou.leo.framework.exception.ServiceException;
-import cn.acyou.leo.framework.util.CollectionUtils;
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisZSetCommands.Limit;
-import org.springframework.data.redis.connection.RedisZSetCommands.Range;
+import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.connection.RedisZSetCommands;
+import org.springframework.data.redis.connection.SortParameters;
 import org.springframework.data.redis.core.*;
-import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.data.redis.core.query.SortQuery;
+import org.springframework.data.redis.core.query.SortQueryBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -21,372 +21,18 @@ import java.util.concurrent.TimeUnit;
  * Redis 命令参考
  * http://doc.redisfans.com/
  *
- * @author youfang
- * @version [1.0.0, 2020-3-21 下午 10:44]
- **/
+ * @author fangyou
+ * @version [1.0.0, 2021-08-25 13:50]
+ */
 @Component
 public class RedisUtils {
     private static final Logger log = LoggerFactory.getLogger(RedisUtils.class);
-
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    public RedisUtils(){
+    public RedisUtils() {
         log.info("RedisUtils 初始化。");
     }
-
-    /**
-     * 获取String 类型
-     *
-     * @param key 键
-     * @return 值
-     */
-    public String get(String key) {
-        String strValue = redisTemplate.opsForValue().get(key);
-        if (log.isDebugEnabled()){
-            log.debug("接口调用详情：参数K： " + key);
-        }
-        return strValue;
-    }
-
-    /**
-     * 设置String 类型
-     *
-     * @param key     K
-     * @param value   V
-     * @param timeout 超时
-     * @param unit    单位
-     */
-    public void set(String key, String value, Long timeout, TimeUnit unit) {
-        if (log.isDebugEnabled()){
-            log.debug("{}|{}|{}|{}|{}", "set方法入参：", "键:" + key, "值:" + value, "存活时间:" + timeout, "时间单位:" + unit);
-        }
-        if (timeout != null) {
-            redisTemplate.opsForValue().set(key, value, timeout, unit != null ? unit : TimeUnit.SECONDS);
-        } else {
-            redisTemplate.opsForValue().set(key, value);
-        }
-    }
-
-    /**
-     * 设置String 类型
-     *
-     * @param key     K
-     * @param value   V
-     * @param timeout 超时时间（单位秒）
-     */
-    public void set(String key, String value, long timeout) {
-        if (log.isDebugEnabled()){
-            log.debug("接口调用详情：参数K-V： " + key + "=" + value);
-        }
-        redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
-    }
-
-    /**
-     * 设置String 类型 (永久有效)
-     *
-     * @param key   K
-     * @param value V
-     */
-    public void set(String key, String value) {
-        if (log.isDebugEnabled()){
-            log.debug("接口调用详情：参数K-V： " + key + "=" + value);
-        }
-        redisTemplate.opsForValue().set(key, value);
-    }
-
-    /**
-     * 根据key删除存在的Key
-     *
-     * @param key key
-     */
-    public void delete(String key) {
-        redisTemplate.delete(key);
-    }
-
-    /**
-     * 根据多个key批量删除缓存中的value
-     *
-     * @param keys keys
-     */
-    public void delete(Collection<String> keys) {
-        redisTemplate.delete(keys);
-    }
-
-    /**
-     * 将一个或多个值 value 插入到列表 key 的表头
-     *
-     * @param key     key
-     * @param timeout 出栈操作的连接阻塞保护时间,时间单位为秒
-     * @return v
-     */
-    public String listLeftPop(String key, long timeout) {
-        if (log.isDebugEnabled()){
-            log.debug("接口调用详情：参数K： " + key);
-        }
-        return redisTemplate.opsForList().leftPop(key, timeout, TimeUnit.SECONDS);
-    }
-
-    /**
-     * 将一个或多个值 value 插入到列表 key 的表头
-     *
-     * @return 执行 LPUSH 命令后，列表的长度。
-     */
-    public Long listLeftPush(String key, String value) {
-        return redisTemplate.opsForList().leftPush(key, value);
-    }
-
-    /**
-     * 将一个或多个值 value 插入到列表 key 的表头
-     *
-     * @return 执行 LPUSH 命令后，列表的长度。
-     */
-    public Long listLeftPushAll(String key, Collection<String> values) {
-        return redisTemplate.opsForList().leftPushAll(key, values);
-    }
-
-    /**
-     * 移除并返回列表 key 的尾元素。
-     *
-     * @param key     key
-     * @param timeout 出队操作的连接阻塞保护时间,时间单位为秒
-     * @return v
-     */
-    public String listRightPop(String key, long timeout) {
-        return redisTemplate.opsForList().rightPop(key, timeout, TimeUnit.SECONDS);
-    }
-
-    /**
-     * 移除并返回列表 key 的尾元素。
-     *
-     * @param key key
-     * @return 列表的尾元素。
-     */
-    public String listRightPop(String key) {
-        return redisTemplate.opsForList().rightPop(key);
-    }
-
-    /**
-     * 移除并返回列表 key 的尾元素。 并转为指定对象
-     *
-     * @param key   Key
-     * @param clazz clazz
-     * @return {@link T}
-     */
-    public <T> T listRightPop2Object(String key, Class<T> clazz) {
-        try {
-            String strValue = redisTemplate.opsForList().rightPop(key);
-            if (StringUtils.isNotEmpty(strValue)) {
-                return JSON.parseObject(strValue, clazz);
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            log.error("Json转对象失败!", e);
-            return null;
-        }
-    }
-
-    /**
-     * 将一个 value 插入到列表 key 的表尾(最右边)。
-     *
-     * @param key 键
-     * @return 执行 RPUSH 操作后，表的长度。
-     */
-    public Long listRightPush(String key, String value) {
-        return redisTemplate.opsForList().rightPush(key, value);
-    }
-
-    /**
-     * 将一个或多个值 value 插入到列表 key 的表尾(最右边)。
-     *
-     * @param key 键
-     * @return 执行 RPUSH 操作后，表的长度。
-     */
-    public Long listRightPushAll(String key, Collection<String> values) {
-        return redisTemplate.opsForList().rightPushAll(key, values);
-    }
-
-    /**
-     * 移除并返回集合中的一个随机元素。
-     *
-     * @param key 键
-     * @return 被移除的随机元素。
-     * 当 key 不存在或 key 是空集时，返回 nil 。
-     */
-    public String setPop(String key) {
-        return redisTemplate.opsForSet().pop(key);
-    }
-
-    /**
-     * 对Set的添加操作
-     *
-     * @param key    键
-     * @param values 插入Set的String数组
-     * @return Long
-     */
-    public Long setAdd(String key, String... values) {
-        return redisTemplate.opsForSet().add(key, values);
-    }
-
-    /**
-     * 移除集合key中的一个或多个member元素，不存在的member元素会被忽略。
-     *
-     * @param key    键
-     * @param values 值
-     */
-    public Long setRemove(String key, Object... values) {
-        return redisTemplate.opsForSet().remove(key, values);
-    }
-
-    /**
-     * 随机获取多个key无序集合中的元素（去重），count表示个数
-     *
-     * @param key   键
-     * @param count 数量
-     * @return 只提供 key 参数时，返回一个元素；如果集合为空，返回 nil 。
-     * 如果提供了 count 参数，那么返回一个数组；如果集合为空，返回空数组。
-     */
-    public Set<String> setDistinctRandomMembers(String key, long count) {
-        return redisTemplate.opsForSet().distinctRandomMembers(key, count);
-    }
-
-    /**
-     * 根据key获取  hashKey对应的value的值 并转换为Bean
-     *
-     * @param key     键
-     * @param hashKey hashKey
-     * @return Bean
-     */
-    public <T> T hashGet(String key, String hashKey, Class<T> clazz) {
-        String o = (String) redisTemplate.opsForHash().get(key, hashKey);
-        return JSON.parseObject(o, clazz);
-    }
-
-    /**
-     * 根据key获取  hashKey对应的value的List
-     *
-     * @param key 键
-     * @return hashKey对应的value的List
-     */
-    public List<Object> hashMultiGet(String key, Collection<Object> hashKeys) {
-        return redisTemplate.opsForHash().multiGet(key, hashKeys);
-    }
-
-    /**
-     * 返回键上的所有hashKey与value
-     *
-     * @param key 键
-     * @return 键上所有的hashKey与value
-     */
-    public Map<Object, Object> hashGetAll(String key) {
-        return redisTemplate.opsForHash().entries(key);
-    }
-
-    /**
-     * 根据hashkey向key对应的HashMap中添加value
-     *
-     * @param key     键
-     * @param hashKey 对应的HashMap中的Key
-     * @param value   值
-     */
-    public void hashPut(String key, Object hashKey, Object value) {
-        redisTemplate.opsForHash().put(key, hashKey, JSON.toJSONString(value));
-    }
-
-    /**
-     * 根据hashkey向key对应的HashMap中添加value
-     *
-     * @param key     键
-     * @param hashKey 对应的HashMap中的Key
-     * @param value   值
-     */
-    public void hashPut(String key, Object hashKey, Object value, long outTime) {
-        redisTemplate.opsForHash().put(key, hashKey, JSON.toJSONString(value));
-    }
-
-    /**
-     * 根据key向缓存中插入整个HashMap
-     *
-     * @param key 键
-     * @param map 要插入的HashMap对象
-     */
-    public void hashPutAll(String key, Map<Object, Object> map) {
-        redisTemplate.opsForHash().putAll(key, map);
-    }
-
-    /**
-     * 删除哈希表 key 中的一个或多个指定域，不存在的域将被忽略。
-     *
-     * @param key      键
-     * @param hashKeys hash值
-     * @return 被成功移除的域的数量，不包括被忽略的域。
-     */
-    public Long hashDelete(String key, String... hashKeys) {
-        Long counts;
-        if (hashKeys.length > 1) {
-            Object[] objKeys = hashKeys.clone();
-            counts = redisTemplate.opsForHash().delete(key, objKeys);
-        } else {
-            counts = redisTemplate.opsForHash().delete(key, hashKeys[0]);
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("接口调用详情：参数K： " + key);
-        }
-        return counts;
-    }
-
-    /**
-     * 判断hash表中是否有该项的值
-     *
-     * @param key     键 不能为null
-     * @param hashKey hash值 不能为null
-     * @return true 存在 false不存在
-     */
-    public boolean hashHasKey(String key, String hashKey) {
-        return redisTemplate.opsForHash().hasKey(key, hashKey);
-    }
-
-    /**
-     * 根据key获取Map中所有的记录条数
-     *
-     * @param key 键
-     * @return 返回哈希表 key 中域的数量。
-     */
-    public Long hashSize(String key) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.opsForHash().size(key);
-    }
-
-    /**
-     * 将一个或多个 member 元素及其 score 值加入到有序集 key 当中。
-     * <p>
-     * 如果某个 member 已经是有序集的成员，那么更新这个 member 的 score 值，并通过重新插入这个 member 元素，来保证该 member 在正确的位置上。
-     * score 值可以是整数值或双精度浮点数。
-     * 如果 key 不存在，则创建一个空的有序集并执行 ZADD 操作。
-     *
-     * @param key   key
-     * @param value value
-     * @param score 分数
-     * @return true/false
-     */
-    public Boolean zSetAdd(String key, String value, double score) {
-        log.debug("接口调用详情：参数K： " + key + "值： " + value + "");
-        return redisTemplate.opsForZSet().add(key, value, score);
-    }
-
-    /**
-     * 根据分数从大到小 获取前几个
-     *
-     * @param key   key
-     * @param limit 前几
-     * @return value集合
-     */
-    public Set<String> zSetReverseRangeLimit(String key, long limit) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.opsForZSet().reverseRange(key, 0, limit);
-    }
-
 
     /**
      * ZSet 类型操作
@@ -430,30 +76,990 @@ public class RedisUtils {
         return redisTemplate.opsForGeo();
     }
 
+
     /**
-     * 移除有序集 key 中的一个或多个成员，不存在的成员将被忽略。
+     * 从当前数据库中随机返回(不删除)一个 key 。
      *
-     * @param key    key 键
-     * @param values values 值
-     * @return 被成功移除的成员的数量，不包括被忽略的成员。
+     * @return 当数据库不为空时，返回一个 key 。
+     * 当数据库为空时，返回 nil 。
      */
-    public Long zSetRemove(String key, Object... values) {
-        log.debug("接口调用详情：参数K： " + key + "值： " + Arrays.toString(values) + "");
-        return redisTemplate.opsForZSet().remove(key, values);
+    public String randomKey() {
+        return redisTemplate.randomKey();
+    }
+
+    /**
+     * 统计存在的键
+     *
+     * @param keys 键
+     * @return 存在的键的数量
+     */
+    public Long countExistingKeys(Collection<String> keys) {
+        return redisTemplate.countExistingKeys(keys);
+    }
+
+    /**
+     * 删除
+     *
+     * @param keys 键
+     * @return 删除的数量
+     */
+    public Long delete(Collection<String> keys) {
+        return redisTemplate.delete(keys);
+    }
+
+    /**
+     * 删除
+     *
+     * @param key 键
+     * @return 成功/失败
+     */
+    public Boolean delete(String key) {
+        return redisTemplate.delete(key);
+    }
+
+    /**
+     * 包含键
+     *
+     * @param key 键
+     * @return 是/否
+     */
+    public Boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    /**
+     * 为键设置过期时间
+     *
+     * @param key     关键
+     * @param timeout 超时
+     * @return 成功/失败
+     */
+    public Boolean expire(String key, Duration timeout) {
+        return redisTemplate.expire(key, timeout);
+    }
+
+    /**
+     * 为键设置过期时间
+     *
+     * @param key     关键
+     * @param timeout 时间
+     * @param unit    单位
+     * @return 成功/失败
+     */
+    public Boolean expire(String key, long timeout, TimeUnit unit) {
+        return redisTemplate.expire(key, timeout, unit);
+    }
+
+    /**
+     * 为键设置过期时间
+     *
+     * @param key  关键
+     * @param date 日期
+     * @return 成功/失败
+     */
+    public Boolean expireAt(String key, Date date) {
+        return redisTemplate.expireAt(key, date);
+    }
+
+    /**
+     * 以秒为单位，返回给定 key 的剩余生存时间(TTL, time to live)。
+     *
+     * @param key 关键
+     * @return 当 key 不存在时，返回 -2 。
+     * 当 key 存在但没有设置剩余生存时间时，返回 -1 。
+     * 否则，以秒为单位，返回 key 的剩余生存时间。
+     */
+    public Long getExpire(String key) {
+        return redisTemplate.getExpire(key);
+    }
+
+    /**
+     * 返回给定 key 的剩余生存时间(TTL, time to live)。
+     *
+     * @param key  关键
+     * @param unit 单位
+     * @return 过期时间
+     */
+    public Long getExpire(String key, TimeUnit unit) {
+        return redisTemplate.getExpire(key, unit);
+    }
+
+    /**
+     * 查找所有符合给定模式 pattern 的 key 。
+     * <pre>
+     * KEYS * 匹配数据库中所有 key 。
+     * KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。
+     * KEYS h*llo 匹配 hllo 和 heeeeello 等。
+     * KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo 。
+     * 特殊符号用 \ 隔开
+     * </pre>
+     *
+     * @param pattern 模式
+     * @return 符合给定模式的 key 列表。
+     */
+    public Set<String> keys(String pattern) {
+        return redisTemplate.keys(pattern);
+    }
+
+    /**
+     * 移除给定 key 的生存时间，将这个 key 从『易失的』(带生存时间 key )转换成『持久的』(一个不带生存时间、永不过期的 key )。
+     *
+     * @param key 关键
+     * @return <p>当生存时间移除成功时，返回 1 .</p>
+     * <p>如果 key 不存在或 key 没有设置生存时间，返回 0 。</p>
+     */
+    public Boolean persist(String key) {
+        return redisTemplate.persist(key);
     }
 
 
     /**
-     * 返回一个成员范围的有序集合，通过索引，以分数排序，从低分到高分
+     * 将 key 改名为 newkey 。
+     * 当 key 和 newkey 相同，或者 key 不存在时，返回一个错误。
+     * 当 newkey 已经存在时， RENAME 命令将覆盖旧值。
+     * <p>
+     * 改名成功时提示 OK ，失败时候返回一个错误。
+     *
+     * @param oldKey 旧的关键
+     * @param newKey 新的密钥
+     */
+    public void rename(String oldKey, String newKey) {
+        redisTemplate.rename(oldKey, newKey);
+    }
+
+    /**
+     * 当且仅当 newkey 不存在时，将 key 改名为 newkey 。
+     *
+     * @param oldKey 旧的关键
+     * @param newKey 新的密钥
+     * @return 修改成功时，返回 1 。
+     * 如果 newkey 已经存在，返回 0 。
+     */
+    public Boolean renameIfAbsent(String oldKey, String newKey) {
+        return redisTemplate.renameIfAbsent(oldKey, newKey);
+    }
+
+
+    /**
+     * 排序
+     *
+     * @param key      关键
+     * @param order    排序
+     * @param pageNum  页码
+     * @param pageSize 页面大小
+     * @return 元素
+     */
+    public List<String> sort(String key, SortParameters.Order order, long pageNum, long pageSize) {
+        long offset = (pageNum - 1) * pageSize;
+        SortQuery<String> sortQuery = SortQueryBuilder.sort(key).order(order).limit(offset, pageSize).build();
+        return redisTemplate.sort(sortQuery);
+    }
+
+    /**
+     * 返回 key 所储存的值的类型。
+     *
+     * @param key 关键
+     * @return 类型
+     */
+    public DataType type(String key) {
+        return redisTemplate.type(key);
+    }
+
+    /**
+     * 如果 key 已经存在并且是一个字符串， APPEND 命令将 value 追加到 key 原来的值的末尾。
+     * <p>
+     * 如果 key 不存在， APPEND 就简单地将给定 key 设为 value ，就像执行 SET key value 一样。
      *
      * @param key   键
+     * @param value 值
+     * @return 追加 value 之后， key 中字符串的长度。
+     */
+    public Integer append(String key, String value) {
+        return redisTemplate.opsForValue().append(key, value);
+    }
+
+    /**
+     * 将 key 中储存的数字值减一。
+     * <p>
+     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECR 操作。
+     *
+     * @param key 关键
+     * @return 执行 DECR 命令之后 key 的值。
+     */
+    public Long decrement(String key) {
+        return redisTemplate.opsForValue().decrement(key);
+    }
+
+    /**
+     * 将 key 所储存的值减去减量 decrement 。
+     *
+     * @param key  关键
+     * @param deal 减量
+     * @return 减去 decrement 之后， key 的值。
+     */
+    public Long decrement(String key, long deal) {
+        return redisTemplate.opsForValue().decrement(key, deal);
+    }
+
+    /**
+     * 将 key 中储存的数字值增一。
+     * <p>
+     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作。
+     *
+     * @param key 关键
+     * @return 执行 INCR 命令之后 key 的值。
+     */
+    public Long increment(String key) {
+        return redisTemplate.opsForValue().increment(key);
+    }
+
+    /**
+     * 将 key 所储存的值加上增量 increment 。
+     * <p>
+     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCRBY 命令。
+     *
+     * @param key  键
+     * @param deal 增量
+     * @return 加上 increment 之后， key 的值。
+     */
+    public Long increment(String key, long deal) {
+        return redisTemplate.opsForValue().increment(key, deal);
+    }
+
+    /**
+     * 返回 key 所关联的字符串值。
+     *
+     * @param key 关键
+     * @return 当 key 不存在时，返回 nil ，否则，返回 key 的值。
+     * 如果 key 不是字符串类型，那么返回一个错误。
+     */
+    public String get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
+    /**
+     * 将给定 key 的值设为 value ，并返回 key 的旧值(old value)。
+     *
+     * @param key   键
+     * @param value 值
+     * @return 返回给定 key 的旧值。
+     */
+    public String getAndSet(String key, String value) {
+        return redisTemplate.opsForValue().getAndSet(key, value);
+    }
+
+    /**
+     * 返回所有(一个或多个)给定 key 的值。
+     *
+     * @param keys 键
+     * @return 一个包含所有给定 key 的值的列表。
+     */
+    public List<String> multiGet(Collection<String> keys) {
+        return redisTemplate.opsForValue().multiGet(keys);
+    }
+
+    /**
+     * 同时设置一个或多个 key-value 对。
+     *
+     * @param keyValues 键值
+     */
+    public void multiSet(Map<String, String> keyValues) {
+        redisTemplate.opsForValue().multiSet(keyValues);
+    }
+
+    /**
+     * 同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在。
+     *
+     * @param keyValues 键值
+     * @return 成功/失败
+     */
+    public Boolean multiSetIfAbsent(Map<String, String> keyValues) {
+        return redisTemplate.opsForValue().multiSetIfAbsent(keyValues);
+    }
+
+    /**
+     * 将字符串值 value 关联到 key 。
+     * <p>
+     * 如果 key 已经持有其他值， SET 就覆写旧值，无视类型。
+     * <p>
+     * 对于某个原本带有生存时间（TTL）的键来说， 当 SET 命令成功在这个键上执行时， 这个键原有的 TTL 将被清除。
+     *
+     * @param key   关键
+     * @param value 价值
+     */
+    public void set(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
+
+    /**
+     * 将值 value 关联到 key ，并设置 key 的生存时间。
+     *
+     * @param key     键
+     * @param value   值
+     * @param timeout 超时
+     * @param unit    单位
+     */
+    public void set(String key, String value, long timeout, TimeUnit unit) {
+        redisTemplate.opsForValue().set(key, value, timeout, unit);
+    }
+
+    /**
+     * 将 key 的值设为 value ，当且仅当 key 不存在。
+     *
+     * @param key   关键
+     * @param value 价值
+     */
+    public void setIfAbsent(String key, String value) {
+        redisTemplate.opsForValue().setIfAbsent(key, value);
+    }
+
+    /**
+     * 将 key 的值设为 value ，当且仅当 key 不存在。并设置 key 的生存时间。
+     *
+     * @param key     关键
+     * @param value   价值
+     * @param timeout 超时
+     * @param unit    单位
+     */
+    public void setIfAbsent(String key, String value, long timeout, TimeUnit unit) {
+        redisTemplate.opsForValue().setIfAbsent(key, value, timeout, unit);
+    }
+
+    /**
+     * 如果存在设置
+     *
+     * @param key   关键
+     * @param value 价值
+     */
+    public void setIfPresent(String key, String value) {
+        redisTemplate.opsForValue().setIfPresent(key, value);
+    }
+
+    /**
+     * 如果存在设置，并设置 key 的生存时间。
+     *
+     * @param key     关键
+     * @param value   价值
+     * @param timeout 超时
+     * @param unit    单位
+     */
+    public void setIfPresent(String key, String value, long timeout, TimeUnit unit) {
+        redisTemplate.opsForValue().setIfPresent(key, value, timeout, unit);
+    }
+
+    /**
+     * 获取值的长度：<code>STRLEN</code>
+     *
+     * @param key 关键
+     * @return 值的长度
+     */
+    public Long size(String key) {
+        return redisTemplate.opsForValue().size(key);
+    }
+
+    /*
+     * ——————————————————————————Hash——————————————————————————————
+     */
+
+
+    /**
+     * 散列的大小
+     *
+     * @param key 关键
+     * @return 所有hash键的数量
+     */
+    public Long hashSize(String key) {
+        return redisTemplate.opsForHash().size(key);
+    }
+
+    /**
+     * 散列删除
+     *
+     * @param key      关键
+     * @param hashKeys 散列键
+     * @return 已删除的数量
+     */
+    public Long hashDelete(String key, Object... hashKeys) {
+        return redisTemplate.opsForHash().delete(key, hashKeys);
+    }
+
+    /**
+     * 散列有关键
+     *
+     * @param key      关键
+     * @param hashKeys 散列键
+     * @return 是/否
+     */
+    public Boolean hashHasKey(String key, Object hashKeys) {
+        return redisTemplate.opsForHash().hasKey(key, hashKeys);
+    }
+
+    /**
+     * 哈希得到
+     *
+     * @param key      关键
+     * @param hashKeys 散列键
+     * @return 哈希值
+     */
+    public Object hashGet(String key, Object hashKeys) {
+        return redisTemplate.opsForHash().get(key, hashKeys);
+    }
+
+    /**
+     * 散列多得到
+     *
+     * @param key      关键
+     * @param hashKeys 散列键
+     * @return 哈希值列表
+     */
+    public List<Object> hashMultiGet(String key, Collection<Object> hashKeys) {
+        return redisTemplate.opsForHash().multiGet(key, hashKeys);
+    }
+
+    /**
+     * 散列增量
+     *
+     * @param key     关键
+     * @param hashKey 散列键
+     * @param delta   δ
+     * @return 增量后的值
+     */
+    public Long hashIncrement(String key, String hashKey, long delta) {
+        return redisTemplate.opsForHash().increment(key, hashKey, delta);
+    }
+
+    /**
+     * 散列键
+     *
+     * @param key 关键
+     * @return 值集合
+     */
+    public Set<Object> hashKeys(String key) {
+        return redisTemplate.opsForHash().keys(key);
+    }
+
+    /**
+     * 哈希设置键值
+     *
+     * @param key     关键
+     * @param hashKey 散列键
+     * @param value   价值
+     */
+    public void hashPut(String key, String hashKey, String value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+    }
+
+    /**
+     * 哈希设置键值 如果缺席
+     *
+     * @param key     关键
+     * @param hashKey 散列键
+     * @param value   价值
+     */
+    public void hashPutIfAbsent(String key, String hashKey, String value) {
+        redisTemplate.opsForHash().putIfAbsent(key, hashKey, value);
+    }
+
+    /**
+     * 哈希批量设置键值
+     *
+     * @param key     关键
+     * @param entries 条目
+     */
+    public void hashPutAll(String key, Map<String, String> entries) {
+        redisTemplate.opsForHash().putAll(key, entries);
+    }
+
+    /**
+     * hash的值列表
+     *
+     * @param key 关键
+     * @return 值列表
+     */
+    public List<Object> hashValues(String key) {
+        return redisTemplate.opsForHash().values(key);
+    }
+
+    /**
+     * 哈希条目
+     *
+     * @param key 关键
+     * @return 所有条目
+     */
+    public Map<Object, Object> hashEntries(String key) {
+        return redisTemplate.opsForHash().entries(key);
+    }
+
+    /*
+     * ——————————————————————————List——————————————————————————————
+     */
+
+    /**
+     * 列表设置
+     *
+     * @param key   关键
+     * @param index 索引
+     * @param value 价值
+     */
+    public void listSet(String key, long index, String value) {
+        redisTemplate.opsForList().set(key, index, value);
+    }
+
+    /**
+     * 列表索引下的元素
+     *
+     * @param key   关键
+     * @param index 索引
+     * @return 元素
+     */
+    public String listIndex(String key, long index) {
+        return redisTemplate.opsForList().index(key, index);
+    }
+
+    /**
+     * 移除并返回列表 key 的头元素。
+     *
+     * @param key 关键
+     * @return 元素
+     */
+    public String listLeftPop(String key) {
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
+    /**
+     * 移除并返回列表 key 的头元素。
+     *
+     * @param key     关键
+     * @param timeout 超时
+     * @param unit    单位
+     * @return 元素
+     */
+    public String listLeftPop(String key, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForList().leftPop(key, timeout, unit);
+    }
+
+    /**
+     * 移除并返回列表 key 的尾元素。
+     *
+     * @param key 关键
+     * @return 元素
+     */
+    public String listRightPop(String key) {
+        return redisTemplate.opsForList().rightPop(key);
+    }
+
+    /**
+     * 移除并返回列表 key 的尾元素。
+     *
+     * @param key     关键
+     * @param timeout 超时
+     * @param unit    单位
+     * @return 元素
+     */
+    public String listRightPop(String key, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForList().rightPop(key, timeout, unit);
+    }
+
+    /**
+     * 列表值的索引
+     *
+     * @param key   关键
+     * @param value 价值
+     * @return 索引
+     */
+    public Long listIndexOf(String key, String value) {
+        return redisTemplate.opsForList().indexOf(key, value);
+    }
+
+    /**
+     * 列表值的索引，倒序
+     *
+     * @param key   关键
+     * @param value 价值
+     * @return {索引
+     */
+    public Long listLastIndexOf(String key, String value) {
+        return redisTemplate.opsForList().lastIndexOf(key, value);
+    }
+
+    /**
+     * 将一个值 value 插入到列表 key 的表头
+     *
+     * @param key   关键
+     * @param value 价值
+     * @return 执行 LPUSH 命令后，列表的长度。
+     */
+    public Long listLeftPush(String key, String value) {
+        return redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    /**
+     * 将一个值 value 插入到指定元素的前面
+     *
+     * @param key   关键
+     * @param pivot 主
+     * @param value 价值
+     * @return 执行 LPUSH 命令后，列表的长度。
+     */
+    public Long listLeftPush(String key, String pivot, String value) {
+        return redisTemplate.opsForList().leftPush(key, pivot, value);
+    }
+
+    /**
+     * 将多个值 value 插入到列表 key 的表头
+     *
+     * @param key    关键
+     * @param values 值
+     * @return 执行 LPUSH 命令后，列表的长度。
+     */
+    public Long listLeftPush(String key, String... values) {
+        return redisTemplate.opsForList().leftPushAll(key, values);
+    }
+
+    /**
+     * 将多个值 value 插入到列表 key 的表头
+     *
+     * @param key    关键
+     * @param values 值
+     * @return 执行 LPUSH 命令后，列表的长度。
+     */
+    public Long listLeftPush(String key, Collection<String> values) {
+        return redisTemplate.opsForList().leftPushAll(key, values);
+    }
+
+    /**
+     * 将一个值 value 插入到指定元素的前面。如果存在
+     *
+     * @param key   关键
+     * @param value 价值
+     * @return 执行 LPUSH 命令后，列表的长度。
+     */
+    public Long leftPushIfPresent(String key, String value) {
+        return redisTemplate.opsForList().leftPushIfPresent(key, value);
+    }
+
+    /**
+     * 将一个值 value 插入到列表 key 的表尾(最右边)。
+     *
+     * @param key   关键
+     * @param value 价值
+     * @return 执行 RPUSH 命令后，列表的长度。
+     */
+    public Long listRightPush(String key, String value) {
+        return redisTemplate.opsForList().rightPush(key, value);
+    }
+
+    /**
+     * 将一个值 value 插入到列表 指定元素的后面
+     *
+     * @param key   关键
+     * @param pivot 主
+     * @param value 价值
+     * @return 执行 RPUSH 命令后，列表的长度。
+     */
+    public Long listRightPush(String key, String pivot, String value) {
+        return redisTemplate.opsForList().rightPush(key, pivot, value);
+    }
+
+    /**
+     * 将多个值 value 插入到列表 key 的表尾(最右边)。
+     *
+     * @param key    关键
+     * @param values 值
+     * @return 执行 RPUSH 命令后，列表的长度。
+     */
+    public Long listRightPushAll(String key, String... values) {
+        return redisTemplate.opsForList().rightPushAll(key, values);
+    }
+
+    /**
+     * 将多个值 value 插入到列表 key 的表尾(最右边)。
+     *
+     * @param key    关键
+     * @param values 值
+     * @return 执行 RPUSH 命令后，列表的长度。
+     */
+    public Long listRightPushAll(String key, Collection<String> values) {
+        return redisTemplate.opsForList().rightPushAll(key, values);
+    }
+
+    /**
+     * 将一个值 value 插入到列表 指定元素的后面，如果存在列表
+     *
+     * @param key   关键
+     * @param value 价值
+     * @return 执行 RPUSH 命令后，列表的长度。
+     */
+    public Long listRightPushIfPresent(String key, String value) {
+        return redisTemplate.opsForList().rightPushIfPresent(key, value);
+    }
+
+    /**
+     * 返回列表 key 中指定区间内的元素，区间以偏移量 start 和 stop 指定。
+     *
+     * @param key   关键
      * @param start 开始
      * @param end   结束
-     * @return value 集合
+     * @return 元素
      */
-    public Set<String> zSetRange(String key, long start, long end) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.opsForZSet().range(key, start, end);
+    public List<String> listRange(String key, long start, long end) {
+        return redisTemplate.opsForList().range(key, start, end);
+    }
+
+    /**
+     * 列表的大小
+     *
+     * @param key 关键
+     * @return 长度
+     */
+    public Long listSize(String key) {
+        return redisTemplate.opsForList().size(key);
+    }
+
+    /**
+     * 列表中删除
+     *
+     * @param key   关键
+     * @param count 数
+     * @param value 价值
+     * @return 移除元素的个数
+     */
+    public Long listRemove(String key, long count, Object value) {
+        return redisTemplate.opsForList().remove(key, count, value);
+    }
+
+    /*
+     * ——————————————————————————Set——————————————————————————————
+     */
+
+    /**
+     * set 添加
+     *
+     * @param key    关键
+     * @param values 值
+     * @return set的长度
+     */
+    public Long setAdd(String key, String... values) {
+        return redisTemplate.opsForSet().add(key, values);
+    }
+
+    /**
+     * SCARD
+     * <p>
+     * 返回集合 key 的基数(集合中元素的数量)。
+     *
+     * @param key 关键
+     * @return 集合的基数。
+     * 当 key 不存在时，返回 0 。
+     */
+    public Long setSize(String key) {
+        return redisTemplate.opsForSet().size(key);
+    }
+
+    /**
+     * 移除集合 key 中的一个或多个 member 元素，不存在的 member 元素会被忽略。
+     *
+     * @param key    关键
+     * @param values 值
+     * @return 被成功移除的元素的数量，不包括被忽略的元素。
+     */
+    public Long setRemove(String key, Object... values) {
+        return redisTemplate.opsForSet().remove(key, values);
+    }
+
+    /**
+     * set的成员
+     *
+     * @param key 关键
+     * @return 元素
+     */
+    public Set<String> setMembers(String key) {
+        return redisTemplate.opsForSet().members(key);
+    }
+
+    /**
+     * SDIFF
+     * 返回一个集合的全部成员，该集合是所有给定集合之间的差集。
+     * 不存在的 key 被视为空集。
+     *
+     * @param key      关键
+     * @param otherKey 其他关键
+     * @return 差集的成员列表
+     */
+    public Set<String> setDifference(String key, String otherKey) {
+        return redisTemplate.opsForSet().difference(key, otherKey);
+    }
+
+    /**
+     * SINTER
+     * 返回一个集合的全部成员，该集合是所有给定集合的交集。
+     * 不存在的 key 被视为空集。
+     *
+     * @param key      关键
+     * @param otherKey 其他关键
+     * @return 交集成员的列表。
+     */
+    public Set<String> setIntersect(String key, String otherKey) {
+        return redisTemplate.opsForSet().intersect(key, otherKey);
+    }
+
+    /**
+     * SUNION
+     * 返回一个集合的全部成员，该集合是所有给定集合的并集。
+     *
+     * @param key      关键
+     * @param otherKey 其他关键
+     * @return 并集成员的列表。
+     */
+    public Set<String> setUnion(String key, String otherKey) {
+        return redisTemplate.opsForSet().union(key, otherKey);
+    }
+
+    /**
+     * SISMEMBER
+     * 判断 member 元素是否集合 key 的成员。
+     *
+     * @param key   关键
+     * @param value 价值
+     * @return 是/否
+     */
+    public Boolean setIsMember(String key, Object value) {
+        return redisTemplate.opsForSet().isMember(key, value);
+    }
+
+    /**
+     * set 移动
+     *
+     * @param key     关键
+     * @param value   价值
+     * @param destKey 关键不在座位上
+     * @return 是否成功
+     */
+    public Boolean setMove(String key, String value, String destKey) {
+        return redisTemplate.opsForSet().move(key, value, destKey);
+    }
+
+    /**
+     * 移除并返回集合中的一个随机元素。
+     *
+     * @param key 关键
+     * @return 被移除的随机元素。
+     */
+    public String setPop(String key) {
+        return redisTemplate.opsForSet().pop(key);
+    }
+
+    /**
+     * 移除并返回集合中的多个随机元素。
+     *
+     * @param key   关键
+     * @param count 数
+     * @return 被移除的随机元素列表
+     */
+    public List<String> setPop(String key, long count) {
+        return redisTemplate.opsForSet().pop(key, count);
+    }
+
+    /*
+     * ——————————————————————————SortedSet（有序集合）——————————————————————————————
+     */
+
+    /**
+     * zSet 大小
+     *
+     * @param key 关键
+     * @return 长度
+     */
+    public Long zSetSize(String key) {
+        return redisTemplate.opsForZSet().size(key);
+    }
+
+    /**
+     * zSet 添加
+     *
+     * @param key   关键
+     * @param value 价值
+     * @param score 分数
+     * @return 成功/失败
+     */
+    public Boolean zSetAdd(String key, String value, double score) {
+        return redisTemplate.opsForZSet().add(key, value, score);
+    }
+
+    /**
+     * 将一个或多个 member 元素及其 score 值加入到有序集 key 当中。
+     *
+     * @param key       key
+     * @param zSetItems 输入元组
+     * @return 被成功添加的新成员的数量，不包括那些被更新的、已经存在的成员。
+     */
+    public Long zSetAdd(String key, Collection<ZSetItem> zSetItems) {
+        return redisTemplate.opsForZSet().add(key, buildTypedTuple(zSetItems));
+    }
+
+    /**
+     * zSet 删除元素
+     *
+     * @param key    关键
+     * @param values 值
+     * @return 被成功移除的成员的数量，不包括被忽略的成员。
+     */
+    public Long zSetRemove(String key, Object... values) {
+        return redisTemplate.opsForZSet().remove(key, values);
+    }
+
+    /**
+     * zSet 删除范围元素
+     *
+     * @param key   关键
+     * @param start 开始
+     * @param end   结束
+     * @return 被成功移除的成员的数量，不包括被忽略的成员。
+     */
+    public Long zSetRemoveRange(String key, long start, long end) {
+        return redisTemplate.opsForZSet().removeRange(key, start, end);
+    }
+
+    /**
+     * zSet 根据分数范围删除元素
+     *
+     * @param key 关键
+     * @param min 最小值
+     * @param max 最大值
+     * @return 被成功移除的成员的数量，不包括被忽略的成员。
+     */
+    public Long zSetRemoveRangeByScore(String key, double min, double max) {
+        return redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
+    }
+
+    /**
+     * zSet 返回有序集 key 中， score 值在 min 和 max 之间(默认包括 score 值等于 min 或 max )的成员的数量。
+     *
+     * @param key 关键
+     * @param min 最小值
+     * @param max 最大值
+     * @return score 值在 min 和 max 之间的成员的数量。
+     */
+    public Long zSetCount(String key, double min, double max) {
+        return redisTemplate.opsForZSet().count(key, min, max);
+    }
+
+    /**
+     * ZINCRBY
+     * 为有序集 key 的成员 member 的 score 值加上增量 increment 。
+     * <p>
+     * 可以通过传递一个负数值 increment ，让 score 减去相应的值，比如 ZINCRBY key -5 member ，就是让 member 的 score 值减去 5 。
+     * 当 key 不存在，或 member 不是 key 的成员时， ZINCRBY key increment member 等同于 ZADD key increment member 。
+     * 当 key 不是有序集类型时，返回一个错误。
+     * score 值可以是整数值或双精度浮点数。
+     *
+     * @param key    键
+     * @param member value
+     * @param deal   value
+     * @return member 成员的新 score 值。
+     */
+    public Double zSetIncrementScore(String key, String member, double deal) {
+        return redisTemplate.opsForZSet().incrementScore(key, member, deal);
     }
 
     /**
@@ -464,8 +1070,7 @@ public class RedisUtils {
      * @param limit limit
      * @return 范围的Value集合
      */
-    public Set<String> zSetRangeByLex(String key, Range range, Limit limit) {
-        log.debug("接口调用详情：参数K： " + key);
+    public Set<String> zSetRangeByLex(String key, RedisZSetCommands.Range range, RedisZSetCommands.Limit limit) {
         return redisTemplate.opsForZSet().rangeByLex(key, range, limit);
     }
 
@@ -482,8 +1087,72 @@ public class RedisUtils {
      * @return 范围的Value集合。
      */
     public Set<String> zSetRangeByScore(String key, double min, double max, long offset, long count) {
-        log.debug("接口调用详情：参数K： " + key);
         return redisTemplate.opsForZSet().rangeByScore(key, min, max, offset, count);
+    }
+
+    /**
+     * zSet 按照分数升序排序
+     *
+     * @param key      关键
+     * @param pageNum  页面num
+     * @param pageSize 页面大小
+     * @return key列表
+     */
+    public Set<String> zSetOrderByScoreAsc(String key, int pageNum, int pageSize) {
+        long offset = (long) (pageNum - 1) * pageSize;
+        return zSetRangeByScore(key, 0, Double.MAX_VALUE, offset, pageSize);
+    }
+
+    /**
+     * zSet 按照分数降序排序
+     *
+     * @param key      关键
+     * @param pageNum  页面num
+     * @param pageSize 页面大小
+     * @return key列表
+     */
+    public Set<String> zSetOrderByScoreDesc(String key, int pageNum, int pageSize) {
+        long offset = (long) (pageNum - 1) * pageSize;
+        return zSetReverseRangeByScore(key, 0, Double.MAX_VALUE, offset, pageSize);
+    }
+
+    /**
+     * ZRANK
+     * 返回有序集 key 中成员 member 的排名。其中有序集成员按 score 值递增(从小到大)顺序排列。
+     * <p>
+     * 排名以 0 为底，也就是说， score 值最小的成员排名为 0 。
+     * <p>
+     * 使用 ZREVRANK 命令可以获得成员按 score 值递减(从大到小)排列的排名。
+     *
+     * @param key 关键
+     * @param v   v
+     * @return 如果 member 是有序集 key 的成员，返回 member 的排名。
+     * 如果 member 不是有序集 key 的成员，返回 nil 。
+     */
+    public Long zSetRank(String key, Object v) {
+        return redisTemplate.opsForZSet().rank(key, v);
+    }
+
+    /**
+     * zSet 反向排名
+     *
+     * @param key 关键
+     * @param v   v
+     * @return 排名
+     */
+    public Long zSetReverseRank(String key, Object v) {
+        return redisTemplate.opsForZSet().reverseRank(key, v);
+    }
+
+    /**
+     * 根据分数从大到小 获取前几个
+     *
+     * @param key   key
+     * @param limit 前几
+     * @return value集合
+     */
+    public Set<String> zSetReverseRangeLimit(String key, long limit) {
+        return redisTemplate.opsForZSet().reverseRange(key, 0, limit);
     }
 
     /**
@@ -495,7 +1164,6 @@ public class RedisUtils {
      * @return value 集合
      */
     public Set<String> zSetReverseRange(String key, long start, long end) {
-        log.debug("接口调用详情：参数K： " + key);
         return redisTemplate.opsForZSet().reverseRange(key, start, end);
     }
 
@@ -510,126 +1178,12 @@ public class RedisUtils {
      * @return 范围的Value集合。
      */
     public Set<String> zSetReverseRangeByScore(String key, double min, double max, long offset, long count) {
-        log.debug("接口调用详情：参数K： " + key);
         return redisTemplate.opsForZSet().reverseRangeByScore(key, min, max, offset, count);
-    }
-
-    /**
-     * 根据分数获取value的排名
-     * <p>
-     * 返回有序集 key 中成员 member 的排名。其中有序集成员按 score 值递减(从大到小)排序。
-     * 排名以 0 为底，也就是说， score 值最大的成员排名为 0 。
-     * 使用 ZRANK 命令可以获得成员按 score 值递增(从小到大)排列的排名。
-     *
-     * @param key    键
-     * @param member value
-     * @return 如果 member 是有序集 key 的成员，返回 member 的排名。
-     * 如果 member 不是有序集 key 的成员，返回 nil 。
-     */
-    public Long zSetReverseRank(String key, String member) {
-        if (log.isDebugEnabled()) {
-            log.debug("接口调用详情：参数K： " + key);
-        }
-        return redisTemplate.opsForZSet().reverseRank(key, member);
-    }
-
-    /**
-     * 返回有序集key中成员member的排名。
-     * 其中有序集成员按score值递增(从小到大)顺序排列。排名以0为底，也就是说，score值最小的成员排名为0。
-     * 使用ZREVRANK命令可以获得成员按score值递减(从大到小)排列的排名。
-     *
-     * @param key    键
-     * @param member value
-     * @return 如果member是有序集key的成员，返回integer-reply：member的排名。
-     * 如果member不是有序集key的成员，返回bulk-string-reply: nil。
-     */
-    public Long zSetRank(String key, String member) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.opsForZSet().rank(key, member);
-    }
-
-    /**
-     * 返回有序集key中，成员member的score值。
-     * 如果member元素不是有序集key的成员，或key不存在，返回nil。
-     *
-     * @param key    键
-     * @param member value
-     * @return member成员的score值（double型浮点数）
-     */
-    public Double zSetScore(String key, String member) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.opsForZSet().score(key, member);
-    }
-
-    /**
-     * 为有序集 key 的成员 member 的 score 值加上增量 increment 。
-     * <p>
-     * 可以通过传递一个负数值 increment ，让 score 减去相应的值，比如 ZINCRBY key -5 member ，就是让 member 的 score 值减去 5 。
-     * 当 key 不存在，或 member 不是 key 的成员时， ZINCRBY key increment member 等同于 ZADD key increment member 。
-     * 当 key 不是有序集类型时，返回一个错误。
-     * score 值可以是整数值或双精度浮点数。
-     *
-     * @param key    键
-     * @param member value
-     * @param deal   value
-     * @return member 成员的新 score 值。
-     */
-    public Double zSetIncrementScore(String key, String member, double deal) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.opsForZSet().incrementScore(key, member, deal);
-    }
-
-    /**
-     * 返回有序集 key 中，指定区间内的成员。
-     * 其中成员的位置按 score 值递增(从小到大)来排序。
-     * <p>
-     * 如果你需要成员按 score 值递减(从大到小)来排列，请使用 ZREVRANGE {@link RedisUtils#zSetReverseRangeWithScores}命令。
-     * 下标参数 start 和 stop 都以 0 为底，也就是说，以 0 表示有序集第一个成员，以 1 表示有序集第二个成员，以此类推。
-     * 你也可以使用负数下标，以 -1 表示最后一个成员， -2 表示倒数第二个成员，以此类推。
-     * <p>
-     * 超出范围的下标并不会引起错误。
-     * 比如说，当 start 的值比有序集的最大下标还要大，或是 start > stop 时， ZRANGE 命令只是简单地返回一个空列表。
-     * 另一方面，假如 stop 参数的值比有序集的最大下标还要大，那么 Redis 将 stop 当作最大下标来处理。
-     *
-     * @param key   键
-     * @param start 开始
-     * @param end   结束
-     * @return 成员和它的 score 值 集合
-     */
-    public List<ZSetItem> zSetRangeWithScores(String key, long start, long end) {
-        if (log.isDebugEnabled()) {
-            log.debug("接口调用详情：参数K： " + key);
-        }
-        Set<TypedTuple<String>> sset = redisTemplate.opsForZSet().rangeWithScores(key, start, end);
-        return buildZsetList(Objects.requireNonNull(sset));
-    }
-
-    /**
-     * 返回有序集 key 中，所有 score 值介于 min 和 max 之间(包括等于 min 或 max )的成员。有序集成员按 score 值递增(从小到大)次序排列。
-     * <p>
-     * 可选的 LIMIT 参数指定返回结果的数量及区间(就像SQL中的 SELECT LIMIT offset, count )，
-     * 注意当 offset 很大时，定位 offset 的操作可能需要遍历整个有序集，此过程最坏复杂度为 O(N) 时间。
-     *
-     * @param key    键
-     * @param min    最小值
-     * @param max    最大值
-     * @param offset 偏移
-     * @param count  数量
-     * @return 指定区间内，带有 score 值(可选)的有序集成员的列表。
-     */
-    public List<ZSetItem> zSetRangeByScoreWithScores(String key, double min, double max, long offset, long count) {
-        log.debug("接口调用详情：参数K： " + key + ",min:" + min + ",max:" + max + ",offset:" + offset + ",count:" + count);
-        Set<TypedTuple<String>> sset = redisTemplate.opsForZSet().rangeByScoreWithScores(key, min, max, offset, count);
-        if (sset == null){
-            return new ArrayList<>();
-        }
-        return buildZsetList(sset);
     }
 
     /**
      * 返回有序集 key 中，指定区间内的成员。
      * 其中成员的位置按 score 值递增(从大到小)来排序。
-     * 参考； {@link RedisUtils#zSetRangeWithScores}
      *
      * @param key   键
      * @param start 开始
@@ -637,122 +1191,13 @@ public class RedisUtils {
      * @return 成员和它的 score 值 集合
      */
     public List<ZSetItem> zSetReverseRangeWithScores(String key, long start, long end) {
-        if (log.isDebugEnabled()) {
-            log.debug("接口调用详情：参数K： " + key);
-        }
-        Set<TypedTuple<String>> sset = redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
-        if (sset == null){
+        Set<ZSetOperations.TypedTuple<String>> sset = redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
+        if (sset == null) {
             return new ArrayList<>();
         }
         return buildZsetList(sset);
     }
 
-    /**
-     * 判定当前key是否存在
-     *
-     * @param key 键
-     * @return true/false
-     */
-    public Boolean hasKey(String key) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.hasKey(key);
-    }
-
-    /**
-     * 返回有序集 key 的基数。
-     *
-     * @param key 键
-     * @return 当 key 存在且是有序集类型时，返回有序集的基数。
-     * 当 key 不存在时，返回 0 。
-     */
-    public Long zSetZCard(String key) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.opsForZSet().zCard(key);
-    }
-
-    /**
-     * 返回列表key的长度。
-     * <p>
-     * 如果key不存在，则key被解释为一个空列表，返回0. 如果key不是列表类型，返回一个错误。
-     *
-     * @param key 键
-     * @return 列表 key 的大小。
-     */
-    public Long listSize(String key) {
-        log.debug("接口调用详情：参数K： " + key);
-        return redisTemplate.opsForList().size(key);
-    }
-
-    /**
-     * 返回列表key中指定区间内的元素，区间以偏移量start和stop指定。
-     * <p>
-     * 下标(index)参数start和stop都以0为底，也就是说，以0表示列表的第一个元素，以1表示列表的第二个元素，以此类推。
-     * 你也可以使用负数下标，以-1表示列表的最后一个元素，-2表示列表的倒数第二个元素，以此类推。
-     *
-     * @param key   键
-     * @param start 开始
-     * @param end   结束
-     * @return 一个列表，包含指定区间内的元素。
-     */
-    public List<String> listRange(String key, long start, long end) {
-        if (log.isDebugEnabled()) {
-            log.debug("接口调用详情：参数K： " + key);
-        }
-        return redisTemplate.opsForList().range(key, start, end);
-    }
-
-    /**
-     * 列表的范围查询和删除
-     * 注意： list的下标为0开始，start 开始为0 ， **end 是下标不是个数！**
-     *
-     *
-     * @param key   关键
-     * @param start 开始
-     * @param end   结束
-     * @return {@link List<String>}
-     */
-    @SuppressWarnings({"unchecked"})
-    public List<String> listRangeAndRemove(String key, long start, long end){
-        SessionCallback<List<String>> sessionCallback = new SessionCallback<List<String>>() {
-            @Override
-            public List<String> execute(RedisOperations operations) throws DataAccessException {
-                operations.multi();
-                redisTemplate.opsForList().range(key, start, end);
-                redisTemplate.opsForList().trim(key, end + 1, -1);
-                List<?> exec = operations.exec();
-                return (List<String>) exec.get(0);
-            }
-        };
-        return redisTemplate.execute(sessionCallback);
-    }
-
-    /**
-     * 将 key 的值设为 value ，当且仅当 key 不存在。
-     * 若给定的 key 已经存在，则 SETNX 不做任何动作。
-     *
-     * @param key     键
-     * @param value   值
-     * @param timeout 超时时间
-     * @return true/false
-     */
-    public Boolean setNx(String key, String value, long timeout) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, TimeUnit.SECONDS);
-    }
-
-    /**
-     * 使用规则删除匹配的键
-     *
-     * @param pattern 模式
-     * @return {@link Set<String>}
-     */
-    public Set<String> deleteKeysInPattern(String pattern) {
-        log.debug("{}|{}|{}", "获取所有匹配pattern参数的Keys", "[KEYS pattern]:", pattern);
-        Set<String> keySets = redisTemplate.keys(pattern);
-        if (CollectionUtils.isNotEmpty(keySets)){
-            redisTemplate.delete(keySets);
-        }
-        return keySets;
-    }
 
     /**
      * 封装Zset 查询结果
@@ -760,9 +1205,9 @@ public class RedisUtils {
      * @param zset zset
      * @return List<ZSetItem>
      */
-    private List<ZSetItem> buildZsetList(Set<TypedTuple<String>> zset) {
+    private List<ZSetItem> buildZsetList(Set<ZSetOperations.TypedTuple<String>> zset) {
         List<ZSetItem> result = new ArrayList<>();
-        for (TypedTuple<String> stringTypedTuple : zset) {
+        for (ZSetOperations.TypedTuple<String> stringTypedTuple : zset) {
             ZSetItem item = new ZSetItem();
             String value = stringTypedTuple.getValue();
             Double score = stringTypedTuple.getScore();
@@ -779,163 +1224,17 @@ public class RedisUtils {
      * @param zSetItems zset
      * @return TypedTuple
      */
-    private Set<TypedTuple<String>> buildTypedTuple(Collection<ZSetItem> zSetItems) {
-        Set<TypedTuple<String>> result = new HashSet<>();
+    private Set<ZSetOperations.TypedTuple<String>> buildTypedTuple(Collection<ZSetItem> zSetItems) {
+        Set<ZSetOperations.TypedTuple<String>> result = new HashSet<>();
         for (ZSetItem zSetItem : zSetItems) {
-            TypedTuple<String> typedTuple = new DefaultTypedTuple<>(zSetItem.getValue(), zSetItem.getScore());
+            ZSetOperations.TypedTuple<String> typedTuple = new DefaultTypedTuple<>(zSetItem.getValue(), zSetItem.getScore());
             result.add(typedTuple);
         }
         return result;
     }
 
-    /**
-     * 自增 / 自减
-     *
-     * @param key   key
-     * @param delta 1自增1 -1减少1
-     * @return 执行 INCR 命令之后 key 的值。
-     */
-    public Long increment(String key, long delta) {
-        log.debug("{}|{}|{}", "increment接口开始调用：", "key:" + key, "delta:" + delta);
-        return redisTemplate.opsForValue().increment(key, delta);
-    }
 
-    /**
-     * 获取过期时间（秒）
-     *
-     * @param key key
-     * @return {@link Long}
-     */
-    public Long getExpire(String key){
-        return redisTemplate.getExpire(key);
-    }
 
-    /**
-     * 获取过期时间（指定单位）
-     *
-     * @param key key
-     * @return {@link Long}
-     */
-    public Long getExpire(String key, TimeUnit timeUnit){
-        return redisTemplate.getExpire(key, timeUnit);
-    }
-    /**
-     * 自增 / 自减 并在初始时设置过期时间
-     * 保证原子性：初始化值为1的时候必设置过期时间。
-     * @param key   key
-     * @param delta 1自增1 -1减少1
-     * @param timeOut 超时时间（单位秒）
-     * @return 执行 INCR 命令之后 key 的值。
-     */
-    public Long increment(String key, long delta, long timeOut) {
-        log.debug("{}|{}|{}|{}", "increment And Expire 接口开始调用：", "key:" + key, "delta:" + delta, "timeOut:" + timeOut);
-        SessionCallback<Long> sessionCallback = new SessionCallback<Long>() {
-            @Override
-            public Long execute(RedisOperations operations) throws DataAccessException {
-                operations.multi();
-                redisTemplate.opsForValue().increment(key, delta);
-                List<?> exec = operations.exec();
-                Long incValue = (Long) exec.get(0);
-                if (incValue != null && incValue == 1){
-                    redisTemplate.expire(key, timeOut, TimeUnit.SECONDS);
-                }
-                return incValue;
-            }
-        };
-        return redisTemplate.execute(sessionCallback);
-    }
-
-    /**
-     * 指定过期
-     *
-     * @param key      Key
-     * @param timeout  超时
-     * @param timeUnit 时间单位
-     * @return {@link Boolean}
-     */
-    public Boolean expire(String key, long timeout, TimeUnit timeUnit) {
-        log.debug("{}|{}|{}|{}", "expire接口开始调用：", "key:" + key, "timeout:" + timeout, "timeUnit:" + timeUnit);
-        return redisTemplate.expire(key, timeout, timeUnit);
-    }
-
-    /**
-     * 返回集合 key 中的所有成员。
-     *
-     * @param key Key
-     * @return {@link Set<String>}
-     */
-    public Set<String> getMembers(String key) {
-        return redisTemplate.opsForSet().members(key);
-    }
-
-    /**
-     * 将一个或多个 member 元素及其 score 值加入到有序集 key 当中。
-     *
-     * @param key         key
-     * @param zSetItems 输入元组
-     * @return {@link Long}
-     */
-    public Long zSetAdd(String key, Collection<ZSetItem> zSetItems) {
-        return redisTemplate.opsForZSet().add(key, buildTypedTuple(zSetItems));
-    }
-    /**
-     * 返回集合 key 的基数(集合中元素的数量)。
-     *
-     * @param key         key
-     * @return 集合中元素的数量
-     */
-    public Long zSetCard(String key) {
-        return redisTemplate.opsForZSet().zCard(key);
-    }
-
-    /**
-     * 返回有序集 key 中， score 值在 min 和 max 之间(默认包括 score 值等于 min 或 max )的成员的数量。
-     *  score 值介于 min 和 max 之间(包括等于 min 或 max )的成员。有序集成员按 score 值递增(从小到大)次序排列。
-     * @param key key
-     * @param min 分数最小值
-     * @param max 分数最大值
-     * @return 集合中元素的数量
-     */
-    public Long zSetCount(String key, double min, double max) {
-        return redisTemplate.opsForZSet().count(key, min, max);
-    }
-
-    /**
-     * z分数设置删除范围
-     *
-     * @param key key
-     * @param min 最小值
-     * @param max 最大值
-     * @return {@link Long}
-     */
-    public Long zSetRemoveRangeByScore(String key, double min, double max) {
-        return redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
-    }
-
-    /**
-     * 移除有序集 key 中的一个或多个成员，不存在的成员将被忽略。
-     *
-     * @param key   key
-     * @param start 开始
-     * @param end   结束
-     * @return {@link Long}
-     */
-    public Long zSetRemoveRange(String key, Long start, Long end) {
-        long startValue = start != null ? start : 0;
-        long endValue = end != null ? end : -1;
-        return redisTemplate.opsForZSet().removeRange(key, startValue, endValue);
-    }
-
-    /**
-     * 根据表达式查询所有key
-     *
-     * @return key Set
-     */
-    public Set<String> keys(String pattern) {
-        log.debug("接口调用详情：参数K： " + pattern);
-        return redisTemplate.keys(pattern);
-
-    }
 
     /* ***********************************Redis分布式锁**************************** */
 
@@ -949,7 +1248,7 @@ public class RedisUtils {
      * 获得锁
      *
      * @param lockKey 锁定键
-     * @return {@link String} lockId锁标识，解锁时使用标识解锁
+     * @return lockId锁标识，解锁时使用标识解锁
      */
     public String lock(String lockKey) {
         return lock(lockKey, DEFAULT_TIME_OUT);
@@ -960,16 +1259,16 @@ public class RedisUtils {
      *
      * @param lockKey     锁定键
      * @param milliSecond 毫秒
-     * @return {@link String} lockId锁标识，解锁时使用标识解锁
+     * @return  lockId锁标识，解锁时使用标识解锁
      */
     public String lock(String lockKey, long milliSecond) {
-        if (StringUtils.isEmpty(lockKey)){
+        if (StringUtils.hasText(lockKey)) {
             throw new ServiceException("lockKey must not be null .");
         }
         assert milliSecond > 1000;
         String lockId = UUID.randomUUID().toString();
         Boolean success = redisTemplate.opsForValue().setIfAbsent(LOCK_KEY_PREFIX + lockKey, lockId, milliSecond, TimeUnit.MILLISECONDS);
-        if (success != null && success){
+        if (success != null && success) {
             return lockId;
         }
         return null;
@@ -982,16 +1281,15 @@ public class RedisUtils {
      * @param lockId  锁标识
      */
     public void unLock(String lockKey, String lockId) {
-        if (StringUtils.isEmpty(lockKey)){
+        if (!StringUtils.hasText(lockKey)) {
             return;
         }
-        if (StringUtils.isEmpty(lockId)){
+        if (!StringUtils.hasText(lockId)) {
             return;
         }
         String currentLockId = redisTemplate.opsForValue().get(LOCK_KEY_PREFIX + lockKey);
-        if (currentLockId != null && currentLockId.equals(lockId)){
+        if (currentLockId != null && currentLockId.equals(lockId)) {
             redisTemplate.delete(LOCK_KEY_PREFIX + lockKey);
         }
     }
-
 }
