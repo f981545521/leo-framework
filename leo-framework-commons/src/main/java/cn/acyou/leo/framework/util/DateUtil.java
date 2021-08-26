@@ -122,6 +122,32 @@ public final class DateUtil {
     }
 
     /**
+     * 创建日期日期（年月日 时分秒）
+     *
+     * @param year           年
+     * @param monthOfYear    月
+     * @param dayOfMonth     日
+     * @param hourOfDay      时
+     * @param minuteOfHour   分
+     * @param secondOfMinute 秒
+     * @return 日期
+     */
+    public static Date newDate(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute) {
+        return new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute).toDate();
+    }
+    /**
+     * 创建日期日期（年月日 00:00:00）
+     *
+     * @param year           年
+     * @param monthOfYear    月
+     * @param dayOfMonth     日
+     * @return {@link Date}
+     */
+    public static Date newDate(int year, int monthOfYear, int dayOfMonth) {
+        return new DateTime(year, monthOfYear, dayOfMonth, 0, 0, 0).toDate();
+    }
+
+    /**
      * 解析具体的时间
      * @param dateStr yyyy-MM-dd HH:mm:ss 类型
      * @return Date类型
