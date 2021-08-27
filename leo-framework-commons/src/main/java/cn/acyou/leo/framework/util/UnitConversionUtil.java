@@ -38,17 +38,29 @@ public class UnitConversionUtil {
     }
 
     /**
-     * <p>转换时间，为：时/分/秒/毫秒</p>
+     * 转换时间
+     *
+     * @param duration   持续时间
+     * @param sourceUnit 源单位
+     * @param targetUnit 目标单位
+     * @return 转换后的时间
+     */
+    public static long convertTime(long duration, TimeUnit sourceUnit, TimeUnit targetUnit){
+        return targetUnit.convert(duration, sourceUnit);
+    }
+
+    /**
+     * <p>转换可读时间，为：时/分/秒/毫秒</p>
      *
      * <pre>
-     *     convertTime(333333, TimeUnit.MILLISECONDS) = |0:5:33.333|
+     *     convertReadableTime(333333, TimeUnit.MILLISECONDS) = |0:5:33.333|
      * </pre>
      *
      * @param duration 持续时间
      * @param unit     单位
-     * @return 转换后的时间
+     * @return 可读的时间
      */
-    public static String convertTime(long duration, TimeUnit unit) {
+    public static String convertReadableTime(long duration, TimeUnit unit) {
         long milliseconds = TimeUnit.MILLISECONDS.convert(duration, unit);
         long hours = TimeUnit.HOURS.convert(milliseconds, TimeUnit.MILLISECONDS);
         if (hours > 0) {
