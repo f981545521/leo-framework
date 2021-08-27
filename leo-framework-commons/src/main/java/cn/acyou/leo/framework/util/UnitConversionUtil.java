@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.util;
 
-import org.joda.time.DateTime;
-
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,17 +37,6 @@ public class UnitConversionUtil {
         }
     }
 
-    /**
-     * 转换时间
-     *
-     * @param duration   持续时间
-     * @param sourceUnit 源单位
-     * @param targetUnit 目标单位
-     * @return 转换后的时间
-     */
-    public static long convertTime(long duration, TimeUnit sourceUnit, TimeUnit targetUnit){
-        return targetUnit.convert(duration, sourceUnit);
-    }
 
     /**
      * <p>转换可读时间，为：时/分/秒/毫秒</p>
@@ -75,6 +64,35 @@ public class UnitConversionUtil {
             milliseconds = milliseconds - (seconds * 1000);
         }
         return String.format("|%s:%s:%s.%s|", hours, minutes, seconds, milliseconds);
+    }
+
+
+    /**
+     * 转换时间 支持：(天、时、分、秒、微秒)
+     *
+     * @param duration   持续时间
+     * @param sourceUnit 源单位
+     * @param targetUnit 目标单位
+     * @return 转换后的时间
+     */
+    public static BigDecimal convertTime(long duration, TimeUnit sourceUnit, TimeUnit targetUnit){
+        long milliseconds = TimeUnit.MILLISECONDS.convert(duration, sourceUnit);
+        if (TimeUnit.MILLISECONDS.equals(targetUnit)) {
+            return new BigDecimal(milliseconds);
+        }
+        if (TimeUnit.SECONDS.equals(targetUnit)) {
+            return new BigDecimal(milliseconds).divide(new BigDecimal(1000), 2, RoundingMode.HALF_UP);
+        }
+        if (TimeUnit.MINUTES.equals(targetUnit)) {
+            return new BigDecimal(milliseconds).divide(new BigDecimal(60 * 1000), 2, RoundingMode.HALF_UP);
+        }
+        if (TimeUnit.HOURS.equals(targetUnit)) {
+            return new BigDecimal(milliseconds).divide(new BigDecimal(60 * 60 * 1000), 2, RoundingMode.HALF_UP);
+        }
+        if (TimeUnit.DAYS.equals(targetUnit)) {
+            return new BigDecimal(milliseconds).divide(new BigDecimal(24 * 60 * 60 * 1000), 2, RoundingMode.HALF_UP);
+        }
+        return BigDecimal.ZERO;
     }
 
 }
