@@ -1,6 +1,6 @@
 package cn.acyou.leo.framework.xss;
 
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -32,11 +32,11 @@ public class XssFilter implements Filter {
     public void init(FilterConfig filterConfig) {
         String tempExcludes = filterConfig.getInitParameter("excludes");
         String tempEnabled = filterConfig.getInitParameter("enabled");
-        if (StringUtils.isNotEmpty(tempExcludes)) {
+        if (StringUtils.hasText(tempExcludes)) {
             String[] url = tempExcludes.split(",");
             excludes.addAll(Arrays.asList(url));
         }
-        if (StringUtils.isNotEmpty(tempEnabled)) {
+        if (StringUtils.hasText(tempEnabled)) {
             enabled = Boolean.parseBoolean(tempEnabled);
         }
     }

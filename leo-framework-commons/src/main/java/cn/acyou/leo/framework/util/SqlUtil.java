@@ -3,7 +3,7 @@ package cn.acyou.leo.framework.util;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.PageSo;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class SqlUtil {
         String sortsStr = pageSo.getSorts();
         //非法的sort参数
         boolean illegalOrderBy = false;
-        if (StringUtils.isNotEmpty(sortsStr) && MapUtils.isNotEmpty(supportFieldMap)){
+        if (StringUtils.hasText(sortsStr) && MapUtils.isNotEmpty(supportFieldMap)){
             Set<String> supportKeys = supportFieldMap.keySet();
             String[] orderItems = sortsStr.split(",");
             if (orderItems.length % 2 == 0) {
@@ -37,7 +37,7 @@ public class SqlUtil {
                     if (split.length % 2 == 0){
                         String key = split[0];
                         String type = split[1];
-                        if (StringUtils.isNotEmpty(key) && StringUtils.isNotEmpty(type) &&
+                        if (StringUtils.hasText(key) && StringUtils.hasText(type) &&
                                 supportKeys.contains(key) && isOrderByType(type)){
                             orderBySqlList.add(supportFieldMap.get(key) + " " + type.toLowerCase());
                         }else {
@@ -55,7 +55,7 @@ public class SqlUtil {
             throw new ServiceException(CommonErrorEnum.E_INVALID_SORT_PARAMETER);
         }
         if (CollectionUtils.isNotEmpty(orderBySqlList)){
-            return StringUtils.join(orderBySqlList, ", ");
+            return StringUtils.collectionToDelimitedString(orderBySqlList, ", ");
         }
         return null;
     }

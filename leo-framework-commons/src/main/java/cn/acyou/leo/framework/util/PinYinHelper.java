@@ -3,9 +3,9 @@ package cn.acyou.leo.framework.util;
 import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 /**
  * @author youfang
@@ -73,7 +73,7 @@ public class PinYinHelper {
      * @return String
      */
     public static String parsePinyinAndHead(String str) {
-        if (StringUtils.isNotEmpty(str)) {
+        if (StringUtils.hasText(str)) {
             return str + COMMA + converterToSpell(str) + COMMA + converterToFirstSpell(str);
         } else {
             return EMPTY_STR;
@@ -94,10 +94,10 @@ public class PinYinHelper {
      * @return String 首字母
      */
     public static String parsePinyinInitial(String str) {
-        if (StringUtils.isNotEmpty(str)) {
+        if (StringUtils.hasText(str)) {
             try {
                 String shortPy = PinyinHelper.getShortPinyin(str);
-                if (StringUtils.isNotEmpty(shortPy)) {
+                if (StringUtils.hasText(shortPy)) {
                     char c = shortPy.charAt(0);
                     if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
                         return shortPy.substring(0, 1);

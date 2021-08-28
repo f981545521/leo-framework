@@ -2,8 +2,8 @@ package cn.acyou.leo.framework.util;
 
 import cn.acyou.leo.framework.base.ClientType;
 import cn.acyou.leo.framework.exception.ServiceException;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,7 +46,7 @@ public class SourceUtil {
      */
     public static ClientType getClientTypeBySource(HttpServletRequest request) {
         String header = request.getHeader(SOURCE_KEY);
-        if (StringUtils.isNotEmpty(header) && NumberUtils.isParsable(header)) {
+        if (StringUtils.hasText(header) && NumberUtils.isParsable(header)) {
             int i = Integer.parseInt(header);
             for (ClientType clientType : ClientType.values()) {
                 if (i == clientType.getCode()) {

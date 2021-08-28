@@ -11,10 +11,10 @@ import cn.acyou.leo.framework.util.ReflectUtils;
 import cn.acyou.leo.framework.util.RegexUtil;
 import cn.acyou.leo.framework.util.SpringHelper;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -116,20 +116,20 @@ public class EnhanceValidUtil {
         //当前字段名称
         String currentFieldName = field.getName();
         //自定义描述
-        if (StringUtils.isNotEmpty(baseValid.message())) {
+        if (StringUtils.hasText(baseValid.message())) {
             description = baseValid.message();
         }
 
         /* *********** 注解解析工作开始 ***************** */
         //非NULL
         if (baseValid.notNull()) {
-            if (validValue == null || StringUtils.isEmpty(validValue.toString())) {
+            if (validValue == null || !StringUtils.hasText(validValue.toString())) {
                 throw new ServiceException(description);
             }
         }
 
         if (baseValid.notEmpty()) {
-            if (validValue == null || StringUtils.isEmpty(validValue.toString())) {
+            if (validValue == null || !StringUtils.hasText(validValue.toString())) {
                 logger.warn("[数据校验]|{}|{}|{}", "valid failed", currentFieldName, "参数为NULL");
                 throw new ServiceException(description);
             }
@@ -333,7 +333,7 @@ public class EnhanceValidUtil {
                 }
             }
 
-            if (StringUtils.isNotEmpty(baseValid.regexExpression())) {
+            if (StringUtils.hasText(baseValid.regexExpression())) {
                 if (validValue.toString().matches(baseValid.regexExpression())) {
                     logger.warn("[数据校验]|{}|{}|{}", "valid failed", currentFieldName, "格式不正确");
                     throw new ServiceException(description);
