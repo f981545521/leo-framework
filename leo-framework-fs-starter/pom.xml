@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>leo-framework</artifactId>
+        <groupId>cn.acyou</groupId>
+        <version>1.0.1.RELEASE</version>
+    </parent>
+
+
+    <artifactId>leo-framework-fs-starter</artifactId>
+    <packaging>jar</packaging>
+    <description>Leo (File System) 文件存储系统 公共组件</description>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 阿里云OSS文件服务 -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.10.2</version>
+        </dependency>
+    </dependencies>
+
+
+</project>
