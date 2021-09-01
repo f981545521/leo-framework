@@ -4,8 +4,6 @@ import com.aliyun.oss.event.ProgressEvent;
 import com.aliyun.oss.event.ProgressEventType;
 import com.aliyun.oss.event.ProgressListener;
 
-import java.util.function.Consumer;
-
 /**
  * @author fangyou
  * @version [1.0.0, 2021-09-01 15:24]
