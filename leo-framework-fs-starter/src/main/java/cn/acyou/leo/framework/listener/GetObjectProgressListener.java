@@ -35,9 +35,8 @@ public class GetObjectProgressListener implements ProgressListener {
                 if (this.totalBytes != -1) {
                     int percent = (int) (this.bytesRead * 100.0 / this.totalBytes);
                     callback.progress(percent);
-                } else {
-                    //没有明确的总字节数
                 }
+                //else: 没有明确的总字节数
                 break;
             case TRANSFER_COMPLETED_EVENT:
                 //传输完成

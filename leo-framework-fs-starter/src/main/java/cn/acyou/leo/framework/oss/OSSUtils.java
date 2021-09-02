@@ -67,7 +67,7 @@ public class OSSUtils {
      * @param url      内容
      */
     public static void uploadURL(String bucket, String fileName, String url) {
-        InputStream inputStream = null;
+        InputStream inputStream;
         try {
             inputStream = new URL(url).openStream();
         } catch (IOException e) {
@@ -85,7 +85,7 @@ public class OSSUtils {
      * @param localFilePath 本地文件
      */
     public static void uploadLocalFile(String bucket, String fileName, String localFilePath) {
-        InputStream inputStream = null;
+        InputStream inputStream;
         try {
             inputStream = new FileInputStream(localFilePath);
         } catch (IOException e) {
