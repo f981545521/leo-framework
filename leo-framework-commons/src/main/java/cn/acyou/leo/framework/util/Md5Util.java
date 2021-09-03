@@ -29,15 +29,11 @@ public class Md5Util {
      * 得到对象的md5值
      * <p>原理：转成JSON字符串后再计算MD5值</p>
      *
-     * @param serialObj 串行obj
-     * @return {@link String}
+     * @param obj obj
+     * @return md5值
      */
-    public static String getObjectMd5(Serializable... serialObj) {
-        StringBuilder sb = new StringBuilder();
-        for (Serializable obj : serialObj) {
-            sb.append(JSON.toJSONString(obj));
-        }
-        return md5(sb.toString());
+    public static String getObjectMd5(Object... obj) {
+        return md5(JSON.toJSONString(obj));
     }
 
     /**
