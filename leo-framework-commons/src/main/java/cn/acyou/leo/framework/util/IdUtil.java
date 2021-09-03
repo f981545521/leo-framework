@@ -24,14 +24,28 @@ public class IdUtil {
 
     }
 
-    @Autowired
+    @Autowired(required = false)
     public void setRedisUtils(RedisUtils redisUtils) {
         IdUtil.redisUtils = redisUtils;
     }
 
-    @Autowired
+    @Autowired(required = false)
     public void setSnowFlake(SnowFlake snowFlake) {
         IdUtil.snowFlake = snowFlake;
+    }
+
+    private static SnowFlake checkGetSnowFlake(){
+        if (snowFlake == null) {
+            throw new ServiceException("ID生成失败，请先配置SnowFlake!");
+        }
+        return snowFlake;
+    }
+
+    private static RedisUtils checkGetRedisUtil(){
+        if (redisUtils == null) {
+            throw new ServiceException("ID生成失败，请先配置Redis!");
+        }
+        return redisUtils;
     }
 
     /**
@@ -40,7 +54,7 @@ public class IdUtil {
      * @return 字符串
      */
     public static long nextId() {
-        return snowFlake.nextId();
+        return checkGetSnowFlake().nextId();
     }
 
     /**
@@ -49,7 +63,7 @@ public class IdUtil {
      * @return 字符串
      */
     public static String nextIdStr() {
-        return snowFlake.nextIdStr();
+        return checkGetSnowFlake().nextIdStr();
     }
     /**
      * 雪花算法 nextIdPrefix
@@ -57,7 +71,7 @@ public class IdUtil {
      * @return 字符串
      */
     public static String nextIdPrefix(String prefix) {
-        return snowFlake.nextIdPrefix(prefix);
+        return checkGetSnowFlake().nextIdPrefix(prefix);
     }
 
     /**
@@ -124,7 +138,7 @@ public class IdUtil {
         String formatDate = DateUtil.getCurrentDateShortFormat();
         String key = "SEQ:" + formatDate;
         //KEY:  SEQ:20200724                timeOut：36小时(36 * 60 * 60)，销毁一天半之前的Key
-        Long increment = redisUtils.increment(key, 1, 129600);
+        Long increment = checkGetRedisUtil().increment(key, 1, 129600);
         long maxV = MathUtil.createMaxLong(length);
         if (increment > maxV) {
             throw new ServiceException("ID获取错误：超出最大值!");
