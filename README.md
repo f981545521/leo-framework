@@ -174,7 +174,7 @@ Content-Type: application/json
 - [模板项目-SpringCloud](https://gitee.com/f981545521/leo-product)
 
 ## 使用技巧
-### 一. SpringCache+Redis缓存
+### 一、 SpringCache+Redis缓存
 1. 配置缓存管理器
 ```
     /**
@@ -214,6 +214,29 @@ Content-Type: application/json
 ```
 - [查看详细介绍](document/howtouse/SpringCache使用说明.md)
 
+### 二、 全局ID生成器
+1. 在项目中配置`SnowFlake`
+```
+    @Bean
+    public SnowFlake snowFlake() {
+        return new SnowFlake(1, 1);
+    }
+```
+2. 使用示例：
+```
+//雪花算法ID
+System.out.println(IdUtil.nextId());                  //631216897488195584
+System.out.println(IdUtil.nextIdStr());               //631216897492389888
+System.out.println(IdUtil.nextIdPrefix("RK"));        //RK631216897492389889
+//UUID
+System.out.println(IdUtil.uuidStr());                 //325b3cfd-b2fc-4e40-a2d5-5b08774f2ec8
+System.out.println(IdUtil.uuidStrWithoutLine());      //63e1c93bbc4a4126a433e9f2f25aa545
+//MongoDB ObjectId
+System.out.println(IdUtil.objectId());                //6131e6cd89042fde6a230649
+//基于Redis Increment 的递增序列ID
+System.out.println(IdUtil.getDatePrefixId("RK"));     //RK2021090300003
+System.out.println(IdUtil.getDatePrefixId("RK", 8));  //RK2021090300000004
+```
 ## 参与贡献
 
 无需贡献
