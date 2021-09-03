@@ -62,7 +62,7 @@ public abstract class AbstractDownloader implements Downloader {
 
     private String getFileNameFromHeader(HttpHeaders headers) {
         String fileName = headers.getContentDisposition().getFilename();
-        if (StringUtils.isEmpty(fileName)) {
+        if (!StringUtils.hasText(fileName)) {
             return UUID.randomUUID().toString();
         }
         return fileName;
