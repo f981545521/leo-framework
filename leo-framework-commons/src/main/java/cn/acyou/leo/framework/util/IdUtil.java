@@ -101,13 +101,13 @@ public class IdUtil {
     /**
      * 公共获取单号
      * <pre>
-     *  getDatePrefix4BitId("RK")    =   RK2020072700001
+     *  getDatePrefixId("RK")    =   RK2020072700001
      * </pre>
      *
      * @param prefix 前缀
      * @return 单号
      */
-    public static String getDatePrefixReceiptNo(String prefix) {
+    public static String getDatePrefixId(String prefix) {
         return getDatePrefixId(prefix, 5);
     }
 
