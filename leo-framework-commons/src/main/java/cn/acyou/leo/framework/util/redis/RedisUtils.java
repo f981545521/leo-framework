@@ -4,6 +4,7 @@ import cn.acyou.leo.framework.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.connection.SortParameters;
@@ -325,7 +326,30 @@ public class RedisUtils {
     public Long increment(String key, long deal) {
         return redisTemplate.opsForValue().increment(key, deal);
     }
-
+    /**
+     * 自增 / 自减 并在初始时设置过期时间
+     * 保证原子性：初始化值为1的时候必设置过期时间。
+     * @param key   key
+     * @param delta 1自增1 -1减少1
+     * @param timeOut 超时时间（单位秒）
+     * @return 执行 INCR 命令之后 key 的值。
+     */
+    public Long increment(String key, long delta, long timeOut) {
+        SessionCallback<Long> sessionCallback = new SessionCallback<Long>() {
+            @Override
+            public Long execute(RedisOperations operations) throws DataAccessException {
+                operations.multi();
+                redisTemplate.opsForValue().increment(key, delta);
+                List<?> exec = operations.exec();
+                Long incValue = (Long) exec.get(0);
+                if (incValue != null && incValue == 1){
+                    redisTemplate.expire(key, timeOut, TimeUnit.SECONDS);
+                }
+                return incValue;
+            }
+        };
+        return redisTemplate.execute(sessionCallback);
+    }
     /**
      * 返回 key 所关联的字符串值。
      *
