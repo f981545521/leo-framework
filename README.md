@@ -172,6 +172,40 @@ Content-Type: application/json
 - [项目功能说明](document/howtouse/项目功能说明.md)
 - [模板项目-SpringBoot](https://gitee.com/f981545521/leo-user)
 - [模板项目-SpringCloud](https://gitee.com/f981545521/leo-product)
+
+## 使用技巧
+### 一. SpringCache+Redis缓存
+1. 配置缓存管理器
+```
+    /**
+     * RedisCacheManager
+     */
+    @Bean
+    public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+        //缓存默认有效期 24小时
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(24));
+        //配置序列化
+        RedisCacheConfiguration redisCacheConfiguration = config.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+        //构建缓存管理器
+        //return RedisCacheManager.builder(redisCacheWriter).cacheDefaults(redisCacheConfiguration).transactionAware().build();
+        //自定义缓存管理器， 支持自定义过期时间：@Cacheable(value="sys:student#100", key="#id") 100S过期
+        //                                     @Cacheable(value="sys:student#-1", key="#id")  永不过期
+        RedisCacheWriter redisCacheWriter = RedisCacheWriter.lockingRedisCacheWriter(redisConnectionFactory);
+        return new MyRedisCacheManager(redisCacheWriter, redisCacheConfiguration);
+    }
+```
+2. 方法中通过`@Cacheable`注解使用
+```
+    @Cacheable(value="leo:example:demo#100", key="#id")
+    public Student getById(Long id) {
+        Student student = new Student(id, RandomUtil.randomUserName(), 12, null);
+        log.info("获取用户：" + student);
+        return student;
+    }
+```
+- [查看详细介绍](document/howtouse/SpringCache使用说明.md)
+
 ## 参与贡献
 
 无需贡献
