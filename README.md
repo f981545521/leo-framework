@@ -197,9 +197,17 @@ Content-Type: application/json
 ```
 2. 方法中通过`@Cacheable`注解使用
 ```
+    //示例1：使用单个参数作为缓存KEY
     @Cacheable(value="leo:example:demo#100", key="#id")
     public Student getById(Long id) {
         Student student = new Student(id, RandomUtil.randomUserName(), 12, null);
+        log.info("获取用户：" + student);
+        return student;
+    }
+    //示例2：使用object作为缓存，会转为JSON字符串
+    @Cacheable(value="leo:example:demo22#100", key="#jo + '-' + #jo2")
+    public Student getById(JSONObject jo, JSONObject jo2) {
+        Student student = new Student(jo.getLong("id"), RandomUtil.randomUserName(), 12, null);
         log.info("获取用户：" + student);
         return student;
     }
