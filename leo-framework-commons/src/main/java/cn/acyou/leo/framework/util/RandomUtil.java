@@ -24,10 +24,8 @@ public class RandomUtil {
         }
         StringBuilder retStr = new StringBuilder();
         String randomPool = number ? "1234567890" : "1234567890abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ";
-        int randomPoolLength = randomPool.length();
-        for (int i = 0; i < length; i++) {
-            int randomIndex = (int) Math.floor(Math.random() * randomPoolLength);
-            retStr.append(randomPool.charAt(randomIndex));
+        while (retStr.length() < length) {
+            retStr.append(randomPool.charAt((int) Math.floor(Math.random() * randomPool.length())));
         }
         return retStr.toString();
     }
@@ -319,22 +317,4 @@ public class RandomUtil {
         return str;
     }
 
-    public static void main(String[] args) {
-        //for (int i = 0; i < 10000; i++) {
-        //    String s = DateUtil.getDateFormat(DateUtil.randomDate(), DateUtil.SHORT_DATE_PATTERN);
-        //    String r = randomIdCardNo(s, new SecureRandom().nextBoolean());
-        //    if (r.length() != 18) {
-        //        System.out.println("号码不正确：" + r);
-        //    }
-        //}
-        int i = 12;
-        System.out.println(String.valueOf(i).length());
-        System.out.println(String.valueOf(2).length());
-        System.out.println("end");
-        //System.out.println(RandomUtil.randomUserName());
-        //System.out.println(RandomUtil.randomAge());
-        //System.out.println(UUID.randomUUID().toString().replace("-","").length());
-        //String result = createRandomStr(180);
-        //System.out.println(result + ":" + result.length());
-    }
 }
