@@ -31,8 +31,9 @@ public class RedisUtils {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    public RedisUtils() {
-        log.info("RedisUtils 初始化。");
+    //私有化构造方法，无法通过new创建。而不影响Spring通过反射创建Bean
+    private RedisUtils() {
+        log.info("RedisUtils 初始化完成。");
     }
 
     /**
