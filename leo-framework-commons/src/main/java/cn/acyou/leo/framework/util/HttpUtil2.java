@@ -17,6 +17,10 @@ public class HttpUtil2 {
 
     public static final RestTemplate restTemplate;
 
+    private HttpUtil2(){
+
+    }
+
     static {
         restTemplate = new RestTemplate();
     }
