@@ -31,3 +31,9 @@ POST http://localhost:12000/order/order/insert?productId=2
 Content-Type: application/json
 
 ###
+
+### 测试网关
+GET http://localhost:12000/user/student/page?pageNum=1&pageSize=5
+Content-Type: application/json
+
+###

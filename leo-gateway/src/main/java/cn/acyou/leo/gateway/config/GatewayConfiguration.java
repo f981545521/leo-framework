@@ -94,7 +94,7 @@ public class GatewayConfiguration {
                 res.put("code", 571);
                 res.put("message", "访问过快，接口限流了！");
                 res.put("success", false);
-                return ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON_UTF8).body(BodyInserters.fromValue(res));
+                return ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(res));
             }
         });
     }
@@ -130,7 +130,10 @@ public class GatewayConfiguration {
                 .setCount(10)
                 .setIntervalSec(1)
         );
-
+        rules.add(new GatewayFlowRule("user-service")
+                .setCount(1)
+                .setIntervalSec(1)
+        );
         //资源名称，可以是网关中的 route 名称或者用户自定义的 API 分组名称。
         rules.add(new GatewayFlowRule("product-service")
                 //规则是针对 API Gateway 的 route（RESOURCE_MODE_ROUTE_ID）还是用户在 Sentinel 中定义的 API 分组（RESOURCE_MODE_CUSTOM_API_NAME），默认是 route。
@@ -152,6 +155,5 @@ public class GatewayConfiguration {
                 )
         );
         GatewayRuleManager.loadRules(rules);
-
     }
 }

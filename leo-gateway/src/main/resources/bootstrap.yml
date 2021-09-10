@@ -39,6 +39,13 @@ spring:
           enabled: true
       routes:
         # 商品服务路由
+        - id: leo-user-service
+          uri: lb://user-service:8054
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+        # 商品服务路由
         - id: leo-product-service
           uri: lb://product-service:8056
           predicates:

@@ -1,7 +1,11 @@
 ## 产品测试
 
 ### 测试接口
-GET http://localhost:8056/order/page?pageNum=1&pageSize=10
+GET http://localhost:8055/order/page?pageNum=1&pageSize=10
+Content-Type: application/json
+
+### 测试接口
+GET http://localhost:12000/order/order/page?pageNum=1&pageSize=10
 Content-Type: application/json
 
 

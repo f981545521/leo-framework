@@ -44,7 +44,7 @@ public class GatewayExceptionHandler extends AbstractExceptionHandler implements
     private List<ViewResolver> viewResolvers = Collections.emptyList();
 
 
-    private ThreadLocal<Map<String, Object>> exceptionHandlerResult = new ThreadLocal<>();
+    private final ThreadLocal<Map<String, Object>> exceptionHandlerResult = new ThreadLocal<>();
 
 
     public void setMessageReaders(List<HttpMessageReader<?>> messageReaders) {
@@ -91,8 +91,8 @@ public class GatewayExceptionHandler extends AbstractExceptionHandler implements
     protected Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
         Map<String, Object> result = exceptionHandlerResult.get();
         return ServerResponse.status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(result));
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(result));
     }
 
 

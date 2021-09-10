@@ -15,8 +15,7 @@ public abstract class AbstractExceptionHandler {
     protected String formatMessage(Throwable ex) {
         String errorMessage = null;
         if (ex instanceof NotFoundException) {
-            String reason = ((NotFoundException) ex).getReason();
-            errorMessage = reason;
+            errorMessage = ((NotFoundException) ex).getReason();
         } else if (ex instanceof ResponseStatusException) {
             ResponseStatusException responseStatusException = (ResponseStatusException) ex;
             errorMessage = responseStatusException.getMessage();
