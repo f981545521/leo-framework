@@ -23,9 +23,9 @@ public class ServiceException extends RuntimeException {
         this.result = result;
     }
 
-    public ServiceException(ErrorEnum<?> errorEnum){
-        super(errorEnum.message());
-        this.result = Result.error(errorEnum.code(), errorEnum.message());
+    public ServiceException(ErrorEnum errorEnum){
+        super(errorEnum.getMessage());
+        this.result = Result.error(errorEnum.getCode(), errorEnum.getMessage());
     }
 
     /**

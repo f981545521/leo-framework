@@ -47,11 +47,11 @@ public class Result<T> implements Serializable {
         return new Result<>(Integer.parseInt(code), message);
     }
 
-    public static <T> Result<T> error(ErrorEnum<?> errorEnum) {
-        return error(errorEnum.code(), errorEnum.message());
+    public static <T> Result<T> error(ErrorEnum errorEnum) {
+        return error(errorEnum.getCode(), errorEnum.getMessage());
     }
-    public static <T> Result<T> error(ErrorEnum<?> errorEnum, T data) {
-        return error(errorEnum.code(), errorEnum.message(), data);
+    public static <T> Result<T> error(ErrorEnum errorEnum, T data) {
+        return error(errorEnum.getCode(), errorEnum.getMessage(), data);
     }
 
     public static <T> Result<T> error(int code, String message, T data) {
