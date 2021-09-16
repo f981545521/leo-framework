@@ -222,6 +222,15 @@ public class StringUtil {
         return returnStr;
     }
 
+    /**
+     * 判断是否 http 地址
+     *
+     * @param text 文本
+     * @return 是否 http 地址
+     */
+    public static boolean isHttpUrl(String text) {
+        return text.startsWith("http://") || text.startsWith("https://");
+    }
 
     public static void main(String[] args) {
         String templateStr = "{姓名}今年{岁}啦！";
