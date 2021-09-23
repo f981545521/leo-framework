@@ -70,6 +70,10 @@ public class Result<T> implements Serializable {
         return new Result<>(SUCCESS_CODE, message, data);
     }
 
+    public static <T> Result<T> custom(int code, String message, T data) {
+        return new Result<>(code, message, data);
+    }
+
     public int getCode() {
         return this.code;
     }
