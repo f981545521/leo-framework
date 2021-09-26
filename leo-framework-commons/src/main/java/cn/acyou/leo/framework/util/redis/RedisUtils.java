@@ -434,8 +434,8 @@ public class RedisUtils {
      * @param key   关键
      * @param value 价值
      */
-    public void setIfAbsent(String key, String value) {
-        redisTemplate.opsForValue().setIfAbsent(key, value);
+    public Boolean setIfAbsent(String key, String value) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value);
     }
 
     /**
@@ -446,8 +446,8 @@ public class RedisUtils {
      * @param timeout 超时
      * @param unit    单位
      */
-    public void setIfAbsent(String key, String value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().setIfAbsent(key, value, timeout, unit);
+    public Boolean setIfAbsent(String key, String value, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, unit);
     }
 
     /**
@@ -456,8 +456,8 @@ public class RedisUtils {
      * @param key   关键
      * @param value 价值
      */
-    public void setIfPresent(String key, String value) {
-        redisTemplate.opsForValue().setIfPresent(key, value);
+    public Boolean setIfPresent(String key, String value) {
+        return redisTemplate.opsForValue().setIfPresent(key, value);
     }
 
     /**
@@ -468,8 +468,8 @@ public class RedisUtils {
      * @param timeout 超时
      * @param unit    单位
      */
-    public void setIfPresent(String key, String value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().setIfPresent(key, value, timeout, unit);
+    public Boolean setIfPresent(String key, String value, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForValue().setIfPresent(key, value, timeout, unit);
     }
 
     /**
