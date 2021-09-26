@@ -237,6 +237,24 @@ System.out.println(IdUtil.objectId());                //6131e6cd89042fde6a230649
 System.out.println(IdUtil.getDatePrefixId("RK"));     //RK2021090300003
 System.out.println(IdUtil.getDatePrefixId("RK", 8));  //RK2021090300000004
 ```
+
+### 三、防止重复提交
+
+通过`@AccessLimit`注解，有两个参数：
+
+1. interval： 访问间隔（毫秒）
+2. includeArgs：包含参数（不同的参数访问间隔不一样）
+
+示例：
+
+```
+    @RequestMapping(value = "get", method = {RequestMethod.GET})
+    @ApiOperation("防止重复提交测试")
+    @AccessLimit(interval = 5000, includeArgs = true)
+    public Result<String> get(String name) {
+        return Result.success(name);
+    }
+```
 ## 参与贡献
 
 无需贡献
