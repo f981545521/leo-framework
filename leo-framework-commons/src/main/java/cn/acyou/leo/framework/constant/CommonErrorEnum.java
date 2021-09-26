@@ -23,6 +23,7 @@ public enum CommonErrorEnum implements ErrorEnum {
     E_NOT_FOUNT(101002, "请求接口不存在，请检查！"),
     E_INVALID_SORT_PARAMETER(101003, "非法的OrderBy参数，请检查！"),
     E_MAX_UPLOAD_SIZE_EXCEEDED(101004, "文件超过上传限制！"),
+    ACCESS_LIMIT(101005, "重复请求，请稍后再试！"),
     /**
      * 登录
      */

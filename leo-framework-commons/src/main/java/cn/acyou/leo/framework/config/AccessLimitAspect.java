@@ -2,6 +2,7 @@ package cn.acyou.leo.framework.config;
 
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
+import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.Md5Util;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
@@ -72,7 +73,7 @@ public class AccessLimitAspect {
         //Redis setNx
         Boolean aBoolean = redisUtils.setIfAbsent(keyBuffer.toString(), "1", accessInterval, TimeUnit.MILLISECONDS);
         if (!aBoolean) {
-            return Result.error("重复请求，请稍后再试");
+            return Result.error(CommonErrorEnum.ACCESS_LIMIT);
         }
         return joinPoint.proceed();
     }
