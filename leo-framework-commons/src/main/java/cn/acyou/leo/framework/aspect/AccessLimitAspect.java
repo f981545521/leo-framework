@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.config;
+package cn.acyou.leo.framework.aspect;
 
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
@@ -28,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 防止重复提交切面
+ *
+ * use support {@link AccessLimit}
  *
  * @author fangyou
  * @version [1.0.0, 2021-09-26 18:01]
