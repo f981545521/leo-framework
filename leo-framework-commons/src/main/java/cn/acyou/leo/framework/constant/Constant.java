@@ -35,5 +35,10 @@ public class Constant {
     public static final Integer NORMAL = 1;
     public static final Integer ENABLE = 1;
     public static final Integer DISABLED = 0;
+
+    /**
+     * 请求头header名称
+     */
+    public static final String TOKEN_NAME = "Authentication";
 }
 
