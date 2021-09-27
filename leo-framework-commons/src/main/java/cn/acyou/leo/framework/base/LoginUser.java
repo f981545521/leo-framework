@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @author youfang
@@ -21,5 +22,13 @@ public class LoginUser implements Serializable {
 
     @ApiModelProperty("用户名")
     private String	userName;
+
+    @ApiModelProperty("用户拥有的角色")
+    private Set<String> roleCodes;
+
+    @ApiModelProperty("用户拥有的权限")
+    private Set<String> permsList;
+
+
 
 }
