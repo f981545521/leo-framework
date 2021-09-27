@@ -3,6 +3,8 @@ package cn.acyou.leo.framework.util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -549,6 +551,31 @@ public class ReflectUtils {
             clazz = clazz.getSuperclass();
         }
         return false;
+    }
+
+    /**
+     * 获取泛型类型
+     *
+     * @param clazz clazz
+     * @param index 指数
+     * @return {@link Class<?>}
+     */
+    public static Class<?> getSuperClassGenericType(final Class<?> clazz, final int index) {
+        Type genType = clazz.getGenericSuperclass();
+        if (!(genType instanceof ParameterizedType)) {
+            return Object.class;
+        } else {
+            Type[] params = ((ParameterizedType)genType).getActualTypeArguments();
+            if (index < params.length && index >= 0) {
+                if (!(params[index] instanceof Class)) {
+                    return Object.class;
+                } else {
+                    return (Class) params[index];
+                }
+            } else {
+                return Object.class;
+            }
+        }
     }
 
 }
