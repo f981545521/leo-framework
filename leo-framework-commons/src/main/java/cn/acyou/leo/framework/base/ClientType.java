@@ -27,9 +27,9 @@ public enum ClientType {
     ;
 
     // 成员变量
-    private int code;
+    private final int code;
 
-    private String message;
+    private final String message;
 
     ClientType(int code, String message) {
         this.code = code;

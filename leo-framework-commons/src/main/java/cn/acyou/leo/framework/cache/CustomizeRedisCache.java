@@ -14,8 +14,8 @@ import java.util.List;
  * @version [1.0.0, 2020/7/1]
  **/
 public class CustomizeRedisCache extends RedisCache {
-    private RedisCacheWriter redisCacheWriter;
-    private RedisCacheConfiguration configuration;
+    private final RedisCacheWriter redisCacheWriter;
+    private final RedisCacheConfiguration configuration;
     //校验规则：获取时间
     private static final String SPLITTER = "#";
 
@@ -56,7 +56,7 @@ public class CustomizeRedisCache extends RedisCache {
                 //不是时间类型
                 throw new IllegalArgumentException("@Cacheable value = " + name + " not Allow ! ttl invalid");
             }
-            Long ttl = Long.valueOf(expireName);
+            long ttl = Long.parseLong(expireName);
 
             //获取缓存value
             Object cacheValue = preProcessCacheValue(value);
