@@ -46,13 +46,13 @@ public class PermissionsAspect {
             Logical logical = requiresRoles.logical();
             String[] needRoles = requiresRoles.value();
             if (logical.equals(Logical.AND)) {
-                boolean containsAll = Sets.newHashSet(needRoles).containsAll(roleCodes);
+                boolean containsAll = roleCodes.containsAll(Sets.newHashSet(needRoles));
                 if (!containsAll) {
                     throw new ServiceException("权限不足，请联系管理员！");
                 }
             }
             if (logical.equals(Logical.OR)) {
-                boolean containsAny = CollectionUtils.containsAny(Sets.newHashSet(needRoles), roleCodes);
+                boolean containsAny = CollectionUtils.containsAny(roleCodes, Sets.newHashSet(needRoles));
                 if (!containsAny) {
                     throw new ServiceException("权限不足，请联系管理员！");
                 }
@@ -68,13 +68,13 @@ public class PermissionsAspect {
             Logical logical = requiresPermissions.logical();
             String[] needPermissions = requiresPermissions.value();
             if (logical.equals(Logical.AND)) {
-                boolean containsAll = Sets.newHashSet(needPermissions).containsAll(permsList);
+                boolean containsAll = permsList.containsAll(Sets.newHashSet(needPermissions));
                 if (!containsAll) {
                     throw new ServiceException("权限不足，请联系管理员！");
                 }
             }
             if (logical.equals(Logical.OR)) {
-                boolean containsAny = CollectionUtils.containsAny(Sets.newHashSet(needPermissions), permsList);
+                boolean containsAny = CollectionUtils.containsAny(permsList, Sets.newHashSet(needPermissions));
                 if (!containsAny) {
                     throw new ServiceException("权限不足，请联系管理员！");
                 }
