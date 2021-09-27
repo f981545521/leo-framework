@@ -255,6 +255,47 @@ System.out.println(IdUtil.getDatePrefixId("RK", 8));  //RK2021090300000004
         return Result.success(name);
     }
 ```
+
+### 四、权限控制
+
+没有使用`shiro`、`Spring Security`，自己通过Aspect实现。
+
+1. `@RequiresRoles`：标识需要角色
+2. `@RequiresPermissions`：标识需要指定权限
+
+示例：
+
+```
+    @RequestMapping(value = "get", method = {RequestMethod.GET})
+    @ApiOperation("获取一条记录")
+    @RequiresRoles("auditor")
+    @RequiresPermissions("student:get")
+    public Result<?> get(@ParamValid @BaseValid(notNull = true) Long id) {
+        Student stu = studentService.getById(id);
+        return Result.success(stu);
+    }
+```
+> 思考： 为什么要使用`shiro`、`Spring Security`？？？我一个切面就能搞定的事情。ி
+
+## 项目使用定制化配置
+
+```
+leo:
+  debug:
+    # 打印错误堆栈到Result中
+    print-to-result: false
+    # 是否开启接口统计分析功能
+    interface-call-statistics: false
+    # 统计分析功能忽略的路径
+    ignore-uri-list:
+      - /student/get
+xss:
+  # 开启XSS过滤
+  enabled: true
+  # XSS过滤排除文件
+  excludes: 
+```
+
 ## 参与贡献
 
 无需贡献
