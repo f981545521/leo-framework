@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.aspect;
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
+import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.Md5Util;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
@@ -54,7 +55,7 @@ public class AccessLimitAspect {
         assert requestAttributes != null;
         HttpServletRequest request = requestAttributes.getRequest();
         String path = request.getServletPath();
-        String token = request.getHeader("token");
+        String token = request.getHeader(Constant.TOKEN_NAME);
         StringBuilder keyBuffer = new StringBuilder(path);
         if (StringUtils.hasText(token)) {
             keyBuffer.append(token);
