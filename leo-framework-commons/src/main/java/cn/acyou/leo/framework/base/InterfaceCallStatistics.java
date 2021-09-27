@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
  * @author youfang
  */
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class InterfaceCallStatistics implements Serializable{
