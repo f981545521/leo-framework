@@ -8,6 +8,7 @@ import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.framework.prop.LeoProperty;
 import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.SourceUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
@@ -36,6 +37,8 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
 
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private LeoProperty leoProperty;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -102,8 +105,14 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
      * @param request request
      */
     public void processInterfaceStatistics(HttpServletRequest request){
-        Result<?> exceptionResult = AppContext.getExceptionResult();
         String requestURI = request.getRequestURI();
+        if (!leoProperty.isInterfaceCallStatistics()) {
+            return;
+        }
+        if (leoProperty.getIgnoreUriList().contains(requestURI)){
+            return;
+        }
+        Result<?> exceptionResult = AppContext.getExceptionResult();
         InterfaceCallStatistics interfaceCallStatistics =
                 InterfaceCallStatistics.builder()
                         .url(requestURI)
