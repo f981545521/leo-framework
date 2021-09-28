@@ -21,7 +21,7 @@ SpringCloud项目
 1. SpringBoot+SpringMvc+Mybatis
 2. Redis
 3. Mysql
-4. [PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md) 一行代码搞定分页
+4. 整合 [PageHelper件](https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md) 分页，一行代码搞定分页
 ```
     @PostMapping(value = "pageSo")
     @ApiOperation("测试分页")
@@ -59,7 +59,7 @@ SpringCloud项目
    }
    ```
    示例二：直接在Controller参数上
-   ```
+   ``` java
        @RequestMapping(value = "get", method = {RequestMethod.GET})
        @ApiOperation("get")
        public Result<?> get(
@@ -298,7 +298,7 @@ System.out.println(IdUtil.getDatePrefixId("RK", 8));  //RK2021090300000004
 
 ## 项目使用定制化配置
 
-```
+``` properties
 leo:
   debug:
     # 打印错误堆栈到Result中
@@ -311,7 +311,7 @@ leo:
 xss:
   # 开启XSS过滤
   enabled: true
-  # XSS过滤排除文件
+  # XSS过滤排除路径
   excludes: 
 ```
 
