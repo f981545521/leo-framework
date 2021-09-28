@@ -89,6 +89,14 @@ SpringCloud项目
 
 8. ElasticSearch全文检索
 
+   - [1.ElasticSearch介绍与相关工具安装](document/6.ElasticSearch/1.ElasticSearch介绍与相关工具安装.md)
+   - [2.IK分词器](document/6.ElasticSearch/2.IK分词器.md)
+   - [3.ElasticSearch基础语法](document/6.ElasticSearch/3.ElasticSearch基础语法.md)
+   - [4.SpringBoot集成ES](document/6.ElasticSearch/4.SpringBoot集成ES.md)
+   - [5.同步数据](document/6.ElasticSearch/5.同步数据.md)
+   - [6.Logstash是什么](document/6.ElasticSearch/6.Logstash到底是干嘛的.md)
+   - [Ext.ES字段类型详解](document/6.ElasticSearch/Ext.ES字段类型详解.md)
+
 
 ## 安装教程
 为了顺利启动项目，一步一步运行好环境。
