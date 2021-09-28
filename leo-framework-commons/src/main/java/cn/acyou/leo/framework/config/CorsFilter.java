@@ -33,11 +33,15 @@ public class CorsFilter extends OncePerRequestFilter {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         List<String> list = new ArrayList<>();
         list.add("*");
-        corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setAllowedOrigins(list);
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
+        //不接收Cookie
+        //        xhrFields: {
+        //            withCredentials: false
+        //        },
+        corsConfiguration.setAllowCredentials(false);
         source.registerCorsConfiguration("/**", corsConfiguration);
         this.configSource = source;
     }
