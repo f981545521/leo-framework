@@ -29,6 +29,12 @@ public class LoginUser implements Serializable {
     @ApiModelProperty("用户拥有的权限")
     private Set<String> permsList;
 
+    @ApiModelProperty("所属组织")
+    private OrganizationVo organization;
+
+    @ApiModelProperty("角色")
+    private RoleVo roleVo;
+
 
 
 }
