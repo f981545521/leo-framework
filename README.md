@@ -58,7 +58,18 @@ SpringCloud项目
        private Integer age;
    }
    ```
-   示例二：直接在Controller参数上
+
+   示例二：简单的非空校验，通过`@RequestParam`注解（默认是非空）会走统一异常处理返回结果。
+   ``` java
+    @RequestMapping(value = "get", method = {RequestMethod.GET})
+    @ApiOperation("get")
+    public Result<?> get(@RequestParam Long id, @RequestParam(required = false) String name) {
+        Student stu = studentService.getById(id);
+        return Result.success(stu);
+    }
+   ```
+   
+   示例三：直接在Controller参数上的增强校验
    ``` java
        @RequestMapping(value = "get", method = {RequestMethod.GET})
        @ApiOperation("get")
@@ -75,6 +86,7 @@ SpringCloud项目
            return Result.success(stu);
        }
    ```
+
 8. ElasticSearch全文检索
 
 
