@@ -59,6 +59,9 @@ public class EnhanceValidUtil {
      * @param object 对象
      */
     private static void validEntity(Object object) {
+        if (object == null) {
+            throw new ServiceException("参数校验实体不能为空！");
+        }
         //获取object的类型
         Class<?> clazz = object.getClass();
         //获取该类型声明的成员
@@ -107,7 +110,6 @@ public class EnhanceValidUtil {
     private static void baseValidSupport(Field field, Object object, BaseValid baseValid) {
         //当前值
         Object validValue = null;
-        String description = "请求参数错误，请检查！";
         try {
             validValue = field.get(object);
         } catch (IllegalAccessException e) {
@@ -115,12 +117,26 @@ public class EnhanceValidUtil {
         }
         //当前字段名称
         String currentFieldName = field.getName();
+        validBaseType(validValue, currentFieldName, baseValid, object);
+    }
+
+    /**
+     * 有效的基本类型
+     *
+     * @param validValue       校验的值
+     * @param currentFieldName 当前字段名
+     * @param baseValid        校验注解
+     * @param object           源对象
+     */
+    public static void validBaseType(Object validValue, String currentFieldName, BaseValid baseValid, Object object) {
+
+        /* *********** 注解解析工作开始 ***************** */
+        String description = "请求参数错误，请检查！";
         //自定义描述
         if (StringUtils.hasText(baseValid.message())) {
             description = baseValid.message();
         }
 
-        /* *********** 注解解析工作开始 ***************** */
         //非NULL
         if (baseValid.notNull()) {
             if (validValue == null || !StringUtils.hasText(validValue.toString())) {

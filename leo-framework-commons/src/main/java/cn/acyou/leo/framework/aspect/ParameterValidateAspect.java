@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.aspect;
 
+import cn.acyou.leo.framework.annotation.valid.BaseValid;
+import cn.acyou.leo.framework.annotation.valid.EnhanceValid;
 import cn.acyou.leo.framework.annotation.valid.ParamValid;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.valid.EnhanceValidUtil;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.annotation.Annotation;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -28,6 +30,9 @@ import java.util.Map;
 @Aspect
 @Component
 public class ParameterValidateAspect {
+
+    private static final List<Class<? extends Annotation>> PARAM_VALID_BASE = Arrays.asList(ParamValid.class, BaseValid.class);
+    private static final List<Class<? extends Annotation>> PARAM_VALID_ENHANCE = Arrays.asList(ParamValid.class, EnhanceValid.class);
 
     /**
      * 切入所有Controller 的请求
@@ -45,6 +50,29 @@ public class ParameterValidateAspect {
         Map<String, Object> paramsMap = new LinkedHashMap<>();
         for (Annotation[] parameterAnnotation : parameterAnnotations) {
             int paramIndex = ArrayUtils.indexOf(parameterAnnotations, parameterAnnotation);
+            List<Class<? extends Annotation>> annotations = Arrays.stream(parameterAnnotation).map(Annotation::annotationType).collect(Collectors.toList());
+            // ParamValid + BaseValid 组合支持
+            boolean singleValid = annotations.containsAll(PARAM_VALID_BASE);
+            if (singleValid){
+                Object validValue = args[paramIndex];
+                paramsMap.put("Arg_" + paramIndex, validValue);
+                int i = annotations.indexOf(BaseValid.class);
+                EnhanceValidUtil.validBaseType(validValue, "Arg" + paramIndex, (BaseValid) parameterAnnotation[i], null);
+                continue;
+            }
+            // ParamValid + EnhanceValid 组合支持
+            boolean singleEnhanceValid = annotations.containsAll(PARAM_VALID_ENHANCE);
+            if (singleEnhanceValid){
+                Object validValue = args[paramIndex];
+                paramsMap.put("Arg_" + paramIndex, validValue);
+                int i = annotations.indexOf(EnhanceValid.class);
+                EnhanceValid enhanceValid = (EnhanceValid) parameterAnnotation[i];
+                for (BaseValid baseValid : enhanceValid.value()) {
+                    EnhanceValidUtil.validBaseType(validValue, "Arg" + paramIndex, baseValid, null);
+                }
+                continue;
+            }
+            //实体参数校验
             for (Annotation annotation : parameterAnnotation) {
                 if (annotation instanceof ParamValid) {
                     Object paramValue = args[paramIndex];

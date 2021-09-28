@@ -40,22 +40,41 @@ SpringCloud项目
 7. 增强的参数校验
     - [@EnhanceValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/EnhanceValid.java) 
     - [@BaseValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/BaseValid.java)
-``` java
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class StudentSo extends PageSo {
 
-    @BaseValid(notEmpty = true, message = "姓名不能为空！")
-    private String	name;
-
-    @EnhanceValid({
-            @BaseValid(notNull = true, message = "年龄不能为空！"),
-            @BaseValid(min = 0, message = "年龄不能小于0岁！"),
-            @BaseValid(max = 200, message = "年龄不能大于200岁！")
-    })
-    private Integer age;
-}
-```
+   示例一：`@RequestBody`实体中
+   ``` java
+   @Data
+   @EqualsAndHashCode(callSuper = true)
+   public class StudentSo extends PageSo {
+   
+       @BaseValid(notEmpty = true, message = "姓名不能为空！")
+       private String	name;
+   
+       @EnhanceValid({
+               @BaseValid(notNull = true, message = "年龄不能为空！"),
+               @BaseValid(min = 0, message = "年龄不能小于0岁！"),
+               @BaseValid(max = 200, message = "年龄不能大于200岁！")
+       })
+       private Integer age;
+   }
+   ```
+   示例二：直接在Controller参数上
+   ```
+       @RequestMapping(value = "get", method = {RequestMethod.GET})
+       @ApiOperation("get")
+       public Result<?> get(
+               @ParamValid @EnhanceValid({
+               @BaseValid(notNull = true, message = "id不能为空"),
+               @BaseValid(max = 1000, message = "id不能超过1000")
+       }) Long id,
+               @ParamValid @EnhanceValid({
+               @BaseValid(notNull = true, message = "name不能为空"),
+               @BaseValid(maxLength = 3, message = "name不能超过3位")
+       }) String name) {
+           Student stu = studentService.getById(id);
+           return Result.success(stu);
+       }
+   ```
 8. ElasticSearch全文检索
 
 

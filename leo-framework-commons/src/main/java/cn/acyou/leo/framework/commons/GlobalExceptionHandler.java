@@ -19,6 +19,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,7 +68,17 @@ public class GlobalExceptionHandler {
     public Result<Object> handleHttpMessageNotReadableException(HttpServletRequest request, Exception e){
         Result<Object> resultInfo = Result.error();
         //org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character ('"' (code 34)): ...
-        resultInfo.setMessage("请求参数格式错误，请检查！");
+        resultInfo.setMessage("请求参数格式转换错误，请检查！");
+        printErrorStackTraceInResultData(e, resultInfo);
+        return resultInfo;
+    }
+    /** 类型转换失败 (RequestParam 接收的类型不正确 */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseBody
+    public Result<Object> handleMethodArgumentTypeMismatchException(HttpServletRequest request, Exception e){
+        Result<Object> resultInfo = Result.error();
+        //Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "999X" ...
+        resultInfo.setMessage("请求参数格式转换错误，请检查！");
         printErrorStackTraceInResultData(e, resultInfo);
         return resultInfo;
     }
