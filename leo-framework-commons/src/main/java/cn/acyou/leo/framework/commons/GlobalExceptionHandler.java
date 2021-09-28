@@ -128,7 +128,7 @@ public class GlobalExceptionHandler {
     public Result<Object> handleMissingServletRequestParameterException(HttpServletRequest request, Exception e) {
         Result<Object> resultInfo = Result.error();
         String message = e.getMessage();
-        int start = message.indexOf("Required String parameter '") + 27;
+        int start = message.indexOf("parameter '") + 11;
         int end = message.indexOf("'", start);
         resultInfo.setMessage(message.substring(start, end) + " 不能为空，请检查！");
         e.printStackTrace();
