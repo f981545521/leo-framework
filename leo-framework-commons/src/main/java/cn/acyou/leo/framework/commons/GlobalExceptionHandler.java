@@ -126,7 +126,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseBody
     public Result<Object> handleMissingServletRequestParameterException(HttpServletRequest request, Exception e) {
-        Result<Object> resultInfo = Result.error(CommonErrorEnum.E_PARAM_ERROR);
+        Result<Object> resultInfo = Result.error();
+        String message = e.getMessage();
+        int start = message.indexOf("Required String parameter '") + 27;
+        int end = message.indexOf("'", start);
+        resultInfo.setMessage(message.substring(start, end) + " 不能为空，请检查！");
         e.printStackTrace();
         printErrorStackTraceInResultData(e, resultInfo);
         return resultInfo;
