@@ -143,10 +143,16 @@ public class PinYinHelper {
     }
 
 
-    public static void main(String[] args) {
-        String str = "阿莫西林";
-        String pinyin = parsePinyinInitial(str);
-        System.out.println(str + " result ：" + pinyin);
+    public static void main(String[] args) throws Exception {
+        System.out.println(converterToSpell("干一行,行一行，一行行，行行行"));
+        //带声调标记
+        System.out.println(PinyinHelper.convertToPinyinString("干一行,行一行，一行行，行行行", " ", PinyinFormat.WITH_TONE_MARK));
+        //不带声调标记
+        System.out.println(PinyinHelper.convertToPinyinString("干一行,行一行，一行行，行行行", " ", PinyinFormat.WITHOUT_TONE));
+        //带音号
+        System.out.println(PinyinHelper.convertToPinyinString("干一行,行一行，一行行，行行行", " ", PinyinFormat.WITH_TONE_NUMBER));
+        //首字母
+        System.out.println(PinyinHelper.getShortPinyin("干一行,行一行，一行行，行行行"));
     }
 
 
