@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.context;
 
+import cn.acyou.leo.framework.base.ClientLanguage;
 import cn.acyou.leo.framework.base.ClientType;
 import cn.acyou.leo.framework.base.LoginUser;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
@@ -21,6 +22,8 @@ public class AppContext {
     private static final ThreadLocal<LoginUser> LOGIN_USER_TL = new ThreadLocal<>();
     //客户端类型
     private static final ThreadLocal<ClientType> CLIENT_TYPE_TL = new ThreadLocal<>();
+    //客户端语言
+    private static final ThreadLocal<ClientLanguage> CLIENT_LANGUAGE_TL = new ThreadLocal<>();
     //请求路径
     private static final ThreadLocal<String> ACTION_URL_TL = new ThreadLocal<>();
     //请求接口注解：{@link ApiOperation}的Value
@@ -38,6 +41,7 @@ public class AppContext {
         THREAD_LOCAL_LIST.add(IP_TL);
         THREAD_LOCAL_LIST.add(LOGIN_USER_TL);
         THREAD_LOCAL_LIST.add(CLIENT_TYPE_TL);
+        THREAD_LOCAL_LIST.add(CLIENT_LANGUAGE_TL);
         THREAD_LOCAL_LIST.add(ACTION_URL_TL);
         THREAD_LOCAL_LIST.add(ACTION_API_OPERATION_TL);
         THREAD_LOCAL_LIST.add(REQUEST_TIMESTAMP_TL);
@@ -166,6 +170,14 @@ public class AppContext {
 
     public static void clearRequestParams(Map<String, Object> paramsMap) {
         PARAMS_TL.remove();
+    }
+
+    public static ClientLanguage getClientLanguage(){
+        return CLIENT_LANGUAGE_TL.get();
+    }
+
+    public static void setClientLanguage(ClientLanguage clientLanguage){
+        CLIENT_LANGUAGE_TL.set(clientLanguage);
     }
 
     public static void clearThreadLocal() {

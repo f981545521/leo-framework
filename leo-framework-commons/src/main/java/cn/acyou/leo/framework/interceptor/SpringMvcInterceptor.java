@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.interceptor;
 
+import cn.acyou.leo.framework.base.ClientLanguage;
 import cn.acyou.leo.framework.base.InterfaceCallStatistics;
 import cn.acyou.leo.framework.base.LoginUser;
 import cn.acyou.leo.framework.commons.AsyncManager;
@@ -67,6 +68,8 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
         AppContext.setRequestTimeStamp(System.currentTimeMillis());
         AppContext.setActionUrl(request.getRequestURI());
         AppContext.setClientType(SourceUtil.getClientTypeByUserAgent(request));
+        String language = request.getHeader("Language");
+        AppContext.setClientLanguage(ClientLanguage.getLanguage(language));
         String methodInfo = "";
         String apiRemark = "";
         if (handler instanceof HandlerMethod) {
