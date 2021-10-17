@@ -22,10 +22,10 @@ public class PageQuery {
      * 使用 springframework.data.domain.Page 时转换为 PageData
      *
      * <p>example:</p>
-     * <pre>
-     *        Page&lt;ProductEo&gt; users = productEsRepository.findAll(PageRequest.of(1, 20));
-     *        PageData&lt;ProductEo&gt; pageData = PageQuery.convert(user);
-     * </pre>
+     *  <pre>
+     ** Page<ProductEo> users = productEsRepository.findAll(PageRequest.of(1, 20));
+     ** PageData<ProductEo> pageData = PageQuery.convert(user);
+     *  </pre>
      *
      * @param <T> 类型
      * @param springPage spring data的page
@@ -45,9 +45,9 @@ public class PageQuery {
      *
      * <p>example:</p>
      * <pre>
-     *     PageHelper.startPage(req.getPageNum(), req.getPageSize());
-     *     List&lt;MarketingProductVo&gt; marketingProductList = marketingProductMapper.selectMarketingProduct(req);
-     *     PageData&lt;MarketingProductVo&gt; PageData = PageData.convert(new PageInfo&lt;&gt;(marketingProductList));
+     ** PageHelper.startPage(req.getPageNum(), req.getPageSize());
+     ** List<MarketingProductVo> marketingProductList = marketingProductMapper.selectMarketingProduct(req);
+     ** PageData<MarketingProductVo> PageData = PageData.convert(new PageInfo<>(marketingProductList));
      * </pre>
      *
      * @param pageInfo pageHelper 分页对象
@@ -88,9 +88,9 @@ public class PageQuery {
      *
      * <p>example:</p>
      * <pre>
-     *      PageHelper.startPage(req.getPageNum(), req.getPageSize());
-     *      List&lt;MarketingProductVo&gt; marketingProductList = marketingProductMapper.selectMarketingProduct(req);
-     *      PageData&lt;MarketingProductVo&gt; PageData = PageData.convert(marketingProductList);
+     ** PageHelper.startPage(req.getPageNum(), req.getPageSize());
+     ** List<MarketingProductVo> marketingProductList = marketingProductMapper.selectMarketingProduct(req);
+     ** PageData<MarketingProductVo> PageData = PageData.convert(marketingProductList);
      * </pre>
      *
      * @param <T>      具体类型
@@ -109,8 +109,8 @@ public class PageQuery {
      * <p>example:</p>
      *
      * <pre>
-     *    PageData&lt;Student&gt; convert2 =  PageData.startPage(pageNum, pageSize).selectMapper(studentService.selectAll());
-     *    PageData&lt;StudentVo&gt; convertType =  PageData.startPage(pageNum, pageSize).selectMapper(studentService.selectAll(), StudentVo.class);
+     ** PageData<Student> convert2 =  PageData.startPage(pageNum, pageSize).selectMapper(studentService.selectAll());
+     ** PageData<StudentVo> convertType =  PageData.startPage(pageNum, pageSize).selectMapper(studentService.selectAll(), StudentVo.class);
      * </pre>
      *
      * @param pageNum  页码，从1开始
