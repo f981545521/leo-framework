@@ -1,7 +1,9 @@
 package cn.acyou.leo.framework.config;
 
+import cn.acyou.leo.framework.annotation.valid.DictValue;
 import cn.acyou.leo.framework.annotation.valid.ListValue;
 import cn.acyou.leo.framework.annotation.valid.PropertyScriptAssert;
+import cn.acyou.leo.framework.constraintvalidators.DictValueConstraintValidator;
 import cn.acyou.leo.framework.constraintvalidators.ListValueConstraintValidator;
 import cn.acyou.leo.framework.constraintvalidators.PropertyScriptAssertValidator;
 import org.hibernate.validator.HibernateValidator;
@@ -26,12 +28,18 @@ public class FrameworkBeanConfig {
                 .configure();
         /* 自定义Validator支持 */
         ConstraintMapping constraintMapping = configuration.createConstraintMapping();
+        //集合类型包含校验
         constraintMapping.constraintDefinition(ListValue.class)
                 .includeExistingValidators(false)
                 .validatedBy(ListValueConstraintValidator.class);
+        //全属性级别脚本判断
         constraintMapping.constraintDefinition(PropertyScriptAssert.class)
                 .includeExistingValidators(false)
                 .validatedBy(PropertyScriptAssertValidator.class);
+        //数据字典类型校验
+        constraintMapping.constraintDefinition(DictValue.class)
+                .includeExistingValidators(false)
+                .validatedBy(DictValueConstraintValidator.class);
 
         return configuration.addMapping(constraintMapping)
                 .buildValidatorFactory()
