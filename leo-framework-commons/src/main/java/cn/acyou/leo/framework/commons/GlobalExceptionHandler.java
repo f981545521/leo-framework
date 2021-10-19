@@ -14,7 +14,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +50,57 @@ public class GlobalExceptionHandler {
 
     @Autowired
     private LeoProperty leoProperty;
+
+    /**
+     * 参数校验 1
+     */
+    @ResponseBody
+    @ExceptionHandler(value = BindException.class)
+    public Result<Object> handleBindException(BindException e) {
+        return handlerParamNotValidException(e.getBindingResult());
+    }
+    /**
+     * 参数校验 2
+     */
+    @ResponseBody
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public Result<Object> handleValidException(MethodArgumentNotValidException e) {
+        return handlerParamNotValidException(e.getBindingResult());
+    }
+
+    /**
+     * 处理参数校验结果
+     *
+     * @param bindingResult 参数校验结果
+     * @return Result
+     */
+    private Result<Object> handlerParamNotValidException(BindingResult bindingResult){
+        Result<Object> error = Result.error(CommonErrorEnum.E_PARAM_VALID_ERROR);
+        Map<String, String> map = new HashMap<>();
+        String firstMessage = null;
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            for (int i = 0; i < allErrors.size(); i++) {
+                ObjectError item = allErrors.get(i);
+                String message = item.getDefaultMessage();
+                if (i == 0){
+                    firstMessage = message;
+                }
+                if (item instanceof FieldError) {
+                    FieldError fieldItem = (FieldError) item;
+                    String field = fieldItem.getField();
+                    map.put(field, message);
+                } else {
+                    String objectName = item.getObjectName();
+                    map.put("global", message);
+                }
+            }
+        }
+        error.setMessage(firstMessage);
+        error.setData(map);
+        return error;
+    }
+
 
     /** 文件大小超过限制 */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
