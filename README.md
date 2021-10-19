@@ -37,57 +37,66 @@ SpringCloud项目
     - [通用Mapper](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-commons/src/main/java/cn/acyou/leo/framework/mapper/Mapper.java)
     - 支持乐观锁、逻辑删除....
 6. Mybatis拦截器，继承`BaseEntity`，不用set createTime、createUser、updateUser、updateTime
-7. 增强的参数校验
-    - [@EnhanceValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/EnhanceValid.java) 
-    - [@BaseValid](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-dto/src/main/java/cn/acyou/leo/framework/annotation/valid/BaseValid.java)
+7. 参数校验，使用JSR303规范
 
-   示例一：`@RequestBody`实体中
-   ``` java
-   @Data
-   @EqualsAndHashCode(callSuper = true)
-   public class StudentSo extends PageSo {
+      示例一：`@RequestBody`实体中
+      ``` java
+      @Data
+      @PropertyScriptAssert(script = "_this.password==_this.confirmation", message = "密码输入不一致！")
+      public class StudentReq implements Serializable {
+      @NotNull(message = "name 不能为空！")
+      private String name;
    
-       @BaseValid(notEmpty = true, message = "姓名不能为空！")
-       private String	name;
+          @NotNull(message = "interests 不能为空！")
+          @Size(min = 1, message = "interests 取值不正确")
+          private List<String> interests;
    
-       @EnhanceValid({
-               @BaseValid(notNull = true, message = "年龄不能为空！"),
-               @BaseValid(min = 0, message = "年龄不能小于0岁！"),
-               @BaseValid(max = 200, message = "年龄不能大于200岁！")
-       })
-       private Integer age;
-   }
-   ```
+          @ListValue(values = {1,2,3}, message = "age 取值不正确")
+          private Integer age;
+   
+          @ListValue(strValues = {"Y","N"}, message = "enable 取值不正确")
+          private String enable;
+   
+          @Valid
+          @NotNull(message = "studentScoreReq 不能为空！")
+          private StudentScoreReq studentScoreReq;
+   
+          private String password;
+   
+          private String confirmation;
+      }
+      
+       // Controler
+       @RequestMapping(value = "valid/test1", method = {RequestMethod.POST})
+       @ApiOperation("测试参数校验1")
+       public Result<?> validTest1(@Validated @RequestBody StudentReq studentReq){
+           System.out.println("NAME" + studentReq);
+           return Result.success(studentReq);
+       }
+      ```
 
-   示例二：简单的非空校验，通过`@RequestParam`注解（默认是非空）会走统一异常处理返回结果。
-   ``` java
-    @RequestMapping(value = "get", method = {RequestMethod.GET})
-    @ApiOperation("get")
-    public Result<?> get(@RequestParam Long id, @RequestParam(required = false) String name) {
-        Student stu = studentService.getById(id);
-        return Result.success(stu);
-    }
-   ```
-   
-   示例三：直接在Controller参数上的增强校验
-   ``` java
+      示例二：简单的非空校验，通过`@RequestParam`注解（默认是非空）会走统一异常处理返回结果。
+      ``` java
        @RequestMapping(value = "get", method = {RequestMethod.GET})
        @ApiOperation("get")
-       public Result<?> get(
-               @ParamValid @EnhanceValid({
-               @BaseValid(notNull = true, message = "id不能为空"),
-               @BaseValid(max = 1000, message = "id不能超过1000")
-       }) Long id,
-               @ParamValid @EnhanceValid({
-               @BaseValid(notNull = true, message = "name不能为空"),
-               @BaseValid(maxLength = 3, message = "name不能超过3位")
-       }) String name) {
+       public Result<?> get(@RequestParam Long id, @RequestParam(required = false) String name) {
            Student stu = studentService.getById(id);
            return Result.success(stu);
        }
-   ```
+      ```
+   
+      示例三：直接在Controller参数上的增强校验
+      ``` java
 
-8. ElasticSearch全文检索
+
+       @GetMapping(value = "valid/test2")
+       @ApiOperation("测试参数校验2")
+       public Result<?> validTest2(@Validated @NotBlank(message = "name不能为空") String name){
+           return Result.success();
+       }
+      ```
+
+9. ElasticSearch全文检索
 
    - [1.ElasticSearch介绍与相关工具安装](document/6.ElasticSearch/1.ElasticSearch介绍与相关工具安装.md)
    - [2.IK分词器](document/6.ElasticSearch/2.IK分词器.md)
@@ -309,7 +318,7 @@ System.out.println(IdUtil.getDatePrefixId("RK", 8));  //RK2021090300000004
     @ApiOperation("获取一条记录")
     @RequiresRoles("auditor")
     @RequiresPermissions("student:get")
-    public Result<?> get(@ParamValid @BaseValid(notNull = true) Long id) {
+    public Result<?> get(Long id) {
         Student stu = studentService.getById(id);
         return Result.success(stu);
     }

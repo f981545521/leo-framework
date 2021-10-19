@@ -28,12 +28,12 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,6 +69,26 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 参数校验 3
+     */
+    @ResponseBody
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public Result<Object> handleConstraintViolationException(ConstraintViolationException e) {
+        Result<Object> error = Result.error(CommonErrorEnum.E_PARAM_VALID_ERROR);
+        Map<String, String> map = new LinkedHashMap<>();
+        String firstMessage = null;
+        for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
+            map.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessageTemplate());
+            if (firstMessage == null) {
+                firstMessage = constraintViolation.getMessageTemplate();
+            }
+        }
+        error.setMessage(firstMessage);
+        error.setData(map);
+        return error;
+    }
+
+    /**
      * 处理参数校验结果
      *
      * @param bindingResult 参数校验结果
@@ -76,7 +96,7 @@ public class GlobalExceptionHandler {
      */
     private Result<Object> handlerParamNotValidException(BindingResult bindingResult){
         Result<Object> error = Result.error(CommonErrorEnum.E_PARAM_VALID_ERROR);
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new LinkedHashMap<>();
         String firstMessage = null;
         if (bindingResult.hasErrors()) {
             List<ObjectError> allErrors = bindingResult.getAllErrors();
