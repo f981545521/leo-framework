@@ -19,11 +19,11 @@ public class TkSqlHelper extends SqlHelper {
     /**
      * update set列
      *
-     * @param entityClass
+     * @param entityClass 实体
      * @param entityName  实体映射名
      * @param notNull     是否判断!=null
      * @param notEmpty    是否判断String类型!=''
-     * @return
+     * @return sql
      */
     public static String updateCustomSetColumns(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty) {
         StringBuilder sql = new StringBuilder();
@@ -70,10 +70,10 @@ public class TkSqlHelper extends SqlHelper {
     /**
      * insert into tableName - 动态表名
      *
-     * @param entityClass
-     * @param defaultTableName
+     * @param entityClass   实体
+     * @param defaultTableName 表名
      * @param parameterName 动态表名的参数名
-     * @return
+     * @return sql
      */
     public static String insertIgnoreIntoTable(Class<?> entityClass, String defaultTableName, String parameterName) {
         StringBuilder sql = new StringBuilder();
@@ -86,9 +86,9 @@ public class TkSqlHelper extends SqlHelper {
     /**
      * insert ignore into tableName - 动态表名
      *
-     * @param entityClass
-     * @param defaultTableName
-     * @return
+     * @param entityClass 实体
+     * @param defaultTableName  表名
+     * @return sql
      */
     public static String insertIgnoreIntoTable(Class<?> entityClass, String defaultTableName) {
         StringBuilder sql = new StringBuilder();
@@ -102,7 +102,7 @@ public class TkSqlHelper extends SqlHelper {
      * 逻辑删除 update set列
      *
      * @param entityClass 实体
-     * @return
+     * @return sql
      */
     public static String deleteLogicSetColumns(Class<?> entityClass) {
         StringBuilder sql = new StringBuilder();
@@ -137,11 +137,11 @@ public class TkSqlHelper extends SqlHelper {
     /**
      * update set列，不考虑乐观锁注解 @Version
      *
-     * @param entityClass
+     * @param entityClass 实体
      * @param entityName  实体映射名
      * @param notNull     是否判断!=null
      * @param notEmpty    是否判断String类型!=''
-     * @return
+     * @return sql
      */
     public static String updateSetColumnsIgnoreVersion(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty) {
         StringBuilder sql = new StringBuilder();

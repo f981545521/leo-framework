@@ -262,7 +262,7 @@ public class ReflectUtils {
      *
      * @param fieldName 字段名
      * @param object    对象
-     * @return {@link T}
+     * @return t
      */
     @SuppressWarnings("unchecked")
     public static <T> T getValueByGetMethod(String fieldName, Object object) {
@@ -285,7 +285,7 @@ public class ReflectUtils {
      *
      * @param field  场
      * @param object 对象
-     * @return {@link T}
+     * @return t
      */
     public static <T> T getValueByGetMethod(Field field, Object object) {
         return getValueByGetMethod(field.getName(), object);
@@ -491,7 +491,7 @@ public class ReflectUtils {
      *
      * @param methodName 属性名
      * @param annotation 目标注解
-     * @return {@link T}
+     * @return t
      */
     @SuppressWarnings("unchecked")
     public static <T> T getAnnotationValue(String methodName, Annotation annotation) {
@@ -558,7 +558,7 @@ public class ReflectUtils {
      *
      * @param clazz clazz
      * @param index 指数
-     * @return {@link Class<?>}
+     * @return clazz
      */
     public static Class<?> getSuperClassGenericType(final Class<?> clazz, final int index) {
         Type genType = clazz.getGenericSuperclass();

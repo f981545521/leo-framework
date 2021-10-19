@@ -131,7 +131,7 @@ public class CommonMapperProvider extends MapperTemplate {
     /**
      * 根据主键更新属性不为null的值 （根据注解忽略）
      *
-     * @return
+     * @return sql
      */
     public String updateByPrimaryKeySelectiveCustom(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
@@ -245,8 +245,8 @@ public class CommonMapperProvider extends MapperTemplate {
     /**
      * 根据Example更新非null字段
      *
-     * @param ms
-     * @return
+     * @param ms ms
+     * @return sql
      */
     public String updateByExampleSelectiveCustom(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);

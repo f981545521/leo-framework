@@ -189,7 +189,7 @@ public class StringUtil {
      *
      * @param sourceStr 源str
      * @param length    长度 (几个汉字)
-     * @return {@link String[]}
+     * @return str array
      */
     public static String[] strLengthSplit(String sourceStr, int length) {
         if (isNullOrBlank(sourceStr)) {

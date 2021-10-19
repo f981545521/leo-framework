@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * 参数记录切面
  *
  * @author youfang
- * @date 2020/12/04
+ * @version [1.0.0, 2021-09-27 15:28]
  */
 @Aspect
 @Component

@@ -18,6 +18,7 @@ import java.util.Set;
  * 可以获取 -> and org_id in (12, 13)
  * 如何使用：
  * <pre>
+ *     {@code
  *    <select id="listXXX" resultType="cn.acyou.xxx.vo.xxx">
  *         select t.*
  *         from r_table_1 t
@@ -25,6 +26,7 @@ import java.util.Set;
  *             ${@cn.acyou.leo.framework.util.DataScopeUtil@scopeSql("t")}
  *         </where>
  *     </select>
+ *     }
  * </pre>
  *
  * @author youfang
