@@ -25,7 +25,7 @@ SpringCloud项目
 ```
     @PostMapping(value = "pageSo")
     @ApiOperation("测试分页")
-    public Result<PageData<Student>> pageSo(@ParamValid @RequestBody StudentSo studentSo) {
+    public Result<PageData<Student>> pageSo(@RequestBody StudentSo studentSo) {
         PageData<Student> convertType =  
                 PageQuery.startPage(studentSo)
                 .selectMapper(studentService.selectByProperties("name", studentSo.getName(), "age", studentSo.getAge()));
