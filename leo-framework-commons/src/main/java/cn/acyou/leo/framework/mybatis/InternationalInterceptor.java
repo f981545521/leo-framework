@@ -36,6 +36,7 @@ import java.util.Properties;
 })
 public class InternationalInterceptor implements Interceptor {
     @Override
+    @SuppressWarnings("unchecked")
     public Object intercept(Invocation invocation) throws Throwable {
         Object[] args = invocation.getArgs();
         Object returnValue = invocation.proceed();

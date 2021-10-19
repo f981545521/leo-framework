@@ -1,8 +1,8 @@
 package cn.acyou.leo.framework.model;
 
-import cn.acyou.leo.framework.annotation.valid.BaseValid;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,6 +14,6 @@ import java.util.List;
 public class IdsReq implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @BaseValid(notEmpty = true, message = "参数错误，请检查！")
+    @NotEmpty(message = "参数错误，请检查！")
     private List<Long> ids;
 }
