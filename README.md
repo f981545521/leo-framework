@@ -85,14 +85,35 @@ SpringCloud项目
        }
       ```
    
-      示例三：直接在Controller参数上的增强校验
+      示例三：直接在Controller参数上的参数校验
       ``` java
-
-
        @GetMapping(value = "valid/test2")
        @ApiOperation("测试参数校验2")
        public Result<?> validTest2(@Validated @NotBlank(message = "name不能为空") String name){
            return Result.success();
+       }
+      ```
+
+      示例四：参数校验分组
+      ``` java
+       @Data
+       public class StudentReq2 implements Serializable {
+           @NotNull(message = "id 不能为空！", groups = {Insert.class})
+           @Null(message = "id 必须为空！", groups = {Update.class})
+           private Long id;
+           @NotBlank(message = "name 不能为空！")
+           private String name;
+       }
+       //Controller
+       @RequestMapping(value = "valid/test3", method = {RequestMethod.POST})
+       @ApiOperation("测试参数校验2")
+       public Result<?> validTest3(@Validated({Insert.class, Default.class}) @RequestBody StudentReq2 studentReq){
+           return Result.success(studentReq);
+       }
+       @RequestMapping(value = "valid/test4", method = {RequestMethod.POST})
+       @ApiOperation("测试参数校验2")
+       public Result<?> validTest4(@Validated({Update.class, Default.class}) @RequestBody StudentReq2 studentReq){
+           return Result.success(studentReq);
        }
       ```
 
