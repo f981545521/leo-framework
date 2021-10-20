@@ -6,6 +6,8 @@ import cn.acyou.leo.framework.base.LoginUser;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.Result;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,16 +99,21 @@ public class AppContext {
         ACTION_URL_TL.set(action);
     }
 
-    public static void setActionApiOperation(String methodInfo, String apiRemark){
-        ACTION_API_OPERATION_TL.set(new String[]{methodInfo, apiRemark});
+    public static void setActionApiOperation(String[] actionApiOperation){
+        ACTION_API_OPERATION_TL.set(actionApiOperation);
     }
 
-    public static String getActionApiMethodInfo(){
+    public static String[] getActionApiMethodInfo(){
+        return ACTION_API_OPERATION_TL.get();
+    }
+
+    public static String getActionApiMethodInfoRemark(){
         String[] values = ACTION_API_OPERATION_TL.get();
         if (values != null && values.length == 2){
             return values[0];
         }
         return "";
+
     }
 
     public static void clearActionApiMethodInfo(){
@@ -187,5 +194,34 @@ public class AppContext {
             }
         }
     }
+
+    public static AppContextBean convertAppContextBean() {
+        return AppContextBean.builder()
+                .ip(getIp())
+                .loginUser(getLoginUser())
+                .clientType(getClientType())
+                .clientLanguage(getClientLanguage())
+                .actionUrl(getActionUrl())
+                .actionApiOperation(ACTION_API_OPERATION_TL.get())
+                .requestTimestamp(getRequestTimeStamp())
+                .exceptionResult(getExceptionResult())
+                .params(getParamsMap())
+                .build();
+    }
+
+    @Data
+    @Builder
+    public static class AppContextBean {
+        private String ip;
+        private LoginUser loginUser;
+        private ClientType clientType;
+        private ClientLanguage clientLanguage;
+        private String actionUrl;
+        private String[] actionApiOperation;
+        private Long requestTimestamp;
+        private Result<?> exceptionResult;
+        private Map<String, Object> params;
+    }
+
 
 }

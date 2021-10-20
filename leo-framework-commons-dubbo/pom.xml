@@ -8,34 +8,28 @@
         <version>1.1.1.RELEASE</version>
     </parent>
 
-    <artifactId>leo-framework-barcode</artifactId>
-
+    <artifactId>leo-framework-commons-dubbo</artifactId>
     <packaging>jar</packaging>
-    <description>Leo 条形码/二维码 公共组件</description>
+    <description>Leo (Service)公共组件</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-commons</artifactId>
-            <version>${parent.version}</version>
+            <version>1.1.1.RELEASE</version>
         </dependency>
         <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>core</artifactId>
-            <version>3.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>javase</artifactId>
-            <version>3.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.barcode4j</groupId>
-            <artifactId>barcode4j</artifactId>
-            <version>2.1</version>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
         </dependency>
     </dependencies>
-
 
 
 </project>

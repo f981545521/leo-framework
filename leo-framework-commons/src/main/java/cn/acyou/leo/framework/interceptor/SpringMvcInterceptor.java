@@ -81,7 +81,7 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
                 apiRemark = annotation.value();
             }
         }
-        AppContext.setActionApiOperation(methodInfo, apiRemark);
+        AppContext.setActionApiOperation(new String[]{methodInfo, apiRemark});
         return true;
     }
 
@@ -121,7 +121,7 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
                         .url(requestURI)
                         .type(Constant.CONS_1)
                         .methodType(request.getMethod())
-                        .methodInfo(AppContext.getActionApiMethodInfo())
+                        .methodInfo(AppContext.getActionApiMethodInfoRemark())
                         .methodDesc(AppContext.getActionApiOperationValue())
                         .params(AppContext.getParamsMap() != null && AppContext.getParamsMap().size() > 0 ? JSON.toJSONString(AppContext.getParamsMap()) : null)
                         .startTime(new Date(AppContext.getRequestTimeStamp()))
