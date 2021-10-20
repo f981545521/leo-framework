@@ -19,5 +19,5 @@ public @interface Desensitized {
      *
      * @return 敏感的类型
      */
-    SensitizedType sensitizedType() default SensitizedType.none;
+    SensitizedType type();
 }

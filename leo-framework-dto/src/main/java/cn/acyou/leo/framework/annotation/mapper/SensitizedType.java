@@ -9,10 +9,6 @@ package cn.acyou.leo.framework.annotation.mapper;
  */
 public enum SensitizedType {
     /**
-     * 无
-     */
-    none,
-    /**
      * 手机号
      */
     mobilePhone,
