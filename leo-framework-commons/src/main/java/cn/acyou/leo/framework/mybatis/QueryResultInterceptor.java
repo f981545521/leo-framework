@@ -59,7 +59,7 @@ public class QueryResultInterceptor implements Interceptor {
                 }
                 Desensitized desensitizedAnnotation = declaredField.getAnnotation(Desensitized.class);
                 if (desensitizedAnnotation != null) {
-                    desensitizedFieldMap.put(declaredField.getName(), desensitizedAnnotation.sensitizedType());
+                    desensitizedFieldMap.put(declaredField.getName(), desensitizedAnnotation.type());
                 }
             }
             if (internationalFieldMap.isEmpty() && desensitizedFieldMap.isEmpty()) {
