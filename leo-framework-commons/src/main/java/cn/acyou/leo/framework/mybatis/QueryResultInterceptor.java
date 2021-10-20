@@ -87,12 +87,16 @@ public class QueryResultInterceptor implements Interceptor {
                         switch (entry.getValue()) {
                             case mobilePhone:
                                 ReflectUtils.setValueBySetMethod(entry.getKey(), o, DesensitizedUtil.mobilePhone(value));
+                                break;
                             case email:
                                 ReflectUtils.setValueBySetMethod(entry.getKey(), o, DesensitizedUtil.email(value));
+                                break;
                             case chineseName:
                                 ReflectUtils.setValueBySetMethod(entry.getKey(), o, DesensitizedUtil.chineseName(value));
+                                break;
                             case idCardNum:
                                 ReflectUtils.setValueBySetMethod(entry.getKey(), o, DesensitizedUtil.idCardNum(value, 6, 4));
+                                break;
                         }
                     }
                 }
