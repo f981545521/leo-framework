@@ -232,6 +232,76 @@ public class StringUtil {
         return text.startsWith("http://") || text.startsWith("https://");
     }
 
+    /**
+     * 替换指定字符串的指定区间内字符为"*"
+     * 俗称：脱敏功能，后面其他功能，可以见：DesensitizedUtils(脱敏工具类)
+     *
+     * <pre>
+     * StrUtil.hide(null,*,*)=null
+     * StrUtil.hide("",0,*)=""
+     * StrUtil.hide("jackduan@163.com",-1,4)   ****duan@163.com
+     * StrUtil.hide("jackduan@163.com",2,3)    ja*kduan@163.com
+     * StrUtil.hide("jackduan@163.com",3,2)    jackduan@163.com
+     * StrUtil.hide("jackduan@163.com",16,16)  jackduan@163.com
+     * StrUtil.hide("jackduan@163.com",16,17)  jackduan@163.com
+     * </pre>
+     *
+     * @param str          字符串
+     * @param startInclude 开始位置（包含）
+     * @param endExclude   结束位置（不包含）
+     * @return 替换后的字符串
+     * @since 4.1.14
+     */
+    public static String hide(CharSequence str, int startInclude, int endExclude) {
+        return replace(str, startInclude, endExclude, '*');
+    }
+    /**
+     * 替换指定字符串的指定区间内字符为固定字符
+     *
+     * @param str          字符串
+     * @param startInclude 开始位置（包含）
+     * @param endExclude   结束位置（不包含）
+     * @param replacedChar 被替换的字符
+     * @return 替换后的字符串
+     * @since 3.2.1
+     */
+    public static String replace(CharSequence str, int startInclude, int endExclude, char replacedChar) {
+        if (str == null || str.length() == 0) {
+            return str(str);
+        }
+        final int strLength = str.length();
+        if (startInclude > strLength) {
+            return str(str);
+        }
+        if (endExclude > strLength) {
+            endExclude = strLength;
+        }
+        if (startInclude > endExclude) {
+            // 如果起始位置大于结束位置，不替换
+            return str(str);
+        }
+
+        final char[] chars = new char[strLength];
+        for (int i = 0; i < strLength; i++) {
+            if (i >= startInclude && i < endExclude) {
+                chars[i] = replacedChar;
+            } else {
+                chars[i] = str.charAt(i);
+            }
+        }
+        return new String(chars);
+    }
+    /**
+     * {@link CharSequence} 转为字符串，null安全
+     *
+     * @param cs {@link CharSequence}
+     * @return 字符串
+     */
+    public static String str(CharSequence cs) {
+        return null == cs ? null : cs.toString();
+    }
+
+
     public static void main(String[] args) {
         String templateStr = "{姓名}今年{岁}啦！";
         Map<String, String> paramMap = new HashMap<>();

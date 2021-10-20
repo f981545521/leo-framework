@@ -1,7 +1,10 @@
 package cn.acyou.leo.framework.mybatis;
 
+import cn.acyou.leo.framework.annotation.mapper.Desensitized;
 import cn.acyou.leo.framework.annotation.mapper.International;
+import cn.acyou.leo.framework.annotation.mapper.SensitizedType;
 import cn.acyou.leo.framework.context.AppContext;
+import cn.acyou.leo.framework.util.DesensitizedUtil;
 import cn.acyou.leo.framework.util.ReflectUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -16,7 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * 国际化拦截器
+ * 国际化/脱敏 查询结果拦截器
  *
  * 示例：
  * <pre>
@@ -34,7 +37,7 @@ import java.util.Properties;
 @Intercepts({
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})
 })
-public class InternationalInterceptor implements Interceptor {
+public class QueryResultInterceptor implements Interceptor {
     @Override
     @SuppressWarnings("unchecked")
     public Object intercept(Invocation invocation) throws Throwable {
@@ -48,13 +51,18 @@ public class InternationalInterceptor implements Interceptor {
             Class<?> resClass = returnValueList.get(0).getClass();
             Field[] declaredFields = resClass.getDeclaredFields();
             Map<String, String> internationalFieldMap = new HashMap<>();
+            Map<String, SensitizedType> desensitizedFieldMap = new HashMap<>();
             for (Field declaredField : declaredFields) {
                 International annotation = declaredField.getAnnotation(International.class);
                 if (annotation != null) {
                     internationalFieldMap.put(declaredField.getName(), annotation.separator());
                 }
+                Desensitized desensitizedAnnotation = declaredField.getAnnotation(Desensitized.class);
+                if (desensitizedAnnotation != null) {
+                    desensitizedFieldMap.put(declaredField.getName(), desensitizedAnnotation.sensitizedType());
+                }
             }
-            if (internationalFieldMap.isEmpty()) {
+            if (internationalFieldMap.isEmpty() && desensitizedFieldMap.isEmpty()) {
                 return returnValue;
             }
             for (Object o : returnValueList) {
@@ -70,6 +78,22 @@ public class InternationalInterceptor implements Interceptor {
                             ReflectUtils.setValueBySetMethod(entry.getKey(), o, "");
                         }
 
+                    }
+                }
+                for (Map.Entry<String, SensitizedType> entry : desensitizedFieldMap.entrySet()) {
+                    Object valueByGetMethod = ReflectUtils.getValueByGetMethod(entry.getKey(), o);
+                    if (valueByGetMethod instanceof String) {
+                        String value = valueByGetMethod.toString();
+                        switch (entry.getValue()) {
+                            case mobilePhone:
+                                ReflectUtils.setValueBySetMethod(entry.getKey(), o, DesensitizedUtil.mobilePhone(value));
+                            case email:
+                                ReflectUtils.setValueBySetMethod(entry.getKey(), o, DesensitizedUtil.email(value));
+                            case chineseName:
+                                ReflectUtils.setValueBySetMethod(entry.getKey(), o, DesensitizedUtil.chineseName(value));
+                            case idCardNum:
+                                ReflectUtils.setValueBySetMethod(entry.getKey(), o, DesensitizedUtil.idCardNum(value, 6, 4));
+                        }
                     }
                 }
             }
