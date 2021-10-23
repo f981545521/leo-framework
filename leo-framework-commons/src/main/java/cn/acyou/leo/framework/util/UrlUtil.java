@@ -76,7 +76,11 @@ public class UrlUtil {
             String[] paramsArr = str.split("&");
             for (String param : paramsArr) {
                 String[] temp = param.split("=");
-                map.put(temp[0], temp[1]);
+                if (temp.length == 1){
+                    map.put(temp[0], "");
+                }else {
+                    map.put(temp[0], temp[1]);
+                }
             }
         }
         return map;
