@@ -10,8 +10,8 @@ import org.springframework.data.redis.cache.RedisCacheWriter;
  * <p>example：</p>
  *
  *  <pre>
- *{@code @Cacheable(value="sys:student#100", key="#id") 100S过期
- *   @Cacheable(value="sys:student#-1", key="#id")  永不过期}
+ *   &#064;Cacheable(value="sys:student#100", key="#id") 100S过期
+ *   &#064;Cacheable(value="sys:student#-1", key="#id")  永不过期
  *  </pre>
  * @author youfang
  * @version [1.0.0, 2020/7/1]

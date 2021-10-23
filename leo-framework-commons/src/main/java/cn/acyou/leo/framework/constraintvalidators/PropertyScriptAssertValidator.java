@@ -13,12 +13,10 @@ import java.util.Map;
 /**
  * 脚本类级别校验 （使用javascript校验）
  * <pre>
- * {@code
- * @PropertyScriptAssert(script = "_this.password==_this.confirmation", message = "密码输入不一致！"))
+ * &#064;PropertyScriptAssert(script = "_this.password==_this.confirmation", message = "密码输入不一致！"))
  * public class StudentReq {
  *     private String password;
  *     private String confirmation;
- * }
  * }
  * </pre>
  * @author fangyou
