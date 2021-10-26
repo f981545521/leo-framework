@@ -2,17 +2,24 @@ package cn.acyou.leo.framework.service;
 
 import cn.acyou.leo.framework.annotation.mapper.SelectiveIgnore;
 import cn.acyou.leo.framework.mapper.Mapper;
+import cn.acyou.leo.framework.mapper.tkMapper.util.TkSqlHelper;
+import cn.acyou.leo.framework.util.ReflectUtils;
 import com.google.common.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import tk.mybatis.mapper.MapperException;
+import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.util.Sqls;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 顶级 Service 实现
@@ -110,6 +117,32 @@ public class ServiceImpl<M extends Mapper<T>, T> implements Service<T> {
     @Override
     public int insertSelective(T record) {
         return baseMapper.insertSelective(record);
+    }
+    /**
+     * 保存一个实体，null的属性不会保存，会使用数据库默认值
+     *
+     * @param record 记录
+     * @return 影响行数
+     */
+    @Override
+    public int insertOrUpdateByPkSelective(T record) {
+        Set<EntityColumn> pkColumns = EntityHelper.getPKColumns(clazz);
+        if (pkColumns.size() == 1) {
+            EntityColumn column = pkColumns.iterator().next();
+            EntityField entityField = column.getEntityField();
+            try {
+                Object value = entityField.getValue(record);
+                if (value != null) {
+                    return baseMapper.updateByPrimaryKeySelective(record);
+                }else {
+                    return baseMapper.insertSelective(record);
+                }
+            }catch (Exception e) {
+                throw new MapperException("未知异常！" + e.getMessage());
+            }
+        } else {
+            throw new MapperException("insertOrUpdateByPkSelective 方法的实体类[" + clazz.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
+        }
     }
 
     /**

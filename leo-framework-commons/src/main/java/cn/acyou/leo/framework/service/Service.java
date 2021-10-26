@@ -29,6 +29,14 @@ public interface Service<T> {
     int insertSelective(T record);
 
     /**
+     * 插入实体或根据主键更新实体
+     *
+     * @param record 记录
+     * @return int 影响行数
+     */
+    int insertOrUpdateByPkSelective(T record);
+
+    /**
      * 批量插入，支持批量插入的数据库可以使用，例如MySQL,H2等，另外该接口限制实体包含`id`属性并且必须为自增列
      *
      * @param recordList 记录List
