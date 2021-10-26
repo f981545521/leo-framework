@@ -24,14 +24,14 @@ public class IdCardValidUtil {
      * 81 : 香港  82 : 澳门
      * 91 : 国外
      */
-    private static String cityCode[] =
+    private static final String[] cityCode =
             {"11", "12", "13", "14", "15", "21", "22", "23", "31", "32", "33", "34", "35", "36", "37", "41", "42", "43",
                     "44", "45", "46", "50", "51", "52", "53", "54", "61", "62", "63", "64", "65", "71", "81", "82", "91"};
 
     /**
      * 每位加权因子
      */
-    private static int power[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+    private static final int[] power = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
 
     /**
      * 验证所有的身份证的合法性
@@ -83,64 +83,36 @@ public class IdCardValidUtil {
         if (idcard == null) {
             return false;
         }
-
-        // 非18位为假  
+        // 非18位为假
         if (idcard.length() != 18) {
             return false;
         }
         // 获取前17位  
         String idcard17 = idcard.substring(0, 17);
-
-        // 前17位全部为数字  
+        // 前17位全部为数字
         if (!isDigital(idcard17)) {
             return false;
         }
-
         String provinceid = idcard.substring(0, 2);
         // 校验省份  
         if (!checkProvinceid(provinceid)) {
             return false;
         }
-
-        // 校验出生日期  
+        // 校验出生日期
         String birthday = idcard.substring(6, 14);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-
-        try {
-            Date birthDate = sdf.parse(birthday);
-            String tmpDate = sdf.format(birthDate);
-            if (!tmpDate.equals(birthday)) {// 出生年月日不正确
-                return false;
-            }
-
-        } catch (ParseException e1) {
-
-            return false;
-        }
-
+        Date birthDate = DateUtil.parseDate(birthday, DateUtil.FORMAT_SHORT_DATE);
         // 获取第18位  
         String idcard18Code = idcard.substring(17, 18);
-
-        char c[] = idcard17.toCharArray();
-
-        int bit[] = converCharToInt(c);
-
-        int sum17 = 0;
-
-        sum17 = getPowerSum(bit);
-
+        char[] c = idcard17.toCharArray();
+        int[] bit = converCharToInt(c);
+        int sum17 = getPowerSum(bit);
         // 将和值与11取模得到余数进行校验码判断  
         String checkCode = getCheckCodeBySum(sum17);
         if (null == checkCode) {
             return false;
         }
         // 将身份证的第18位与算出来的校码进行匹配，不相等就为假  
-        if (!idcard18Code.equalsIgnoreCase(checkCode)) {
-            return false;
-        }
-
-        return true;
+        return idcard18Code.equalsIgnoreCase(checkCode);
     }
 
     /**
@@ -161,34 +133,21 @@ public class IdCardValidUtil {
         if (idcard.length() != 15) {
             return false;
         }
-
         // 15全部为数字  
         if (!isDigital(idcard)) {
             return false;
         }
-
         String provinceid = idcard.substring(0, 2);
         // 校验省份  
         if (!checkProvinceid(provinceid)) {
             return false;
         }
-
         String birthday = idcard.substring(6, 12);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-
         try {
-            Date birthDate = sdf.parse(birthday);
-            String tmpDate = sdf.format(birthDate);
-            if (!tmpDate.equals(birthday)) {// 身份证日期错误
-                return false;
-            }
-
-        } catch (ParseException e1) {
-
+            DateUtil.parseDate(birthday, DateUtil.FORMAT_SHORT_DATE);
+        }catch (Exception e) {
             return false;
         }
-
         return true;
     }
 
@@ -202,23 +161,19 @@ public class IdCardValidUtil {
         if (idcard == null) {
             return null;
         }
-
         // 非15位身份证  
         if (idcard.length() != 15) {
             return null;
         }
-
         // 15全部为数字  
         if (!isDigital(idcard)) {
             return null;
         }
-
         String provinceid = idcard.substring(0, 2);
         // 校验省份  
         if (!checkProvinceid(provinceid)) {
             return null;
         }
-
         String birthday = idcard.substring(6, 12);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
@@ -241,11 +196,11 @@ public class IdCardValidUtil {
 
         String idcard17 = idcard.substring(0, 6) + year + idcard.substring(8);
 
-        char c[] = idcard17.toCharArray();
+        char[] c = idcard17.toCharArray();
         String checkCode = "";
 
         // 将字符数组转为整型数组  
-        int bit[] = converCharToInt(c);
+        int[] bit = converCharToInt(c);
 
         int sum17 = 0;
         sum17 = getPowerSum(bit);
@@ -265,7 +220,7 @@ public class IdCardValidUtil {
     /**
      * 校验省份
      *
-     * @param provinceid
+     * @param provinceid 省
      * @return 合法返回TRUE，否则返回FALSE
      */
     private static boolean checkProvinceid(String provinceid) {
@@ -280,8 +235,8 @@ public class IdCardValidUtil {
     /**
      * 数字验证
      *
-     * @param str
-     * @return
+     * @param str 字符串
+     * @return 数字
      */
     private static boolean isDigital(String str) {
         return str.matches("^[0-9]*$");
@@ -290,7 +245,7 @@ public class IdCardValidUtil {
     /**
      * 将身份证的每位和对应位的加权因子相乘之后，再得到和值
      *
-     * @param bit
+     * @param bit bit
      * @return
      */
     private static int getPowerSum(int[] bit) {
@@ -314,8 +269,7 @@ public class IdCardValidUtil {
     /**
      * 将和值与11取模得到余数进行校验码判断
      *
-     * @param checkCode
-     * @param sum17
+     * @param sum17 17
      * @return 校验位
      */
     private static String getCheckCodeBySum(int sum17) {
@@ -361,9 +315,8 @@ public class IdCardValidUtil {
     /**
      * 将字符数组转为整型数组
      *
-     * @param c
-     * @return
-     * @throws NumberFormatException
+     * @param c c
+     * @return int[]
      */
     private static int[] converCharToInt(char[] c)
             throws NumberFormatException {
