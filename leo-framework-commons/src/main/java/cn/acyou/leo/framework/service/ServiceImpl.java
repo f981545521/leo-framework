@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.service;
 
 import cn.acyou.leo.framework.annotation.mapper.SelectiveIgnore;
+import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.mapper.Mapper;
 import cn.acyou.leo.framework.mapper.tkMapper.util.TkSqlHelper;
 import cn.acyou.leo.framework.util.ReflectUtils;
@@ -462,5 +463,25 @@ public class ServiceImpl<M extends Mapper<T>, T> implements Service<T> {
                 .where(sqls)
                 .build();
         return baseMapper.selectByExample(example);
+    }
+
+    /**
+     * 根据属性查询(单条) 多个报错
+     *
+     * @param propertyName 实体属性
+     * @param value        v
+     * @param args         参数 必须是偶数，否则忽略
+     * @return 查询结果
+     */
+    @Override
+    public T selectOneByProperties(String propertyName, Object value, Object... args) {
+        List<T> resultList = selectByProperties(propertyName, value, args);
+        if (resultList == null || resultList.size() == 0 ){
+            return null;
+        }
+        if (resultList.size() > 1) {
+            throw new ServiceException("查询单条记录，但是找到{}条记录！", resultList.size());
+        }
+        return resultList.get(0);
     }
 }

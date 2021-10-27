@@ -248,4 +248,13 @@ public interface Service<T> {
      * @return 查询结果
      */
     List<T> selectByProperties(String propertyName, Object value, Object... args);
+    /**
+     * 根据属性查询(单条) 多个报错
+     *
+     * @param propertyName 实体属性
+     * @param value        v
+     * @param args         参数 必须是偶数，否则忽略
+     * @return 查询结果
+     */
+    T selectOneByProperties(String propertyName, Object value, Object... args);
 }
