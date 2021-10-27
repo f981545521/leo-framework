@@ -20,10 +20,10 @@ public class PageData<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("当前页")
-    private Integer pageNum;
+    private final Integer pageNum;
 
     @ApiModelProperty("每页显示条数")
-    private Integer pageSize;
+    private final Integer pageSize;
 
     @ApiModelProperty("总页数")
     private Integer totalPage;
@@ -57,18 +57,8 @@ public class PageData<T> implements Serializable {
         return pageNum;
     }
 
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-        processNextPage();
-    }
-
     public Integer getPageSize() {
         return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-        processNextPage();
     }
 
     public Long getTotal() {
@@ -102,10 +92,6 @@ public class PageData<T> implements Serializable {
 
     public Integer getTotalPage() {
         return totalPage;
-    }
-
-    public void setTotalPage(Integer totalPage) {
-        this.totalPage = totalPage;
     }
 
     /**

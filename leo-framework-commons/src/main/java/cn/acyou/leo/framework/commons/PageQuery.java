@@ -36,7 +36,6 @@ public class PageQuery {
         PageData<T> resultData = new PageData<>(pageNum, springPage.getSize());
         resultData.setTotal(springPage.getTotalElements());
         resultData.setList(springPage.getContent());
-        resultData.setTotalPage(springPage.getTotalPages());
         return resultData;
     }
 
@@ -60,7 +59,6 @@ public class PageQuery {
         PageData<T> resultData = new PageData<>(pageNum, pageInfo.getPageSize());
         resultData.setTotal(pageInfo.getTotal());
         resultData.setList(pageInfo.getList());
-        resultData.setTotalPage(pageInfo.getPages());
         return resultData;
     }
 
@@ -79,7 +77,6 @@ public class PageQuery {
         PageData<T> resultData = new PageData<>(pageNum, pageInfo.getPageSize());
         resultData.setTotal(pageInfo.getTotal());
         resultData.setList(BeanCopyUtil.copyList(pageInfo.getList(), tarClass));
-        resultData.setTotalPage(pageInfo.getPages());
         return resultData;
     }
 
@@ -212,7 +209,17 @@ public class PageQuery {
     public static <T> PageData<T> empty() {
         PageData<T> pageData = new PageData<>(1, 10);
         pageData.setTotal(0L);
-        pageData.setTotalPage(0);
+        return pageData;
+    }
+
+    /**
+     * 返回空分页 （根据 分页大小）
+     * @param pageSize 分页大小
+     * @return 空分页
+     */
+    public static <T> PageData<T> empty(int pageSize) {
+        PageData<T> pageData = new PageData<>(1, pageSize);
+        pageData.setTotal(0L);
         return pageData;
     }
 
