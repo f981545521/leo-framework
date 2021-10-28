@@ -101,21 +101,24 @@ public interface Service<T> {
     <E> int deleteByPrimaryKeyList(Collection<E> idList);
 
     /**
-     * 根据主键字符串进行逻辑删除，类中只有存在一个带有@Id注解的字段
-     * 有逻辑删除注解
-     * {@link cn.acyou.leo.framework.annotation.mapper.LogicDelete}
+     * 根据主键字符串进行逻辑删除
      *
-     * @param key 主键集合 如 List<Long>
-     * @return 影响行数 影响行数
+     * 1. 类中需要有主键@Id注解，
+     * 2. 有逻辑删除注解 {@link cn.acyou.leo.framework.annotation.mapper.LogicDelete}
+     *
+     * @param key 主键
+     * @return int 影响行数
      */
      int deleteLogicByPrimaryKey(Object key);
 
     /**
-     * 根据主键字符串进行逻辑删除，类中只有存在一个带有@Id注解的字段
-     * 有逻辑删除注解
-     * {@link cn.acyou.leo.framework.annotation.mapper.LogicDelete}
-     * @param idList 主键集合 如 List<Long>
-     * @return 影响行数 影响行数
+     * 根据主键字符串进行逻辑删除
+     *
+     * 1. 类中需要有主键@Id注解，
+     * 2. 有逻辑删除注解 {@link cn.acyou.leo.framework.annotation.mapper.LogicDelete}
+     *
+     * @param idList 主键集合
+     * @return int 影响行数
      */
      int deleteLogicByPrimaryKeyList(Collection<?> idList);
 

@@ -281,11 +281,29 @@ public class ServiceImpl<M extends Mapper<T>, T> implements Service<T> {
         return baseMapper.deleteByPrimaryKeyList(idList);
     }
 
+    /**
+     * 根据主键字符串进行逻辑删除
+     *
+     * 1. 类中需要有主键@Id注解，
+     * 2. 有逻辑删除注解 {@link cn.acyou.leo.framework.annotation.mapper.LogicDelete}
+     *
+     * @param key 主键
+     * @return int 影响行数
+     */
     @Override
     public int deleteLogicByPrimaryKey(Object key) {
         return baseMapper.deleteLogicByPrimaryKey(key);
     }
 
+    /**
+     * 根据主键字符串进行逻辑删除
+     *
+     * 1. 类中需要有主键@Id注解，
+     * 2. 有逻辑删除注解 {@link cn.acyou.leo.framework.annotation.mapper.LogicDelete}
+     *
+     * @param idList 主键集合
+     * @return int 影响行数
+     */
     @Override
     public int deleteLogicByPrimaryKeyList(Collection<?> idList) {
         return baseMapper.deleteLogicByPrimaryKeyList(idList);
