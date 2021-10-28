@@ -105,7 +105,7 @@ public interface CommonMapper<T> {
      * @return 影响行数
      */
     @DeleteProvider(type = CommonMapperProvider.class, method = "dynamicSQL")
-    int deleteLogicByPrimaryKeyList(Collection idList);
+    int deleteLogicByPrimaryKeyList(Collection<?> idList);
 
     /**
      * 批量插入，支持批量插入的数据库可以使用，例如MySQL,H2等，另外该接口限制实体包含`id`属性并且必须为自增列
