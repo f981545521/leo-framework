@@ -17,6 +17,8 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Extension;
+import io.swagger.annotations.ExtensionProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -72,6 +74,7 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
         AppContext.setClientLanguage(ClientLanguage.getLanguage(language));
         String methodInfo = "";
         String apiRemark = "";
+        String debug = "true";
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = ((HandlerMethod) handler);
             methodInfo = handlerMethod.toString();
@@ -79,9 +82,24 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
             ApiOperation annotation = method.getAnnotation(ApiOperation.class);
             if (annotation != null) {
                 apiRemark = annotation.value();
+                Extension[] extensions = annotation.extensions();
+                if (extensions != null) {
+                    for (Extension extension : extensions) {
+                        if (extension.properties() != null) {
+                            for (ExtensionProperty property : extension.properties()) {
+                                if (property.name().equalsIgnoreCase("debug")) {
+                                    if (property.value().equalsIgnoreCase("false")) {
+                                        debug = "false";
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-        AppContext.setActionApiOperation(new String[]{methodInfo, apiRemark});
+        AppContext.setActionApiOperation(new String[]{methodInfo, apiRemark, debug});
         return true;
     }
 
@@ -113,6 +131,9 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
             return;
         }
         if (leoProperty.getIgnoreUriList().contains(requestURI)){
+            return;
+        }
+        if (!AppContext.getActionDebug()) {
             return;
         }
         Result<?> exceptionResult = AppContext.getExceptionResult();

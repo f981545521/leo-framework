@@ -109,7 +109,7 @@ public class AppContext {
 
     public static String getActionApiMethodInfoRemark(){
         String[] values = ACTION_API_OPERATION_TL.get();
-        if (values != null && values.length == 2){
+        if (values != null && values.length > 0){
             return values[0];
         }
         return "";
@@ -122,10 +122,17 @@ public class AppContext {
 
     public static String getActionApiOperationValue(){
         String[] values = ACTION_API_OPERATION_TL.get();
-        if (values != null && values.length == 2){
+        if (values != null && values.length > 1){
             return values[1];
         }
         return "";
+    }
+    public static boolean getActionDebug(){
+        String[] values = ACTION_API_OPERATION_TL.get();
+        if (values != null && values.length > 2){
+            return Boolean.parseBoolean(values[2]);
+        }
+        return Boolean.TRUE;
     }
 
     public static void clearAction() {
