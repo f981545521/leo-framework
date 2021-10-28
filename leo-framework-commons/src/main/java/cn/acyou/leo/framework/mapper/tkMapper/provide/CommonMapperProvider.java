@@ -211,6 +211,24 @@ public class CommonMapperProvider extends MapperTemplate {
     /**
      * 根据主键字符串进行删除，类中只有存在一个带有@Id注解的字段
      */
+    public String deleteLogicByExample(MappedStatement ms) {
+        final Class<?> entityClass = getEntityClass(ms);
+        StringBuilder sql = new StringBuilder();
+        if (isCheckExampleEntityClass()) {
+            sql.append(SqlHelper.exampleCheck(entityClass));
+        }
+        //安全更新，Example 必须包含条件
+        if (getConfig().isSafeUpdate()) {
+            sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("example"));
+        }
+        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
+        sql.append(TkSqlHelper.deleteLogicSetColumns(entityClass));
+        sql.append(SqlHelper.updateByExampleWhereClause());
+        return sql.toString();
+    }
+    /**
+     * 根据主键字符串进行删除，类中只有存在一个带有@Id注解的字段
+     */
     public String deleteLogicByPrimaryKey(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();

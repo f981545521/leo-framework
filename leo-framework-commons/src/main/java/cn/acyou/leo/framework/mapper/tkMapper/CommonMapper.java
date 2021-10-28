@@ -92,10 +92,10 @@ public interface CommonMapper<T> {
     /**
      * 根据主键字段进行逻辑删除，方法参数必须包含完整的主键属性，类中只有存在一个带有{@link LogicDelete}注解的字段
      *
-     * @param key 如 Long
+     * @param key 主键
      * @return 影响行数
      */
-    @DeleteProvider(type = CommonMapperProvider.class, method = "dynamicSQL")
+    @UpdateProvider(type = CommonMapperProvider.class, method = "dynamicSQL")
     int deleteLogicByPrimaryKey(Object key);
 
     /**
@@ -104,8 +104,17 @@ public interface CommonMapper<T> {
      * @param idList 如 List<Long>
      * @return 影响行数
      */
-    @DeleteProvider(type = CommonMapperProvider.class, method = "dynamicSQL")
+    @UpdateProvider(type = CommonMapperProvider.class, method = "dynamicSQL")
     int deleteLogicByPrimaryKeyList(Collection<?> idList);
+
+    /**
+     * 根据主键字段进行逻辑删除，方法参数必须包含完整的主键属性，类中只有存在一个带有{@link LogicDelete}注解的字段
+     *
+     * @param example 条件
+     * @return 影响行数
+     */
+    @UpdateProvider(type = CommonMapperProvider.class, method = "dynamicSQL")
+    int deleteLogicByExample(@Param("example") Object example);
 
     /**
      * 批量插入，支持批量插入的数据库可以使用，例如MySQL,H2等，另外该接口限制实体包含`id`属性并且必须为自增列

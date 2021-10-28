@@ -310,6 +310,19 @@ public class ServiceImpl<M extends Mapper<T>, T> implements Service<T> {
     }
 
     /**
+     * 根据条件进行逻辑删除
+     *
+     * 1. 有逻辑删除注解 {@link cn.acyou.leo.framework.annotation.mapper.LogicDelete}
+     *
+     * @param example 条件
+     * @return int 影响行数
+     */
+    @Override
+    public int deleteLogicByExample(Object example) {
+        return baseMapper.deleteLogicByExample(example);
+    }
+
+    /**
      * 根据实体属性作为条件进行删除，查询条件使用等号
      *
      * @param record 记录

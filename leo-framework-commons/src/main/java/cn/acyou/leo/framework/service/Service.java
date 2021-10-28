@@ -123,6 +123,16 @@ public interface Service<T> {
      int deleteLogicByPrimaryKeyList(Collection<?> idList);
 
     /**
+     * 根据条件进行逻辑删除
+     *
+     * 1. 有逻辑删除注解 {@link cn.acyou.leo.framework.annotation.mapper.LogicDelete}
+     *
+     * @param example 条件
+     * @return int 影响行数
+     */
+     int deleteLogicByExample(Object example);
+
+    /**
      * 批量更新（属性为null不更新）
      *
      * @param recordList 记录List
