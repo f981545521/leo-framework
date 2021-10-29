@@ -1,5 +1,8 @@
 package cn.acyou.leo.framework.constant;
 
+import cn.acyou.leo.framework.base.EnumEntity;
+import cn.acyou.leo.framework.commons.EnumTool;
+
 /**
  * 通用常量类
  *
@@ -40,5 +43,15 @@ public class Constant {
      * 请求头header名称
      */
     public static final String TOKEN_NAME = "Authentication";
+
+    public static class SysRole {
+        public static final String SUPER_ADMIN = "super_admin";
+
+        public static final EnumEntity SUPER_ADMIN_ENTITY = new EnumEntity(SUPER_ADMIN, "超级管理员");
+
+        public static EnumTool tool(){
+            return EnumTool.newInstance(SysRole.class);
+        }
+    }
 }
 
