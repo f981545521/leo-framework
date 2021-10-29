@@ -17,11 +17,12 @@ public class BeanUtil {
      * @return Map key-属性名 value-属性值
      */
     public static Map<String, Object> convertToMap(Object obj) {
-        return new HashMap<String, Object>(BeanMap.create(obj));
+        return beanToMap(obj);
     }
 
+    @SuppressWarnings("unchecked")
     public static Map<String, Object> beanToMap(Object bean) {
-        return null == bean ? null : BeanMap.create(bean);
+        return null == bean ? null : new HashMap<String, Object>(BeanMap.create(bean));
     }
 
     public static <T> T mapToBean(Map<String, ?> map, Class<T> clazz) {
