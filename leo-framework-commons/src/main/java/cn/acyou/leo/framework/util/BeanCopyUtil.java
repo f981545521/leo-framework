@@ -39,7 +39,7 @@ public class BeanCopyUtil {
             e1.printStackTrace();
         }
         //return null;会导致编译器空指针检查警告，理论上不会出现此情况，所以抛出异常。
-        throw new ServiceException("BeanCopy 出错了！");
+        throw new ServiceException("BeanCopy出错了！{}->{}", t, clz.getName());
     }
 
     /**
@@ -61,7 +61,7 @@ public class BeanCopyUtil {
 
 
     /**
-     * 合并属性
+     * 合并属性 (不会使用null覆盖目标)
      * @param <M>   对象类型
      * @param target      目标
      * @param destination 目的
