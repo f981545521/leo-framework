@@ -1,6 +1,8 @@
 package cn.acyou.leo.framework.util;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.cglib.beans.BeanMap;
+import org.springframework.objenesis.instantiator.util.ClassUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -14,28 +16,18 @@ public class BeanUtil {
      * @param obj bean
      * @return Map key-属性名 value-属性值
      */
-    public static HashMap<String, Object> convertToMap(Object obj) {
-        HashMap<String, Object> map = new HashMap<>();
-        Field[] fields = obj.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            String varName = field.getName();
-            if ("serialVersionUID".equals(varName)) {
-                continue;
-            }
-            boolean accessFlag = field.isAccessible();
-            field.setAccessible(true);
-            Object o = null;
-            try {
-                o = field.get(obj);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            if (o != null){
-                map.put(varName, o.toString());
-            }
-            field.setAccessible(accessFlag);
-        }
-        return map;
+    public static Map<String, Object> convertToMap(Object obj) {
+        return new HashMap<String, Object>(BeanMap.create(obj));
+    }
+
+    public static Map<String, Object> beanToMap(Object bean) {
+        return null == bean ? null : BeanMap.create(bean);
+    }
+
+    public static <T> T mapToBean(Map<String, ?> map, Class<T> clazz) {
+        T bean = ClassUtils.newInstance(clazz);
+        BeanMap.create(bean).putAll(map);
+        return bean;
     }
 
     /**
