@@ -121,7 +121,14 @@ public class GlobalExceptionHandler {
         return error;
     }
 
-
+    /** 正在处理 */
+    @ExceptionHandler(ConcurrentException.class)
+    @ResponseBody
+    public Result<Object> handleConcurrentException(HttpServletRequest request, Exception e){
+        Result<Object> resultInfo = Result.error(CommonErrorEnum.CONCURRENT_ERROR);
+        AppContext.setExceptionResult(resultInfo);
+        return resultInfo;
+    }
     /** 文件大小超过限制 */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     @ResponseBody
