@@ -885,6 +885,41 @@ public final class DateUtil {
         }
     }
 
+    //内部维护的值
+    private static long prevUseTimeStamp = 0;
+
+    /**
+     * 获取顺序化时间毫秒数
+     *
+     * @return long
+     */
+    public static long getSerialTimeMillis(){
+        return getSerialTimeMillis(1).get(0);
+    }
+
+    /**
+     * 批量获取顺序化时间毫秒数(同步方法防止并发)
+     *
+     * 会记录上一个获取的时间戳 {@see prevUseTimeStamp}，如果并发会取这个时间+1
+     *
+     * @param count 数量
+     * @return {@link List<Long>}
+     */
+    public static synchronized List<Long> getSerialTimeMillis(int count){
+        List<Long> resList = new ArrayList<>();
+        long nowTime =  System.currentTimeMillis();
+        //当前时间戳小于上次运行的时间戳 --> 使用上次的时间戳
+        if (prevUseTimeStamp > 0 && nowTime < prevUseTimeStamp) {
+            nowTime = prevUseTimeStamp;
+        }
+        for (int i = 0; i < count; i++) {
+            resList.add(nowTime);
+            nowTime++;
+        }
+        prevUseTimeStamp = nowTime;
+        return resList;
+    }
+
     public static void main(String[] args) {
         System.out.println(getMonthZh("2020-10-30"));
         Date date = parseTime(new Date(), "09:40:30");
