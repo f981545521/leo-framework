@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * 分页查询，不管是GET还是POST 必须继承此类！！！
+ *
  * @author youfang
  * @version [1.0.0, 2020/7/6]
  **/
@@ -54,6 +56,12 @@ public class PageSo implements Serializable {
     }
 
     public void setPageNum(Integer pageNum) {
+        if (pageNum == null) {
+            throw new IllegalPageArgumentException("pageNum 不能为空！");
+        }
+        if (pageNum < 0) {
+            throw new IllegalPageArgumentException("pageNum 必须大于0！");
+        }
         this.pageNum = pageNum;
     }
 
@@ -62,6 +70,12 @@ public class PageSo implements Serializable {
     }
 
     public void setPageSize(Integer pageSize) {
+        if (pageSize == null) {
+            throw new IllegalPageArgumentException("pageSize 不能为空！");
+        }
+        if (pageSize < 0 || pageSize > 100) {
+            throw new IllegalPageArgumentException("pageSize 取值范围不正确！合法范围：[0~100]");
+        }
         this.pageSize = pageSize;
     }
 
@@ -72,4 +86,17 @@ public class PageSo implements Serializable {
     public void setSorts(String sorts) {
         this.sorts = sorts;
     }
+
+    /**
+     * 页面参数异常
+     *
+     * @author fangyou
+     * @version [1.0.0, 2021/11/12]
+     */
+    public static class IllegalPageArgumentException extends RuntimeException {
+        public IllegalPageArgumentException(String message) {
+            super(message);
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.commons;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.exception.*;
+import cn.acyou.leo.framework.model.PageSo;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.prop.LeoProperty;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
@@ -235,6 +236,15 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result<Object> handleDoRefreshException(HttpServletRequest request, Exception e) {
         Result<Object> resultInfo = Result.error(CommonErrorEnum.E_DO_REFRESH);
+        resultInfo.setMessage(e.getMessage());
+        AppContext.setExceptionResult(resultInfo);
+        return resultInfo;
+    }
+    /** 分页参数不合法异常 */
+    @ExceptionHandler(PageSo.IllegalPageArgumentException.class)
+    @ResponseBody
+    public Result<Object> handlePageArgumentException(HttpServletRequest request, Exception e) {
+        Result<Object> resultInfo = Result.error();
         resultInfo.setMessage(e.getMessage());
         AppContext.setExceptionResult(resultInfo);
         return resultInfo;
