@@ -65,6 +65,8 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     }
 
     /**
+     * RequestBody Xss 过滤
+     *
      * @param request 请求
      */
     public XssHttpServletRequestWrapper(HttpServletRequest request) {
