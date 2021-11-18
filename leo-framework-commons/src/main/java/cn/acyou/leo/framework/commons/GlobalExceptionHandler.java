@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -29,6 +30,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
@@ -52,6 +54,23 @@ public class GlobalExceptionHandler {
     @Autowired
     private LeoProperty leoProperty;
 
+    /**
+     * Server 500异常
+     *
+     * 服务器内部异常 返回状态码500
+     */
+    @ExceptionHandler(value = ServerInternalException.class)
+    public void handleBindException(HttpServletResponse response, Exception ex) {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        try (PrintWriter out = response.getWriter()) {
+            String responseJson = StringUtils.isNoneBlank(ex.getMessage()) ? ex.getMessage(): "内部错误";
+            out.print(responseJson);
+        } catch (IOException e) {
+            log.error("sendChallenge error：", e);
+        }
+    }
     /**
      * 参数校验 1
      */
