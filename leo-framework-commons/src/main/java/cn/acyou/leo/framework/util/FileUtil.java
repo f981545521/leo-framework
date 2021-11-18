@@ -1,12 +1,16 @@
 package cn.acyou.leo.framework.util;
 
+import com.google.common.collect.Lists;
+
 import java.io.File;
+import java.util.List;
 
 /**
  * @author youfang
  * @version [1.0.0, 2020/7/29]
  **/
 public class FileUtil {
+    private static List<String> imageTypes = Lists.newArrayList("png", "jpg", "jpeg");
     /**
      * 获取文件扩展名，扩展名不带“.”
      *
@@ -35,9 +39,17 @@ public class FileUtil {
         }
         int index = fileName.lastIndexOf(StringUtil.DOT);
         if (index == -1) {
-            return StringUtil.EMPTY;
+            return null;
         } else {
             return fileName.substring(index + 1);
         }
+    }
+
+    public static boolean isImage(String fileName){
+        String extName = extName(fileName);
+        if (extName == null) {
+            return false;
+        }
+        return imageTypes.contains(extName.toLowerCase());
     }
 }
