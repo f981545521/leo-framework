@@ -55,12 +55,29 @@ public class GlobalExceptionHandler {
     private LeoProperty leoProperty;
 
     /**
+     * 非法请求 (被禁止的)
+     *
+     * 表示请求走到这里不合逻辑（疑似黑客攻击）
+     */
+    @ExceptionHandler(value = IllegalRequestException.class)
+    public void handleIllegalRequestException(HttpServletResponse response, Exception ex) {
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        try (PrintWriter out = response.getWriter()) {
+            String responseJson = StringUtils.isNoneBlank(ex.getMessage()) ? ex.getMessage(): "非法请求";
+            out.print(responseJson);
+        } catch (IOException e) {
+            log.error("response error：", e);
+        }
+    }
+    /**
      * Server 500异常
      *
      * 服务器内部异常 返回状态码500
      */
     @ExceptionHandler(value = ServerInternalException.class)
-    public void handleBindException(HttpServletResponse response, Exception ex) {
+    public void handleServerInternalException(HttpServletResponse response, Exception ex) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json; charset=utf-8");
@@ -68,7 +85,7 @@ public class GlobalExceptionHandler {
             String responseJson = StringUtils.isNoneBlank(ex.getMessage()) ? ex.getMessage(): "内部错误";
             out.print(responseJson);
         } catch (IOException e) {
-            log.error("sendChallenge error：", e);
+            log.error("response error：", e);
         }
     }
     /**
