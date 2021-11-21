@@ -17,6 +17,8 @@ import org.springframework.util.StringUtils;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * Redis 命令参考
@@ -1261,7 +1263,7 @@ public class RedisUtils {
 
 
 
-    /* ***********************************Redis分布式锁**************************** */
+    /* *********************************** Redis分布式锁简单实现 **************************** */
 
     private static final String LOCK_KEY_PREFIX = "REDIS_LOCK:";
     /**
@@ -1271,6 +1273,10 @@ public class RedisUtils {
 
     /**
      * 获得锁
+     *
+     * 使用注意：
+     * 1. 正确的评估执行时间（默认 60S）
+     * 2. unLock的时候带入返回的`lockId`标识
      *
      * @param lockKey 锁定键
      * @return lockId锁标识，解锁时使用标识解锁
@@ -1283,18 +1289,45 @@ public class RedisUtils {
      * 获得锁
      *
      * @param lockKey     锁定键
-     * @param milliSecond 毫秒
+     * @param timeOut     锁超时时间（必须大于1秒！！）
      * @return  lockId锁标识，解锁时使用标识解锁
      */
-    public String lock(String lockKey, long milliSecond) {
+    public String lock(String lockKey, long timeOut) {
         if (StringUtils.hasText(lockKey)) {
             throw new ServiceException("lockKey must not be null .");
         }
-        assert milliSecond > 1000;
+        assert timeOut > 1000;
         String lockId = UUID.randomUUID().toString();
-        Boolean success = redisTemplate.opsForValue().setIfAbsent(LOCK_KEY_PREFIX + lockKey, lockId, milliSecond, TimeUnit.MILLISECONDS);
+        Boolean success = redisTemplate.opsForValue().setIfAbsent(LOCK_KEY_PREFIX + lockKey, lockId, timeOut, TimeUnit.MILLISECONDS);
         if (success != null && success) {
             return lockId;
+        }
+        return null;
+    }
+
+
+    /**
+     * 循环获取锁
+     *
+     * @param lockKey     锁定键
+     * @param waitTimeout 等待超时
+     * @param timeOut     时间
+     * @return {@link String}
+     */
+    public String lockLoop(String lockKey, long waitTimeout, long timeOut) {
+        long waitingStartTime = System.nanoTime();
+        if (waitTimeout <= 0L) {
+            return lock(lockKey, timeOut);
+        }
+        try {
+            do { //循环获取锁
+                final String lockId = lock(lockKey, timeOut);
+                if (lockId != null) {
+                    return lockId;
+                }
+            } while ((System.nanoTime() - waitingStartTime) < waitTimeout);
+        } catch (Throwable e) {
+            return null;
         }
         return null;
     }
