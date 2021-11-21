@@ -920,12 +920,36 @@ public final class DateUtil {
         return resList;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getMonthZh("2020-10-30"));
-        Date date = parseTime(new Date(), "09:40:30");
-        System.out.println(parseDefaultDate("2020-12-34"));
-        System.out.println(date);
-    }
 
+    /**
+     * 找寻最大日期
+     *
+     * @param dateArr 日期列表
+     * @return {@link Date}
+     */
+    public static Date max(Date... dateArr) {
+        Date maxDate = dateArr[0];
+        for (Date date : dateArr) {
+            if (date.after(maxDate)) {
+                maxDate = date;
+            }
+        }
+        return maxDate;
+    }
+    /**
+     * 找寻最小日期
+     *
+     * @param dateArr 日期列表
+     * @return {@link Date}
+     */
+    public static Date min(Date... dateArr) {
+        Date maxDate = dateArr[0];
+        for (Date date : dateArr) {
+            if (date.before(maxDate)) {
+                maxDate = date;
+            }
+        }
+        return maxDate;
+    }
 
 }
