@@ -1310,8 +1310,8 @@ public class RedisUtils {
      * 循环获取锁
      *
      * @param lockKey     锁定键
-     * @param waitTimeout 等待超时
-     * @param timeOut     时间
+     * @param waitTimeout 等待超时    (单位毫秒)
+     * @param timeOut     时间        (单位毫秒)
      * @return {@link String}
      */
     public String lockLoop(String lockKey, long waitTimeout, long timeOut) {
@@ -1319,13 +1319,14 @@ public class RedisUtils {
         if (waitTimeout <= 0L) {
             return lock(lockKey, timeOut);
         }
+        long waitingStartNanoTime = TimeUnit.NANOSECONDS.convert(waitingStartTime, TimeUnit.MILLISECONDS);
         try {
             do { //循环获取锁
                 final String lockId = lock(lockKey, timeOut);
                 if (lockId != null) {
                     return lockId;
                 }
-            } while ((System.nanoTime() - waitingStartTime) < waitTimeout);
+            } while ((System.nanoTime() - waitingStartNanoTime) < waitTimeout);
         } catch (Throwable e) {
             return null;
         }
