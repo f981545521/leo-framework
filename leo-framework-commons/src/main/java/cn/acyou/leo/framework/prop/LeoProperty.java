@@ -20,6 +20,11 @@ public class LeoProperty {
     private boolean printToResult = true;
 
     /**
+     * 打印请求参数
+     */
+    private boolean printRequestParam = true;
+
+    /**
      * 接口统计分析
      */
     private boolean interfaceCallStatistics = true;

@@ -1,12 +1,16 @@
 package cn.acyou.leo.framework.aspect;
 
 import cn.acyou.leo.framework.context.AppContext;
+import cn.acyou.leo.framework.prop.LeoProperty;
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,9 +27,12 @@ import java.util.stream.Collectors;
  * @author youfang
  * @version [1.0.0, 2021-09-27 15:28]
  */
+@Slf4j
 @Aspect
 @Component
 public class ParameterRecordAspect {
+    @Autowired
+    private LeoProperty leoProperty;
 
     /**
      * 切入所有Controller 的请求
@@ -61,6 +68,9 @@ public class ParameterRecordAspect {
             }
         }
         AppContext.setRequestParams(paramsMap);
+        if (leoProperty.isPrintRequestParam()) {
+            log.info("请求地址：{}|参数：{}", AppContext.getActionUrl(), JSON.toJSONString(paramsMap));
+        }
     }
 
 

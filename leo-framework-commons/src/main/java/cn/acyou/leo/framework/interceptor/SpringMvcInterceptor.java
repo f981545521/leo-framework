@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Extension;
 import io.swagger.annotations.ExtensionProperty;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author youfang
@@ -47,7 +49,7 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String remoteIp = IPUtil.getClientIp(request);
         String localIp = IPUtil.getLocalIP();
-        log.info("SpringMvcInterceptor ——>  remoteIP:{}, localIP: {}, 访问路径:{}", remoteIp, localIp, request.getRequestURI());
+        log.info("LeoInterceptor ——>  remoteIP:{}, localIP: {}, 访问路径:{}", remoteIp, localIp, request.getRequestURI());
         String token = request.getHeader(Constant.TOKEN_NAME);
         if (!StringUtils.hasText(token)) {
             falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
@@ -100,6 +102,7 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
             }
         }
         AppContext.setActionApiOperation(new String[]{methodInfo, apiRemark, debug});
+        MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-",""));
         return true;
     }
 
@@ -116,7 +119,7 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         processInterfaceStatistics(request);
-        log.info("SpringMvcInterceptor ——>  访问结束。");
+        log.info("LeoInterceptor ——>  访问结束。");
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
     }
