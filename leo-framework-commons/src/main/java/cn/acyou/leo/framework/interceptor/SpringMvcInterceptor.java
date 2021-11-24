@@ -125,6 +125,7 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
         log.info("LeoInterceptor ——>  访问结束。");
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
+        MDC.clear();
     }
 
     /**
