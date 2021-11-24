@@ -9,6 +9,8 @@
     <!-- 自定义输出模式 -->
     <property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
     <property name="log.pattern2" value="[%date{yyyy-MM-dd HH:mm:ss.SSS}] %level %X{thread} %logger{36}:%line -> %msg%n"/>
+    <property name="log.pattern.console" value="%d{yyyy-MM-dd HH:mm:ss.SSS}  %clr(${LOG_LEVEL_PATTERN:-%5level}) %clr([%15.15thread]){faint} -%X{leoTraceNo}- %clr(%-48.48logger,%5line{47}){cyan} %clr(:){blue} %msg%n"/>
+    <property name="log.pattern.file" value="%d{yyyy-MM-dd HH:mm:ss.SSS} -%5level [%15.15thread] -%X{leoTraceNo}- %-48.48logger,%5line{47} : %msg%n"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
