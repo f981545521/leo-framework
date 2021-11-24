@@ -25,6 +25,11 @@ public class LeoProperty {
     private boolean printRequestParam = true;
 
     /**
+     * SpringMvcInterceptor Token校验
+     */
+    private boolean tokenVerify = false;
+
+    /**
      * 接口统计分析
      */
     private boolean interfaceCallStatistics = true;

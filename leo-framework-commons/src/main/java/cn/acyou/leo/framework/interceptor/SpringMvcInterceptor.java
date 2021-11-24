@@ -47,27 +47,31 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-",""));
         String remoteIp = IPUtil.getClientIp(request);
         String localIp = IPUtil.getLocalIP();
         log.info("LeoInterceptor ——>  remoteIP:{}, localIP: {}, 访问路径:{}", remoteIp, localIp, request.getRequestURI());
-        String token = request.getHeader(Constant.TOKEN_NAME);
-        if (!StringUtils.hasText(token)) {
-            falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
-            return false;
-        }
-        String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
-        if (!StringUtils.hasText(userId)) {
-            String loginAtOtherWhere = redisUtils.get(RedisKeyConstant.USER_LOGIN_AT_OTHER_WHERE + token);
-            if (StringUtils.hasText(loginAtOtherWhere)) {
-                falseResult(response, CommonErrorEnum.E_LOGIN_AT_OTHER_WHERE);
-            }else {
-                falseResult(response, CommonErrorEnum.E_LOGIN_TIMEOUT);
+        //启用Token校验
+        if (leoProperty.isTokenVerify()) {
+            String token = request.getHeader(Constant.TOKEN_NAME);
+            if (!StringUtils.hasText(token)) {
+                falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
+                return false;
             }
-            return false;
+            String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
+            if (!StringUtils.hasText(userId)) {
+                String loginAtOtherWhere = redisUtils.get(RedisKeyConstant.USER_LOGIN_AT_OTHER_WHERE + token);
+                if (StringUtils.hasText(loginAtOtherWhere)) {
+                    falseResult(response, CommonErrorEnum.E_LOGIN_AT_OTHER_WHERE);
+                }else {
+                    falseResult(response, CommonErrorEnum.E_LOGIN_TIMEOUT);
+                }
+                return false;
+            }
+            //TODO: MustBe LoginUser loginUser = userTokenService.getLoginUser(token);
+            String loginStr = redisUtils.get(RedisKeyConstant.USER_LOGIN_INFO + userId);
+            AppContext.setLoginUser(JSON.parseObject(loginStr, LoginUser.class));
         }
-        //TODO: MustBe LoginUser loginUser = userTokenService.getLoginUser(token);
-        String loginStr = redisUtils.get(RedisKeyConstant.USER_LOGIN_INFO + userId);
-        AppContext.setLoginUser(JSON.parseObject(loginStr, LoginUser.class));
         AppContext.setIp(remoteIp);
         AppContext.setRequestTimeStamp(System.currentTimeMillis());
         AppContext.setActionUrl(request.getRequestURI());
@@ -102,7 +106,6 @@ public class SpringMvcInterceptor implements HandlerInterceptor {
             }
         }
         AppContext.setActionApiOperation(new String[]{methodInfo, apiRemark, debug});
-        MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-",""));
         return true;
     }
 
