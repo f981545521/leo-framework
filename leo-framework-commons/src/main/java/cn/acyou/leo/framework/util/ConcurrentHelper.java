@@ -1,7 +1,9 @@
 package cn.acyou.leo.framework.util;
 
 import cn.acyou.leo.framework.exception.ConcurrentException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author fangyou
  * @version [1.0.0, 2021-11-02 17:01]
  */
+@Slf4j
 public class ConcurrentHelper {
     private static final ConcurrentHashMap<String, Long> cache = new ConcurrentHashMap<>();
     //标识 prefix
@@ -103,6 +106,7 @@ public class ConcurrentHelper {
         try {
             lock = ConcurrentHelper.lock(key, time);
             if (lock == null) {
+                log.warn("Key:{} 正在处理中...", key);
                 throw new ConcurrentException("正在处理中，请稍候...");
             }
             task.run();
@@ -111,7 +115,25 @@ public class ConcurrentHelper {
         }
     }
 
+    public static <T> T doCallWork(String key, CallTask<T> callTask){
+        Long lock = null;
+        try {
+            lock = ConcurrentHelper.lock(key);
+            if (lock == null) {
+                log.warn("Key:{} 正在处理中...", key);
+                throw new ConcurrentException("正在处理中，请稍候...");
+            }
+            return callTask.run();
+        } finally {
+            ConcurrentHelper.unLock(key, lock);
+        }
+    }
+
     public interface Task {
         void run() throws RuntimeException;
+    }
+
+    public interface CallTask<T> {
+        T run() throws RuntimeException;
     }
 }

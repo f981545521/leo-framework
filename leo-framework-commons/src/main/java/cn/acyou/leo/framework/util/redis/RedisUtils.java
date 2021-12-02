@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util.redis;
 
+import cn.acyou.leo.framework.exception.ConcurrentException;
 import cn.acyou.leo.framework.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1405,5 +1406,48 @@ public class RedisUtils {
         if (currentLockId != null && currentLockId.equals(lockId)) {
             redisTemplate.delete(LOCK_KEY_PREFIX + lockKey);
         }
+    }
+
+    /**
+     * 执行任务
+     *
+     * @param key  锁关键词
+     * @param time 锁时间（毫秒）
+     * @param task 任务
+     */
+    public void doWork(String key, Long time, Task task) {
+        String lockId = null;
+        try {
+            lockId = lock(key, time);
+            if (lockId == null) {
+                log.warn("Key:{} 正在处理中...", key);
+                throw new ConcurrentException("正在处理中，请稍候...");
+            }
+            task.run();
+        } finally {
+            unLock(key, lockId);
+        }
+    }
+
+    public <T> T doCallWork(String key, CallTask<T> callTask){
+        String lockId = null;
+        try {
+            lockId = lock(key);
+            if (lockId == null) {
+                log.warn("Key:{} 正在处理中...", key);
+                throw new ConcurrentException("正在处理中，请稍候...");
+            }
+            return callTask.run();
+        } finally {
+            unLock(key, lockId);
+        }
+    }
+
+    public interface Task {
+        void run() throws RuntimeException;
+    }
+
+    public interface CallTask<T> {
+        T run() throws RuntimeException;
     }
 }
