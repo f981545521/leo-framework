@@ -1348,7 +1348,7 @@ public class RedisUtils {
      * @return  lockId锁标识，解锁时使用标识解锁
      */
     public String lock(String lockKey, long timeOut) {
-        if (StringUtils.hasText(lockKey)) {
+        if (!StringUtils.hasText(lockKey)) {
             throw new ServiceException("lockKey must not be null .");
         }
         assert timeOut > 1000;
