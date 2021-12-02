@@ -17,8 +17,7 @@ import org.springframework.util.StringUtils;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.AbstractQueuedSynchronizer;
-import java.util.concurrent.locks.LockSupport;
+import java.util.function.Function;
 
 /**
  * Redis 命令参考
@@ -30,8 +29,22 @@ import java.util.concurrent.locks.LockSupport;
 @Component
 public class RedisUtils {
     private static final Logger log = LoggerFactory.getLogger(RedisUtils.class);
+    /**
+     * 默认锁 前缀标识
+     */
+    private static final String LOCK_KEY_PREFIX = "REDIS_LOCK:";
+    /**
+     * 默认锁 超时时间 60S
+     */
+    private static final int DEFAULT_LOCK_TIME_OUT = 60 * 1000;
+    /**
+     * 默认 getAndCache 超时时间 {@link #getAndCache(String, Function)}
+     */
+    private static final int DEFAULT_CACHE_SECONDS = 60 ;
     @Autowired
     private StringRedisTemplate redisTemplate;
+    @Autowired
+    private RedisTemplate<Object, Object> redisObjTemplate;
 
     //私有化构造方法，无法通过new创建。而不影响Spring通过反射创建Bean
     private RedisUtils() {
@@ -1260,16 +1273,58 @@ public class RedisUtils {
         return result;
     }
 
+    /**
+     * 获取和缓存
+     *
+     * @param key      关键
+     * @param function 函数
+     * @return {@link String}
+     */
+    public String getAndCache(String key, Function<String, String> function){
+        return getAndCacheObj(key, DEFAULT_CACHE_SECONDS, function);
+    }
+
+    /**
+     * 获取和缓存
+     *
+     * @param key      关键
+     * @param timeOut  缓存超时时间（秒）
+     * @param function 函数
+     * @return {@link String}
+     */
+    public String getAndCache(String key, long timeOut, Function<String, String> function){
+        String v = get(key);
+        if (v != null && v.length() > 0){
+            return v;
+        }
+        String value = function.apply(key);
+        set(key, value, timeOut, TimeUnit.SECONDS);
+        return value;
+    }
+
+    /**
+     * 获取和缓存（使用二进制的类型）
+     *
+     * @param key      关键
+     * @param timeOut  缓存超时时间（秒）
+     * @param function 函数
+     * @return {@link String}
+     */
+    @SuppressWarnings("unchecked")
+    public <O> O getAndCacheObj(String key, long timeOut, Function<String, O> function){
+        Object o = redisObjTemplate.opsForValue().get(key);
+        if (o != null) {
+            return (O) o;
+        }
+        O value = function.apply(key);
+        redisObjTemplate.opsForValue().set(key, value, timeOut, TimeUnit.SECONDS);
+        return value;
+    }
+
 
 
 
     /* *********************************** Redis分布式锁简单实现 **************************** */
-
-    private static final String LOCK_KEY_PREFIX = "REDIS_LOCK:";
-    /**
-     * 默认超时时间 60S
-     */
-    private static final int DEFAULT_TIME_OUT = 60 * 1000;
 
     /**
      * 获得锁
@@ -1282,7 +1337,7 @@ public class RedisUtils {
      * @return lockId锁标识，解锁时使用标识解锁
      */
     public String lock(String lockKey) {
-        return lock(lockKey, DEFAULT_TIME_OUT);
+        return lock(lockKey, DEFAULT_LOCK_TIME_OUT);
     }
 
     /**
