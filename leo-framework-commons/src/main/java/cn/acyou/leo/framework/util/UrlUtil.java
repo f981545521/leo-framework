@@ -221,6 +221,19 @@ public class UrlUtil {
         }
     }
 
+
+    /**
+     * 得到URL上的文件名
+     *         String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov";
+     *         System.out.println(UrlUtil.getName(url));==> movie001.mov
+     *
+     * @param url url
+     * @return {@link String}
+     */
+    public static String getName(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
     /**
      * 获取网址的path
      * https://sale.vmall.com/huaweizone.html?cid=10618
@@ -238,8 +251,8 @@ public class UrlUtil {
     }
 
     public static void main(String[] args) {
-        String url = "https://sou.zhaopin.com/?jl=635&kw=编导&kt=3";
-        System.out.println(replaceUrlParams(url, "kt", "GGG"));
+        String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov";
+        System.out.println(UrlUtil.getName(url));
 
     }
 
