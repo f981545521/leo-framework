@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -207,8 +210,10 @@ public class UrlUtil {
 
     /**
      * 获取网址的path
-     * https://sale.vmall.com/huaweizone.html?cid=10618
-     *  -> /huaweizone.html
+     * <pre>
+     *  https://sale.vmall.com/ttt/huaweizone.html?cid=10618
+     *   -> /ttt/huaweizone.html
+     * </pre>
      * @param url 网址
      * @return pathname
      */
@@ -223,9 +228,35 @@ public class UrlUtil {
 
 
     /**
+     * 获取指定URL对应资源的内容长度，对于Http，其长度使用Content-Length头决定。
+     *
+     * @param url URL
+     * @return 内容长度，未知返回-1
+     */
+    public static long getContentLength(URL url) {
+        if (null == url) {
+            return -1;
+        }
+        URLConnection conn = null;
+        try {
+            conn = url.openConnection();
+            return conn.getContentLengthLong();
+        } catch (IOException e) {
+            return -1;
+        } finally {
+            if (conn instanceof HttpURLConnection) {
+                ((HttpURLConnection) conn).disconnect();
+            }
+        }
+    }
+
+
+    /**
      * 得到URL上的文件名
-     *         String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov";
-     *         System.out.println(UrlUtil.getName(url));==> movie001.mov
+     * <pre>
+     * String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov";
+     * System.out.println(UrlUtil.getName(url));//==> movie001.mov
+     * </pre>
      *
      * @param url url
      * @return {@link String}
@@ -236,8 +267,10 @@ public class UrlUtil {
 
     /**
      * 获取网址的path
-     * https://sale.vmall.com/huaweizone.html?cid=10618
-     *  -> cid=10618
+     * <pre>
+     *  https://sale.vmall.com/huaweizone.html?cid=10618
+     *   -> cid=10618
+     * </pre>
      * @param url 网址
      * @return pathname
      */
@@ -250,9 +283,15 @@ public class UrlUtil {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov";
+        System.out.println("start");
+        System.out.println(UrlUtil.getContentLength(new URL(url)));
+        System.out.println("end");
         System.out.println(UrlUtil.getName(url));
+        System.out.println(UrlUtil.getSearch(url));
+        System.out.println(UrlUtil.getPathName(url));
+        System.out.println(UrlUtil.getPathName(url));
 
     }
 
