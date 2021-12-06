@@ -952,4 +952,32 @@ public final class DateUtil {
         return maxDate;
     }
 
+    /**
+     * 解析带utc时区的时间
+     * <pre>
+     *     parseUTC("2021-12-06T07:58:03Z")   -> +8到北京的时间：2021-12-06 15:58:03
+     * </pre>
+     *
+     * @param dateStr str日期：使用yyyy-MM-dd'T'HH:mm:ssZ的格式
+     * @return {@link Date}
+     */
+    public static Date parseUTC(String dateStr){
+        return DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ").withZoneUTC().parseDateTime(dateStr).toDate();
+    }
+
+    /**
+     * 得到utc日期(带时区的时间)
+     * <pre>
+     *     getDateUTC(new Date())    ->   2021-12-06T09:10:14+0000
+     * </pre>
+     *
+     * @param date 日期
+     * @return {@link String}
+     */
+    public static String getDateUTC(Date date){
+        return new DateTime(date).withZone(DateTimeZone.UTC).toString("yyyy-MM-dd'T'HH:mm:ssZ");
+    }
+
+
+
 }
