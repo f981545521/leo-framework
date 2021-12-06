@@ -38,4 +38,4 @@ ijpay:
     clientId: AbUnJc4ToUN7Z6lbnKB97rew653xvscUZks0FEU5Rw9Oqqd3PwNHokgrp47rkbNGjcQywhPKyYVT808o
     secret: EAFHSIydO8GJDvLah7Pb62NAFwit5fSHtmQHW6OanN4nccHnXte9gMmA662SvjCCJ__yfMQ89OFqUgl4
     sandBox: true
-    domain: https://robot.guiji.ai/pay-center-api/
+    domain: http://localhost:8075

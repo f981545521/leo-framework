@@ -47,6 +47,7 @@
         <module>leo-framework-commons-dubbo</module>
         <module>leo-framework-dto</module>
         <module>leo-gateway</module>
+        <module>leo-pay</module>
     </modules>
 
     <dependencyManagement>

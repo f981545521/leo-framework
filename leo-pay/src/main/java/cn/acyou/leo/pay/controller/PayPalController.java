@@ -286,6 +286,7 @@ public class PayPalController {
     @ResponseBody
     @ApiOperation("点击支付成功 后的跳转路径")
     public String returnUrl(HttpServletRequest request) {
+        final PayPalApiConfig config = getConfig();
         Map<String, String[]> parameterMap = request.getParameterMap();
         log.info("PayPal支付 调用 return 参数列表:{}", JSON.toJSONString(parameterMap));
         try {
@@ -293,7 +294,8 @@ public class PayPalController {
             String payerId = request.getParameter("PayerID");
             log.info("token:" + token);
             log.info("payerId:" + payerId);
-            return token;
+            String resStr = "您已经完成授权，点击：%s 进行确认！";
+            return String.format(resStr, config.getDomain() + "/payPal/captureOrder?id=" + token);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -305,8 +307,8 @@ public class PayPalController {
     @ApiOperation("点击取消支付 后的跳转路径")
     public String cancelUrl(HttpServletRequest request, HttpServletResponse response) {
         log.info("PayPal支付 调用 cancel ");
-        String readData = HttpKit.readData(request);
-        System.out.println(readData);
-        return readData;
+        String token = request.getParameter("token");
+        System.out.println(token);
+        return token;
     }
 }
