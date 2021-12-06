@@ -1,0 +1,18 @@
+server:
+  port: 8075
+spring:
+  profiles:
+    active: dev
+  application:
+    name: leo-pay
+  thymeleaf:
+    enabled: true
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+leo:
+  debug:
+    interface-call-statistics: false
+    print-request-param: true
+    print-to-result: true
+    token-verify: false
