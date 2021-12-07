@@ -37,7 +37,7 @@ public class RedisUtils {
     /**
      * 默认锁 超时时间 60S
      */
-    private static final int DEFAULT_LOCK_TIME_OUT = 60 * 1000;
+    public static final int DEFAULT_LOCK_TIME_OUT = 60 * 1000;
     /**
      * 默认 getAndCache 超时时间 {@link #getAndCache(String, Function)}
      */
@@ -1408,6 +1408,7 @@ public class RedisUtils {
         }
     }
 
+
     /**
      * 执行任务
      *
@@ -1429,10 +1430,10 @@ public class RedisUtils {
         }
     }
 
-    public <T> T doCallWork(String key, CallTask<T> callTask){
+    public <T> T doCallWork(String key, Long time, CallTask<T> callTask){
         String lockId = null;
         try {
-            lockId = lock(key);
+            lockId = lock(key, time);
             if (lockId == null) {
                 log.warn("Key:{} 正在处理中...", key);
                 throw new ConcurrentException("正在处理中，请稍候...");
