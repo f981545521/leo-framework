@@ -64,4 +64,73 @@ public class IOUtil {
         }
         return count;
     }
+
+
+    /**
+     * 从流中读取前28个byte并转换为16进制，字母部分使用大写
+     *
+     * @param in {@link InputStream}
+     * @return 16进制字符串
+     * @throws IOException IO异常
+     */
+    public static String readHex28Upper(InputStream in) throws IOException {
+        return readHex(in, 28, false);
+    }
+
+
+    /**
+     * 读取16进制字符串
+     *
+     * @param in          {@link InputStream}
+     * @param length      长度
+     * @param toLowerCase true 传换成小写格式 ， false 传换成大写格式
+     * @return 16进制字符串
+     * @throws IOException IO异常
+     */
+    public static String readHex(InputStream in, int length, boolean toLowerCase) throws IOException {
+        return HexUtil.encodeHexStr(readBytes(in, length), toLowerCase);
+    }
+
+
+    /**
+     * 读取指定长度的byte数组，不关闭流
+     *
+     * @param in     {@link InputStream}，为null返回null
+     * @param length 长度，小于等于0返回空byte数组
+     * @return bytes
+     */
+    public static byte[] readBytes(InputStream in, int length) throws IOException {
+        if (null == in) {
+            return null;
+        }
+        if (length <= 0) {
+            return new byte[0];
+        }
+        byte[] b = new byte[length];
+        int readLength = in.read(b);
+        if (readLength > 0 && readLength < length) {
+            byte[] b2 = new byte[readLength];
+            System.arraycopy(b, 0, b2, 0, readLength);
+            return b2;
+        } else {
+            return b;
+        }
+    }
+
+
+    /**
+     * 关闭<br>
+     * 关闭失败不会抛出异常
+     *
+     * @param closeable 被关闭的对象
+     */
+    public static void close(Closeable closeable) {
+        if (null != closeable) {
+            try {
+                closeable.close();
+            } catch (Exception e) {
+                // 静默关闭
+            }
+        }
+    }
 }
