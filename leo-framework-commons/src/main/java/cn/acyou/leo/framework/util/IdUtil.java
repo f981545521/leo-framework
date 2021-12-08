@@ -143,7 +143,7 @@ public class IdUtil {
         if (increment > maxV) {
             throw new ServiceException("ID获取错误：超出最大值!");
         }
-        DecimalFormat df = new DecimalFormat(StringUtil.concatLengthChar(length, '0'));
+        DecimalFormat df = new DecimalFormat(StringUtils.concatLengthChar(length, '0'));
         return prefix + formatDate + df.format(increment);
     }
 

@@ -1,12 +1,13 @@
 package cn.acyou.leo.framework.config;
 
 import cn.acyou.leo.framework.prop.XssProperty;
-import cn.acyou.leo.framework.util.StringUtil;
+import cn.acyou.leo.framework.util.StringUtils;
 import cn.acyou.leo.framework.xss.XssFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 
 import javax.servlet.DispatcherType;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class FilterConfig {
         registration.setName("xssFilter");
         registration.setOrder(Integer.MAX_VALUE);
         Map<String, String> initParameters = new HashMap<>();
-        if (StringUtil.isNotNullOrBlank(xssProperty.getExcludes())) {
+        if (StringUtils.isNotBlank(xssProperty.getExcludes())) {
             initParameters.put("excludes", xssProperty.getExcludes());
         }
         initParameters.put("enabled", String.valueOf(xssProperty.isEnabled()));

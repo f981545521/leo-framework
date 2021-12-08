@@ -851,7 +851,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String extractDateStr(String sourceStr, DateRegex dateRegex) {
-        if (StringUtil.isNotNullOrBlank(sourceStr)) {
+        if (StringUtils.isNotBlank(sourceStr)) {
             Pattern pattern = dateRegex.getPattern();
             Matcher matcher = pattern.matcher(sourceStr);
             if (matcher.find()) {

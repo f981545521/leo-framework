@@ -185,7 +185,7 @@ public class FileUtil {
         if (fileName == null) {
             return null;
         }
-        int index = fileName.lastIndexOf(StringUtil.DOT);
+        int index = fileName.lastIndexOf(StringUtils.DOT);
         if (index == -1) {
             return null;
         } else {
@@ -200,7 +200,7 @@ public class FileUtil {
      * @return boolean
      */
     public static boolean isImage(String extName){
-        if (StringUtil.isNullOrBlank(extName)) {
+        if (StringUtils.isBlank(extName)) {
             return false;
         }
         return imageTypes.contains(extName.toLowerCase());

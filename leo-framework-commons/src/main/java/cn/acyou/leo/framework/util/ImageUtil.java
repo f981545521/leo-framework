@@ -49,7 +49,7 @@ public class ImageUtil {
      * @return BufferedImage
      */
     public static BufferedImage read(String url) {
-        return StringUtil.isHttpUrl(url) ? readUrl(url) : read(new File(url));
+        return StringUtils.isHttpUrl(url) ? readUrl(url) : read(new File(url));
     }
 
     /**

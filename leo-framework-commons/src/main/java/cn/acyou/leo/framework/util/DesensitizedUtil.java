@@ -1,6 +1,5 @@
 package cn.acyou.leo.framework.util;
 
-import org.springframework.util.StringUtils;
 
 /**
  * @author fangyou
@@ -28,7 +27,7 @@ public class DesensitizedUtil {
         if (front < 0 || end < 0) {
             return "";
         }
-        return StringUtil.hide(idCardNum, front, idCardNum.length() - end);
+        return StringUtils.hide(idCardNum, front, idCardNum.length() - end);
     }
     /**
      * 【中文姓名】只显示第一个汉字，其他隐藏为2个星号，比如：李**
@@ -40,7 +39,7 @@ public class DesensitizedUtil {
         if (!StringUtils.hasText(fullName)) {
             return "";
         }
-        return StringUtil.hide(fullName, 1, fullName.length());
+        return StringUtils.hide(fullName, 1, fullName.length());
     }
     /**
      * 【电子邮箱】邮箱前缀仅显示第一个字母，前缀其他隐藏，用星号代替，@及后面的地址显示，比如：d**@126.com
@@ -56,7 +55,7 @@ public class DesensitizedUtil {
         if (index <= 1) {
             return email;
         }
-        return StringUtil.hide(email, 1, index);
+        return StringUtils.hide(email, 1, index);
     }
     /**
      * 【手机号码】前三位，后4位，其他隐藏，比如135****2210
@@ -68,7 +67,7 @@ public class DesensitizedUtil {
         if (!StringUtils.hasText(num)) {
             return "";
         }
-        return StringUtil.hide(num, 3, num.length() - 4);
+        return StringUtils.hide(num, 3, num.length() - 4);
     }
 
 }

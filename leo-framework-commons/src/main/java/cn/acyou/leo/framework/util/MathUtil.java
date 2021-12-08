@@ -81,7 +81,7 @@ public class MathUtil {
         if (length > 18) {
             throw new IllegalArgumentException("length must be less than 18 .");
         }
-        return Long.parseLong(StringUtil.concatLengthChar(length, '9'));
+        return Long.parseLong(StringUtils.concatLengthChar(length, '9'));
     }
 
     public static void main(String[] args) {

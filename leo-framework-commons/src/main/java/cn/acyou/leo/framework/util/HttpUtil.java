@@ -1,6 +1,5 @@
 package cn.acyou.leo.framework.util;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -170,7 +169,7 @@ public class HttpUtil {
         HttpUtil httpUtil = newInstance();
         HttpPost request = new HttpPost(url);
 
-        if (!Strings.isNullOrEmpty(jsonParam)) {
+        if (StringUtils.isNotBlank(jsonParam)) {
             HttpEntity entity = EntityBuilder.create().setText(jsonParam).setContentType(ContentType.APPLICATION_JSON.withCharset(StandardCharsets.UTF_8)).setContentEncoding(StandardCharsets.UTF_8.name()).build();
             request.setEntity(entity);
         }

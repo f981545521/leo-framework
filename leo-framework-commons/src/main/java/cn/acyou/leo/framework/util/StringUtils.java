@@ -1,25 +1,20 @@
 package cn.acyou.leo.framework.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * 补充 String 相关方法
+ * 补充 Spring String 相关方法
  *
  * @author youfang
  * @version [1.0.0, 2020-7-24 下午 09:31]
  **/
-public class StringUtil {
+public class StringUtils extends org.springframework.util.StringUtils {
     public static final String SPACE = " ";
     public static final String EMPTY = "";
     public static final String COMMA = ",";
     public static final String DOT = ".";
-    /**
-     * 换行
-     */
     public static final String NEW_LINE = "\r\n";
 
     /**
@@ -43,15 +38,6 @@ public class StringUtil {
         return sb.toString();
     }
 
-    /**
-     * 数据库 like %xx%
-     *
-     * @param value 价值
-     * @return {@link String}
-     */
-    public static String likeLR(String value) {
-        return "%" + value + "%";
-    }
 
     /**
      * 字符串加入逗号
@@ -60,7 +46,7 @@ public class StringUtil {
      * @return {@link String}
      */
     public static String joinOnComma(final Iterable<?> iterable) {
-        return StringUtils.join(iterable.iterator(), COMMA);
+        return org.apache.commons.lang3.StringUtils.join(iterable.iterator(), COMMA);
     }
 
     /**
@@ -112,7 +98,7 @@ public class StringUtil {
      * @param str str
      * @return {@link String}
      */
-    public static String nullAsDash(String str) {
+    public static String nullAsDashed(String str) {
         if (str == null) {
             return "-";
         }
@@ -126,8 +112,8 @@ public class StringUtil {
      * @param defaultValue 对象为空时返回
      * @return {@link Object}
      */
-    public static String isNullOrBlank(Object value, Object defaultValue) {
-        if (isNullOrBlank(value)) {
+    public static String isBlank(Object value, Object defaultValue) {
+        if (isBlank(value)) {
             return defaultValue.toString();
         }
         return value.toString();
@@ -139,8 +125,8 @@ public class StringUtil {
      * @param str 字符串
      * @return 是否是空或空串
      */
-    public static boolean isNullOrBlank(String str) {
-        return str == null || "".equals(str);
+    public static boolean isBlank(String str) {
+        return !hasText(str);
     }
 
     /**
@@ -149,8 +135,8 @@ public class StringUtil {
      * @param str 字符串
      * @return 是否是空或空串
      */
-    public static boolean isNotNullOrBlank(String str) {
-        return !isNullOrBlank(str);
+    public static boolean isNotBlank(String str) {
+        return hasText(str);
     }
 
     /**
@@ -159,8 +145,8 @@ public class StringUtil {
      * @param obj obj
      * @return boolean
      */
-    public static boolean isNotNullOrBlank(Object obj) {
-        return obj != null && isNotNullOrBlank(obj.toString());
+    public static boolean isNotBlank(Object obj) {
+        return obj != null && isNotBlank(obj.toString());
     }
 
     /**
@@ -170,8 +156,8 @@ public class StringUtil {
      * @param defaultValue 默认值
      * @return {@link String}
      */
-    public static String isNotNullOrBlank(Object obj, Object defaultValue) {
-        return isNotNullOrBlank(obj) ? obj.toString() : defaultValue.toString();
+    public static String isNotBlank(Object obj, Object defaultValue) {
+        return isNotBlank(obj) ? obj.toString() : defaultValue.toString();
     }
 
     /**
@@ -180,8 +166,8 @@ public class StringUtil {
      * @param obj obj
      * @return boolean
      */
-    public static boolean isNullOrBlank(Object obj) {
-        return obj == null || isNullOrBlank(obj.toString());
+    public static boolean isBlank(Object obj) {
+        return obj == null || isBlank(obj.toString());
     }
 
     /**
@@ -192,7 +178,7 @@ public class StringUtil {
      * @return str array
      */
     public static String[] strLengthSplit(String sourceStr, int length) {
-        if (isNullOrBlank(sourceStr)) {
+        if (isBlank(sourceStr)) {
             return new String[]{"", ""};
         }
         int sp = length * 2;
