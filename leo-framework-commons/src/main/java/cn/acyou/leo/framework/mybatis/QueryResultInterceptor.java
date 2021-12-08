@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.mybatis;
 import cn.acyou.leo.framework.annotation.mapper.Desensitized;
 import cn.acyou.leo.framework.annotation.mapper.International;
 import cn.acyou.leo.framework.annotation.mapper.SensitizedType;
+import cn.acyou.leo.framework.base.ClientLanguage;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.util.DesensitizedUtil;
 import cn.acyou.leo.framework.util.ReflectUtils;
@@ -71,13 +72,15 @@ public class QueryResultInterceptor implements Interceptor {
                     if (valueByGetMethod instanceof String) {
                         String value = valueByGetMethod.toString();
                         String[] splitValue = value.split(entry.getValue());
-                        int languageIndex = AppContext.getClientLanguage().getIndex();
-                        if (languageIndex < splitValue.length) {
-                            ReflectUtils.setValueBySetMethod(entry.getKey(), o, splitValue[languageIndex]);
-                        } else {
-                            ReflectUtils.setValueBySetMethod(entry.getKey(), o, "");
+                        ClientLanguage clientLanguage = AppContext.getClientLanguage();
+                        if (clientLanguage != null) {
+                            int languageIndex = clientLanguage.getIndex();
+                            if (languageIndex < splitValue.length) {
+                                ReflectUtils.setValueBySetMethod(entry.getKey(), o, splitValue[languageIndex]);
+                            } else {
+                                ReflectUtils.setValueBySetMethod(entry.getKey(), o, "");
+                            }
                         }
-
                     }
                 }
                 for (Map.Entry<String, SensitizedType> entry : desensitizedFieldMap.entrySet()) {
