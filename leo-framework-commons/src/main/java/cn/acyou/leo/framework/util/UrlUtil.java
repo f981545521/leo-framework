@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -23,6 +22,21 @@ import java.util.regex.Pattern;
 public class UrlUtil {
 
     public static final String SLASH = "\\";
+
+    /**
+     * 是URL
+     *
+     * @param url url
+     * @return boolean 是/否
+     */
+    public static boolean isUrl(String url){
+        try {
+            new URL(url);
+        }catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 从URL中提取参数Map
@@ -221,7 +235,7 @@ public class UrlUtil {
         try {
             URL url1 = new URL(url);
             return url1.getPath();
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             return "";
         }
     }
@@ -254,15 +268,20 @@ public class UrlUtil {
     /**
      * 得到URL上的文件名
      * <pre>
-     * String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov";
-     * System.out.println(UrlUtil.getName(url));//==> movie001.mov
+     * String url = "http://qiniu.acyou.cn/images/1.jpg?name=oss";
+     * System.out.println(UrlUtil.getName(url));//==> 1.jpg
      * </pre>
      *
      * @param url url
      * @return {@link String}
      */
     public static String getName(String url) {
-        return url.substring(url.lastIndexOf("/") + 1);
+        try {
+            URL url1 = new URL(url);
+            return url1.getPath().substring(url1.getPath().lastIndexOf("/") + 1);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**
@@ -278,7 +297,24 @@ public class UrlUtil {
         try {
             URL url1 = new URL(url);
             return url1.getQuery();
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
+            return "";
+        }
+    }
+    /**
+     * 获取网址的path
+     * <pre>
+     *  http://qiniu.acyou.cn/images/1.jpg?name=oss
+     *   -> /images/1.jpg?name=oss
+     * </pre>
+     * @param url 网址
+     * @return pathname
+     */
+    public static String getFile(String url) {
+        try {
+            URL url1 = new URL(url);
+            return url1.getFile();
+        } catch (Exception e) {
             return "";
         }
     }
