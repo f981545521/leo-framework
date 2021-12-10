@@ -6,18 +6,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author fangyou
  * @version [1.0.0, 2021-09-01 10:56]
  */
-@ConfigurationProperties(prefix = "oss")
+@ConfigurationProperties(prefix = "leo.fs.oss")
 public class OSSProperty {
     /**
-     * endpoint
+     * oss endpoint
      */
     private String endpoint;
     /**
-     * access_key_id
+     * oss access_key_id
      */
     private String access_key_id;
     /**
-     * access_key_secret
+     * oss access_key_secret
      */
     private String access_key_secret;
 

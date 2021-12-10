@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author fangyou
  * @version [1.0.0, 2021-09-01 10:56]
  */
-@ConfigurationProperties(prefix = "fs.ftp")
+@ConfigurationProperties(prefix = "leo.fs.ftp")
 public class FTPProperty {
     /**
      * 主机
