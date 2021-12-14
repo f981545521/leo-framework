@@ -115,6 +115,13 @@ public class ConcurrentHelper {
         }
     }
 
+    /**
+     * 执行有返回值的任务
+     *
+     * @param key      锁关键词
+     * @param callTask 调用任务
+     * @return {@link T} 任务返回值
+     */
     public static <T> T doCallWork(String key, CallTask<T> callTask){
         Long lock = null;
         try {
@@ -127,6 +134,34 @@ public class ConcurrentHelper {
         } finally {
             ConcurrentHelper.unLock(key, lock);
         }
+    }
+
+    /**
+     * 做等待循环
+     *
+     * @param waitTime 等待时间 (时间秒)
+     * @param callTask 调用任务 (返回null时重试)
+     * @return {@link T}
+     */
+    public static <T> T doWaitLoop(int waitTime, CallTask<T> callTask) {
+        long current = System.currentTimeMillis();
+        long end = System.currentTimeMillis() + (waitTime * 1000L);
+        while (current < end) {
+            log.warn("循环任务中... time {} -> {}", current, end);
+            T run = callTask.run();
+            if (run != null) {
+                log.warn("循环任务获取值结束... time {} -> {}", current, end);
+                return run;
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                //ignore
+            }
+            current = System.currentTimeMillis();
+        }
+        log.warn("循环任务未获取值结束... time {} -> {}", current, end);
+        return null;
     }
 
     public interface Task {
