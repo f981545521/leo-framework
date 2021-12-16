@@ -1363,7 +1363,7 @@ public class RedisUtils {
 
 
     /**
-     * 循环获取锁
+     * 循环（自旋等待）获取锁
      *
      * @param lockKey     锁定键
      * @param waitTimeout 等待超时    (单位毫秒)
