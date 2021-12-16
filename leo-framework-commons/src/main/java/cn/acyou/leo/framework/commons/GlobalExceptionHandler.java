@@ -339,7 +339,7 @@ public class GlobalExceptionHandler {
                 e.printStackTrace(new PrintWriter(buf, true));
                 buf.close();
                 resultInfo.setData(buf.toString());
-                AppContext.setExceptionResult(BeanCopyUtil.copy(resultInfo, Result.class));
+                AppContext.setExceptionResult(resultInfo);
                 if (!leoProperty.isPrintToResult()) {
                     resultInfo.setData(null);
                 }
