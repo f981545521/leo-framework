@@ -42,7 +42,7 @@ public class UnitConversionUtil {
      * <p>转换可读时间，为：时/分/秒/毫秒</p>
      *
      * <pre>
-     *     convertReadableTime(333333, TimeUnit.MILLISECONDS) = |0:5:33.333|
+     *     convertReadableTime(333333, TimeUnit.MILLISECONDS) = |0h 5m 33.333s|
      * </pre>
      *
      * @param duration 持续时间
@@ -63,7 +63,7 @@ public class UnitConversionUtil {
         if (seconds > 0) {
             milliseconds = milliseconds - (seconds * 1000);
         }
-        return String.format("|%s:%s:%s.%s|", hours, minutes, seconds, milliseconds);
+        return String.format("|%sh %sm %s.%ss|", hours, minutes, seconds, milliseconds);
     }
 
 
