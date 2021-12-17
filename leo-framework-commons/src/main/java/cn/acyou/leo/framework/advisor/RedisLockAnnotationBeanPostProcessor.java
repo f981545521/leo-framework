@@ -22,8 +22,7 @@ public class RedisLockAnnotationBeanPostProcessor extends AbstractBeanFactoryAwa
     @Override
     public void setBeanFactory(BeanFactory beanFactory) {
         super.setBeanFactory(beanFactory);
-        RedisLockAnnotationInterceptor interceptor = new RedisLockAnnotationInterceptor(redisUtils, redisLockSource);
-
+        RedisLockInterceptor interceptor = new RedisLockInterceptor(redisUtils, redisLockSource);
         RedisLockPointCut redisLockPointCut = new RedisLockPointCut(redisLockSource);
         this.advisor = new DefaultPointcutAdvisor(redisLockPointCut, interceptor);
     }

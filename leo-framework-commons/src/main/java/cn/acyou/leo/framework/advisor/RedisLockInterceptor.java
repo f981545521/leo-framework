@@ -15,7 +15,7 @@ import org.springframework.core.Ordered;
  * @version [1.0.0, 2021-11-28]
  **/
 @Slf4j
-public class RedisLockAnnotationInterceptor implements MethodInterceptor, Ordered {
+public class RedisLockInterceptor implements MethodInterceptor, Ordered {
 
     //标识 prefix
     private static final String REDIS_LOCK_KEY_PREFIX = "RedisAnn_LOCK:";
@@ -25,7 +25,7 @@ public class RedisLockAnnotationInterceptor implements MethodInterceptor, Ordere
     private final RedisLockSource redisLockSource;
 
 
-    public RedisLockAnnotationInterceptor(RedisUtils redisUtils, RedisLockSource redisLockSource) {
+    public RedisLockInterceptor(RedisUtils redisUtils, RedisLockSource redisLockSource) {
         this.redisUtils = redisUtils;
         this.redisLockSource = redisLockSource;
     }
