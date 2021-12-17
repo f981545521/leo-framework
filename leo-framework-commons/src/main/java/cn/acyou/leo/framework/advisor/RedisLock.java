@@ -12,6 +12,8 @@ import java.lang.annotation.*;
  *     }
  *     }
  * </pre>
+ *
+ * 使用注意：请正确的评估 -过期时间- 与 -等待时间- ！！！
  * @author youfang
  * @version [1.0.0, 2021-11-28]
  **/

@@ -1361,7 +1361,12 @@ public class RedisUtils {
         return null;
     }
 
-
+    /**
+     * The number of nanoseconds for which it is faster to spin
+     * rather than to use timed park. A rough estimate suffices
+     * to improve responsiveness with very short timeouts.
+     */
+    static final long spinForTimeoutThreshold = 1000000 * 100;
     /**
      * 循环（自旋等待）获取锁
      *
@@ -1371,18 +1376,24 @@ public class RedisUtils {
      * @return {@link String}
      */
     public String lockLoop(String lockKey, long waitTimeout, long timeOut) {
-        long waitingStartTime = System.nanoTime();
+        long nanosWaitTimeout = TimeUnit.NANOSECONDS.convert(waitTimeout, TimeUnit.MILLISECONDS);
+        final long deadline = System.nanoTime() + nanosWaitTimeout;
         if (waitTimeout <= 0L) {
             return lock(lockKey, timeOut);
         }
-        long waitingStartNanoTime = TimeUnit.NANOSECONDS.convert(waitingStartTime, TimeUnit.MILLISECONDS);
         try {
             do { //循环获取锁
                 final String lockId = lock(lockKey, timeOut);
                 if (lockId != null) {
+                    //log.info("获取到锁：" + lockKey);
                     return lockId;
                 }
-            } while ((System.nanoTime() - waitingStartNanoTime) < waitTimeout);
+                //log.info("自旋获取锁：" + lockKey);
+                //超过100毫秒以上 休眠100ms
+                if (deadline - System.nanoTime() > spinForTimeoutThreshold) {
+                    Thread.sleep(100);
+                }
+            } while (System.nanoTime()  < deadline);
         } catch (Throwable e) {
             return null;
         }
@@ -1429,7 +1440,13 @@ public class RedisUtils {
             unLock(key, lockId);
         }
     }
-
+    /**
+     * 执行任务（有返回值）
+     *
+     * @param key  锁关键词
+     * @param time 锁时间（毫秒）
+     * @param callTask 有返回值的任务
+     */
     public <T> T doCallWork(String key, Long time, CallTask<T> callTask){
         String lockId = null;
         try {
