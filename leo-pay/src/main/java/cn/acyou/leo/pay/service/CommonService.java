@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class CommonService {
-    @RedisLock(key = "#name")
+    @RedisLock(key = "#name", waitTime = 5000)
     public String testRedisLock(String name) {
         try {
-            Thread.sleep(3000L);
+            Thread.sleep(8000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
