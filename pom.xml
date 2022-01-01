@@ -42,6 +42,7 @@
     </properties>
 
     <modules>
+        <module>leo-framework-barcode</module>
         <module>leo-framework-fs-starter</module>
         <module>leo-framework-commons</module>
         <module>leo-framework-commons-dubbo</module>
