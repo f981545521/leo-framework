@@ -48,6 +48,7 @@ public class ParameterRecordAspect {
     public void before(JoinPoint jp) {
         MethodSignature methodSignature = (MethodSignature) jp.getSignature();
         Annotation[][] parameterAnnotations = methodSignature.getMethod().getParameterAnnotations();
+        final Class<?>[] parameterTypes = methodSignature.getMethod().getParameterTypes();
         Object[] args = jp.getArgs();
         Map<String, Object> paramsMap = new LinkedHashMap<>();
         for (Annotation[] parameterAnnotation : parameterAnnotations) {
@@ -75,7 +76,7 @@ public class ParameterRecordAspect {
             //不明显的RequestParam类型
             if (!obvious) {
                 Object paramValue = args[paramIndex];
-                if (baseType.contains(paramValue.getClass().getSimpleName())) {
+                if (baseType.contains(parameterTypes[paramIndex].getSimpleName())) {
                     paramsMap.put("RequestParam_" + paramIndex, paramValue);
                 }
             }
