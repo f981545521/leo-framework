@@ -31,6 +31,8 @@ import java.util.stream.Collectors;
 @Aspect
 @Component
 public class ParameterRecordAspect {
+    public static final List<String> baseType = Arrays.asList("Long", "Integer", "String", "Boolean", "Double", "Float");
+
     @Autowired
     private LeoProperty leoProperty;
 
@@ -52,18 +54,29 @@ public class ParameterRecordAspect {
             int paramIndex = ArrayUtils.indexOf(parameterAnnotations, parameterAnnotation);
             List<Class<? extends Annotation>> annotations = Arrays.stream(parameterAnnotation).map(Annotation::annotationType).collect(Collectors.toList());
             //实体参数校验
+            boolean obvious = false;
             for (Annotation annotation : parameterAnnotation) {
                 if (annotation instanceof RequestParam) {
                     Object paramValue = args[paramIndex];
                     paramsMap.put("RequestParam_" + paramIndex, paramValue);
+                    obvious = true;
                 }
                 if (annotation instanceof RequestBody) {
                     Object paramValue = args[paramIndex];
                     paramsMap.put("RequestBody_" + paramIndex, paramValue);
+                    obvious = true;
                 }
                 if (annotation instanceof PathVariable) {
                     Object paramValue = args[paramIndex];
                     paramsMap.put("PathVariable_" + paramIndex, paramValue);
+                    obvious = true;
+                }
+            }
+            //不明显的RequestParam类型
+            if (!obvious) {
+                Object paramValue = args[paramIndex];
+                if (paramValue != null && baseType.contains(args[0].getClass().getSimpleName())) {
+                    paramsMap.put("RequestParam_" + paramIndex, paramValue);
                 }
             }
         }
