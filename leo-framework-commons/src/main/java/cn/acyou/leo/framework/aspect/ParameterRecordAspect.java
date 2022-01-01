@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.aspect;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.prop.LeoProperty;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
@@ -83,7 +84,7 @@ public class ParameterRecordAspect {
         }
         AppContext.setRequestParams(paramsMap);
         if (leoProperty.isPrintRequestParam()) {
-            log.info("请求地址：{}|参数：{}", AppContext.getActionUrl(), JSON.toJSONString(paramsMap));
+            log.info("请求地址：{}|参数：{}", AppContext.getActionUrl(), JSON.toJSONString(paramsMap, SerializerFeature.WriteMapNullValue));
         }
     }
 
