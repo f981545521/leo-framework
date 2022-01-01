@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Aspect
 @Component
 public class ParameterRecordAspect {
-    public static final List<String> baseType = Arrays.asList("Long", "Integer", "String", "Boolean", "Double", "Float");
+    private static final List<String> baseType = Arrays.asList("Long", "Integer", "String", "Boolean", "Double", "Float");
 
     @Autowired
     private LeoProperty leoProperty;
