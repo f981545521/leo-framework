@@ -75,7 +75,7 @@ public class ParameterRecordAspect {
             //不明显的RequestParam类型
             if (!obvious) {
                 Object paramValue = args[paramIndex];
-                if (baseType.contains(args[0].getClass().getSimpleName())) {
+                if (baseType.contains(paramValue.getClass().getSimpleName())) {
                     paramsMap.put("RequestParam_" + paramIndex, paramValue);
                 }
             }
