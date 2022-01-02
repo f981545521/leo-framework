@@ -1,6 +1,8 @@
 package cn.acyou.leo.framework.model;
 
-import java.io.Serializable;
+import cn.acyou.leo.framework.model.base.DTO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 经纬度
@@ -12,8 +14,9 @@ import java.io.Serializable;
  * @author youfang
  * @version [1.0.0, 2020/4/9]
  **/
-public class LatLng implements Serializable {
-    private static final long serialVersionUID = -4840042005404521542L;
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class LatLng extends DTO {
 
     private double lat;
 
@@ -30,29 +33,7 @@ public class LatLng implements Serializable {
     }
 
     public LatLng() {
+
     }
 
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLng(double lng) {
-        this.lng = lng;
-    }
-
-    @Override
-    public String toString() {
-        return "LatLng{" +
-                "lat=" + lat +
-                ", lng=" + lng +
-                '}';
-    }
 }

@@ -6,7 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Map;
 
 /**
- * 分页查询，不管是GET还是POST 必须继承此类！！！
+ * Page Search Object
+ * 分页查询对象，不管是GET还是POST 必须继承此类！！！
  *
  * @author youfang
  * @version [1.0.0, 2020/7/6]
