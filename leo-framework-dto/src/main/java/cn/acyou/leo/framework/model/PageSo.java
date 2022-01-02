@@ -1,8 +1,8 @@
 package cn.acyou.leo.framework.model;
 
+import cn.acyou.leo.framework.model.base.DTO;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -11,8 +11,8 @@ import java.util.Map;
  * @author youfang
  * @version [1.0.0, 2020/7/6]
  **/
-public class PageSo implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class PageSo extends DTO {
+
     /**
      * 分页：页码
      */
