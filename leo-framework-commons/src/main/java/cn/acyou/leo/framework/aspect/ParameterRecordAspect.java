@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.aspect;
 
 import cn.acyou.leo.framework.context.AppContext;
+import cn.acyou.leo.framework.model.base.DTO;
 import cn.acyou.leo.framework.prop.LeoProperty;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -79,6 +80,8 @@ public class ParameterRecordAspect {
                 Object paramValue = args[paramIndex];
                 if (baseType.contains(parameterTypes[paramIndex].getSimpleName())) {
                     paramsMap.put("RequestParam_" + paramIndex, paramValue);
+                }else if (paramValue instanceof DTO) {
+                    paramsMap.put("RequestParam_" + paramIndex, paramValue.toString());
                 }
             }
         }
