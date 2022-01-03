@@ -1,6 +1,8 @@
 package cn.acyou.leo.framework.commons;
 
 import cn.acyou.leo.framework.base.EnumEntity;
+import cn.acyou.leo.framework.util.ReflectUtils;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,10 @@ public class EnumTool {
         return new EnumTool(clazz);
     }
 
-    public EnumTool(Class<?> clazz) {
+    /**
+     * 私有构造器 必须通过newInstance创建
+     */
+    private EnumTool(Class<?> clazz) {
         this.clazz = clazz;
     }
 
@@ -33,7 +38,7 @@ public class EnumTool {
      */
     public List<EnumEntity> listAllField() {
         List<EnumEntity> resultList = new ArrayList<>();
-        Field[] fields = clazz.getDeclaredFields();
+        final List<Field> fields = ReflectUtils.getFields(clazz);
         try {
             for (Field field : fields) {
                 field.setAccessible(true);
