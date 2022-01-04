@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
+ * 本机缓存
+ *
  * @author fangyou
  * @version [1.0.0, 2021-08-04 14:07]
  */
@@ -20,20 +22,22 @@ public class CacheUtil {
      * 默认缓存 7200 s
      */
     private static final long DEFAULT_CACHE_DURATION = 7200;
+
     /**
      * 获取缓存值
+     *
      * @param key 缓存Key
      * @return 缓存value
      */
-    public static String get(String key){
+    public synchronized static String get(String key) {
         CacheBean cacheBean = CACHE_MAP.get(key);
-        if (cacheBean != null){
-            if (cacheBean.getExpiresTime() == null){
+        if (cacheBean != null) {
+            if (cacheBean.getExpiresTime() == null) {
                 return cacheBean.getCacheValue();
             }
             if (cacheBean.getExpiresTime() > System.currentTimeMillis()) {
                 return cacheBean.getCacheValue();
-            }else {
+            } else {
                 CACHE_MAP.remove(key);
             }
         }
@@ -46,22 +50,21 @@ public class CacheUtil {
      * @param key   缓存Key
      * @param value 缓存value
      */
-    public static void put(String key, String value){
+    public static void put(String key, String value) {
         CacheBean cacheBean = new CacheBean(value, null);
         CACHE_MAP.put(key, cacheBean);
     }
 
 
-
     /**
      * 设置缓存值（带过期时间）
      *
-     * @param key   缓存Key
-     * @param value 缓存value
+     * @param key      缓存Key
+     * @param value    缓存value
      * @param duration duration
      * @param timeUnit 单位
      */
-    public static void put(String key, String value, long duration, TimeUnit timeUnit){
+    public static void put(String key, String value, long duration, TimeUnit timeUnit) {
         long toMillis = timeUnit.toMillis(duration);
         CacheBean cacheBean = new CacheBean(value, System.currentTimeMillis() + toMillis);
         CACHE_MAP.put(key, cacheBean);
@@ -77,7 +80,7 @@ public class CacheUtil {
      */
     public static String getAndCache(String key, Function<String, String> function) {
         String v = get(key);
-        if (v != null && v.length() > 0){
+        if (v != null && v.length() > 0) {
             return v;
         }
         String value = function.apply(key);
@@ -118,7 +121,9 @@ public class CacheUtil {
          */
         private Long expiresTime;
 
-        public CacheBean() {
+        public CacheBean(String cacheValue) {
+            this.cacheValue = cacheValue;
+            this.expiresTime = null;
         }
 
         public CacheBean(String cacheValue, Long expiresTime) {
