@@ -1,8 +1,6 @@
 package cn.acyou.leo.framework.util;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 补充 Spring String 相关方法
@@ -285,6 +283,37 @@ public class StringUtils extends org.springframework.util.StringUtils {
      */
     public static String str(CharSequence cs) {
         return null == cs ? null : cs.toString();
+    }
+
+    /**
+     * 使用System.out.println 打印任何对象
+     * @param obj 任意对象
+     */
+    @SuppressWarnings("unchecked")
+    public static void println(Object obj){
+        if (obj == null) {
+            System.out.println("null");
+            return;
+        }
+        if (obj instanceof CharSequence) {
+            System.out.println(obj);
+            return;
+        }
+        if (obj.getClass().isArray()) {
+            Arrays.stream((Object[]) obj).forEach(System.out::println);
+            return;
+        }
+        if (obj instanceof Collection) {
+            ((Collection<Object>) obj).forEach(System.out::println);
+            return;
+        }
+        if (obj instanceof Map) {
+            ((Map<Object, Object>) obj).forEach((k,v)->{
+                System.out.println(k + ":" + v);
+            });
+            return;
+        }
+        System.out.println(obj);
     }
 
 
