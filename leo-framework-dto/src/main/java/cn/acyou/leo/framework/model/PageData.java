@@ -1,9 +1,8 @@
 package cn.acyou.leo.framework.model;
 
-
+import cn.acyou.leo.framework.model.base.DTO;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * @author youfang
  * @version [1.0.0, 2020/7/28]
  */
-public class PageData<T> implements Serializable {
+public class PageData<T> extends DTO {
     /**
      * 序列化版本号
      */

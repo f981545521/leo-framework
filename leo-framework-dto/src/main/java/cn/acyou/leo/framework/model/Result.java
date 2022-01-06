@@ -1,12 +1,12 @@
 package cn.acyou.leo.framework.model;
 
-import java.io.Serializable;
+import cn.acyou.leo.framework.model.base.DTO;
 
 /**
  * @author youfang
  * @since  2020/03/19 11:59
  **/
-public class Result<T> implements Serializable {
+public class Result<T> extends DTO {
     private int code;
     private String message;
     private T data;
