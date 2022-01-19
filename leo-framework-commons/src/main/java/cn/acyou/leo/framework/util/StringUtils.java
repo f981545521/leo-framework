@@ -286,6 +286,40 @@ public class StringUtils extends org.springframework.util.StringUtils {
     }
 
     /**
+     * 把原始字符串分割成指定长度的字符串列表
+     *
+     * @param sourStr  原始字符串
+     * @param length   指定长度
+     * @return 指定长度的字符串列表
+     */
+    public static List<String> splitByLength(String sourStr, int length) {
+        return splitByLength(new ArrayList<>(), sourStr, length);
+    }
+
+    /**
+     * 把原始字符串分割成指定长度的字符串列表
+     *
+     * @param container     容器
+     * @param sourStr       字符串
+     * @param length        长度
+     * @return 指定长度的字符串列表
+     */
+    private static List<String> splitByLength(List<String> container, String sourStr, int length){
+        if (sourStr != null && sourStr.length() > 0) {
+            //源字符串的长度小于分割的长度
+            if (sourStr.length() < length) {
+                container.add(sourStr);
+                return container;
+            }
+            String str0 = sourStr.substring(0, length);
+            String str1 = sourStr.substring(length);
+            container.add(str0);
+            return splitByLength(container, str1, length);
+        }
+        return container;
+    }
+
+    /**
      * 使用System.out.println 打印任何对象
      * @param obj 任意对象
      */
