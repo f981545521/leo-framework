@@ -39,14 +39,23 @@ public class ParameterRecordAspect {
     private LeoProperty leoProperty;
 
     /**
-     * 切入所有Controller 的请求
+     * 所有的Controller
      */
-    @Pointcut("execution(* cn.acyou.leo.*.controller.*..*(..))")
-    public void parameterValid() {
+    @Pointcut("@within(org.springframework.stereotype.Controller)")
+    public void pointCutCtl() {
 
     }
 
-    @Before("parameterValid()")
+    /**
+     * 所有的RestController
+     */
+    @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
+    public void pointCutRestCtl() {
+
+    }
+
+
+    @Before("pointCutCtl() || pointCutRestCtl()")
     public void before(JoinPoint jp) {
         MethodSignature methodSignature = (MethodSignature) jp.getSignature();
         Annotation[][] parameterAnnotations = methodSignature.getMethod().getParameterAnnotations();
