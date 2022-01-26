@@ -67,4 +67,22 @@ public class SpringHelper implements BeanFactoryPostProcessor {
     public static boolean isSingleton(String name) {
         return beanFactory.isSingleton(name);
     }
+
+    /**
+     * 创建指定type的Bean，执行bean的完整初始化，包括所有适用的BeanPostProcessor。
+     * <ul>
+     *     <li>1. 可以进行AutoWired注解的注入</li>
+     *     <li>2. 可以进行Constructor的注入</li>
+     * </ul>
+     *
+     * <p>
+     * 注意： 此处创建的bean为原型，不受Spring管理
+     *
+     * @param clz 类型class
+     * @return {@link T} 实例
+     * @throws BeansException 异常
+     */
+    public static <T> T createBean(Class<T> clz) throws BeansException {
+        return beanFactory.createBean(clz);
+    }
 }
