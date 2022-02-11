@@ -61,29 +61,27 @@ public class ParameterRecordAspect {
         MethodSignature methodSignature = (MethodSignature) jp.getSignature();
         Annotation[][] parameterAnnotations = methodSignature.getMethod().getParameterAnnotations();
         final Class<?>[] parameterTypes = methodSignature.getMethod().getParameterTypes();
-        final Parameter[] parameters = methodSignature.getMethod().getParameters();
         Object[] args = jp.getArgs();
         Map<String, Object> paramsMap = new LinkedHashMap<>();
         for (Annotation[] parameterAnnotation : parameterAnnotations) {
             int paramIndex = ArrayUtils.indexOf(parameterAnnotations, parameterAnnotation);
-            final String name = parameters[paramIndex].getName();
             List<Class<? extends Annotation>> annotations = Arrays.stream(parameterAnnotation).map(Annotation::annotationType).collect(Collectors.toList());
             //实体参数校验
             boolean obvious = false;
             for (Annotation annotation : parameterAnnotation) {
                 if (annotation instanceof RequestParam) {
                     Object paramValue = args[paramIndex];
-                    paramsMap.put("RequestParam_" + name, paramValue);
+                    paramsMap.put("RequestParam_" + paramIndex, paramValue);
                     obvious = true;
                 }
                 if (annotation instanceof RequestBody) {
                     Object paramValue = args[paramIndex];
-                    paramsMap.put("RequestBody_" + name, paramValue);
+                    paramsMap.put("RequestBody_" + paramIndex, paramValue);
                     obvious = true;
                 }
                 if (annotation instanceof PathVariable) {
                     Object paramValue = args[paramIndex];
-                    paramsMap.put("PathVariable_" + name, paramValue);
+                    paramsMap.put("PathVariable_" + paramIndex, paramValue);
                     obvious = true;
                 }
             }
@@ -91,9 +89,9 @@ public class ParameterRecordAspect {
             if (!obvious) {
                 Object paramValue = args[paramIndex];
                 if (baseType.contains(parameterTypes[paramIndex].getSimpleName())) {
-                    paramsMap.put("RequestParam_" + name, paramValue);
+                    paramsMap.put("RequestParam_" + paramIndex, paramValue);
                 }else if (paramValue instanceof DTO) {
-                    paramsMap.put("RequestParam_" + name, paramValue.toString());
+                    paramsMap.put("RequestParam_" + paramIndex, paramValue.toString());
                 }
             }
         }
