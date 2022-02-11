@@ -28,6 +28,20 @@ import java.util.Properties;
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})
 })
 public class PerformanceInterceptor implements Interceptor {
+    /**
+     * 简化打印信息
+     */
+    private boolean simplePrint = false;
+
+    public PerformanceInterceptor() {
+
+    }
+
+    public PerformanceInterceptor(boolean simplePrint) {
+        this.simplePrint = simplePrint;
+    }
+
+
 
     private static final Logger log = LoggerFactory.getLogger(PerformanceInterceptor.class);
 
@@ -52,10 +66,14 @@ public class PerformanceInterceptor implements Interceptor {
 
         long end = System.currentTimeMillis();
         long timing = end - start;
-        log.debug("耗时：" + timing + " ms" + " - id:" + statementId);
-        log.debug("<—————————————————————————SQL——————————————————————————>");
-        log.debug(sql);
-        log.debug("<——————————————————————————————————————————————————————>");
+        if (simplePrint) {
+            log.debug(sql);
+        }else {
+            log.debug("耗时：" + timing + " ms" + " - id:" + statementId);
+            log.debug("<—————————————————————————SQL——————————————————————————>");
+            log.debug(sql);
+            log.debug("<——————————————————————————————————————————————————————>");
+        }
         return result;
     }
 
