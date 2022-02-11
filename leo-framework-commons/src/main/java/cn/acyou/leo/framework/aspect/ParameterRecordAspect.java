@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,27 +61,29 @@ public class ParameterRecordAspect {
         MethodSignature methodSignature = (MethodSignature) jp.getSignature();
         Annotation[][] parameterAnnotations = methodSignature.getMethod().getParameterAnnotations();
         final Class<?>[] parameterTypes = methodSignature.getMethod().getParameterTypes();
+        final Parameter[] parameters = methodSignature.getMethod().getParameters();
         Object[] args = jp.getArgs();
         Map<String, Object> paramsMap = new LinkedHashMap<>();
         for (Annotation[] parameterAnnotation : parameterAnnotations) {
             int paramIndex = ArrayUtils.indexOf(parameterAnnotations, parameterAnnotation);
+            final String name = parameters[paramIndex].getName();
             List<Class<? extends Annotation>> annotations = Arrays.stream(parameterAnnotation).map(Annotation::annotationType).collect(Collectors.toList());
             //实体参数校验
             boolean obvious = false;
             for (Annotation annotation : parameterAnnotation) {
                 if (annotation instanceof RequestParam) {
                     Object paramValue = args[paramIndex];
-                    paramsMap.put("RequestParam_" + paramIndex, paramValue);
+                    paramsMap.put("RequestParam_" + name, paramValue);
                     obvious = true;
                 }
                 if (annotation instanceof RequestBody) {
                     Object paramValue = args[paramIndex];
-                    paramsMap.put("RequestBody_" + paramIndex, paramValue);
+                    paramsMap.put("RequestBody_" + name, paramValue);
                     obvious = true;
                 }
                 if (annotation instanceof PathVariable) {
                     Object paramValue = args[paramIndex];
-                    paramsMap.put("PathVariable_" + paramIndex, paramValue);
+                    paramsMap.put("PathVariable_" + name, paramValue);
                     obvious = true;
                 }
             }
@@ -88,9 +91,9 @@ public class ParameterRecordAspect {
             if (!obvious) {
                 Object paramValue = args[paramIndex];
                 if (baseType.contains(parameterTypes[paramIndex].getSimpleName())) {
-                    paramsMap.put("RequestParam_" + paramIndex, paramValue);
+                    paramsMap.put("RequestParam_" + name, paramValue);
                 }else if (paramValue instanceof DTO) {
-                    paramsMap.put("RequestParam_" + paramIndex, paramValue.toString());
+                    paramsMap.put("RequestParam_" + name, paramValue.toString());
                 }
             }
         }
