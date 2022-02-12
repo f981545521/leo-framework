@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -317,6 +318,72 @@ public class UrlUtil {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    /**
+     * 把header中的set-cookie转换为请求的字符串结构
+     * <pre>
+     *  Response Header示例:
+     *      Connection: keep-alive
+     *      Content-Encoding: gzip
+     *      Content-Type: text/html; charset=utf-8
+     *      Date: Sat, 12 Feb 2022 03:29:35 GMT
+     *      Set-Cookie: kpf=PC_WEB; path=/; expires=Sun, 12 Feb 2023 03:29:35 GMT; domain=www.kuaishou.com; httponly
+     *      Set-Cookie: kpn=KUAISHOU_VISION; path=/; expires=Sun, 12 Feb 2023 03:29:35 GMT; domain=www.kuaishou.com; httponly
+     *      Set-Cookie: clientid=3; path=/; expires=Sun, 12 Feb 2023 03:29:35 GMT; domain=kuaishou.com; httponly
+     *      Set-Cookie: did=web_c103091cbdefb56d3c25a450cdc3cea8; path=/; expires=Sun, 12 Feb 2023 03:29:35 GMT; domain=kuaishou.com
+     *      Transfer-Encoding: chunked
+     * </pre>
+     *
+     * @param setCookieHeaders header中的set-cookie
+     * @return str
+     */
+    public static String getCookieStrFromSetCookie(List<String> setCookieHeaders) {
+        if (CollectionUtils.isEmpty(setCookieHeaders)) {
+            return "";
+        }
+        List<String> cookieList = new ArrayList<>();
+        for (String setCookieHeader : setCookieHeaders) {
+            String[] split = setCookieHeader.split(";");
+            cookieList.add(split[0]);
+        }
+        return StringUtils.join(cookieList, "; ");
+    }
+
+    /**
+     * 把CookieMap转换为请求的字符串结构
+     * <pre>
+     *     返回的：
+     *     Cookie: did=web_46cefbd3406a4b29ad49fcaf48f01f1d; didv=1640161658000;
+     * </pre>
+     *
+     * @param cookies cookies
+     * @return str
+     */
+    public static String getCookieStr(Map<String, String> cookies){
+        List<String> cookieList = new ArrayList<>();
+        for (Map.Entry<String, String> cookie : cookies.entrySet()) {
+            cookieList.add(cookie.getKey() + "=" + cookie.getValue());
+        }
+        return StringUtils.join(cookieList, "; ");
+    }
+
+    /**
+     * 把Cookie字符串转换为Map结构
+     *
+     * @param cookieStr cookie字符串，例如： did=web_46cefbd3406a4b29ad49fcaf48f01f1d; didv=1640161658000;
+     * @return str
+     */
+    public static Map<String, String> getCookieMapFromCookieStr(String cookieStr){
+        Map<String, String> cookieMap = new HashMap<>();
+        if (cookieStr != null) {
+            String[] cookieElements = cookieStr.split(";");
+            for (String cookieEle : cookieElements) {
+                String[] split = cookieEle.split("=");
+                cookieMap.put(split[0], split[1]);
+            }
+        }
+        return cookieMap;
     }
 
     public static void main(String[] args) throws Exception{
