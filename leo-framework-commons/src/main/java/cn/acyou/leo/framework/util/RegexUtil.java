@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util;
 
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Matcher;
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
  * @author youfang
  * @version [1.0.0, 2020年07月23日]
  */
-public class RegexUtil {
+public class RegexUtil extends RegExUtils {
     /**
      * IP地址正则表达式
      */
@@ -109,16 +110,29 @@ public class RegexUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(isMobilePhone("u@qq"));
-        System.out.println(isMobilePhone("11111111111"));
-        System.out.println(isMobilePhone("18222222222"));
-        System.out.println(isMobilePhone("182222222227"));
-
-        System.out.println(isTelephone("025-83242316"));
-
-        System.out.println(isNumberLetter("aa1234"));
-        System.out.println(isNumberLetter("aa_1234"));
+        System.out.println(removeAll("aa1234  bb2345","\\d+"));
+        System.out.println(extractAll("aa1234 bb 2356 98076 ","[ \\d]+"));
     }
+
+    /**
+     * 提取所有文本中正则匹配的字符
+     *
+     * @param text  文本
+     * @param regex 正则表达式
+     * @return 文本中正则匹配的字符
+     */
+    public static String extractAll(String text, String regex){
+        if (StringUtils.isEmpty(text)) {
+            return text;
+        }
+        Matcher matcher = Pattern.compile(regex).matcher(text);
+        StringBuilder sb = new StringBuilder();
+        while (matcher.find()) {
+            sb.append(matcher.group());
+        }
+        return sb.toString();
+    }
+
 
     /**
      * 判断是否正整数
