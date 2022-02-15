@@ -43,6 +43,7 @@ public class IPUtil {
      * @return {@link String}
      */
     public static String getLocalIP() {
+        //增加缓存 , 因为此方式比较耗时 大约300ms
         if (localIP != null) {
             return localIP;
         }
