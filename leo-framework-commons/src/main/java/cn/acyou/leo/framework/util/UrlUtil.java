@@ -387,14 +387,13 @@ public class UrlUtil {
     }
 
     public static void main(String[] args) throws Exception{
-        String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov";
-        System.out.println("start");
-        System.out.println(UrlUtil.getContentLength(new URL(url)));
-        System.out.println("end");
-        System.out.println(UrlUtil.getName(url));
-        System.out.println(UrlUtil.getSearch(url));
-        System.out.println(UrlUtil.getPathName(url));
-        System.out.println(UrlUtil.getPathName(url));
+        String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov?type=oss";
+        System.out.println(UrlUtil.getContentLength(new URL(url)));//16009340
+        System.out.println(UrlUtil.getName(url));//: movie001.mov
+        System.out.println(UrlUtil.getSearch(url));//: type=oss
+        System.out.println(UrlUtil.getFile(url));//: /lifeLike/movie/movie001.mov?type=oss
+        System.out.println(UrlUtil.getPathName(url));//: /lifeLike/movie/movie001.mov
+        System.out.println(UrlUtil.getQueryString(url));//: map:{type:oss}
 
     }
 
