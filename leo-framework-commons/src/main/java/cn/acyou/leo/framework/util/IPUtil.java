@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  * @version [1.0.0, 2020/7/10]
  **/
 public class IPUtil {
+    private static String localIP = null;
     /**
      * 检查IP是否合法
      *
@@ -42,12 +43,16 @@ public class IPUtil {
      * @return {@link String}
      */
     public static String getLocalIP() {
+        if (localIP != null) {
+            return localIP;
+        }
         String defaultLocalIp = "127.0.0.1";
         List<String> localIps = getLocalIPList();
         if (CollectionUtils.isNotEmpty(localIps)){
-            return localIps.get(0);
+            defaultLocalIp = localIps.get(0);
         }
-        return defaultLocalIp;
+        localIP = defaultLocalIp;
+        return localIP;
     }
 
     /**
