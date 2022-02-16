@@ -13,10 +13,12 @@ import com.ijpay.paypal.PayPalApiConfig;
 import com.ijpay.paypal.PayPalApiConfigKit;
 import com.ijpay.paypal.accesstoken.AccessToken;
 import com.ijpay.paypal.accesstoken.AccessTokenKit;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +32,7 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequestMapping("/payPal")
+@Api(tags = "PayPal支付示例")
 public class PayPalController {
 
     @Autowired
@@ -39,14 +42,14 @@ public class PayPalController {
     private final static String CANCEL_URL = "/payPal/cancel";
 
 
-    @RequestMapping("")
+    @GetMapping("")
     @ResponseBody
     public String index() {
         log.info(payPalBean.toString());
         return ("欢迎使用 PayPal 支付");
     }
 
-    @RequestMapping("test")
+    @GetMapping("test")
     @ResponseBody
     public PayPalBean test() {
         return payPalBean;
@@ -62,7 +65,7 @@ public class PayPalController {
         return config;
     }
 
-    @RequestMapping(value = "/getAccessToken")
+    @GetMapping(value = "/getAccessToken")
     @ResponseBody
     public AccessToken getAccessToken() {
         try {
@@ -74,7 +77,7 @@ public class PayPalController {
         return null;
     }
 
-    @RequestMapping(value = "/createOrder")
+    @GetMapping(value = "/createOrder")
     @ResponseBody
     @ApiOperation("创建订单")
     public void createOrder(HttpServletResponse response) {
@@ -131,7 +134,7 @@ public class PayPalController {
         }
     }
 
-    @RequestMapping(value = "/updateOrder")
+    @GetMapping(value = "/updateOrder")
     @ResponseBody
     @ApiOperation("修改订单 （修改已创建的订单信息）支持修改订单的金额")
     public String updateOrder(@RequestParam("id") String id) {
@@ -168,7 +171,7 @@ public class PayPalController {
         return null;
     }
 
-    @RequestMapping(value = "/queryOrder")
+    @GetMapping(value = "/queryOrder")
     @ResponseBody
     @ApiOperation("查询订单")
     public String queryOrder(@RequestParam("id") String id) {
@@ -188,7 +191,7 @@ public class PayPalController {
         return null;
     }
 
-    @RequestMapping(value = "/captureOrder")
+    @GetMapping(value = "/captureOrder")
     @ResponseBody
     @ApiOperation("捕获订单 （用户支付后APPROVED状态时，捕获设置为支付完成）")
     public String captureOrder(@RequestParam("id") String id) {
@@ -208,7 +211,7 @@ public class PayPalController {
         return null;
     }
 
-    @RequestMapping(value = "/captureQuery")
+    @GetMapping(value = "/captureQuery")
     @ResponseBody
     @ApiOperation("查询捕获订单")
     public String captureQuery(@RequestParam("captureId") String captureId) {
@@ -228,7 +231,7 @@ public class PayPalController {
         return null;
     }
 
-    @RequestMapping(value = "/refund")
+    @GetMapping(value = "/refund")
     @ResponseBody
     @ApiOperation("退款")
     public String refund(@RequestParam("id") String id) {
@@ -262,7 +265,7 @@ public class PayPalController {
         return null;
     }
 
-    @RequestMapping(value = "/refundQuery")
+    @GetMapping(value = "/refundQuery")
     @ResponseBody
     @ApiOperation("退款查询")
     public String refundQuery(@RequestParam("id") String id) {
@@ -282,7 +285,7 @@ public class PayPalController {
         return null;
     }
 
-    @RequestMapping(value = "/return")
+    @GetMapping(value = "/return")
     @ResponseBody
     @ApiOperation("点击支付成功 后的跳转路径")
     public String returnUrl(HttpServletRequest request) {
@@ -302,7 +305,7 @@ public class PayPalController {
         return null;
     }
 
-    @RequestMapping(value = "/cancel")
+    @GetMapping(value = "/cancel")
     @ResponseBody
     @ApiOperation("点击取消支付 后的跳转路径")
     public String cancelUrl(HttpServletRequest request, HttpServletResponse response) {

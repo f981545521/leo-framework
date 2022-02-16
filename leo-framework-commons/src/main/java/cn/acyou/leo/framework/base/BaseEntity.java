@@ -1,8 +1,8 @@
 package cn.acyou.leo.framework.base;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,24 +15,24 @@ public class BaseEntity implements Serializable {
     /**
      * 创建时间
      */
-    @Column(name = "create_time")
+    @TableField(value = "create_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
     /**
      * 创建人
      */
-    @Column(name = "create_user")
+    @TableField(value = "create_user")
     private Long	createUser;
     /**
      * 最后修改时间
      */
-    @Column(name = "update_time")
+    @TableField(value = "update_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date	updateTime;
     /**
      * 最后修改人
      */
-    @Column(name = "update_user")
+    @TableField(value = "update_user")
     private Long	updateUser;
 
     public Date getCreateTime() {
