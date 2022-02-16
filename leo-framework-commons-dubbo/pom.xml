@@ -5,7 +5,7 @@
     <parent>
         <artifactId>leo-framework</artifactId>
         <groupId>cn.acyou</groupId>
-        <version>1.1.2.RELEASE</version>
+        <version>1.2.0.RELEASE</version>
     </parent>
 
     <artifactId>leo-framework-commons-dubbo</artifactId>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-commons</artifactId>
-            <version>1.1.2.RELEASE</version>
+            <version>1.2.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

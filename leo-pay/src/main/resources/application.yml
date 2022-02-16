@@ -16,3 +16,11 @@ leo:
     print-request-param: true
     print-to-result: false
     token-verify: false
+# knife4j增强模式
+knife4j:
+  enable: true
+  documents:
+  - locations: classpath:knife4j_doc/*
+    group: 1.0
+    name: 文档手册
+

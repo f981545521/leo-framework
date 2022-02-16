@@ -6,7 +6,7 @@
     <parent>
         <artifactId>leo-framework</artifactId>
         <groupId>cn.acyou</groupId>
-        <version>1.1.2.RELEASE</version>
+        <version>1.2.0.RELEASE</version>
     </parent>
 
     <artifactId>leo-framework-commons</artifactId>
@@ -24,8 +24,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
