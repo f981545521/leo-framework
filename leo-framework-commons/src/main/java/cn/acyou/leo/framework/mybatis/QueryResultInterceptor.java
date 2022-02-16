@@ -7,7 +7,9 @@ import cn.acyou.leo.framework.base.ClientLanguage;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.util.DesensitizedUtil;
 import cn.acyou.leo.framework.util.ReflectUtils;
+import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
@@ -36,7 +38,8 @@ import java.util.Properties;
  * @version [1.0.0, 2021/10/15]
  **/
 @Intercepts({
-        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
 })
 public class QueryResultInterceptor implements Interceptor {
     @Override

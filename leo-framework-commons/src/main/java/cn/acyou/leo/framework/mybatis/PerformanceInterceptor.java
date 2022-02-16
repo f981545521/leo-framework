@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.mybatis;
 
+import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -22,9 +23,13 @@ import java.util.Properties;
 
 /**
  * MyBatis 性能拦截器，用于输出每条 SQL 语句及其执行时间
+ *
+ * QueryInterceptor 规范：https://pagehelper.github.io/docs/interceptor/
+ *
  */
 @Intercepts({
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})
 })
 public class PerformanceInterceptor implements Interceptor {
@@ -67,12 +72,12 @@ public class PerformanceInterceptor implements Interceptor {
         long end = System.currentTimeMillis();
         long timing = end - start;
         if (simplePrint) {
-            log.debug(sql);
+            log.info(sql);
         }else {
-            log.debug("耗时：" + timing + " ms" + " - id:" + statementId);
-            log.debug("<—————————————————————————SQL——————————————————————————>");
-            log.debug(sql);
-            log.debug("<——————————————————————————————————————————————————————>");
+            log.info("耗时：" + timing + " ms" + " - id:" + statementId);
+            log.info("<—————————————————————————SQL——————————————————————————>");
+            log.info(sql);
+            log.info("<——————————————————————————————————————————————————————>");
         }
         return result;
     }
