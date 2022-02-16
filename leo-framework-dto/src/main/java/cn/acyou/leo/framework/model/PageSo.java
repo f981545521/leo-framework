@@ -100,4 +100,12 @@ public class PageSo extends DTO {
         }
     }
 
+    @Override
+    public String toString() {
+        return "PageSo{" +
+                "pageNum=" + pageNum +
+                ", pageSize=" + pageSize +
+                ", sorts='" + sorts + '\'' +
+                '}';
+    }
 }

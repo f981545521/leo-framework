@@ -39,7 +39,8 @@
         <httpmime.version>4.5.12</httpmime.version>
         <jpinyin.version>1.1.8</jpinyin.version>
         <spring-boot-starter-data-redis.version>2.1.10.RELEASE</spring-boot-starter-data-redis.version>
-        <pagehelper.version>5.1.11</pagehelper.version>
+        <pagehelper.version>1.4.1</pagehelper.version>
+        <mybatis.version>2.2.0</mybatis.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
     </properties>
 
@@ -116,8 +117,14 @@
             </dependency>
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper</artifactId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <!-- 特别注意版本问题: 1.2.3版本不支持pageSizeZero!!! -->
                 <version>${pagehelper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
