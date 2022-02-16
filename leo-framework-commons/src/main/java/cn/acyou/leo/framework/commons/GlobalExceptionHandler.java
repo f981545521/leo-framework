@@ -253,8 +253,9 @@ public class GlobalExceptionHandler {
         String message = e.getMessage();
         int start = message.indexOf("parameter '") + 11;
         int end = message.indexOf("'", start);
-        resultInfo.setMessage(message.substring(start, end) + " 不能为空，请检查！");
-        e.printStackTrace();
+        String realMsg = message.substring(start, end) + " 不能为空，请检查！";
+        resultInfo.setMessage(realMsg);
+        log.error(realMsg);
         printErrorStackTraceInResultData(e, resultInfo);
         return resultInfo;
     }
