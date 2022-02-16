@@ -29,14 +29,15 @@ public class CacheUtil {
      * @param key 缓存Key
      * @return 缓存value
      */
-    public synchronized static String get(String key) {
+    @SuppressWarnings("unchked")
+    public synchronized static <T> T get(String key) {
         CacheBean cacheBean = CACHE_MAP.get(key);
         if (cacheBean != null) {
             if (cacheBean.getExpiresTime() == null) {
-                return cacheBean.getCacheValue();
+                return (T) cacheBean.getCacheValue();
             }
             if (cacheBean.getExpiresTime() > System.currentTimeMillis()) {
-                return cacheBean.getCacheValue();
+                return (T) cacheBean.getCacheValue();
             } else {
                 CACHE_MAP.remove(key);
             }
@@ -64,7 +65,7 @@ public class CacheUtil {
      * @param duration duration
      * @param timeUnit 单位
      */
-    public static void put(String key, String value, long duration, TimeUnit timeUnit) {
+    public static void put(String key, Object value, long duration, TimeUnit timeUnit) {
         long toMillis = timeUnit.toMillis(duration);
         CacheBean cacheBean = new CacheBean(value, System.currentTimeMillis() + toMillis);
         CACHE_MAP.put(key, cacheBean);
@@ -78,14 +79,15 @@ public class CacheUtil {
      * @param function 函数
      * @return {@link String}
      */
-    public static String getAndCache(String key, Function<String, String> function) {
-        String v = get(key);
-        if (v != null && v.length() > 0) {
-            return v;
+    @SuppressWarnings("unchecked")
+    public static <T> T getAndCache(String key, Function<String, Object> function) {
+        Object v = get(key);
+        if (v != null) {
+            return (T) v;
         }
-        String value = function.apply(key);
+        Object value = function.apply(key);
         put(key, value, DEFAULT_CACHE_DURATION, TimeUnit.SECONDS);
-        return value;
+        return (T) value;
     }
 
     /**
@@ -115,18 +117,18 @@ public class CacheUtil {
         /**
          * 缓存值
          */
-        private String cacheValue;
+        private Object cacheValue;
         /**
          * 过期时间(null 表示长期)
          */
         private Long expiresTime;
 
-        public CacheBean(String cacheValue) {
+        public CacheBean(Object cacheValue) {
             this.cacheValue = cacheValue;
             this.expiresTime = null;
         }
 
-        public CacheBean(String cacheValue, Long expiresTime) {
+        public CacheBean(Object cacheValue, Long expiresTime) {
             this.cacheValue = cacheValue;
             this.expiresTime = expiresTime;
         }

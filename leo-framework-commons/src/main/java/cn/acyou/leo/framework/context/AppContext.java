@@ -6,8 +6,10 @@ import cn.acyou.leo.framework.base.LoginUser;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.Result;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -228,6 +230,15 @@ public class AppContext {
         private Long requestTimestamp;
         private Result<?> exceptionResult;
         private Map<String, Object> params;
+    }
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MethodInfoBean {
+        private String methodInfo = "";
+        private String apiRemark = "";
+        private String debug = "true";
     }
 
 

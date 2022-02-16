@@ -10,6 +10,7 @@ import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.prop.LeoProperty;
+import cn.acyou.leo.framework.util.CacheUtil;
 import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.SourceUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
@@ -88,34 +89,35 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         AppContext.setClientType(SourceUtil.getClientTypeByUserAgent(request));
         String language = request.getHeader("Language");
         AppContext.setClientLanguage(ClientLanguage.getLanguage(language));
-        String methodInfo = "";
-        String apiRemark = "";
-        String debug = "true";
+        AppContext.MethodInfoBean methodInfoBean = new AppContext.MethodInfoBean();
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = ((HandlerMethod) handler);
-            methodInfo = handlerMethod.toString();
-            Method method = handlerMethod.getMethod();
-            ApiOperation annotation = method.getAnnotation(ApiOperation.class);
-            if (annotation != null) {
-                apiRemark = annotation.value();
-                Extension[] extensions = annotation.extensions();
-                if (extensions != null) {
-                    for (Extension extension : extensions) {
-                        if (extension.properties() != null) {
-                            for (ExtensionProperty property : extension.properties()) {
-                                if (property.name().equalsIgnoreCase("debug")) {
-                                    if (property.value().equalsIgnoreCase("false")) {
-                                        debug = "false";
-                                        break;
+            final String methodInfo = handlerMethod.toString();
+            methodInfoBean = CacheUtil.getAndCache("BaseInterceptor.methodDebug." + methodInfo, (k) -> {
+                Method method = handlerMethod.getMethod();
+                String apiRemark = "";
+                ApiOperation annotation = method.getAnnotation(ApiOperation.class);
+                if (annotation != null) {
+                    apiRemark = annotation.value();
+                    Extension[] extensions = annotation.extensions();
+                    if (extensions != null) {
+                        for (Extension extension : extensions) {
+                            if (extension.properties() != null) {
+                                for (ExtensionProperty property : extension.properties()) {
+                                    if (property.name().equalsIgnoreCase("debug")) {
+                                        if (property.value().equalsIgnoreCase("false")) {
+                                            return new AppContext.MethodInfoBean(methodInfo, apiRemark, "false");
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
+                return new AppContext.MethodInfoBean(methodInfo, apiRemark, "true");
+            });
         }
-        AppContext.setActionApiOperation(new String[]{methodInfo, apiRemark, debug});
+        AppContext.setActionApiOperation(new String[]{methodInfoBean.getMethodInfo(), methodInfoBean.getApiRemark(), methodInfoBean.getDebug()});
         return true;
     }
 
