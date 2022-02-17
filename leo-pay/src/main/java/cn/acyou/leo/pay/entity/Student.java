@@ -24,13 +24,17 @@ public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "主键ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    @ApiModelProperty(value = "姓名")
     private String name;
 
+    @ApiModelProperty(value = "年龄")
     private Integer age;
 
+    @ApiModelProperty(value = "生日")
     private Date birth;
 
 

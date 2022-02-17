@@ -42,6 +42,8 @@
         <pagehelper.version>1.4.1</pagehelper.version>
         <mybatis.version>2.2.0</mybatis.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
+        <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
+        <retrofit.version>2.2.12</retrofit.version>
     </properties>
 
     <modules>
@@ -64,37 +66,43 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- 开发文档，使用请参照官网：https://doc.xiaominfo.com/ -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
             </dependency>
-            <!-- knife4j-spring-boot-starter 已经包含本依赖，注意两边保持统一 -->
+            <!-- knife4j-spring-boot-starter 已经包含本依赖，注意两边版本保持统一 -->
             <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>${swagger-annotations.version}</version>
             </dependency>
+            <!-- 公共工具包 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
+            <!-- 公共工具包（时间处理） -->
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>${joda-time.version}</version>
             </dependency>
+            <!-- 公共工具包（JSON处理） -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
+            <!-- 公共工具包 -->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+            <!-- 公共工具包（HTTP请求） -->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
@@ -105,39 +113,49 @@
                 <artifactId>httpmime</artifactId>
                 <version>${httpmime.version}</version>
             </dependency>
+            <!-- 公共工具包（中文拼音） -->
             <dependency>
                 <groupId>com.github.stuxuhai</groupId>
                 <artifactId>jpinyin</artifactId>
                 <version>${jpinyin.version}</version>
             </dependency>
+            <!-- Redis -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring-boot-starter-data-redis.version}</version>
             </dependency>
+            <!-- Mybatis 分页插件 -->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <!-- 特别注意版本问题: 1.2.3版本不支持pageSizeZero!!! -->
                 <version>${pagehelper.version}</version>
             </dependency>
+            <!-- Mybatis -->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.version}</version>
             </dependency>
+            <!-- Mybatis Plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-            <!-- MybatisPlus 代码生成器 开始 -->
+            <!-- MybatisPlus 代码生成器 -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
-                <version>3.4.1</version>
+                <version>${mybatis-plus-generator.version}</version>
             </dependency>
-            <!-- MybatisPlus 代码生成器 结束 -->
+            <!-- 网络请求  -->
+            <dependency>
+                <groupId>com.github.lianjiatech</groupId>
+                <artifactId>retrofit-spring-boot-starter</artifactId>
+                <version>${retrofit.version}</version>
+            </dependency>
             <!-- 使用了bootstrap.yml文件之后需要引入bootstrap的依赖 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
