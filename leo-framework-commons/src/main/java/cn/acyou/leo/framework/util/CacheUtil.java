@@ -29,7 +29,7 @@ public class CacheUtil {
      * @param key 缓存Key
      * @return 缓存value
      */
-    @SuppressWarnings("unchked")
+    @SuppressWarnings("unchecked")
     public synchronized static <T> T get(String key) {
         CacheBean cacheBean = CACHE_MAP.get(key);
         if (cacheBean != null) {
