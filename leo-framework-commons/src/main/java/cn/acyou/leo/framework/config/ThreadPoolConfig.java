@@ -1,4 +1,4 @@
-package cn.acyou.leo.pay.config;
+package cn.acyou.leo.framework.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
