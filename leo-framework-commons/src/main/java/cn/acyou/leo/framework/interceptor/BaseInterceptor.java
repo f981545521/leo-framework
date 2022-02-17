@@ -93,7 +93,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = ((HandlerMethod) handler);
             final String methodInfo = handlerMethod.toString();
-            methodInfoBean = CacheUtil.getAndCache("BaseInterceptor.methodDebug." + methodInfo, (k) -> {
+            methodInfoBean = CacheUtil.getAndCache("BaseInterceptor.methodDebug." + methodInfo, 0L, (k) -> {
                 Method method = handlerMethod.getMethod();
                 String apiRemark = "";
                 ApiOperation annotation = method.getAnnotation(ApiOperation.class);

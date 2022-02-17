@@ -65,9 +65,12 @@ public class CacheUtil {
      * @param duration duration
      * @param timeUnit 单位
      */
-    public static void put(String key, Object value, long duration, TimeUnit timeUnit) {
-        long toMillis = timeUnit.toMillis(duration);
-        CacheBean cacheBean = new CacheBean(value, System.currentTimeMillis() + toMillis);
+    public static void put(String key, Object value, Long duration, TimeUnit timeUnit) {
+        CacheBean cacheBean = new CacheBean(value);
+        if (duration != null && duration > 0) {
+            long toMillis = timeUnit.toMillis(duration);
+            cacheBean.setExpiresTime(System.currentTimeMillis() + toMillis);
+        }
         CACHE_MAP.put(key, cacheBean);
     }
 
@@ -79,14 +82,25 @@ public class CacheUtil {
      * @param function 函数
      * @return {@link String}
      */
-    @SuppressWarnings("unchecked")
     public static <T> T getAndCache(String key, Function<String, Object> function) {
+        return getAndCache(key, DEFAULT_CACHE_DURATION, function);
+    }
+
+    /**
+     * 获取和缓存
+     *
+     * @param key      关键
+     * @param function 函数
+     * @return {@link String}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getAndCache(String key, Long expire, Function<String, Object> function) {
         Object v = get(key);
         if (v != null) {
             return (T) v;
         }
         Object value = function.apply(key);
-        put(key, value, DEFAULT_CACHE_DURATION, TimeUnit.SECONDS);
+        put(key, value, expire, TimeUnit.SECONDS);
         return (T) value;
     }
 
