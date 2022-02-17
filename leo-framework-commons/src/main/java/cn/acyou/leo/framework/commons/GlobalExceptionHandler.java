@@ -126,6 +126,10 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 分页参数不合法异常关键字
+     */
+    private static final String Page_Illegal = "PageSo$IllegalPageArgumentException";
+    /**
      * 处理参数校验结果
      *
      * @param bindingResult 参数校验结果
@@ -140,6 +144,10 @@ public class GlobalExceptionHandler {
             for (int i = 0; i < allErrors.size(); i++) {
                 ObjectError item = allErrors.get(i);
                 String message = item.getDefaultMessage();
+                //特殊处理
+                if (message != null && message.contains(Page_Illegal)) {
+                    message = message.substring(message.indexOf(Page_Illegal) + Page_Illegal.length() + 2);
+                }
                 if (i == 0){
                     firstMessage = message;
                 }
@@ -277,15 +285,7 @@ public class GlobalExceptionHandler {
         AppContext.setExceptionResult(resultInfo);
         return resultInfo;
     }
-    /** 分页参数不合法异常 */
-    @ExceptionHandler(PageSo.IllegalPageArgumentException.class)
-    @ResponseBody
-    public Result<Object> handlePageArgumentException(HttpServletRequest request, Exception e) {
-        Result<Object> resultInfo = Result.error();
-        resultInfo.setMessage(e.getMessage());
-        AppContext.setExceptionResult(resultInfo);
-        return resultInfo;
-    }
+
     /**处理自定义服务异常*/
     @ExceptionHandler(ServiceException.class)
     @ResponseBody
