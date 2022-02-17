@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LeoPayApplication {
 
     public static void main(String[] args) {
+        System.setProperty("pagehelper.banner", "false");
         SpringApplication.run(LeoPayApplication.class, args);
     }
 
