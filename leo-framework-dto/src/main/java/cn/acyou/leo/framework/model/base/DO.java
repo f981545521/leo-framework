@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * 阿里巴巴专指数据库表一一对应的 POJO 类。此对象与数据库表结构一
  * 一对应，通过 DAO 层向上传输数据源对象。
+ *
  * @author youfang
  * @version [1.0.0, 2022-1-2]
  **/

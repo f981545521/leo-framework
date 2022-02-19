@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 业务对象，可以由 Service 层输出的封装业务逻辑的对象。
+ *
  * @author youfang
  * @version [1.0.0, 2022-1-2]
  **/
