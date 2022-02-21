@@ -12,13 +12,17 @@ import java.util.List;
  **/
 public class UserAgentUtil {
     /**
-     * 移动浏览器
+     * iPhone 浏览器
      */
-    public static final String MOBILE_BROWSER = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
+    public static final String USER_AGENT_APPLE = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
     /**
-     * PC浏览器
+     * PC 浏览器
      */
     public static final String PC_BROWSER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36";
+    /**
+     * Android 浏览器
+     */
+    private static final String USER_AGENT_ANDROID = "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Mobile Safari/537.36";
 
     /**
      * 是否微信浏览器
