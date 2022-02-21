@@ -143,7 +143,7 @@ public class CodeGenerator {
         // 写于父类中的公共字段
         //strategy.setSuperEntityColumns("id");
         strategy.setInclude(tableName);
-        strategy.setControllerMappingHyphenStyle(true);
+        strategy.setControllerMappingHyphenStyle(false);
         strategy.setTablePrefix(pc.getModuleName() + "_");
         autoGenerator.setStrategy(strategy);
         autoGenerator.setTemplateEngine(new FreemarkerTemplateEngine());
