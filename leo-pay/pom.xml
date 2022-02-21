@@ -49,12 +49,10 @@
         </dependency>
         <!-- MybatisPlus 代码生成器 开始 -->
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
+            <groupId>cn.acyou</groupId>
+            <artifactId>leo-framework-generator</artifactId>
+            <version>1.2.0.RELEASE</version>
+            <scope>test</scope>
         </dependency>
         <!--模板引擎-->
         <dependency>

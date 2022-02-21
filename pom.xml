@@ -54,6 +54,7 @@
         <module>leo-framework-dto</module>
         <module>leo-gateway</module>
         <module>leo-pay</module>
+        <module>leo-framework-generator</module>
     </modules>
 
     <dependencyManagement>

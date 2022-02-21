@@ -1,4 +1,4 @@
-package cn.acyou.leo.pay.generator;
+package cn.acyou.leo.framework.generator;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -15,24 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * @author youfang
  * @version [1.0.0, 2021-7-11]
  **/
 public class CodeGenerator {
 
-    private static final String tableName = "student";
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root123";
-    private static final String AUTHOR = "youfang";
-    private static final String PACKAGE_PARENT = "cn.acyou.leo.pay";
-    private static final String projectPath = System.getProperty("user.dir") + "\\leo-pay";
-    /**
-     * 正常情况下读取表注释时，是取不出来的。
-     * 需要增加useInformationSchema=true配置
-     */
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false";
-
+    public static String tableName = "student";
+    public static String DRIVER = "com.mysql.cj.jdbc.Driver";
+    public static String USER = "root";
+    public static String PASSWORD = "root123";
+    public static String AUTHOR = "youfang";
+    public static String PACKAGE_PARENT = "cn.acyou.leo.pay";
+    public static String projectPath = System.getProperty("user.dir") + "\\leo-pay";
+    public static String JDBC_URL = "jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false";
 
     private static final ITypeConvert typeConvert = new ITypeConvert() {
         /**
@@ -48,7 +44,7 @@ public class CodeGenerator {
         }
     };
 
-    public static void main(String[] args) {
+    public static void doGenerator() {
         // 代码生成器
         AutoGenerator autoGenerator = new AutoGenerator();
         // 全局配置
@@ -124,9 +120,9 @@ public class CodeGenerator {
 
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-        // templateConfig.setEntity("templates/entity2.java");
-        // templateConfig.setService();
-        // templateConfig.setController();
+        //templateConfig.setEntity("templates/entity2.java");
+        //templateConfig.setService();
+        //templateConfig.setController();
 
         templateConfig.setXml(null);
         autoGenerator.setTemplate(templateConfig);
