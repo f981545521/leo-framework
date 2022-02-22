@@ -8,22 +8,28 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  thymeleaf:
-    enabled: true
-    encoding: UTF-8
-    prefix: classpath:/templates/
-    suffix: .html
+#  thymeleaf:
+#    enabled: true
+#    encoding: UTF-8
+#    prefix: classpath:/templates/
+#    suffix: .html
 leo:
   debug:
     interface-call-statistics: false
     print-request-param: true
     print-to-result: false
     token-verify: false
+  api:
+    enable: false
+    title: Leo pay 接口文档
+    description: \# 接口调试页面。✍
+    termsOfServiceUrl: http://www.acyou.cn/
+    version: 1.0
+    basePackage: cn.acyou.leo.pay.controller
 # knife4j增强模式
 knife4j:
   enable: true
   documents:
-  - locations: classpath:knife4j_doc/*
-    group: 1.0
-    name: 文档手册
-
+    - locations: classpath:knife4j_doc/*
+      group: 1.0
+      name: 文档手册

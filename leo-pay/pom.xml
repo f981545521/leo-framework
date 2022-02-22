@@ -54,11 +54,12 @@
             <version>1.2.0.RELEASE</version>
             <scope>test</scope>
         </dependency>
-        <!--模板引擎-->
+        <!--模板引擎，引入模版引擎会导致默认/sys/common/error 无法自定义处理-->
+<!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
+        </dependency>-->
         <!-- 聚合所有支付 https://javen205.gitee.io/ijpay/guide/maven.html#maven -->
         <dependency>
             <groupId>com.github.javen205</groupId>
