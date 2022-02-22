@@ -40,7 +40,7 @@ ijpay:
     sandBox: true
     domain: http://localhost:8075
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/**/*.xml
+  mapper-locations: classpath*:/mappers/**/*.xml
   type-aliases-package: cn.acyou.leo.pay.entity
   global-config:
     banner: false

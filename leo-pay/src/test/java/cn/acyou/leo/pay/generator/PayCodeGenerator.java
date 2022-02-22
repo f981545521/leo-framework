@@ -8,6 +8,7 @@ import cn.acyou.leo.framework.generator.CodeGenerator;
  **/
 public class PayCodeGenerator extends CodeGenerator {
     public static void main(String[] args) {
+        tableName = "sys_user";
         doGenerator();
     }
 }
