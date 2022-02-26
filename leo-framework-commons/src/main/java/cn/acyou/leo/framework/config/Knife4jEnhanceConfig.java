@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
@@ -47,7 +48,7 @@ public class Knife4jEnhanceConfig {
                         .title(apiDocProperty.getTitle())
                         .description(apiDocProperty.getDescription())
                         .termsOfServiceUrl(apiDocProperty.getTermsOfServiceUrl())
-                        .contact(apiDocProperty.getContact())
+                        .contact(new Contact(apiDocProperty.getContact(), "", ""))
                         .version(apiDocProperty.getVersion())
                         .build())
                 //分组名称

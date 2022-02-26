@@ -17,7 +17,7 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-commons</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
