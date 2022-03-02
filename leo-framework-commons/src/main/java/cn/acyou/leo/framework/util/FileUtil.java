@@ -33,6 +33,17 @@ public class FileUtil {
         return dirFile;
     }
 
+    /**
+     * 在文件夹下创建临时文件
+     * @param dir 文件夹
+     * @param fileName 文件名
+     * @return 文件
+     * @throws IOException 异常
+     */
+    public File createTempFile(File dir, String fileName) throws IOException{
+        return File.createTempFile("", fileName, dir);
+    }
+
 
     private static final Map<String, String> FILE_TYPE_MAP;
 
