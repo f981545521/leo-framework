@@ -3,6 +3,8 @@ package cn.acyou.leo.framework.util;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,11 +109,6 @@ public class RegexUtil extends RegExUtils {
         }
         Matcher m = REGEX_CHINESE.matcher(text);
         return m.find();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(removeAll("aa1234  bb2345","\\d+"));
-        System.out.println(extractAll("aa1234 bb 2356 98076 ","[ \\d]+"));
     }
 
     /**
@@ -327,5 +324,28 @@ public class RegexUtil extends RegExUtils {
             return false;
         }
         return password.matches(REGEX_STRONG_PASSWORD);
+    }
+
+    /**
+     * 得到匹配str
+     *
+     * @param sourceStr 源str
+     * @param regex     正则表达式
+     * @return {@link List <String>}
+     */
+    public static List<String> getMatchStr(String sourceStr, String regex) {
+        Pattern compile = Pattern.compile(regex);
+        Matcher matcher = compile.matcher(sourceStr);
+        List<String> res = new ArrayList<>();
+        while (matcher.find()){
+            res.add(matcher.group());
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        String s = "the request was rejected because its size (57176420) exceeds the configured maximum (52428800)";
+        List<String> matchStr = RegexUtil.getMatchStr(s, "\\d+");
+        System.out.println(matchStr);
     }
 }

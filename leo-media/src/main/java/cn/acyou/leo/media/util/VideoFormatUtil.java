@@ -213,4 +213,22 @@ public class VideoFormatUtil {
         }
     }
 
+    public static void main(String[] args) {
+        File source = new File("C:\\Users\\1\\Music\\汤倩 - 随便吧.mp3");
+        File target = new File("C:\\Users\\1\\Music\\汤倩 - 随便吧_2.wav");
+        MultimediaObject multimediaObject = new MultimediaObject(source);
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("pcm_s16le");
+        audio.setSamplingRate(16000);
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setOutputFormat("wav");
+        attrs.setAudioAttributes(audio);
+        Encoder encoder = new Encoder();
+        try {
+            encoder.encode(multimediaObject, target, attrs);
+        } catch (EncoderException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
