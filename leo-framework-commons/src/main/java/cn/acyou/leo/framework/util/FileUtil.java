@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.util;
 
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +15,24 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * @author youfang
  * @version [1.0.0, 2020/7/29]
  **/
+@Slf4j
 public class FileUtil {
+
+    public static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
+
+    /**
+     * 创建临时文件的目录
+     * @param dir 目录名称
+     * @return 临时目录下的目录
+     */
+    public File createTempDir(String dir){
+        File dirFile = new File(TEMP_DIR, dir);
+        if (!dirFile.exists()) {
+            log.info("创建临时目录：{} {}", dirFile.getAbsolutePath(), dirFile.mkdirs() ? "成功" : "失败");
+        }
+        return dirFile;
+    }
+
 
     private static final Map<String, String> FILE_TYPE_MAP;
 
