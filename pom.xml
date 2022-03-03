@@ -41,7 +41,7 @@
         <spring-boot-starter-data-redis.version>2.1.10.RELEASE</spring-boot-starter-data-redis.version>
         <pagehelper.version>1.4.1</pagehelper.version>
         <mybatis.version>2.2.0</mybatis.version>
-        <mybatis-plus.version>3.4.2</mybatis-plus.version>
+        <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
         <retrofit.version>2.2.12</retrofit.version>
     </properties>
