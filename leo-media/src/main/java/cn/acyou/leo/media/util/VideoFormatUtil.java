@@ -2,6 +2,7 @@ package cn.acyou.leo.media.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StopWatch;
 import ws.schild.jave.Encoder;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
@@ -11,11 +12,15 @@ import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoInfo;
 import ws.schild.jave.info.VideoSize;
+import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.channels.FileChannel;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +29,6 @@ import java.util.Map;
  * @version [1.0.0, 2022/2/22 19:19]
  **/
 public class VideoFormatUtil {
-
 
     public static Logger Log = LoggerFactory.getLogger(VideoFormatUtil.class);
 
@@ -213,7 +217,7 @@ public class VideoFormatUtil {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main4(String[] args) {
         File source = new File("C:\\Users\\1\\Music\\汤倩 - 随便吧.mp3");
         File target = new File("C:\\Users\\1\\Music\\汤倩 - 随便吧_2.wav");
         MultimediaObject multimediaObject = new MultimediaObject(source);
@@ -229,6 +233,67 @@ public class VideoFormatUtil {
         } catch (EncoderException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 可以获取ffmpeg.exe路径
+     */
+    private final static DefaultFFMPEGLocator ffmpegLocator=new DefaultFFMPEGLocator();
+
+    /**
+     * FFMPEG 截取音频指定部分
+     *
+     * @param sourcePath 源路径
+     * @param targetPath 目标路径
+     * @param start      开始
+     * @param end        结束
+     * @return boolean
+     * @throws RuntimeException 运行时异常
+     */
+    public static boolean cutByFfmpeg(String sourcePath, String targetPath, int start, int end) throws RuntimeException {
+        if (start < 0 || end <= 0 ||  start >= end) {
+            return false;
+        }
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Log.info("开始剪辑文件{}，{}ms-{}ms", sourcePath, start, end);
+        File targetFile = new File(targetPath);
+        File sourceFile = new File(sourcePath);
+        Process proc;
+        String[] args = new String[]{ffmpegLocator.getExecutablePath(), "-y", "-i", sourceFile.getAbsolutePath(),"-ss", formatDuring(start),"-to", formatDuring(end), "-c","copy", targetFile.getAbsolutePath()};
+
+        System.out.println(Arrays.toString(args));
+        try {
+            //先删除，后面好判断是否剪辑成功
+            if (targetFile.exists()) {
+                targetFile.delete();
+            }
+            proc = Runtime.getRuntime().exec(args);
+            proc.waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        stopWatch.stop();
+        Log.info("剪辑文件{}完成，{}ms-{}ms，耗时{}秒", sourcePath, start, end, stopWatch.getTotalTimeSeconds());
+        Log.info("剪辑文件为{}", targetPath);
+        return targetFile.exists();
+    }
+    public static String formatDuring(long mss) {
+        String hours = ((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))+"";
+        hours = hours.length() == 1 ? 0 + hours : hours;
+        String minutes = ((mss % (1000 * 60 * 60)) / (1000 * 60)) + "";
+        minutes = minutes.length() == 1 ? 0 + minutes : minutes;
+        String seconds = new BigDecimal((mss % (1000 * 60))).divide(new BigDecimal(1000), 3, RoundingMode.CEILING).toString();
+        return hours+ ":" + minutes + ":" + seconds;
+    }
+    public static void main(String[] args) {
+        //cutByFfmpeg("C:\\Users\\1\\Music\\汤倩 - 随便吧.mp3", "C:\\Users\\1\\Music\\汤倩 - 随便吧_TAR2.mp3", 30000, 40000);
+        //System.out.println("end");
+        System.out.println(formatDuring(30000));
+        System.out.println(formatDuring(33000));
+        System.out.println(formatDuring(33300));
+        System.out.println(formatDuring(33330));
+        System.out.println(formatDuring(33333));
     }
 
 }
