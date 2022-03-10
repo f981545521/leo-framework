@@ -52,7 +52,7 @@ public class Knife4jEnhanceConfig {
                         .title(apiDocProperty.getTitle())
                         .description(apiDocProperty.getDescription())
                         .termsOfServiceUrl(apiDocProperty.getTermsOfServiceUrl())
-                        .contact(new Contact(apiDocProperty.getContact(), "2222", "3333"))
+                        .contact(new Contact(apiDocProperty.getContact(), "", ""))
                         .version(apiDocProperty.getVersion())
                         .build())
                 .groupName(GROUP_NAME)
