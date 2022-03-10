@@ -28,6 +28,7 @@ leo:
     termsOfServiceUrl: http://www.acyou.cn/
     version: 1.0
     basePackage: cn.acyou.leo.pay.controller
+    contact: youfang
 # knife4j增强模式
 knife4j:
   enable: true
