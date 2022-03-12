@@ -31,7 +31,7 @@ public class ApiDocSecurityFilter extends BasicFilter implements Filter {
         } else {
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter pw = response.getWriter();
-            pw.write(JSON.toJSONString(Result.error("404 error"), SerializerFeature.WriteMapNullValue));
+            pw.write(JSON.toJSONString(Result.error(404, "Not Found."), SerializerFeature.WriteMapNullValue));
             pw.flush();
         }
     }
