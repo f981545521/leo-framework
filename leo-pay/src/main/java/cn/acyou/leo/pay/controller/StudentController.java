@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,6 +50,12 @@ public class StudentController {
     @ApiOperation("根据ID获取数据")
     public Result<Void> update(@Validated @RequestBody StudentReq studentReq) {
         log.info("参数：{}", studentReq);
+        return Result.success();
+    }
+    @PostMapping(value = "/upload")
+    @ApiOperation("删除文件")
+    public Result<Void> upload(String type, MultipartFile file) {
+        log.info("参数：{}", file.getOriginalFilename());
         return Result.success();
     }
 

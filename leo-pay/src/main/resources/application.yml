@@ -2,6 +2,8 @@ server:
   port: 8075
   servlet:
     context-path: '/leo-pay'
+  tomcat:
+    max-http-form-post-size: -1
 spring:
   profiles:
     active: dev
@@ -15,6 +17,12 @@ spring:
 #    encoding: UTF-8
 #    prefix: classpath:/templates/
 #    suffix: .html
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      enabled: true
+      max-request-size: 50MB
+      resolve-lazily: true
 leo:
   debug:
     interface-call-statistics: false

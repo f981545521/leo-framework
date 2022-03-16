@@ -71,18 +71,20 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
      */
     public XssHttpServletRequestWrapper(HttpServletRequest request) {
         super(request);
-        //缓存请求body
-        try {
-            String requestBodyStr = getRequestPostStr(request);
-            if (StringUtils.isNotBlank(requestBodyStr)) {
-                requestBodyStr = filter(requestBodyStr);
-                JSONObject resultJson = JSONObject.parseObject(requestBodyStr);
-                requestBody = resultJson.toString().getBytes(charSet);
-            } else {
-                requestBody = new byte[0];
+        if (request.getContentType() != null && request.getContentType().contains("application/json")) {
+            //缓存请求body
+            try {
+                String requestBodyStr = getRequestPostStr(request);
+                if (StringUtils.isNotBlank(requestBodyStr)) {
+                    requestBodyStr = filter(requestBodyStr);
+                    JSONObject resultJson = JSONObject.parseObject(requestBodyStr);
+                    requestBody = resultJson.toString().getBytes(charSet);
+                } else {
+                    requestBody = new byte[0];
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

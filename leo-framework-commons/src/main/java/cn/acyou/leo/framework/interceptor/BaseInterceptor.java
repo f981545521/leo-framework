@@ -29,10 +29,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.UUID;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * 基本的Token拦截器
@@ -59,9 +62,34 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-",""));
+        String requestURI = request.getRequestURI();
+        final String requestMethod = request.getMethod();
         String remoteIp = IPUtil.getClientIp(request);
-        String localIp = IPUtil.getLocalIP();
-        log.info("LeoInterceptor ——>  remoteIP:{}, localIP: {}, 访问路径:{}", remoteIp, localIp, request.getRequestURI());
+        String requestParams = "";
+        String requestBody = "";
+        if (request.getContentType() != null && request.getContentType().contains("application/json")) {
+            InputStream is = request.getInputStream ();
+            StringBuilder responseStrBuilder = new StringBuilder ();
+            BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            String inputStr;
+            while ((inputStr = streamReader.readLine ()) != null){
+                responseStrBuilder.append (inputStr);
+            }
+            requestBody = responseStrBuilder.toString();
+        }
+        final Map<String, String[]> parameterMap = request.getParameterMap();
+        if (parameterMap != null && parameterMap.size() > 0) {
+            List<String> params = new ArrayList<>();
+            for (Map.Entry<String, String[]> stringEntry : parameterMap.entrySet()) {
+                params.add(stringEntry.getKey() + "=" + stringEntry.getValue()[0]);
+            }
+            requestURI = requestURI + "?" + StringUtils.collectionToDelimitedString(params, "&");
+        }
+        String logMessage = String.format("LeoInterceptor ——> %s [%s %s] ", remoteIp, requestMethod, requestURI);
+        if (requestBody.length() > 0) {
+            logMessage = logMessage + String.format("\r\n 请求体: %s", requestBody);
+        }
+        log.info(logMessage);
         //启用Token校验
         if (leoProperty.isTokenVerify()) {
             String token = getToken(request);
