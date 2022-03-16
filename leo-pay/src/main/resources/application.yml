@@ -28,7 +28,10 @@ leo:
     interface-call-statistics: false
     print-request-param: true
     print-to-result: false
-    token-verify: false
+    token-verify: true
+    ignore-uri-list:
+      - ${server.servlet.context-path}/doc.html
+      - ${server.servlet.context-path}/swagger-resources
   api:
     enable: true
     title: Leo pay 接口文档

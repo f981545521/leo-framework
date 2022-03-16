@@ -10,6 +10,7 @@ import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.prop.LeoProperty;
+import cn.acyou.leo.framework.service.UserTokenService;
 import cn.acyou.leo.framework.util.CacheUtil;
 import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.SourceUtil;
@@ -50,6 +51,8 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     private RedisUtils redisUtils;
     @Autowired
     private LeoProperty leoProperty;
+    @Autowired(required = false)
+    private UserTokenService userTokenService;
 
     /**
      * 获得Token的方式
@@ -66,6 +69,19 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         final String requestMethod = request.getMethod();
         String remoteIp = IPUtil.getClientIp(request);
         String requestParams = "";
+
+        Map<String, Object> appContextParamMap = new HashMap<>();
+        final Map<String, String[]> parameterMap = request.getParameterMap();
+        if (parameterMap != null && parameterMap.size() > 0) {
+            List<String> params = new ArrayList<>();
+            for (Map.Entry<String, String[]> stringEntry : parameterMap.entrySet()) {
+                params.add(stringEntry.getKey() + "=" + stringEntry.getValue()[0]);
+            }
+            final String joinParam = StringUtils.collectionToDelimitedString(params, "&");
+            appContextParamMap.put("RequestParam", joinParam);
+            requestURI = requestURI + "?" + joinParam;
+        }
+        String logMessage = String.format("LeoInterceptor ——> %s [%s %s] ", remoteIp, requestMethod, requestURI);
         String requestBody = "";
         if (request.getContentType() != null && request.getContentType().contains("application/json")) {
             InputStream is = request.getInputStream ();
@@ -77,21 +93,14 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             }
             requestBody = responseStrBuilder.toString();
         }
-        final Map<String, String[]> parameterMap = request.getParameterMap();
-        if (parameterMap != null && parameterMap.size() > 0) {
-            List<String> params = new ArrayList<>();
-            for (Map.Entry<String, String[]> stringEntry : parameterMap.entrySet()) {
-                params.add(stringEntry.getKey() + "=" + stringEntry.getValue()[0]);
-            }
-            requestURI = requestURI + "?" + StringUtils.collectionToDelimitedString(params, "&");
-        }
-        String logMessage = String.format("LeoInterceptor ——> %s [%s %s] ", remoteIp, requestMethod, requestURI);
         if (requestBody.length() > 0) {
+            appContextParamMap.put("RequestBody", requestBody);
             logMessage = logMessage + String.format("\r\n 请求体: %s", requestBody);
         }
+        AppContext.setRequestParams(appContextParamMap);
         log.info(logMessage);
         //启用Token校验
-        if (leoProperty.isTokenVerify()) {
+        if (leoProperty.isTokenVerify() && !leoProperty.getIgnoreUriList().contains(request.getRequestURI())) {
             String token = getToken(request);
             if (!StringUtils.hasText(token)) {
                 falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
@@ -107,13 +116,12 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                 }
                 return false;
             }
-            //TODO: MustBe LoginUser loginUser = userTokenService.getLoginUser(token);
-            String loginStr = redisUtils.get(RedisKeyConstant.USER_LOGIN_INFO + userId);
-            AppContext.setLoginUser(JSON.parseObject(loginStr, LoginUser.class));
+            LoginUser loginUser = userTokenService.getLoginUserByUserId(Long.valueOf(userId));
+            AppContext.setLoginUser(loginUser);
         }
         AppContext.setIp(remoteIp);
         AppContext.setRequestTimeStamp(System.currentTimeMillis());
-        AppContext.setActionUrl(request.getRequestURI());
+        AppContext.setActionUrl(requestURI);
         AppContext.setClientType(SourceUtil.getClientTypeByUserAgent(request));
         String language = request.getHeader("Language");
         AppContext.setClientLanguage(ClientLanguage.getLanguage(language));

@@ -22,7 +22,7 @@ spring:
           useServerPrepStmts: true
       connection-init-sql: set names utf8mb4
   redis:
-    database: 10
+    database: 0
     host: 127.0.0.1
     port: 6379
     password:
