@@ -24,16 +24,17 @@ import io.swagger.annotations.ExtensionProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -53,6 +54,8 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     private LeoProperty leoProperty;
     @Autowired(required = false)
     private UserTokenService userTokenService;
+
+    AntPathMatcher pathMatcher = new AntPathMatcher();
 
     /**
      * 获得Token的方式
@@ -100,7 +103,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         AppContext.setRequestParams(appContextParamMap);
         log.info(logMessage);
         //启用Token校验
-        if (leoProperty.isTokenVerify() && !leoProperty.getIgnoreUriList().contains(request.getRequestURI())) {
+        if (leoProperty.isTokenVerify() && !isMatcherPath(request.getRequestURI())) {
             String token = getToken(request);
             if (!StringUtils.hasText(token)) {
                 falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
@@ -157,6 +160,17 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    private boolean isMatcherPath(String path){
+        List<String> ignoreUriList = leoProperty.getIgnoreUriList();
+        for (String url : ignoreUriList) {
+            if (pathMatcher.match(url, path)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
 
     private void falseResult(HttpServletResponse response, CommonErrorEnum commonErrorEnum) throws IOException {
         response.setCharacterEncoding("UTF-8");
@@ -170,18 +184,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         processInterfaceStatistics(request);
-        if (leoProperty.isPrintResponseBody()) {
-            final String contentType = response.getContentType();
-            if (contentType != null && contentType.contains("application/json")) {
-                //ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                //final ServletOutputStream outputStream = response.getOutputStream();
-                //byteArrayOutputStream.writeTo(outputStream);
-                //final String s = StreamUtils.copyToString(byteArrayOutputStream, StandardCharsets.UTF_8);
-                //System.out.println(s);
-            }
-        }else {
-            log.info("LeoInterceptor ——>  访问结束。");
-        }
+        log.info("LeoInterceptor ——>  访问结束 status:{}", response.getStatus());
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
         MDC.clear();
