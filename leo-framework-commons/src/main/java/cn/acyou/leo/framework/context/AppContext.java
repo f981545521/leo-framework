@@ -153,11 +153,11 @@ public class AppContext {
         CLIENT_TYPE_TL.remove();
     }
 
-    public static long getRequestTimeStamp() {
+    public static Long getRequestTimeStamp() {
         return REQUEST_TIMESTAMP_TL.get();
     }
 
-    public static void setRequestTimeStamp(long timeStamp) {
+    public static void setRequestTimeStamp(Long timeStamp) {
         REQUEST_TIMESTAMP_TL.set(timeStamp);
     }
 

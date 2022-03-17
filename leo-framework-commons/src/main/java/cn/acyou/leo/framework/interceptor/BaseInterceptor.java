@@ -32,10 +32,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -193,7 +195,10 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                 System.out.println(s);
             }
         }
-        log.info("LeoInterceptor ——>  访问结束 status:{} 请求耗时:{} ms", response.getStatus(), System.currentTimeMillis() - AppContext.getRequestTimeStamp());
+        final Long requestTimeStamp = AppContext.getRequestTimeStamp();
+        log.info("LeoInterceptor <——  访问结束 status:{} 请求耗时: {}ms",
+                response.getStatus(),
+                requestTimeStamp != null ? (System.currentTimeMillis() - AppContext.getRequestTimeStamp()) : "-");
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
         MDC.clear();
