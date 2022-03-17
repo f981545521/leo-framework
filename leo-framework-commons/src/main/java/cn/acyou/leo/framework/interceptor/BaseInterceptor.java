@@ -170,7 +170,18 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         processInterfaceStatistics(request);
-        log.info("LeoInterceptor ——>  访问结束。");
+        if (leoProperty.isPrintResponseBody()) {
+            final String contentType = response.getContentType();
+            if (contentType != null && contentType.contains("application/json")) {
+                //ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                //final ServletOutputStream outputStream = response.getOutputStream();
+                //byteArrayOutputStream.writeTo(outputStream);
+                //final String s = StreamUtils.copyToString(byteArrayOutputStream, StandardCharsets.UTF_8);
+                //System.out.println(s);
+            }
+        }else {
+            log.info("LeoInterceptor ——>  访问结束。");
+        }
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
         MDC.clear();

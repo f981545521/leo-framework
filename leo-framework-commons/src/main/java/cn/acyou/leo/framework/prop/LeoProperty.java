@@ -23,6 +23,14 @@ public class LeoProperty {
      * 打印请求参数
      */
     private boolean printRequestParam = true;
+    /**
+     * 打印响应参数
+     */
+    private boolean printResponseBody = true;
+    /**
+     * 打印响应参数长度限制（-1不做限制）
+     */
+    private int printResponseBodyLengthLimit = -1;
 
     /**
      * SpringMvcInterceptor Token校验
