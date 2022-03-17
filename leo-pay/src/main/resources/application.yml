@@ -32,6 +32,7 @@ leo:
     ignore-uri-list:
       - ${server.servlet.context-path}/doc.html
       - ${server.servlet.context-path}/swagger-resources
+      - ${server.servlet.context-path}/v2/api-docs
       - ${server.servlet.context-path}/webjars/**
   api:
     enable: true
@@ -41,6 +42,9 @@ leo:
     version: 1.0
     basePackage: cn.acyou.leo.pay.controller
     contact: youfang
+  xss:
+    enabled: true
+
 # knife4j增强模式
 knife4j:
   enable: true

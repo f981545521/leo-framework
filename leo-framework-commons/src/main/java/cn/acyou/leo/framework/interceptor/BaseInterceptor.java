@@ -29,6 +29,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletOutputStream;
@@ -184,7 +185,15 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         processInterfaceStatistics(request);
-        log.info("LeoInterceptor ——>  访问结束 status:{}", response.getStatus());
+        String contentType = response.getContentType();
+        if (contentType != null && contentType.contains("application/json")) {
+            ContentCachingResponseWrapper resp =  WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+            if (resp != null) {
+                String s = StreamUtils.copyToString(resp.getContentInputStream(), StandardCharsets.UTF_8);
+                System.out.println(s);
+            }
+        }
+        log.info("LeoInterceptor ——>  访问结束 status:{} 请求耗时:{} ms", response.getStatus(), System.currentTimeMillis() - AppContext.getRequestTimeStamp());
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
         MDC.clear();

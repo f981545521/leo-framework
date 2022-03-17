@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @version [1.0.0, 2021-8-17]
  **/
 @Data
-@ConfigurationProperties(prefix = "xss")
+@ConfigurationProperties(prefix = "leo.xss")
 public class XssProperty {
 
     /**

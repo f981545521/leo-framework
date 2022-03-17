@@ -1,6 +1,8 @@
 package cn.acyou.leo.framework.xss;
 
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +30,11 @@ public class XssFilter implements Filter {
      */
     public boolean enabled = true;
 
+    /**
+     * 路径匹配器
+     */
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
+
     @Override
     public void init(FilterConfig filterConfig) {
         String tempExcludes = filterConfig.getInitParameter("excludes");
@@ -51,7 +58,9 @@ public class XssFilter implements Filter {
             return;
         }
         XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper((HttpServletRequest) request);
-        chain.doFilter(xssRequest, response);
+        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
+        chain.doFilter(xssRequest, responseWrapper);
+        responseWrapper.copyBodyToResponse();
     }
 
     private boolean handleExcludeURL(HttpServletRequest request, HttpServletResponse response) {
@@ -68,9 +77,7 @@ public class XssFilter implements Filter {
         }
         String url = request.getServletPath();
         for (String pattern : excludes) {
-            Pattern p = Pattern.compile("^" + pattern);
-            Matcher m = p.matcher(url);
-            if (m.find()) {
+            if (pathMatcher.match(pattern, url)) {
                 return true;
             }
         }
