@@ -89,19 +89,21 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         }
         String logMessage = String.format("LeoInterceptor ——> %s [%s %s] ", remoteIp, requestMethod, requestURI);
         String requestBody = "";
-        if (request.getContentType() != null && request.getContentType().contains("application/json")) {
-            InputStream is = request.getInputStream ();
-            StringBuilder responseStrBuilder = new StringBuilder ();
-            BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-            String inputStr;
-            while ((inputStr = streamReader.readLine ()) != null){
-                responseStrBuilder.append (inputStr);
+        if (leoProperty.isPrintRequestBody()) {
+            if (request.getContentType() != null && request.getContentType().contains("application/json")) {
+                InputStream is = request.getInputStream ();
+                StringBuilder responseStrBuilder = new StringBuilder ();
+                BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                String inputStr;
+                while ((inputStr = streamReader.readLine ()) != null){
+                    responseStrBuilder.append (inputStr);
+                }
+                requestBody = responseStrBuilder.toString();
             }
-            requestBody = responseStrBuilder.toString();
-        }
-        if (requestBody.length() > 0) {
-            appContextParamMap.put("RequestBody", requestBody);
-            logMessage = logMessage + String.format("\r\n 请求体: %s", requestBody);
+            if (requestBody.length() > 0) {
+                appContextParamMap.put("RequestBody", requestBody);
+                logMessage = logMessage + String.format("\r\n 请求体: %s", requestBody);
+            }
         }
         AppContext.setRequestParams(appContextParamMap);
         log.info(logMessage);
@@ -171,9 +173,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             }
         }
         return false;
-
     }
-
 
     private void falseResult(HttpServletResponse response, CommonErrorEnum commonErrorEnum) throws IOException {
         response.setCharacterEncoding("UTF-8");
@@ -187,18 +187,22 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         processInterfaceStatistics(request);
-        String contentType = response.getContentType();
-        if (contentType != null && contentType.contains("application/json")) {
-            ContentCachingResponseWrapper resp =  WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
-            if (resp != null) {
-                String s = StreamUtils.copyToString(resp.getContentInputStream(), StandardCharsets.UTF_8);
-                System.out.println(s);
-            }
-        }
         final Long requestTimeStamp = AppContext.getRequestTimeStamp();
-        log.info("LeoInterceptor <——  访问结束 status:{} 请求耗时: {}ms",
+        String logMessage = String.format("LeoInterceptor <——  访问结束 status:%s 请求耗时: %sms",
                 response.getStatus(),
                 requestTimeStamp != null ? (System.currentTimeMillis() - AppContext.getRequestTimeStamp()) : "-");
+        if (leoProperty.isPrintResponseBody()) {
+            String contentType = response.getContentType();
+            if (contentType != null && contentType.contains("application/json")) {
+                ContentCachingResponseWrapper resp =  WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+                if (resp != null) {
+                    String responseBody = StreamUtils.copyToString(resp.getContentInputStream(), StandardCharsets.UTF_8);
+                    logMessage = logMessage + String.format("\r\n 响应体: %s", responseBody.length() > 1000 ? responseBody.substring(0, 1000) : responseBody);
+                }
+            }
+        }
+        log.info(logMessage);
+        //clear context
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
         MDC.clear();

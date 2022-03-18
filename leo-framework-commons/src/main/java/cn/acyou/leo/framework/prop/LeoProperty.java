@@ -20,9 +20,14 @@ public class LeoProperty {
     private boolean printToResult = true;
 
     /**
-     * 打印请求参数
+     * 打印请求体
      */
-    private boolean printRequestParam = true;
+    private boolean printRequestBody = true;
+
+    /**
+     * 打印响应信息
+     */
+    private boolean printResponseBody = true;
 
     /**
      * SpringMvcInterceptor Token校验

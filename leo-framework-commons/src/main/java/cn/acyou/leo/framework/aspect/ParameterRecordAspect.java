@@ -7,20 +7,21 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Parameter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 参数记录切面
@@ -92,7 +93,7 @@ public class ParameterRecordAspect {
             }
         }
         AppContext.setRequestParams(paramsMap);
-        if (leoProperty.isPrintRequestParam()) {
+        if (leoProperty.isPrintRequestBody()) {
             log.info("请求地址：{}|参数：{}", AppContext.getActionUrl(), JSON.toJSONString(paramsMap, SerializerFeature.WriteMapNullValue));
         }
         //执行方法
