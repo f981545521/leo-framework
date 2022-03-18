@@ -85,4 +85,13 @@ public class SpringHelper implements BeanFactoryPostProcessor {
     public static <T> T createBean(Class<T> clz) throws BeansException {
         return beanFactory.createBean(clz);
     }
+
+    /**
+     * 销毁Bean
+     *
+     * @param bean 实例
+     */
+    public static void destroyBean(Object bean){
+        beanFactory.destroyBean(bean);
+    }
 }
