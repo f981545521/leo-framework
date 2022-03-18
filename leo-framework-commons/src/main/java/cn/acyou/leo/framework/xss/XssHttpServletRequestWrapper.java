@@ -1,11 +1,7 @@
 package cn.acyou.leo.framework.xss;
 
-import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.safety.Whitelist;
 import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -14,6 +10,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.regex.Pattern;
 
 /**
  * XSS过滤处理
@@ -22,35 +19,14 @@ import java.nio.charset.Charset;
  */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
-    private static final Whitelist whitelist = createWhitelist();
-
-    private static final Document.OutputSettings outputSettings = new Document.OutputSettings().prettyPrint(false);
-
     private byte[] requestBody;
     private Charset charSet;
-
-    private static Whitelist createWhitelist() {
-        return Whitelist.relaxed()
-                .removeProtocols("a", "href", "ftp", "http", "https", "mailto")
-                .removeProtocols("img", "src", "http", "https")
-
-                .addAttributes("a", "href", "title", "target")  // 官方默认会将 target 给过滤掉
-
-                /*
-                 * 在 Whitelist.relaxed() 之外添加额外的白名单规则
-                 */
-                .addTags("div", "span", "embed", "object", "param")
-                .addAttributes(":all", "style", "class", "id", "name")
-                .addAttributes("object", "width", "height", "classid", "codebase")
-                .addAttributes("param", "name", "value")
-                .addAttributes("embed", "src", "quality", "width", "height", "allowFullScreen", "allowScriptAccess", "flashvars", "name", "type", "pluginspage");
-    }
 
     private static String[] filter(String[] values) {
         if (values != null) {
             for (int i = 0, len = values.length; i < len; i++) {
                 if (values[i] != null && !"".equals(values[i])) {
-                    values[i] = Jsoup.clean(values[i], "", whitelist, outputSettings).trim();
+                    values[i] = filter(values[i]);
                 }
             }
         }
@@ -59,7 +35,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     private static String filter(String value) {
         if (value != null) {
-            value = Jsoup.clean(value, "", whitelist, outputSettings).trim();
+            value = stripXSS(value);
         }
         return value;
     }
@@ -75,10 +51,9 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
             //缓存请求body
             try {
                 String requestBodyStr = getRequestPostStr(request);
-                if (StringUtils.isNotBlank(requestBodyStr)) {
+                if (StringUtils.hasText(requestBodyStr)) {
                     requestBodyStr = filter(requestBodyStr);
-                    JSONObject resultJson = JSONObject.parseObject(requestBodyStr);
-                    requestBody = resultJson.toString().getBytes(charSet);
+                    requestBody = requestBodyStr.getBytes(charSet);
                 } else {
                     requestBody = new byte[0];
                 }
@@ -111,8 +86,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
             int length = values.length;
             String[] escapseValues = new String[length];
             for (int i = 0; i < length; i++) {
-                // 防xss攻击和过滤前后空格
-                escapseValues[i] = Jsoup.clean(values[i], "", whitelist, outputSettings).trim();
+                escapseValues[i] = filter(values[i]);
             }
             return escapseValues;
         }
@@ -146,6 +120,32 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
                 return byteArrayInputStream.read();
             }
         };
+    }
+
+    private static String stripXSS(String value) {
+        if (value != null) {
+            //script标签对
+            Pattern scriptPattern = Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE);
+            value = scriptPattern.matcher(value).replaceAll("");
+            // Remove any lonesome </script> tag
+            scriptPattern = Pattern.compile("</script>", Pattern.CASE_INSENSITIVE);
+            value = scriptPattern.matcher(value).replaceAll("");
+            // Remove any lonesome <script ...> tag
+            scriptPattern = Pattern.compile("<script(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+            // Avoid eval(...)
+            scriptPattern = Pattern.compile("eval\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+            scriptPattern = Pattern.compile("expression\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+            scriptPattern = Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE);
+            value = scriptPattern.matcher(value).replaceAll("");
+            scriptPattern = Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE);
+            value = scriptPattern.matcher(value).replaceAll("");
+            scriptPattern = Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+        }
+        return value;
     }
 
 }
