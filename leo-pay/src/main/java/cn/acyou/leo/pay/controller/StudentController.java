@@ -48,12 +48,12 @@ public class StudentController {
 
     @PostMapping(value = "/update")
     @ApiOperation("根据ID获取数据")
-    public Result<Void> update(@Validated @RequestBody StudentReq studentReq) {
+    public Result<StudentReq> update(@Validated @RequestBody StudentReq studentReq) {
         log.info("参数：{}", studentReq);
-        return Result.success();
+        return Result.success(studentReq);
     }
     @PostMapping(value = "/upload")
-    @ApiOperation("删除文件")
+    @ApiOperation("上传文件")
     public Result<Void> upload(String type, MultipartFile file) {
         log.info("参数：{}", file.getOriginalFilename());
         return Result.success();
