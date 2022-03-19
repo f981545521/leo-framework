@@ -102,7 +102,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             }
             if (requestBody.length() > 0) {
                 appContextParamMap.put("RequestBody", requestBody);
-                logMessage = logMessage + String.format("\r\n 请求体: %s", requestBody);
+                logMessage = logMessage + String.format(" 请求体: %s", requestBody);
             }
         }
         AppContext.setRequestParams(appContextParamMap);
