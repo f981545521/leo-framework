@@ -24,9 +24,9 @@ public class VersionUtil {
      * @return int 比较结果
      */
     public static int compareVersion(String versionA, String versionB) {
-        String[] sA = versionA.split("\\.");
-        String[] sB = versionB.split("\\.");
         try {
+            String[] sA = versionA.split("\\.");
+            String[] sB = versionB.split("\\.");
             for (int i = 0; i < Math.max(sA.length, sB.length); i++) {
                 int h = Objects.compare(sA[i], sB[i], STRING_COMPARATOR);
                 if (h != 0) {
@@ -37,8 +37,8 @@ public class VersionUtil {
         }catch (Exception e) {
             //ignore
         }
-        //It's illegal to come here . example : [1.1.0.RELEASE & 1.1.0]
-        throw new IllegalArgumentException("unable to compare version with [" + versionA + " & " + versionB + "]");
+        //比较出异常时的策略： 返回0来忽略
+        return 0;
     }
 
 }
