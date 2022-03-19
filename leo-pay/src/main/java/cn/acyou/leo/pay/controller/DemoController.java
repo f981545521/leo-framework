@@ -1,6 +1,9 @@
 package cn.acyou.leo.pay.controller;
 
+import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.framework.util.SpringHelper;
+import cn.acyou.leo.pay.config.TestDestroyBean;
 import cn.acyou.leo.pay.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,4 +33,23 @@ public class DemoController {
         String s = commonService.testRedisLock(key);
         return Result.success(s);
     }
+    @RequestMapping(value = "/testDestroyBean", method = {RequestMethod.GET})
+    @ResponseBody
+    @ApiOperation("测试使用 SpringHelper.createBean 创建的对象可以被GC回收")
+    public Result<String> testDestroyBean(int count) {
+        System.out.println(SpringHelper.getSingletonCount());
+        AsyncManager.me().execute(()->{
+            for (int i = 0; i < count; i++) {
+                SpringHelper.createBean(TestDestroyBean.class);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(SpringHelper.getSingletonCount());
+            }
+        });
+        return Result.success("ok");
+    }
+
 }

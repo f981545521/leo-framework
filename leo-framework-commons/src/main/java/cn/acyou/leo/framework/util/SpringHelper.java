@@ -76,7 +76,7 @@ public class SpringHelper implements BeanFactoryPostProcessor {
      * </ul>
      *
      * <p>
-     * 注意： 此处创建的bean为原型，不受Spring管理
+     * 注意： 此处创建的bean为原型，不受Spring管理。**可以被GC回收**
      *
      * @param clz 类型class
      * @return {@link T} 实例
@@ -93,5 +93,12 @@ public class SpringHelper implements BeanFactoryPostProcessor {
      */
     public static void destroyBean(Object bean){
         beanFactory.destroyBean(bean);
+    }
+
+    /**
+     * 获取单例Bean的数量
+     */
+    public static int getSingletonCount(){
+        return beanFactory.getSingletonCount();
     }
 }
