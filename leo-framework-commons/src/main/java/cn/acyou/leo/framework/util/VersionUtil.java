@@ -8,7 +8,7 @@ import java.util.Objects;
  * @version [1.0.0, 2022/3/14 10:35]
  **/
 public class VersionUtil {
-    private static final Comparator<String> STRING_COMPARATOR = String::compareTo;
+    private static final Comparator<Integer> INTEGER_COMPARATOR = Integer::compareTo;
 
     /**
      * 比较版本
@@ -28,7 +28,7 @@ public class VersionUtil {
             String[] sA = versionA.split("\\.");
             String[] sB = versionB.split("\\.");
             for (int i = 0; i < Math.max(sA.length, sB.length); i++) {
-                int h = Objects.compare(sA[i], sB[i], STRING_COMPARATOR);
+                int h = Objects.compare(Integer.valueOf(sA[i]), Integer.valueOf(sB[i]), INTEGER_COMPARATOR);
                 if (h != 0) {
                     return h;
                 }
@@ -39,6 +39,10 @@ public class VersionUtil {
         }
         //比较出异常时的策略： 返回0来忽略
         return 0;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(compareVersion("1.10.1", "1.2.1"));
     }
 
 }
