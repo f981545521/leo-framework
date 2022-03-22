@@ -36,8 +36,8 @@ public class AppContext {
     private static final ThreadLocal<Long> REQUEST_TIMESTAMP_TL = new ThreadLocal<>();
     //异常Result
     private static final ThreadLocal<Result<?>> EXCEPTION_RESULT_TL = new ThreadLocal<>();
-    //请求参数
-    private static final ThreadLocal<Map<String, Object>> PARAMS_TL = new ThreadLocal<>();
+    //请求体
+    private static final ThreadLocal<String> REQUEST_BODY_TL = new ThreadLocal<>();
 
     private static final List<ThreadLocal<?>> THREAD_LOCAL_LIST = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class AppContext {
         THREAD_LOCAL_LIST.add(ACTION_API_OPERATION_TL);
         THREAD_LOCAL_LIST.add(REQUEST_TIMESTAMP_TL);
         THREAD_LOCAL_LIST.add(EXCEPTION_RESULT_TL);
-        THREAD_LOCAL_LIST.add(PARAMS_TL);
+        THREAD_LOCAL_LIST.add(REQUEST_BODY_TL);
     }
 
     public static String getIp() {
@@ -176,16 +176,16 @@ public class AppContext {
         EXCEPTION_RESULT_TL.remove();
     }
 
-    public static Map<String, Object> getParamsMap(){
-        return PARAMS_TL.get();
+    public static String getRequestBody(){
+        return REQUEST_BODY_TL.get();
     }
 
-    public static void setRequestParams(Map<String, Object> paramsMap) {
-        PARAMS_TL.set(paramsMap);
+    public static void setRequestBody(String requestBodyStr) {
+        REQUEST_BODY_TL.set(requestBodyStr);
     }
 
-    public static void clearRequestParams(Map<String, Object> paramsMap) {
-        PARAMS_TL.remove();
+    public static void clearRequestParams() {
+        REQUEST_BODY_TL.remove();
     }
 
     public static ClientLanguage getClientLanguage(){
@@ -214,7 +214,7 @@ public class AppContext {
                 .actionApiOperation(ACTION_API_OPERATION_TL.get())
                 .requestTimestamp(getRequestTimeStamp())
                 .exceptionResult(getExceptionResult())
-                .params(getParamsMap())
+                .requestBodyStr(getRequestBody())
                 .build();
     }
 
@@ -229,8 +229,9 @@ public class AppContext {
         private String[] actionApiOperation;
         private Long requestTimestamp;
         private Result<?> exceptionResult;
-        private Map<String, Object> params;
+        private String requestBodyStr;
     }
+
     @Data
     @Builder
     @AllArgsConstructor

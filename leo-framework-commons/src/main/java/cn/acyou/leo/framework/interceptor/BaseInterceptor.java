@@ -70,13 +70,12 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-",""));
+        MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-", ""));
+        AppContext.setRequestTimeStamp(System.currentTimeMillis());
         String requestURI = request.getRequestURI();
         final String requestMethod = request.getMethod();
         String remoteIp = IPUtil.getClientIp(request);
-        String requestParams = "";
 
-        Map<String, Object> appContextParamMap = new HashMap<>();
         final Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null && parameterMap.size() > 0) {
             List<String> params = new ArrayList<>();
@@ -84,10 +83,9 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                 params.add(stringEntry.getKey() + "=" + stringEntry.getValue()[0]);
             }
             final String joinParam = StringUtils.collectionToDelimitedString(params, "&");
-            appContextParamMap.put("RequestParam", joinParam);
             requestURI = requestURI + "?" + joinParam;
         }
-        String logMessage = String.format("LeoInterceptor ——> %s [%s %s] ", remoteIp, requestMethod, requestURI);
+        String logMessage = String.format("访问开始 ——> %s [%s %s] ", remoteIp, requestMethod, requestURI);
         String requestBody = "";
         if (leoProperty.isPrintRequestBody()) {
             if (request.getContentType() != null && request.getContentType().contains("application/json")) {
@@ -101,11 +99,10 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                 requestBody = responseStrBuilder.toString();
             }
             if (requestBody.length() > 0) {
-                appContextParamMap.put("RequestBody", requestBody);
+                AppContext.setRequestBody(requestBody);
                 logMessage = logMessage + String.format(" 请求体: %s", requestBody);
             }
         }
-        AppContext.setRequestParams(appContextParamMap);
         log.info(logMessage);
         //启用Token校验
         if (leoProperty.isTokenVerify() && !isMatcherPath(request.getRequestURI())) {
@@ -128,7 +125,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             AppContext.setLoginUser(loginUser);
         }
         AppContext.setIp(remoteIp);
-        AppContext.setRequestTimeStamp(System.currentTimeMillis());
+
         AppContext.setActionUrl(requestURI);
         AppContext.setClientType(SourceUtil.getClientTypeByUserAgent(request));
         String language = request.getHeader("Language");
@@ -188,7 +185,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         processInterfaceStatistics(request);
         final Long requestTimeStamp = AppContext.getRequestTimeStamp();
-        String logMessage = String.format("LeoInterceptor <——  访问结束 status:%s 请求耗时: %sms",
+        String logMessage = String.format("访问结束 <——  [status:%s 请求耗时:%s ms]",
                 response.getStatus(),
                 requestTimeStamp != null ? (System.currentTimeMillis() - AppContext.getRequestTimeStamp()) : "-");
         if (leoProperty.isPrintResponseBody()) {
@@ -197,7 +194,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                 ContentCachingResponseWrapper resp =  WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
                 if (resp != null) {
                     String responseBody = StreamUtils.copyToString(resp.getContentInputStream(), StandardCharsets.UTF_8);
-                    logMessage = logMessage + String.format("\r\n 响应体: %s", responseBody.length() > 1000 ? responseBody.substring(0, 1000) : responseBody);
+                    logMessage = logMessage + String.format(" 响应体: %s", responseBody.length() > 1000 ? responseBody.substring(0, 1000) : responseBody);
                 }
             }
         }
@@ -231,7 +228,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                         .methodType(request.getMethod())
                         .methodInfo(AppContext.getActionApiMethodInfoRemark())
                         .methodDesc(AppContext.getActionApiOperationValue())
-                        .params(AppContext.getParamsMap() != null && AppContext.getParamsMap().size() > 0 ? JSON.toJSONString(AppContext.getParamsMap()) : null)
+                        .params(AppContext.getRequestBody())
                         .startTime(new Date(AppContext.getRequestTimeStamp()))
                         .execTime(System.currentTimeMillis() - AppContext.getRequestTimeStamp())
                         .errorMessage(exceptionResult != null ? exceptionResult.getMessage() : null)
