@@ -1,9 +1,15 @@
 package cn.acyou.leo.framework.util;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+
+import java.lang.reflect.Method;
 
 /**
  * @author youfang
@@ -21,7 +27,7 @@ public class ElParser {
      * @param args       参数
      * @return {@link String}
      */
-    public static String getKey(String key, String[] paramNames, Object[] args) {
+    public static Object getKey(String key, String[] paramNames, Object[] args) {
         Expression expression = parser.parseExpression(key);
         StandardEvaluationContext context = new StandardEvaluationContext();
         if (args.length <= 0) {
@@ -30,6 +36,7 @@ public class ElParser {
         for (int i = 0; i < args.length; i++) {
             context.setVariable(paramNames[i], args[i]);
         }
-        return expression.getValue(context, String.class);
+        return expression.getValue(context, Object.class);
     }
+
 }

@@ -1,5 +1,6 @@
 package cn.acyou.leo.pay.controller;
 
+import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.commons.PageQuery;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.PageSo;
@@ -42,12 +43,14 @@ public class StudentController {
 
     @GetMapping(value = "/get")
     @ApiOperation("根据ID获取数据")
+    @AccessLimit(value = "#id")
     public Result<Student> get(@RequestParam Integer id) {
         return Result.success(studentService.getById(id));
     }
 
     @PostMapping(value = "/update")
     @ApiOperation("根据ID获取数据")
+    @AccessLimit(value = "#studentReq")
     public Result<StudentReq> update(@Validated @RequestBody StudentReq studentReq) {
         log.info("参数：{}", studentReq);
         return Result.success(studentReq);

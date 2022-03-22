@@ -22,9 +22,9 @@ public @interface AccessLimit {
     long interval() default 1000;
 
     /**
-     * 包括参数 (相同参数的才会被拦截)
+     * 参数表达式 (相同参数的才会被拦截)
      *
      * @return boolean
      */
-    boolean includeArgs() default false;
+    String value();
 }
