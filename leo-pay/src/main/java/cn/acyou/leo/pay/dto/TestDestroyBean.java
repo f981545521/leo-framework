@@ -1,5 +1,6 @@
-package cn.acyou.leo.pay.config;
+package cn.acyou.leo.pay.dto;
 
+import cn.acyou.leo.pay.config.PayPalBean;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PreDestroy;

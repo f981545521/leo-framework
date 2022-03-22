@@ -3,7 +3,7 @@ package cn.acyou.leo.pay.controller;
 import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.SpringHelper;
-import cn.acyou.leo.pay.config.TestDestroyBean;
+import cn.acyou.leo.pay.dto.TestDestroyBean;
 import cn.acyou.leo.pay.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
