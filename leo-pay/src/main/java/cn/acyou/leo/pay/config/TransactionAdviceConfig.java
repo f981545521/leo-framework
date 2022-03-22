@@ -1,6 +1,5 @@
 package cn.acyou.leo.pay.config;
 
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -22,7 +21,6 @@ import java.util.Collections;
  * @author youfang
  * @version [1.0.0, 2020-4-19 下午 07:42]
  **/
-@Aspect
 @Configuration
 public class TransactionAdviceConfig {
     private static final String AOP_POINTCUT_EXPRESSION = "execution(* cn.acyou.leo.pay.service..*.*(..))";
@@ -49,9 +47,15 @@ public class TransactionAdviceConfig {
 
         source.addTransactionalMethod("update*", txAttr_REQUIRED);
         source.addTransactionalMethod("edit*", txAttr_REQUIRED);
+        source.addTransactionalMethod("modify*", txAttr_REQUIRED);
 
         source.addTransactionalMethod("over*", txAttr_REQUIRED);
+        source.addTransactionalMethod("cancel*", txAttr_REQUIRED);
         source.addTransactionalMethod("check*", txAttr_REQUIRED);
+        source.addTransactionalMethod("commit*", txAttr_REQUIRED);
+        source.addTransactionalMethod("finish*", txAttr_REQUIRED);
+        source.addTransactionalMethod("active*", txAttr_REQUIRED);
+        source.addTransactionalMethod("verify*", txAttr_REQUIRED);
         source.addTransactionalMethod("move*", txAttr_REQUIRED);
         source.addTransactionalMethod("opt*", txAttr_REQUIRED);
         source.addTransactionalMethod("exec*", txAttr_REQUIRED);

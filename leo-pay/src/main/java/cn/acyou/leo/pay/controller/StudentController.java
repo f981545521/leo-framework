@@ -68,5 +68,11 @@ public class StudentController {
         PageData<Student> studentPageData = PageQuery.startPage(pageSo).selectMapper(studentService.list());
         return Result.success(studentPageData);
     }
+    @GetMapping(value = "/addStudent")
+    @ApiOperation("添加一个学生")
+    public Result<Void> addStudent(String name, Integer age) {
+        studentService.addStudent(name, age);
+        return Result.success();
+    }
 
 }
