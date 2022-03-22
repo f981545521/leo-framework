@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -9,7 +11,7 @@ import java.util.Objects;
  **/
 public class VersionUtil {
     private static final Comparator<Integer> INTEGER_COMPARATOR = Integer::compareTo;
-
+    private static final Comparator<String> STRING_COMPARATOR = String::compareTo;
     /**
      * 比较版本
      * <pre>
@@ -24,25 +26,27 @@ public class VersionUtil {
      * @return int 比较结果
      */
     public static int compareVersion(String versionA, String versionB) {
+        String[] sA = versionA.split("\\.");
+        String[] sB = versionB.split("\\.");
         try {
-            String[] sA = versionA.split("\\.");
-            String[] sB = versionB.split("\\.");
             for (int i = 0; i < Math.max(sA.length, sB.length); i++) {
-                int h = Objects.compare(Integer.valueOf(sA[i]), Integer.valueOf(sB[i]), INTEGER_COMPARATOR);
-                if (h != 0) {
-                    return h;
+                if (NumberUtils.isDigits(sA[i]) && NumberUtils.isDigits(sB[i])) {
+                    int h = Objects.compare(Integer.valueOf(sA[i]), Integer.valueOf(sB[i]), INTEGER_COMPARATOR);
+                    if (h != 0) {
+                        return h;
+                    }
+                }else {
+                    int h = Objects.compare(sA[i], sB[i], STRING_COMPARATOR);
+                    if (h != 0) {
+                        return h;
+                    }
                 }
             }
             return 0;
         }catch (Exception e) {
             //ignore
         }
-        //比较出异常时的策略： 返回0来忽略
         return 0;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(compareVersion("1.10.1", "1.2.1"));
     }
 
 }
