@@ -287,13 +287,14 @@ public class VideoFormatUtil {
         return hours+ ":" + minutes + ":" + seconds;
     }
     public static void main(String[] args) {
-        //cutByFfmpeg("C:\\Users\\1\\Music\\汤倩 - 随便吧.mp3", "C:\\Users\\1\\Music\\汤倩 - 随便吧_TAR2.mp3", 30000, 40000);
+        //cutByFfmpeg("C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y..mp3", "C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y._1.mp3", 30000, 40000);
         //System.out.println("end");
         System.out.println(formatDuring(30000));
         System.out.println(formatDuring(33000));
         System.out.println(formatDuring(33300));
         System.out.println(formatDuring(33330));
         System.out.println(formatDuring(33333));
+        FFmpeg.exec("-y", "-i", "C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y..mp3", "-ss", "00:00:30.000", "-to", "00:00:40.000", "-c", "copy", "C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y._5.mp3");
     }
 
 }
