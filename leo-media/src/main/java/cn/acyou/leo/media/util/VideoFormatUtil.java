@@ -17,12 +17,12 @@ import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import static cn.acyou.leo.media.util.MediaUtil.formatDuring;
 
 /**
  * @author youfang
@@ -278,23 +278,17 @@ public class VideoFormatUtil {
         Log.info("剪辑文件为{}", targetPath);
         return targetFile.exists();
     }
-    public static String formatDuring(long mss) {
-        String hours = ((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))+"";
-        hours = hours.length() == 1 ? 0 + hours : hours;
-        String minutes = ((mss % (1000 * 60 * 60)) / (1000 * 60)) + "";
-        minutes = minutes.length() == 1 ? 0 + minutes : minutes;
-        String seconds = new BigDecimal((mss % (1000 * 60))).divide(new BigDecimal(1000), 3, RoundingMode.CEILING).toString();
-        return hours+ ":" + minutes + ":" + seconds;
-    }
+
     public static void main(String[] args) {
         //cutByFfmpeg("C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y..mp3", "C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y._1.mp3", 30000, 40000);
         //System.out.println("end");
-        System.out.println(formatDuring(30000));
-        System.out.println(formatDuring(33000));
-        System.out.println(formatDuring(33300));
-        System.out.println(formatDuring(33330));
+        System.out.println(formatDuring(30000));//00:00:30.000
+        System.out.println(formatDuring(33000));//00:00:33.000
+        System.out.println(formatDuring(33300));//00:00:33.300
+        System.out.println(formatDuring(33330));//00:00:33.330
         System.out.println(formatDuring(33333));
-        FFmpeg.exec("-y", "-i", "C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y..mp3", "-ss", "00:00:30.000", "-to", "00:00:40.000", "-c", "copy", "C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y._5.mp3");
+        //MediaUtil.exec("-y", "-i", "F:\\KuGou\\柳爽 - 漠河舞厅.mp3", "-ss", "00:00:40.000", "-to", "00:00:50.000", "-c", "copy", "F:\\KuGou\\柳爽 - 漠河舞厅_2.mp3");
+        MediaUtil.cutAudio("http://qiniu.acyou.cn/audio/1.mp3", 10000, 20000, "F:\\KuGou\\柳爽 - 漠河舞厅_3.mp3");
     }
 
 }
