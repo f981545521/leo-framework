@@ -1,5 +1,6 @@
 package cn.acyou.leo.media.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,14 +31,14 @@ public class MediaController {
 
     /**
      * 获取第一帧
-     * http://localhost:8060/media/firstFrame?vPath=http://qiniu.acyou.cn/video/568b5fe3f98e35536fce71a7c7e07af6.mp4
+     * http://localhost:8060/media/firstFrame?vPath=http://qiniu.acyou.cn/video/1.mp4
      *
      * @param vPath    地址
      * @param response res
      * @throws Exception ex
      */
     @RequestMapping(value = "firstFrame", method = {RequestMethod.GET})
-    public void firstFrame(@RequestParam("vPath") String vPath, HttpServletResponse response) throws Exception {
+    public void firstFrame(@RequestParam("vPath") String vPath, String offset, HttpServletResponse response) throws Exception {
         MultimediaObject object = new MultimediaObject(new URL(vPath));
         File firstFrameFile = File.createTempFile("FirstFrame", "firstFrameFile.jpg");
         try {
@@ -49,7 +50,14 @@ public class MediaController {
             EncodingAttributes attrs = new EncodingAttributes();
             //VideoAttributes attrs = ecodeAttrs.getVideoAttributes().get();
             attrs.setOutputFormat("image2");
-            attrs.setOffset(1f);//设置偏移位置，即开始转码位置（11秒）
+            if (multimediaInfo.getDuration() > 1500) {
+                attrs.setOffset(1f);//设置偏移位置，即开始转码位置（11秒）
+            }else {
+                attrs.setOffset(0.01f);//设置偏移位置，即开始转码位置（11秒）
+            }
+            if (StringUtils.isNotBlank(offset)) {
+                attrs.setOffset(Float.valueOf(offset));
+            }
             attrs.setDuration(0.01f);//设置转码持续时间（1秒）
             attrs.setVideoAttributes(video);
             Encoder encoder = new Encoder();
@@ -58,7 +66,7 @@ public class MediaController {
         } catch (EncoderException e) {
             e.printStackTrace();
         } finally {
-            firstFrameFile.deleteOnExit();
+            firstFrameFile.delete();
         }
     }
 
@@ -90,7 +98,7 @@ public class MediaController {
         } catch (EncoderException e) {
             e.printStackTrace();
         } finally {
-            extractAudioFile.deleteOnExit();
+            extractAudioFile.delete();
         }
     }
 
