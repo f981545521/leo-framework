@@ -27,9 +27,9 @@ import java.util.Map;
  * @author youfang
  * @version [1.0.0, 2022/2/22 19:19]
  **/
-public class VideoFormatUtil {
+public class VideoFormatTest {
 
-    public static Logger Log = LoggerFactory.getLogger(VideoFormatUtil.class);
+    public static Logger Log = LoggerFactory.getLogger(VideoFormatTest.class);
 
     /**
      * 视频文件转音频文件
