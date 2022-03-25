@@ -28,12 +28,13 @@ public class MediaUtil {
      */
     private static void exec(String... command){
         String[] args = ArrayUtils.addFirst(command, ffmpegLocator.getExecutablePath());
-        log.info("执行FFMPEG :{}",StringUtils.join(args, " "));
+        log.info("执行FFMPEG 命令:{}",StringUtils.join(args, " "));
         Process proc;
         try {
             proc = Runtime.getRuntime().exec(args);
             proc.waitFor();
         } catch (IOException | InterruptedException e) {
+            log.error("执行FFMPEG出错了 命令:{}",StringUtils.join(args, " "));
             e.printStackTrace();
         }
     }
@@ -48,7 +49,7 @@ public class MediaUtil {
      */
     public static void cutAudio(String source, long ss, long to, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
-        log.info("剪切音频文件 [source:{} ss:{} to:{} target:{}] 目标目录：{}", source, ss, to, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        log.info("剪切音频文件 params:[source:{},ss:{},to:{},target:{}] 目标目录：{}", source, ss, to, targetPath, (mkdirs ? "创建成功" : "无需创建"));
         MediaUtil.exec("-y", "-i", source, "-ss", formatDuring(ss), "-to", formatDuring(to), "-c", "copy", targetPath);
     }
 
