@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static cn.acyou.leo.media.util.MediaUtil.formatDuring;
 
 /**
  * @author youfang
@@ -260,7 +259,7 @@ public class VideoFormatUtil {
         File targetFile = new File(targetPath);
         File sourceFile = new File(sourcePath);
         Process proc;
-        String[] args = new String[]{ffmpegLocator.getExecutablePath(), "-y", "-i", sourceFile.getAbsolutePath(),"-ss", formatDuring(start),"-to", formatDuring(end), "-c","copy", targetFile.getAbsolutePath()};
+        String[] args = new String[]{ffmpegLocator.getExecutablePath(), "-y", "-i", sourceFile.getAbsolutePath(),"-ss", MediaUtil.formatDuring(start),"-to", MediaUtil.formatDuring(end), "-c","copy", targetFile.getAbsolutePath()};
 
         System.out.println(Arrays.toString(args));
         try {
@@ -282,13 +281,9 @@ public class VideoFormatUtil {
     public static void main(String[] args) {
         //cutByFfmpeg("C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y..mp3", "C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y._1.mp3", 30000, 40000);
         //System.out.println("end");
-        System.out.println(formatDuring(30000));//00:00:30.000
-        System.out.println(formatDuring(33000));//00:00:33.000
-        System.out.println(formatDuring(33300));//00:00:33.300
-        System.out.println(formatDuring(33330));//00:00:33.330
-        System.out.println(formatDuring(33333));
+
         //MediaUtil.exec("-y", "-i", "F:\\KuGou\\柳爽 - 漠河舞厅.mp3", "-ss", "00:00:40.000", "-to", "00:00:50.000", "-c", "copy", "F:\\KuGou\\柳爽 - 漠河舞厅_2.mp3");
-        MediaUtil.cutAudio("http://qiniu.acyou.cn/audio/1.mp3", 10000, 20000, "F:\\KuGou\\柳爽 - 漠河舞厅_3.mp3");
+        MediaUtil.cutAudio("http://qiniu.acyou.cn/audio/1.mp3", 10000, 20000, "E:\\KuGou2\\柳爽 - 漠河舞厅_54.mp3");
     }
 
 }
