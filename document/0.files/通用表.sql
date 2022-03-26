@@ -17,5 +17,5 @@ CREATE TABLE `param_config`
     `update_time` datetime                                                        DEFAULT NULL COMMENT '最后修改时间',
     `update_user` bigint                                                          DEFAULT NULL COMMENT '最后修改人',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `idex_namespace_code` (`namespace`,`code`) USING BTREE COMMENT '命名空间与编码唯一'
+    UNIQUE KEY `idx_namespace_code` (`namespace`,`code`) USING BTREE COMMENT '命名空间与编码唯一'
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='参数配置表';
