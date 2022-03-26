@@ -8,6 +8,7 @@ import cn.acyou.leo.pay.mapper.ParamConfigMapper;
 import cn.acyou.leo.pay.service.ParamConfigService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +27,13 @@ import java.util.Map;
 @Service
 public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, ParamConfig> implements ParamConfigService {
 
+    @Autowired
+    private ParamConfigService baseService;
+
     @Override
     public Map<String, ParamConfigVo> getConfigMap(String namespace, String code) {
         Map<String, ParamConfigVo> configVoMap = new LinkedHashMap<>();
-        List<ParamConfigVo> configList = getConfigList(namespace, code);
+        List<ParamConfigVo> configList = baseService.getConfigList(namespace, code);
         for (ParamConfigVo configVo : configList) {
             configVoMap.put(configVo.getCode(), configVo);
         }
@@ -37,7 +41,7 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
     }
 
     @Override
-    @Cacheable(value="leo:pay:paramConfig#-1", key="#namespace")
+    @Cacheable(value="leo:pay:paramConfig#-1", key="#namespace + '-' + #code")
     public List<ParamConfigVo> getConfigList(String namespace, String code) {
         List<ParamConfig> list = lambdaQuery()
                 .eq(StringUtils.isNotBlank(namespace), ParamConfig::getNamespace, namespace)
