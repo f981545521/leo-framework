@@ -20,4 +20,7 @@ public interface ParamConfigService extends IService<ParamConfig> {
     Map<String, ParamConfigVo> getConfigMap(String namespace, String code);
 
     List<ParamConfigVo> getConfigList(String namespace, String code);
+
+    void clearAllCache();
+
 }

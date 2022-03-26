@@ -46,5 +46,12 @@ public class ParamConfigController {
         return Result.success(configList);
     }
 
+    @ApiOperation("清除所有缓存")
+    @GetMapping("clearAllCache")
+    public Result<Void> clearAllCache(){
+        paramConfigService.clearAllCache();
+        return Result.success();
+    }
+
 
 }

@@ -7,8 +7,10 @@ import cn.acyou.leo.pay.entity.ParamConfig;
 import cn.acyou.leo.pay.mapper.ParamConfigMapper;
 import cn.acyou.leo.pay.service.ParamConfigService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ import java.util.Map;
  * @author youfang
  * @since 2022-03-26
  */
+@Slf4j
 @Service
 public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, ParamConfig> implements ParamConfigService {
 
@@ -49,5 +52,11 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
                 .eq(ParamConfig::getIsDelete, Constant.FLAG_FALSE_0)
                 .list();
         return BeanCopyUtil.copyList(list, ParamConfigVo.class);
+    }
+
+    @Override
+    @CacheEvict(value = "leo:pay:paramConfig", allEntries = true)
+    public void clearAllCache() {
+        log.info("清除所有缓存成功！");
     }
 }
