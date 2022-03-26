@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.config;
 
 import cn.acyou.leo.framework.cache.MyRedisCacheManager;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ import java.time.Duration;
  **/
 @Configuration
 @EnableCaching
-@ConditionalOnBean(RedisConnectionFactory.class)
+@ConditionalOnClass(RedisConnectionFactory.class)
 public class RedisConfig {
 
     @Bean
