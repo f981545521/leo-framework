@@ -62,7 +62,7 @@ public class MediaUtil {
      */
     public static void mergeAudioAndVideo(String audioSource, String videoSource, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
-        log.info("剪切音频文件 params:[audioSource:{},videoSource:{},target:{}] 目标目录：{}", audioSource, videoSource, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        log.info("合并音/视频文件 params:[audioSource:{}, videoSource:{}, target:{}] 目标目录：{}", audioSource, videoSource, targetPath, (mkdirs ? "创建成功" : "无需创建"));
         MediaUtil.exec("-i", audioSource, "-i", videoSource, "-vcodec", "copy", "-acodec", "copy", targetPath);
     }
 
