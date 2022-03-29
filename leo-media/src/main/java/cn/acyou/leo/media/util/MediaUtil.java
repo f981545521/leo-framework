@@ -54,6 +54,19 @@ public class MediaUtil {
     }
 
     /**
+     * 合并音频和视频
+     *
+     * @param audioSource 音频源
+     * @param videoSource 视频源
+     * @param targetPath  目标路径（File的AbsolutePath）
+     */
+    public static void mergeAudioAndVideo(String audioSource, String videoSource, String targetPath) {
+        boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
+        log.info("剪切音频文件 params:[audioSource:{},videoSource:{},target:{}] 目标目录：{}", audioSource, videoSource, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        MediaUtil.exec("-i", audioSource, "-i", videoSource, "-vcodec", "copy", "-acodec", "copy", targetPath);
+    }
+
+    /**
      * 格式化毫秒数
      *
      * <pre>

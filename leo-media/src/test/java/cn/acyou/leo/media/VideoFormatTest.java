@@ -284,7 +284,8 @@ public class VideoFormatTest {
         //System.out.println("end");
 
         //MediaUtil.exec("-y", "-i", "F:\\KuGou\\柳爽 - 漠河舞厅.mp3", "-ss", "00:00:40.000", "-to", "00:00:50.000", "-c", "copy", "F:\\KuGou\\柳爽 - 漠河舞厅_2.mp3");
-        MediaUtil.cutAudio("http://qiniu.acyou.cn/audio/1.mp3", 10000, 20000, "E:\\KuGou2\\柳爽 - 漠河舞厅_54.mp3");
+        //MediaUtil.cutAudio("http://qiniu.acyou.cn/audio/1.mp3", 10000, 20000, "E:\\KuGou2\\柳爽 - 漠河舞厅_54.mp3");
+        MediaUtil.mergeAudioAndVideo("D:\\temp\\merge\\audio.mp4", "D:\\temp\\merge\\video.mp4", "D:\\temp\\merge\\9.mp4");
     }
 
 }
