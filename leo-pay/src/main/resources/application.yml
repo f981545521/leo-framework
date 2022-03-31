@@ -45,7 +45,18 @@ leo:
     contact: youfang
   xss:
     enabled: true
-
+  #fs:
+  #  minio:
+  #    endpoint: http://172.16.103.19:9000
+  #    access-key: accessKey
+  #    secret-key: secretkey
+  #  oss:
+  #    endpoint: oss-cn-beijing.aliyuncs.com
+  #    access-key-id: accessKeyId
+  #    access-key-secret: secretkey
+  #  ftp:
+  #    host: 192.168.1.217
+  #    port: 3721
 # knife4j增强模式
 knife4j:
   enable: true
