@@ -26,15 +26,15 @@ public class MediaUtil {
      *
      * @param command 命令
      */
-    private static void exec(String... command){
+    private static void exec(String... command) {
         String[] args = ArrayUtils.addFirst(command, ffmpegLocator.getExecutablePath());
-        log.info("执行FFMPEG 命令:{}",StringUtils.join(args, " "));
+        log.info("执行FFMPEG 命令:{}", StringUtils.join(args, " "));
         Process proc;
         try {
             proc = Runtime.getRuntime().exec(args);
             proc.waitFor();
         } catch (IOException | InterruptedException e) {
-            log.error("执行FFMPEG出错了 命令:{}",StringUtils.join(args, " "));
+            log.error("执行FFMPEG出错了 命令:{}", StringUtils.join(args, " "));
             e.printStackTrace();
         }
     }
@@ -49,7 +49,7 @@ public class MediaUtil {
      */
     public static void cutAudio(String source, long ss, long to, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
-        log.info("剪切音频文件 params:[source:{},ss:{},to:{},target:{}] 目标目录：{}", source, ss, to, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        log.info("剪切音频文件 params:[source:{}, ss:{}, to:{}, target:{}] 目标目录：{}", source, ss, to, targetPath, (mkdirs ? "创建成功" : "无需创建"));
         MediaUtil.exec("-y", "-i", source, "-ss", formatDuring(ss), "-to", formatDuring(to), "-c", "copy", targetPath);
     }
 
@@ -81,12 +81,12 @@ public class MediaUtil {
      * @return {@link String}
      */
     public static String formatDuring(long mss) {
-        String hours = ((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))+"";
+        String hours = ((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) + "";
         hours = hours.length() == 1 ? 0 + hours : hours;
         String minutes = ((mss % (1000 * 60 * 60)) / (1000 * 60)) + "";
         minutes = minutes.length() == 1 ? 0 + minutes : minutes;
         String seconds = new BigDecimal((mss % (1000 * 60))).divide(new BigDecimal(1000), 3, RoundingMode.CEILING).toString();
-        return hours+ ":" + minutes + ":" + seconds;
+        return hours + ":" + minutes + ":" + seconds;
     }
 
 }
