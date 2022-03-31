@@ -15,8 +15,8 @@ public class MinIoUtil {
     private MinioClient minioClient;
 
     public MinIoUtil(MinioClient minioClient) {
-        log.info("MinIoUtil 初始化完成。");
         this.minioClient = minioClient;
+        log.info("MinIoUtil 初始化完成。");
     }
 
     public void makeBucket(String name) {

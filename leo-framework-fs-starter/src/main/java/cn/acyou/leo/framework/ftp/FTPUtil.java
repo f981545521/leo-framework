@@ -2,6 +2,7 @@ package cn.acyou.leo.framework.ftp;
 
 import cn.acyou.leo.framework.exception.FsException;
 import cn.acyou.leo.framework.prop.FTPProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -19,12 +20,10 @@ import java.util.Date;
  * @author fangyou
  * @version [1.0.0, 2021-12-10 10:41]
  */
-@Component
-@EnableConfigurationProperties(value = FTPProperty.class)
+@Slf4j
 public class FTPUtil {
-    private static final Logger log = LoggerFactory.getLogger(FTPUtil.class);
 
-    private static FTPProperty ftpProperty;
+    private final FTPProperty ftpProperty;
 
     /**
      * 本地字符编码
@@ -35,13 +34,9 @@ public class FTPUtil {
      */
     private static final String SERVER_CHARSET = "ISO-8859-1";
 
-    @Autowired
-    public void setFtpProperties(FTPProperty ftpProperty) {
-        if (!StringUtils.hasText(ftpProperty.getHost())) {
-            log.warn("FTP 未配置，将影响FTP使用！");
-            return;
-        }
-        FTPUtil.ftpProperty = ftpProperty;
+    public FTPUtil(FTPProperty ftpProperty) {
+        this.ftpProperty = ftpProperty;
+        log.info("FTPUtil 初始化完成。");
     }
 
     /**
