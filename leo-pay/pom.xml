@@ -76,6 +76,11 @@
             <artifactId>leo-framework-fs-starter</artifactId>
             <version>1.2.0.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>leo-framework-wx-starter</artifactId>
+            <version>1.2.0.RELEASE</version>
+        </dependency>
     </dependencies>
 
 
