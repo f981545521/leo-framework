@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.wx.cache;
+package cn.acyou.leo.framework.wx.api;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @version [1.0.0, 2021-08-04 14:08]
  */
 @Data
-public class WxCacheItem {
+class WxCacheItem {
 
     /**
      * 缓存值

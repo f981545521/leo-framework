@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.wx.cache;
+package cn.acyou.leo.framework.wx.api;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -6,10 +6,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
+ * 只在本包中使用
+ *
  * @author fangyou
  * @version [1.0.0, 2021-08-04 14:07]
  */
-public class WxCommonCachePool {
+class WxCommonCachePool {
     /**
      * 微信内部缓存池
      */

@@ -1,6 +1,5 @@
 package cn.acyou.leo.framework.wx.api;
 
-import cn.acyou.leo.framework.wx.cache.WxCommonCachePool;
 import cn.acyou.leo.framework.wx.dto.*;
 import cn.acyou.leo.framework.wx.dto.mp.WxMpTagUsers;
 import cn.acyou.leo.framework.wx.dto.mp.WxMpTags;
