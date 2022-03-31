@@ -27,7 +27,7 @@ public class AppContextFilter implements Filter {
         AppContext.setActionApiOperation(appContextBean.getActionApiOperation());
         AppContext.setRequestTimeStamp(appContextBean.getRequestTimestamp());
         AppContext.setExceptionResult(appContextBean.getExceptionResult());
-        AppContext.setRequestParams(appContextBean.getParams());
+        AppContext.setRequestBody(appContextBean.getRequestBodyStr());
         RpcContext.getContext().getObjectAttachments().put("DUBBO_APP_CONTEXT_KEY", appContextBean);
         return invoker.invoke(invocation);
     }
