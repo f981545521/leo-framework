@@ -37,6 +37,15 @@
             <artifactId>commons-net</artifactId>
             <version>20030805.205232</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.2.1</version>
+        </dependency>
     </dependencies>
 
 
