@@ -57,6 +57,7 @@
         <module>leo-pay</module>
         <module>leo-framework-generator</module>
         <module>leo-framework-wx-starter</module>
+        <module>leo-framework-retrofit-starter</module>
     </modules>
 
     <dependencyManagement>
