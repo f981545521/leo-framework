@@ -279,14 +279,13 @@ public class VideoFormatTest {
         return targetFile.exists();
     }
 
-    public static void main(String[] args) {
-        //cutByFfmpeg("C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y..mp3", "C:\\Users\\1\\Music\\G.E.M.邓紫棋 - A.I.N.Y._1.mp3", 30000, 40000);
-        //System.out.println("end");
-
+    public static void main(String[] args) throws Exception {
         //MediaUtil.exec("-y", "-i", "F:\\KuGou\\柳爽 - 漠河舞厅.mp3", "-ss", "00:00:40.000", "-to", "00:00:50.000", "-c", "copy", "F:\\KuGou\\柳爽 - 漠河舞厅_2.mp3");
         //MediaUtil.cutAudio("http://qiniu.acyou.cn/audio/1.mp3", 10000, 20000, "E:\\KuGou2\\柳爽 - 漠河舞厅_54.mp3");
         //MediaUtil.mergeAudioAndVideo("D:\\temp\\merge\\audio.mp4", "D:\\temp\\merge\\video.mp4", "D:\\temp\\merge\\9.mp4");
-        MediaUtil.mergeAudioAndVideo("http://qiniu.acyou.cn/video/merge/audio.mp4", "http://qiniu.acyou.cn/video/merge/video.mp4", "D:\\temp\\merge\\10.mp4");
+        //MediaUtil.mergeAudioAndVideo("http://qiniu.acyou.cn/video/merge/audio.mp4", "http://qiniu.acyou.cn/video/merge/video.mp4", "D:\\temp\\merge\\10.mp4");
+        String[] targetPaths = MediaUtil.extractFrameBySpeedRatio("http://qiniu.acyou.cn/DouYin/2.mp4", new int[]{10, 20, 50, 70, 90}, "D:\\temp\\frame\\");
+        System.out.println(Arrays.toString(targetPaths));
     }
 
 }

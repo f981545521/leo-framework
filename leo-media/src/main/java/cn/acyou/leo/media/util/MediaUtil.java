@@ -3,12 +3,16 @@ package cn.acyou.leo.media.util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
+import java.text.DecimalFormat;
 
 /**
  * @author youfang
@@ -89,4 +93,41 @@ public class MediaUtil {
         return hours + ":" + minutes + ":" + seconds;
     }
 
+    /**
+     * 提取帧
+     * <p>
+     * ffmpeg.exe -i .\991hsxtp3ctse4yg.mp4 -ss 1 -f image2 .\out1.jpg
+     *
+     * @param i          输入
+     * @param ss         第ss帧
+     * @param targetPath 输出目录
+     */
+    public static void extractFrame(String i, String ss, String targetPath) {
+        boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
+        log.info("提取帧 params:[i:{}, ss:{}, target:{}] 目标目录：{}", i, ss, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        MediaUtil.exec("-i", i, "-ss", ss, "-f", "image2", targetPath);
+    }
+
+    /**
+     * 提取帧
+     *
+     * @param url        url
+     * @param speedRatio 进度比例
+     * @param targetDir  目标目录
+     * @return {@link String[]} 目标文件路径列表
+     * @throws Exception 异常
+     */
+    public static String[] extractFrameBySpeedRatio(String url, int[] speedRatio, String targetDir) throws Exception {
+        String[] paths = new String[speedRatio.length];
+        MultimediaObject object = new MultimediaObject(new URL(url));
+        MultimediaInfo info = object.getInfo();
+        long duration = info.getDuration();
+        for (int i = 0; i < speedRatio.length; i++) {
+            int t = (int) (duration * (speedRatio[i] * 0.01));
+            String targetPath = targetDir + t + ".jpg";
+            MediaUtil.extractFrame(url, DecimalFormat.getInstance().format(t * 0.001), targetPath);
+            paths[i] = targetPath;
+        }
+        return paths;
+    }
 }
