@@ -2,6 +2,7 @@ package cn.acyou.leo.pay.controller;
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.commons.PageQuery;
+import cn.acyou.leo.framework.ftp.FTPUtil;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.PageSo;
 import cn.acyou.leo.framework.model.Result;
@@ -34,6 +35,8 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private FTPUtil ftpUtil;
 
     @GetMapping(value = "/all")
     @ApiOperation("获取所有数据")
@@ -57,8 +60,9 @@ public class StudentController {
     }
     @PostMapping(value = "/upload")
     @ApiOperation("上传文件")
-    public Result<Void> upload(String type, MultipartFile file) {
+    public Result<Void> upload(String type, MultipartFile file) throws Exception {
         log.info("参数：{}", file.getOriginalFilename());
+        ftpUtil.uploadFile("/upload", file.getOriginalFilename(), file.getInputStream());
         return Result.success();
     }
 
