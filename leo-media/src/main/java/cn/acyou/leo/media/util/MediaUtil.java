@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
-import java.text.DecimalFormat;
 
 /**
  * @author youfang
@@ -125,7 +124,7 @@ public class MediaUtil {
         for (int i = 0; i < speedRatio.length; i++) {
             int t = (int) (duration * (speedRatio[i] * 0.01));
             String targetPath = targetDir + t + ".jpg";
-            MediaUtil.extractFrame(url, DecimalFormat.getInstance().format(t * 0.001), targetPath);
+            MediaUtil.extractFrame(url, new BigDecimal(t).multiply(new BigDecimal("0.001")).toString(), targetPath);
             paths[i] = targetPath;
         }
         return paths;
