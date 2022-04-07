@@ -1,5 +1,11 @@
 package cn.acyou.leo.framework.util;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -190,4 +196,143 @@ public class NumberUtil {
         return cvt(String.valueOf(num), true);
     }
 
+
+    /**
+     * 提供精确的加法运算<br>
+     * 如果传入多个值为null或者空，则返回0
+     *
+     * @param values 多个被加值
+     * @return 和
+     * @since 4.0.0
+     */
+    public static BigDecimal add(String... values) {
+        if (ArrayUtils.isEmpty(values)) {
+            return BigDecimal.ZERO;
+        }
+
+        String value = values[0];
+        BigDecimal result = toBigDecimal(value);
+        for (int i = 1; i < values.length; i++) {
+            value = values[i];
+            if (StringUtils.isNotBlank(value)) {
+                result = result.add(toBigDecimal(value));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 提供精确的减法运算<br>
+     * 如果传入多个值为null或者空，则返回0
+     *
+     * @param values 多个被减值
+     * @return 差
+     * @since 4.0.0
+     */
+    public static BigDecimal sub(String... values) {
+        if (ArrayUtils.isEmpty(values)) {
+            return BigDecimal.ZERO;
+        }
+
+        String value = values[0];
+        BigDecimal result = toBigDecimal(value);
+        for (int i = 1; i < values.length; i++) {
+            value = values[i];
+            if (StringUtils.isNotBlank(value)) {
+                result = result.subtract(toBigDecimal(value));
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 提供精确的乘法运算<br>
+     * 如果传入多个值为null或者空，则返回0
+     *
+     * @param values 多个被乘值
+     * @return 积
+     * @since 4.0.0
+     */
+    public static BigDecimal mul(String... values) {
+        if (ArrayUtils.isEmpty(values)) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal result = new BigDecimal(values[0]);
+        for (int i = 1; i < values.length; i++) {
+            result = result.multiply(new BigDecimal(values[i]));
+        }
+
+        return result;
+    }
+
+    /**
+     * 提供(相对)精确的除法运算,当发生除不尽的情况的时候,精确到小数点后10位,后面的四舍五入
+     *
+     * @param v1 被除数
+     * @param v2 除数
+     * @return 两个参数的商
+     */
+    public static BigDecimal div(String v1, String v2) {
+        return div(toBigDecimal(v1), toBigDecimal(v2), 2, RoundingMode.FLOOR);
+    }
+
+
+    /**
+     * 提供(相对)精确的除法运算,当发生除不尽的情况时,由scale指定精确度
+     *
+     * @param v1           被除数
+     * @param v2           除数
+     * @param scale        精确度，如果为负值，取绝对值
+     * @param roundingMode 保留小数的模式 {@link RoundingMode}
+     * @return 两个参数的商
+     * @since 3.0.9
+     */
+    public static BigDecimal div(BigDecimal v1, BigDecimal v2, int scale, RoundingMode roundingMode) {
+        Assert.notNull(v2, "Divisor must be not null !");
+        if (null == v1) {
+            return BigDecimal.ZERO;
+        }
+        if (scale < 0) {
+            scale = -scale;
+        }
+        return v1.divide(v2, scale, roundingMode);
+    }
+
+    /**
+     * 数字转{@link BigDecimal}<br>
+     * null或""或空白符转换为0
+     *
+     * @param number 数字字符串
+     * @return {@link BigDecimal}
+     * @since 4.0.9
+     */
+    public static BigDecimal toBigDecimal(String number) {
+        try {
+            number = parseNumber(number).toString();
+        } catch (Exception ignore) {
+            // 忽略解析错误
+        }
+        return StringUtils.isBlank(number) ? BigDecimal.ZERO : new BigDecimal(number);
+    }
+
+
+    /**
+     * 将指定字符串转换为{@link Number} 对象
+     *
+     * @param numberStr Number字符串
+     * @return Number对象
+     * @throws NumberFormatException 包装了{@link ParseException}，当给定的数字字符串无法解析时抛出
+     * @since 4.1.15
+     */
+    public static Number parseNumber(String numberStr) throws NumberFormatException {
+        try {
+            return NumberFormat.getInstance().parse(numberStr);
+        } catch (ParseException e) {
+            final NumberFormatException nfe = new NumberFormatException(e.getMessage());
+            nfe.initCause(e);
+            throw nfe;
+        }
+    }
 }
