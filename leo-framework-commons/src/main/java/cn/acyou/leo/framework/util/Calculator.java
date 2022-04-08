@@ -96,6 +96,7 @@ public class Calculator {
      */
     public static BigDecimal conversion(String expression) {
         final Calculator cal = new Calculator("0");
+        expression = expression.replaceAll(" ", "");
         expression = transform(expression);
         return cal.calculate(expression);
     }
