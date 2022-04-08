@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.push.umeng;
 
 import cn.acyou.leo.framework.ClientEnum;
+import cn.acyou.leo.framework.push.prop.UmengProperties;
 import cn.acyou.leo.framework.push.umeng.android.AndroidCustomizedcast;
 import cn.acyou.leo.framework.push.umeng.ios.IOSCustomizedcast;
 import com.alibaba.fastjson.JSON;
@@ -15,9 +16,13 @@ import java.util.Map;
 @Slf4j
 public class PushUtils {
 
-    private static PushClient client = new PushClient();
+    private static final PushClient client = new PushClient();
 
-    private UmengProperties umengPropConfig;
+    private UmengProperties umengProperties;
+
+    public PushUtils(UmengProperties umengProperties) {
+        this.umengProperties = umengProperties;
+    }
 
     /**
      * 推送消息
@@ -32,18 +37,18 @@ public class PushUtils {
         customizedcastBo.setTitle(param.getTitle());
         customizedcastBo.setText(param.getText());
         customizedcastBo.setCustomField(param.getCustomField());
-        customizedcastBo.setTest(umengPropConfig.isTest());
+        customizedcastBo.setTest(umengProperties.isTest());
         customizedcastBo.setAliasType("userId");
         customizedcastBo.setAlias(String.valueOf(param.getUserId()));
         switch (deviceType) {
             case ANDROID:
-                customizedcastBo.setAppkey(umengPropConfig.getAndroid().getAppkey());
-                customizedcastBo.setAppMasterSecret(umengPropConfig.getAndroid().getAppMasterSecret());
+                customizedcastBo.setAppkey(umengProperties.getAndroid().getAppkey());
+                customizedcastBo.setAppMasterSecret(umengProperties.getAndroid().getAppMasterSecret());
                 sendAndroidCustomizedcast(customizedcastBo);
                 break;
             case IOS:
-                customizedcastBo.setAppkey(umengPropConfig.getIos().getAppkey());
-                customizedcastBo.setAppMasterSecret(umengPropConfig.getIos().getAppMasterSecret());
+                customizedcastBo.setAppkey(umengProperties.getIos().getAppkey());
+                customizedcastBo.setAppMasterSecret(umengProperties.getIos().getAppMasterSecret());
                 sendIOSCustomizedcast(customizedcastBo);
                 break;
             default:
