@@ -22,6 +22,7 @@ public class PushUtils {
 
     public PushUtils(UmengProperties umengProperties) {
         this.umengProperties = umengProperties;
+        log.info("友盟推送 配置完成：{}", umengProperties);
     }
 
     /**
