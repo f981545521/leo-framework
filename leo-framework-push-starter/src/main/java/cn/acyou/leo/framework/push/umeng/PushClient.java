@@ -6,7 +6,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -19,7 +19,7 @@ public class PushClient {
     protected final String USER_AGENT = "Mozilla/5.0";
 
     // This object is used for sending the post request to Umeng
-    protected HttpClient client = new DefaultHttpClient();
+    protected HttpClient client = HttpClients.createDefault();
 
     // The host
     protected static final String host = "http://msg.umeng.com";

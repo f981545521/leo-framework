@@ -59,6 +59,15 @@ leo:
       port: 3721
       base-path: /leo
       base-path-url: http://ftp.acyou.cn
+  umeng:
+    enable: true
+    test: true
+    ios:
+      appkey: 111
+      app-master-secret: 222
+    android:
+      appkey: 111
+      app-master-secret: 222
 # knife4j增强模式
 knife4j:
   enable: true
