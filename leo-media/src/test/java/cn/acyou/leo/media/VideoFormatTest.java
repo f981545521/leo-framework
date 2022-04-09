@@ -18,6 +18,7 @@ import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -284,8 +285,25 @@ public class VideoFormatTest {
         //MediaUtil.cutAudio("http://qiniu.acyou.cn/audio/1.mp3", 10000, 20000, "E:\\KuGou2\\柳爽 - 漠河舞厅_54.mp3");
         //MediaUtil.mergeAudioAndVideo("D:\\temp\\merge\\audio.mp4", "D:\\temp\\merge\\video.mp4", "D:\\temp\\merge\\9.mp4");
         //MediaUtil.mergeAudioAndVideo("http://qiniu.acyou.cn/video/merge/audio.mp4", "http://qiniu.acyou.cn/video/merge/video.mp4", "D:\\temp\\merge\\10.mp4");
-        String[] targetPaths = MediaUtil.extractFrameBySpeedRatio("http://qiniu.acyou.cn/DouYin/2.mp4", new int[]{10, 20, 50, 70, 90}, "D:\\temp\\frame\\");
-        System.out.println(Arrays.toString(targetPaths));
+        //String[] targetPaths = MediaUtil.extractFrameBySpeedRatio("http://qiniu.acyou.cn/DouYin/2.mp4", new int[]{10, 20, 50, 70, 90}, "D:\\temp\\frame\\");
+        //System.out.println(Arrays.toString(targetPaths));
+        //###
+        //Map<String, String> param = new HashMap<>();
+        //param.put("0.0.0", "D:\\temp\\channel\\1.wav");
+        //param.put("0.0.1", "D:\\temp\\channel\\2.wav");
+        //MediaUtil.separateAudioChannel("http://qiniu.acyou.cn/media/354-2-20220407180008326.aac", param);
+
+        MultimediaObject mediaObject = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/354-2-20220407180008326.aac"));
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        audio.setBitRate(128000);
+        audio.setChannels(2);
+        audio.setSamplingRate(44100);
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setOutputFormat("wav");
+        attrs.setAudioAttributes(audio);
+        Encoder encoder = new Encoder();
+        encoder.encode(mediaObject, new File("D:\\temp\\channel\\3.wav"), attrs);
     }
 
 }

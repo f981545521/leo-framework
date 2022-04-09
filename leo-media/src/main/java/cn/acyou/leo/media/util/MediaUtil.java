@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author youfang
@@ -128,5 +131,38 @@ public class MediaUtil {
             paths[i] = targetPath;
         }
         return paths;
+    }
+
+    /**
+     * 分离音频通道
+     *
+     * <pre>
+     * 参考命令：ffmpeg -i 1.wav -map_channel 0.0.0 output/1/1.wav -map_channel 0.0.1 output/2/1.wav
+     * {@code
+     * Map<String, String> param = new HashMap<>();
+     * param.put("0.0.0", "D:\\temp\\channel\\1.wav");
+     * param.put("0.0.1", "D:\\temp\\channel\\2.wav");
+     * MediaUtil.separateAudioChannel("http://qiniu.acyou.cn/media/354-2-20220407180008326.aac", param);
+     * }
+     * </pre>
+     * @param url        url
+     * @param channelOut 频道
+     *                    0.0.0 -> D:\temp\channel\1.wav
+     *                    0.0.1 -> D:\temp\channel\2.wav
+     */
+    public static void separateAudioChannel(String url, Map<String, String> channelOut){
+        List<String> command = new ArrayList<>();
+        command.add("-i");
+        command.add(url);
+        channelOut.forEach((k, v)->{
+            command.add("-map_channel");
+            command.add(k);
+            command.add(v);
+        });
+        MediaUtil.exec(command.toArray(new String[0]));
+    }
+
+    public static void main(String[] args) {
+
     }
 }
