@@ -299,15 +299,15 @@ public class VideoFormatTest {
 
         MultimediaObject mediaObject = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/354-2-20220407180008326.aac"));
         AudioAttributes audio = new AudioAttributes();
-        audio.setCodec("libmp3lame");
-        audio.setBitRate(128000);
-        audio.setChannels(2);
-        audio.setSamplingRate(44100);
+        audio.setCodec("pcm_s16le");
+        audio.setBitRate(16);
+        audio.setChannels(1);
+        audio.setSamplingRate(16000);
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setOutputFormat("wav");
         attrs.setAudioAttributes(audio);
         Encoder encoder = new Encoder();
-        encoder.encode(mediaObject, new File("D:\\temp\\channel\\3.wav"), attrs);
+        encoder.encode(mediaObject, new File("D:\\temp\\channel\\5.wav"), attrs);
     }
 
 }

@@ -105,6 +105,7 @@ public class MediaController {
 
     /**
      * 从视频提取音频
+     * https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/354-2-20220407180008326.aac
      * http://localhost:8060/media/getVideoInfo?vPath=http://qiniu.acyou.cn/video/568b5fe3f98e35536fce71a7c7e07af6.mp4
      *
      * @param vPath    地址
