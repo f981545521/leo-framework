@@ -31,7 +31,7 @@ class Demo {
         broadcast.setText("Android broadcast text");
         broadcast.goAppAfterOpen();
         broadcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
-        // TODO Set 'production_mode' to 'false' if it's a test device.
+        // Set 'production_mode' to 'false' if it's a test device.
         // For how to register a test device, please see the developer doc.
         broadcast.setProductionMode();
         // Set customized fields
@@ -44,14 +44,14 @@ class Demo {
 
     public void sendAndroidUnicast() throws Exception {
         AndroidUnicast unicast = new AndroidUnicast(appkey, appMasterSecret);
-        // TODO Set your device token
+        // Set your device token
         unicast.setDeviceToken("your device_token");
         unicast.setTicker("Android unicast ticker");
         unicast.setTitle("中文的title");
         unicast.setText("Android unicast text");
         unicast.goAppAfterOpen();
         unicast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
-        // TODO Set 'production_mode' to 'false' if it's a test device.
+        // Set 'production_mode' to 'false' if it's a test device.
         // For how to register a test device, please see the developer doc.
         unicast.setProductionMode();
         // Set customized fields
@@ -93,7 +93,7 @@ class Demo {
         groupcast.goAppAfterOpen();
         groupcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
         groupcast.setChannelActivity("your channel activity");
-        // TODO Set 'production_mode' to 'false' if it's a test device.
+        // Set 'production_mode' to 'false' if it's a test device.
         // For how to register a test device, please see the developer doc.
         groupcast.setProductionMode();
         //厂商通道相关参数
@@ -104,7 +104,7 @@ class Demo {
 
     public void sendAndroidCustomizedcast() throws Exception {
         AndroidCustomizedcast customizedcast = new AndroidCustomizedcast(appkey, appMasterSecret);
-        // TODO Set your alias here, and use comma to split them if there are multiple alias.
+        // Set your alias here, and use comma to split them if there are multiple alias.
         // And if you have many alias, you can also upload a file containing these alias, then
         // use file_id to send customized notification.
         customizedcast.setAlias("alias", "alias_type");
@@ -113,7 +113,7 @@ class Demo {
         customizedcast.setText("Android customizedcast text");
         customizedcast.goAppAfterOpen();
         customizedcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
-        // TODO Set 'production_mode' to 'false' if it's a test device.
+        // Set 'production_mode' to 'false' if it's a test device.
         // For how to register a test device, please see the developer doc.
         customizedcast.setProductionMode();
         //厂商通道相关参数
@@ -124,7 +124,7 @@ class Demo {
 
     public void sendAndroidCustomizedcastFile() throws Exception {
         AndroidCustomizedcast customizedcast = new AndroidCustomizedcast(appkey, appMasterSecret);
-        // TODO Set your alias here, and use comma to split them if there are multiple alias.
+        // Set your alias here, and use comma to split them if there are multiple alias.
         // And if you have many alias, you can also upload a file containing these alias, then
         // use file_id to send customized notification.
         String fileId = client.uploadContents(appkey, appMasterSecret, "aa" + "\n" + "bb" + "\n" + "alias");
@@ -134,7 +134,7 @@ class Demo {
         customizedcast.setText("Android customizedcast text");
         customizedcast.goAppAfterOpen();
         customizedcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
-        // TODO Set 'production_mode' to 'false' if it's a test device.
+        // Set 'production_mode' to 'false' if it's a test device.
         // For how to register a test device, please see the developer doc.
         customizedcast.setProductionMode();
         //厂商通道相关参数
@@ -145,7 +145,7 @@ class Demo {
 
     public void sendAndroidFilecast() throws Exception {
         AndroidFilecast filecast = new AndroidFilecast(appkey, appMasterSecret);
-        // TODO upload your device tokens, and use '\n' to split them if there are multiple tokens
+        // upload your device tokens, and use '\n' to split them if there are multiple tokens
         String fileId = client.uploadContents(appkey, appMasterSecret, "aa" + "\n" + "bb");
         filecast.setFileId(fileId);
         filecast.setTicker("Android filecast ticker");
@@ -167,7 +167,7 @@ class Demo {
         broadcast.setAlert("今日天气", "", "今日可能下雨🌂");
         broadcast.setBadge(0);
         broadcast.setSound("default");
-        // TODO set 'production_mode' to 'true' if your app is under production mode
+        // set 'production_mode' to 'true' if your app is under production mode
         broadcast.setTestMode();
         // Set customized fields
         broadcast.setCustomizedField("test", "helloworld");
@@ -176,7 +176,7 @@ class Demo {
 
     public void sendIOSUnicast() throws Exception {
         IOSUnicast unicast = new IOSUnicast(appkey, appMasterSecret);
-        // TODO Set your device token
+        // Set your device token
         unicast.setDeviceToken("your device_token");
         //alert值设置为字符串
         //unicast.setAlert("IOS 单播测试");
@@ -184,7 +184,7 @@ class Demo {
         unicast.setAlert("今日天气", "", "今日可能下雨🌂");
         unicast.setBadge(0);
         unicast.setSound("default");
-        // TODO set 'production_mode' to 'true' if your app is under production mode
+        // set 'production_mode' to 'true' if your app is under production mode
         unicast.setTestMode();
         // Set customized fields
         unicast.setCustomizedField("test", "helloworld");
@@ -221,14 +221,14 @@ class Demo {
         groupcast.setAlert("今日天气", "subtitle", "今日可能下雨🌂");
         groupcast.setBadge(0);
         groupcast.setSound("default");
-        // TODO set 'production_mode' to 'true' if your app is under production mode
+        // set 'production_mode' to 'true' if your app is under production mode
         groupcast.setTestMode();
         client.send(groupcast);
     }
 
     public void sendIOSCustomizedcast() throws Exception {
         IOSCustomizedcast customizedcast = new IOSCustomizedcast(appkey, appMasterSecret);
-        // TODO Set your alias and alias_type here, and use comma to split them if there are multiple alias.
+        // Set your alias and alias_type here, and use comma to split them if there are multiple alias.
         // And if you have many alias, you can also upload a file containing these alias, then
         // use file_id to send customized notification.
         customizedcast.setAlias("alias", "alias_type");
@@ -237,14 +237,14 @@ class Demo {
         customizedcast.setAlert("今日天气", "", "今日可能下雨🌂");
         customizedcast.setBadge(0);
         customizedcast.setSound("default");
-        // TODO set 'production_mode' to 'true' if your app is under production mode
+        // set 'production_mode' to 'true' if your app is under production mode
         customizedcast.setTestMode();
         client.send(customizedcast);
     }
 
     public void sendIOSFilecast() throws Exception {
         IOSFilecast filecast = new IOSFilecast(appkey, appMasterSecret);
-        // TODO upload your device tokens, and use '\n' to split them if there are multiple tokens
+        // upload your device tokens, and use '\n' to split them if there are multiple tokens
         String fileId = client.uploadContents(appkey, appMasterSecret, "aa" + "\n" + "bb");
         filecast.setFileId(fileId);
         //filecast.setAlert("IOS 文件播测试");
@@ -252,18 +252,18 @@ class Demo {
         filecast.setAlert("今日天气", "", "今日可能下雨🌂");
         filecast.setBadge(0);
         filecast.setSound("default");
-        // TODO set 'production_mode' to 'true' if your app is under production mode
+        // set 'production_mode' to 'true' if your app is under production mode
         filecast.setTestMode();
         client.send(filecast);
     }
 
     public static void main(String[] args) {
-        // TODO set your appkey and master secret here
+        // set your appkey and master secret here
         Demo demo = new Demo("your appkey", "your master secret");
         try {
             demo.sendAndroidUnicast();
             //demo.sendIOSUnicast();
-            /* TODO these methods are all available, just fill in some fields and do the test
+            /* these methods are all available, just fill in some fields and do the test
              * demo.sendAndroidCustomizedcastFile();
              * demo.sendAndroidBroadcast();
              * demo.sendAndroidGroupcast();
