@@ -81,6 +81,9 @@ public class CustomCodeGenerator {
     };
 
     public void doGenerator() {
+        if (modulesMap.size() == 0) {
+            return;
+        }
         // 代码生成器
         AutoGenerator autoGenerator = new AutoGenerator();
         // 全局配置
@@ -110,29 +113,40 @@ public class CustomCodeGenerator {
         PackageConfig pc = new PackageConfig();
         pc.setModuleName("");
         pc.setParent(PACKAGE_PARENT);
-
-        // 包信息
-        // 包信息
-        pc.setEntity(modulesMap.get(ConstVal.ENTITY_PATH)[1]);
-        pc.setMapper(modulesMap.get(ConstVal.MAPPER_PATH)[1]);
-        pc.setXml(modulesMap.get(ConstVal.XML_PATH)[1]);
-        pc.setService(modulesMap.get(ConstVal.SERVICE_PATH)[1]);
-        pc.setServiceImpl(modulesMap.get(ConstVal.SERVICE_IMPL_PATH)[1]);
-        pc.setController(modulesMap.get(ConstVal.CONTROLLER_PATH)[1]);
-        packageInfo.put(ConstVal.ENTITY, joinPackage(pc.getParent(), pc.getEntity()));
-        packageInfo.put(ConstVal.MAPPER, joinPackage(pc.getParent(), pc.getMapper()));
-        packageInfo.put(ConstVal.XML, joinPackage(pc.getParent(), pc.getXml()));
-        packageInfo.put(ConstVal.SERVICE, joinPackage(pc.getParent(), pc.getService()));
-        packageInfo.put(ConstVal.SERVICE_IMPL, joinPackage(pc.getParent(), pc.getServiceImpl()));
-        packageInfo.put(ConstVal.CONTROLLER, joinPackage(pc.getParent(), pc.getController()));
-
         Map<String, String> pathInfo = new HashMap<>();
-        pathInfo.put(ConstVal.XML_PATH, globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.XML_PATH)[0] + "\\src\\main\\resources\\" + modulesMap.get(ConstVal.XML_PATH)[1]);
-        setPathInfo(pathInfo, templateConfig.getEntity(globalConfig.isKotlin()), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.ENTITY_PATH)[0] + "\\src\\main\\java", ConstVal.ENTITY_PATH, ConstVal.ENTITY);
-        setPathInfo(pathInfo, templateConfig.getMapper(), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.MAPPER_PATH)[0] + "\\src\\main\\java", ConstVal.MAPPER_PATH, ConstVal.MAPPER);
-        setPathInfo(pathInfo, templateConfig.getService(), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.SERVICE_PATH)[0] + "\\src\\main\\java", ConstVal.SERVICE_PATH, ConstVal.SERVICE);
-        setPathInfo(pathInfo, templateConfig.getServiceImpl(), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.SERVICE_IMPL_PATH)[0] + "\\src\\main\\java", ConstVal.SERVICE_IMPL_PATH, ConstVal.SERVICE_IMPL);
-        setPathInfo(pathInfo, templateConfig.getController(), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.CONTROLLER_PATH)[0] + "\\src\\main\\java", ConstVal.CONTROLLER_PATH, ConstVal.CONTROLLER);
+
+        // 包信息
+        if (modulesMap.get(ConstVal.ENTITY_PATH) != null) {
+            pc.setEntity(modulesMap.get(ConstVal.ENTITY_PATH)[1]);
+            packageInfo.put(ConstVal.ENTITY, joinPackage(pc.getParent(), pc.getEntity()));
+            setPathInfo(pathInfo, templateConfig.getEntity(globalConfig.isKotlin()), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.ENTITY_PATH)[0] + "\\src\\main\\java", ConstVal.ENTITY_PATH, ConstVal.ENTITY);
+        }
+        if (modulesMap.get(ConstVal.MAPPER_PATH) != null) {
+            pc.setMapper(modulesMap.get(ConstVal.MAPPER_PATH)[1]);
+            packageInfo.put(ConstVal.MAPPER, joinPackage(pc.getParent(), pc.getMapper()));
+            setPathInfo(pathInfo, templateConfig.getMapper(), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.MAPPER_PATH)[0] + "\\src\\main\\java", ConstVal.MAPPER_PATH, ConstVal.MAPPER);
+        }
+        if (modulesMap.get(ConstVal.XML_PATH) != null) {
+            pc.setXml(modulesMap.get(ConstVal.XML_PATH)[1]);
+            packageInfo.put(ConstVal.XML, joinPackage(pc.getParent(), pc.getXml()));
+            pathInfo.put(ConstVal.XML_PATH, globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.XML_PATH)[0] + "\\src\\main\\resources\\" + modulesMap.get(ConstVal.XML_PATH)[1]);
+        }
+        if (modulesMap.get(ConstVal.SERVICE_PATH) != null) {
+            pc.setService(modulesMap.get(ConstVal.SERVICE_PATH)[1]);
+            packageInfo.put(ConstVal.SERVICE, joinPackage(pc.getParent(), pc.getService()));
+            setPathInfo(pathInfo, templateConfig.getService(), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.SERVICE_PATH)[0] + "\\src\\main\\java", ConstVal.SERVICE_PATH, ConstVal.SERVICE);
+        }
+        if (modulesMap.get(ConstVal.SERVICE_IMPL_PATH) != null) {
+            pc.setServiceImpl(modulesMap.get(ConstVal.SERVICE_IMPL_PATH)[1]);
+            packageInfo.put(ConstVal.SERVICE_IMPL, joinPackage(pc.getParent(), pc.getServiceImpl()));
+            setPathInfo(pathInfo, templateConfig.getServiceImpl(), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.SERVICE_IMPL_PATH)[0] + "\\src\\main\\java", ConstVal.SERVICE_IMPL_PATH, ConstVal.SERVICE_IMPL);
+        }
+        if (modulesMap.get(ConstVal.CONTROLLER_PATH) != null) {
+            pc.setController(modulesMap.get(ConstVal.CONTROLLER_PATH)[1]);
+            packageInfo.put(ConstVal.CONTROLLER, joinPackage(pc.getParent(), pc.getController()));
+            setPathInfo(pathInfo, templateConfig.getController(), globalConfig.getOutputDir() + "\\" + modulesMap.get(ConstVal.CONTROLLER_PATH)[0] + "\\src\\main\\java", ConstVal.CONTROLLER_PATH, ConstVal.CONTROLLER);
+        }
+
         pc.setPathInfo(pathInfo);
 
         autoGenerator.setPackageInfo(pc);
