@@ -23,6 +23,7 @@ import java.util.Map;
 public class CustomCodeGenerator {
 
     private String tableName = "student";
+    private String tablePrefix;
     private String DRIVER = "com.mysql.cj.jdbc.Driver";
     private String USER = "root";
     private String PASSWORD = "root123";
@@ -35,6 +36,11 @@ public class CustomCodeGenerator {
 
     public CustomCodeGenerator(String tableName) {
         this.tableName = tableName;
+    }
+
+    public CustomCodeGenerator(String tableName, String removeTablePrefix) {
+        this.tableName = tableName;
+        this.tablePrefix = removeTablePrefix;
     }
 
     public CustomCodeGenerator author(String AUTHOR) {
@@ -173,7 +179,7 @@ public class CustomCodeGenerator {
         //strategy.setSuperEntityColumns("id");
         strategy.setInclude(tableName);
         strategy.setControllerMappingHyphenStyle(false);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
+        strategy.setTablePrefix(tablePrefix);
         autoGenerator.setStrategy(strategy);
         autoGenerator.setTemplateEngine(new FreemarkerTemplateEngine());
         autoGenerator.execute();
