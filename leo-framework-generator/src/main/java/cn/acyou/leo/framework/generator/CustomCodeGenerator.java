@@ -22,14 +22,39 @@ import java.util.Map;
  **/
 public class CustomCodeGenerator {
 
+    /**
+     * 要生产的表名
+     */
     private String tableName = "student";
-    private String tablePrefix;
+    /**
+     * 移除表前缀
+     */
+    private String tablePrefix = "";
+    /**
+     * 数据库驱动
+     */
     private String DRIVER = "com.mysql.cj.jdbc.Driver";
+    /**
+     * 数据库用户名
+     */
     private String USER = "root";
+    /**
+     * 数据库密码
+     */
     private String PASSWORD = "root123";
+    /**
+     * 文件作者
+     */
     private String AUTHOR = "youfang";
+    /**
+     * 父包
+     */
     private String PACKAGE_PARENT = "cn.acyou.leo.content";
+    /**
+     * 数据库驱动
+     */
     private String JDBC_URL = "jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false";
+    //项目地址，无需关系
     private static final String projectPath = System.getProperty("user.dir");
     //Module 文件存放项目配置
     public Map<String, String[]> modulesMap = new HashMap<>();
