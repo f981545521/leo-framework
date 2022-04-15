@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.util.SpringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Component;
 public class ApplicationCheckRunner implements ApplicationRunner {
     @Autowired
     private LeoProperty leoProperty;
+    @Autowired(required = false)
+    private LoggingSystem loggingSystem;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -23,5 +26,7 @@ public class ApplicationCheckRunner implements ApplicationRunner {
             //启动Token校验时，必须存在UserTokenService
             SpringHelper.getBean(UserTokenService.class);
         }
+        //去除频繁的无关紧要的日志
+        //loggingSystem.setLogLevel("cn.acyou.leo.pay.StudentMapper.selectList", LogLevel.WARN);
     }
 }
