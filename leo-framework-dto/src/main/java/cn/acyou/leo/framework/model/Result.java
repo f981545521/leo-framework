@@ -14,7 +14,7 @@ public class Result<T> extends DTO {
     private static final int SUCCESS_CODE = 200;
     private static final String SUCCESS_MESSAGE = "处理成功";
     private static final int ERROR_CODE = 500;
-    private static final String ERROR_MESSAGE = "未知异常，请联系管理员";
+    private static final String ERROR_MESSAGE = "服务繁忙，请稍后再试";
 
     public Result() {
 
