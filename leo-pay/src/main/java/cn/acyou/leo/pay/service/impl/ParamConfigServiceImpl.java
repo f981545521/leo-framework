@@ -47,7 +47,7 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
     @Cacheable(value="leo:pay:paramConfig#-1", key="#namespace + '-' + #code")
     public List<ParamConfigVo> getConfigList(String namespace, String code) {
         List<ParamConfig> list = lambdaQuery()
-                .in(StringUtils.isNotBlank(namespace), ParamConfig::getNamespace, namespace.split(","))
+                .in(StringUtils.isNotBlank(namespace), ParamConfig::getNamespace, (Object[]) namespace.split(","))
                 .eq(StringUtils.isNotBlank(code), ParamConfig::getCode, code)
                 .eq(ParamConfig::getIsDelete, Constant.FLAG_FALSE_0)
                 .orderByDesc(ParamConfig::getCreateTime)
