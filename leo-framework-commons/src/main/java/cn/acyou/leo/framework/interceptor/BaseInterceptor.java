@@ -238,7 +238,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                         .userId(AppContext.getLoginUser() != null ? AppContext.getLoginUser().getUserId() : null)
                         .userName(AppContext.getLoginUser() != null ? AppContext.getLoginUser().getUserName() : null)
                         .build();
-        AsyncManager.me().execute(() -> {
+        AsyncManager.execute(() -> {
             log.info(">>> {}", interfaceCallStatistics);
         });
     }

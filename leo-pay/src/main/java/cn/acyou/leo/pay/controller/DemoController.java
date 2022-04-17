@@ -38,7 +38,7 @@ public class DemoController {
     @ApiOperation("测试使用 SpringHelper.createBean 创建的对象可以被GC回收")
     public Result<String> testDestroyBean(int count) {
         System.out.println(SpringHelper.getSingletonCount());
-        AsyncManager.me().execute(()->{
+        AsyncManager.execute(()->{
             for (int i = 0; i < count; i++) {
                 SpringHelper.createBean(TestDestroyBean.class);
                 try {

@@ -1,7 +1,7 @@
 package cn.acyou.leo.framework.commons;
 
-import cn.acyou.leo.framework.util.Assert;
 import cn.acyou.leo.framework.util.SpringHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Callable;
@@ -14,17 +14,22 @@ import java.util.concurrent.TimeUnit;
  *
  * @author youfang
  */
+@Slf4j
 public class AsyncManager {
-
     /**
      * 异步操作任务调度线程池
      */
-    private final ThreadPoolTaskExecutor taskExecutor = SpringHelper.getBean("threadPoolTaskExecutor");
-
+    private static final ThreadPoolTaskExecutor taskExecutor;
     /**
      * 定时任务线程池
      */
-    private final ScheduledExecutorService scheduledExecutor = SpringHelper.getBean("scheduledExecutorService");
+    private static final ScheduledExecutorService scheduledExecutor;
+
+    static {
+        //使用的时候，没有Bean的时候会报错
+        taskExecutor = SpringHelper.getBean("threadPoolTaskExecutor");
+        scheduledExecutor = SpringHelper.getBean("scheduledExecutorService");
+    }
 
     /**
      * 单例模式
@@ -33,19 +38,32 @@ public class AsyncManager {
 
     }
 
-    private static final AsyncManager ME = new AsyncManager();
 
-    public static AsyncManager me() {
-        return ME;
+    /**
+     * 获取线程池
+     *
+     * @return {@link ThreadPoolTaskExecutor}
+     */
+    public static ThreadPoolTaskExecutor executor(){
+        return taskExecutor;
     }
+
+    /**
+     * 获取定时任务线程池
+     *
+     * @return {@link ScheduledExecutorService}
+     */
+    public static ScheduledExecutorService scheduleExecutor(){
+        return scheduledExecutor;
+    }
+
 
     /**
      * 执行任务 execute
      *
      * @param task 任务
      */
-    public void execute(Runnable task) {
-        Assert.notNull(taskExecutor, "请先配置线程池：[threadPoolTaskExecutor]");
+    public static void execute(Runnable task) {
         taskExecutor.execute(task);
     }
 
@@ -56,8 +74,7 @@ public class AsyncManager {
      * @param task 任务
      * @return 任务
      */
-    public Future<?> submit(Runnable task) {
-        Assert.notNull(taskExecutor, "请先配置线程池：[threadPoolTaskExecutor]");
+    public static Future<?> submit(Runnable task) {
         return taskExecutor.submit(task);
     }
 
@@ -69,8 +86,7 @@ public class AsyncManager {
      * @param task 任务
      * @return 任务
      */
-    public <T> Future<T> submit(Callable<T> task) {
-        Assert.notNull(taskExecutor, "请先配置线程池：[threadPoolTaskExecutor]");
+    public static <T> Future<T> submit(Callable<T> task) {
         return taskExecutor.submit(task);
     }
 
@@ -79,10 +95,9 @@ public class AsyncManager {
      *
      * @param task 任务
      */
-    public void schedule(Runnable task) {
-        Assert.notNull(scheduledExecutor, "请先配置线程池：[scheduledExecutorService]");
-        //操作延迟10毫秒
-        scheduledExecutor.schedule(task, 10, TimeUnit.MILLISECONDS);
+    public static void schedule(Runnable task) {
+        //操作延迟5秒
+        scheduledExecutor.schedule(task, 5, TimeUnit.SECONDS);
     }
 
     /**
@@ -92,8 +107,7 @@ public class AsyncManager {
      * @param delay 延迟
      * @param unit  时间单位
      */
-    public void schedule(Runnable task, long delay, TimeUnit unit) {
-        Assert.notNull(scheduledExecutor, "请先配置线程池：[scheduledExecutorService]");
+    public static void schedule(Runnable task, long delay, TimeUnit unit) {
         scheduledExecutor.schedule(task, delay, unit);
     }
 
@@ -105,8 +119,7 @@ public class AsyncManager {
      * @param period       周期
      * @param unit         时间单位
      */
-    public void scheduleAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit) {
-        Assert.notNull(scheduledExecutor, "请先配置线程池：[scheduledExecutorService]");
+    public static void scheduleAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit) {
         scheduledExecutor.scheduleAtFixedRate(task, initialDelay, period, unit);
     }
 
@@ -118,15 +131,14 @@ public class AsyncManager {
      * @param delay        延迟
      * @param unit         时间单位
      */
-    public void scheduleWithFixedDelay(Runnable task, long initialDelay, long delay, TimeUnit unit) {
-        Assert.notNull(scheduledExecutor, "请先配置线程池：[scheduledExecutorService]");
+    public static void scheduleWithFixedDelay(Runnable task, long initialDelay, long delay, TimeUnit unit) {
         scheduledExecutor.scheduleWithFixedDelay(task, initialDelay, delay, unit);
     }
 
     /**
      * 停止线程池
      */
-    public void shutdown() {
+    public static void shutdown() {
         taskExecutor.shutdown();
         scheduledExecutor.shutdown();
     }
