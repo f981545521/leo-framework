@@ -107,6 +107,9 @@ public class CustomCodeGenerator {
             if (t.contains("datetime")) {
                 return DbColumnType.DATE;
             }
+            if (t.contains("timestamp")) {
+                return DbColumnType.DATE;
+            }
             return new MySqlTypeConvert().processTypeConvert(globalConfig, fieldType);
         }
     };
