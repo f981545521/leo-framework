@@ -296,7 +296,8 @@ public class VideoFormatTest {
         //param.put("0.0.0", "D:\\temp\\channel\\1.wav");
         //param.put("0.0.1", "D:\\temp\\channel\\2.wav");
         //MediaUtil.separateAudioChannel("http://qiniu.acyou.cn/media/354-2-20220407180008326.aac", param);
-
+        //### 拼接视频
+        //MediaUtil.concatVideo(Arrays.asList("http://qiniu.acyou.cn/media/douyin1.mp4", "http://qiniu.acyou.cn/media/douyin2.mp4"), "D:\\ToUpload\\2\\TG223.mp4");
         MultimediaObject mediaObject = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/354-2-20220407180008326.aac"));
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("pcm_s16le");

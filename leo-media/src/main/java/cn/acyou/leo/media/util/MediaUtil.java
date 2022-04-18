@@ -3,6 +3,7 @@ package cn.acyou.leo.media.util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.FileSystemUtils;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
@@ -15,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author youfang
@@ -154,7 +156,7 @@ public class MediaUtil {
         List<String> command = new ArrayList<>();
         command.add("-i");
         command.add(url);
-        channelOut.forEach((k, v)->{
+        channelOut.forEach((k, v) -> {
             command.add("-map_channel");
             command.add(k);
             command.add(v);
@@ -162,7 +164,49 @@ public class MediaUtil {
         MediaUtil.exec(command.toArray(new String[0]));
     }
 
+    /**
+     * 拼接视频
+     *
+     * @param urls       url
+     * @param targetPath 目标路径
+     */
+    public static void concatVideo(List<String> urls, String targetPath) {
+        boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
+        log.info("拼接视频 params:[urls:{},  target:{}] 目标目录：{}", urls, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        File tempDir = createTempDir("MediaUtil_concatVideo_" + UUID.randomUUID().toString().replaceAll("-", ""));
+        try {
+            List<String> tsList = new ArrayList<>();
+            for (int i = 0; i < urls.size(); i++) {
+                File tempTs = new File(tempDir, i + ".ts");
+                //转换成TS格式
+                MediaUtil.exec("-i", urls.get(i), "-c", "copy", "-bsf:v", "h264_mp4toannexb", "-f", "mpegts", tempTs.getAbsolutePath());
+                tsList.add(tempTs.getAbsolutePath());
+            }
+            MediaUtil.exec("-i", "concat:" + StringUtils.join(tsList, "|"), "-c", "copy", "-bsf:a", "aac_adtstoasc", "-movflags", "+faststart", targetPath);
+        } finally {
+            FileSystemUtils.deleteRecursively(tempDir);
+        }
+    }
+
+
     public static void main(String[] args) {
 
     }
+
+    /*————————————————————————————————————  工具方法  ———————————————————————————————————————————*/
+
+    /**
+     * 创建临时目录
+     *
+     * @param subDirName 子目录名称
+     * @return {@link File}
+     */
+    private static File createTempDir(String subDirName) {
+        File dirFolder = new File(System.getProperty("java.io.tmpdir"), subDirName);
+        if (!dirFolder.exists()) {
+            dirFolder.mkdirs();
+        }
+        return dirFolder;
+    }
+
 }
