@@ -117,7 +117,7 @@ public class MediaUtil {
      *
      * @param url        url
      * @param speedRatio 进度比例
-     * @param targetDir  目标目录
+     * @param targetDir  目标目录 无"/"结尾 。可以直接使用 getAbsolutePath()
      * @return {@link String[]} 目标文件路径列表
      * @throws Exception 异常
      */
@@ -128,7 +128,7 @@ public class MediaUtil {
         long duration = info.getDuration();
         for (int i = 0; i < speedRatio.length; i++) {
             int t = (int) (duration * (speedRatio[i] * 0.01));
-            String targetPath = targetDir + t + ".jpg";
+            String targetPath = targetDir + File.separator + "frame_" + t + ".jpg";
             MediaUtil.extractFrame(url, new BigDecimal(t).multiply(new BigDecimal("0.001")).toString(), targetPath);
             paths[i] = targetPath;
         }

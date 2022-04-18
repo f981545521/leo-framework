@@ -18,7 +18,6 @@ import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -298,17 +297,18 @@ public class VideoFormatTest {
         //MediaUtil.separateAudioChannel("http://qiniu.acyou.cn/media/354-2-20220407180008326.aac", param);
         //### 拼接视频
         //MediaUtil.concatVideo(Arrays.asList("http://qiniu.acyou.cn/media/douyin1.mp4", "http://qiniu.acyou.cn/media/douyin2.mp4"), "D:\\ToUpload\\2\\TG223.mp4");
-        MultimediaObject mediaObject = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/354-2-20220407180008326.aac"));
-        AudioAttributes audio = new AudioAttributes();
-        audio.setCodec("pcm_s16le");
-        audio.setBitRate(16);
-        audio.setChannels(1);
-        audio.setSamplingRate(16000);
-        EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setOutputFormat("wav");
-        attrs.setAudioAttributes(audio);
-        Encoder encoder = new Encoder();
-        encoder.encode(mediaObject, new File("D:\\temp\\channel\\5.wav"), attrs);
+
+        //MultimediaObject mediaObject = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/354-2-20220407180008326.aac"));
+        //AudioAttributes audio = new AudioAttributes();
+        //audio.setCodec("pcm_s16le");
+        //audio.setBitRate(16);
+        //audio.setChannels(1);
+        //audio.setSamplingRate(16000);
+        //EncodingAttributes attrs = new EncodingAttributes();
+        //attrs.setOutputFormat("wav");
+        //attrs.setAudioAttributes(audio);
+        //Encoder encoder = new Encoder();
+        //encoder.encode(mediaObject, new File("D:\\temp\\channel\\5.wav"), attrs);
     }
 
 }
