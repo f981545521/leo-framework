@@ -1274,6 +1274,8 @@ public class RedisUtils {
         return result;
     }
 
+    /* *********************************** Redis 缓存  **************************** */
+
     /**
      * 获取和缓存
      *
@@ -1281,7 +1283,7 @@ public class RedisUtils {
      * @param function 函数
      * @return {@link String}
      */
-    public String getAndCache(String key, Function<String, String> function){
+    public String getAndCache(String key, Function<String, String> function) {
         return getAndCacheObj(key, DEFAULT_CACHE_SECONDS, function);
     }
 
@@ -1294,13 +1296,7 @@ public class RedisUtils {
      * @return {@link String}
      */
     public String getAndCache(String key, long timeOut, Function<String, String> function){
-        String v = get(key);
-        if (v != null && v.length() > 0){
-            return v;
-        }
-        String value = function.apply(key);
-        set(key, value, timeOut, TimeUnit.SECONDS);
-        return value;
+        return getAndCacheObj(key, timeOut, function);
     }
 
     /**
@@ -1321,9 +1317,6 @@ public class RedisUtils {
         redisObjTemplate.opsForValue().set(key, value, timeOut, TimeUnit.SECONDS);
         return value;
     }
-
-
-
 
     /* *********************************** Redis分布式锁简单实现 **************************** */
 
