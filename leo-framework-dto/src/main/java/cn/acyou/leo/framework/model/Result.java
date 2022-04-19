@@ -1,14 +1,18 @@
 package cn.acyou.leo.framework.model;
 
 import cn.acyou.leo.framework.model.base.DTO;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author youfang
  * @since  2020/03/19 11:59
  **/
 public class Result<T> extends DTO {
+    @ApiModelProperty("编码(默认成功：200)")
     private int code;
+    @ApiModelProperty("描述")
     private String message;
+    @ApiModelProperty("响应内容")
     private T data;
 
     private static final int SUCCESS_CODE = 200;

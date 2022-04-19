@@ -17,12 +17,12 @@ public class PageSo extends DTO {
     /**
      * 分页：页码
      */
-    @ApiModelProperty("分页页码")
+    @ApiModelProperty(value = "分页页码", required = true, example = "1")
     private Integer pageNum = 1;
     /**
      * 分页：每页显示记录数
      */
-    @ApiModelProperty("分页大小")
+    @ApiModelProperty(value = "分页大小", required = true, example = "10")
     private Integer pageSize = 10;
     /**
      * 排序 example: createTime-desc,roleCode-asc}

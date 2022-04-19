@@ -263,24 +263,20 @@ public class PageQuery {
         if (StringUtils.hasText(sortsStr) && MapUtils.isNotEmpty(supportFieldMap)) {
             Set<String> supportKeys = supportFieldMap.keySet();
             String[] orderItems = sortsStr.split(",");
-            if (orderItems.length % 2 == 0) {
-                for (String orderItem : orderItems) {
-                    String[] split = orderItem.split("-");
-                    if (split.length % 2 == 0) {
-                        String key = split[0];
-                        String type = split[1];
-                        if (StringUtils.hasText(key) && StringUtils.hasText(type) &&
-                                supportKeys.contains(key) && isOrderByType(type)) {
-                            orderBySqlList.add(supportFieldMap.get(key) + " " + type.toLowerCase());
-                        } else {
-                            illegalOrderBy = true;
-                        }
+            for (String orderItem : orderItems) {
+                String[] split = orderItem.split("-");
+                if (split.length % 2 == 0) {
+                    String key = split[0];
+                    String type = split[1];
+                    if (StringUtils.hasText(key) && StringUtils.hasText(type) &&
+                            supportKeys.contains(key) && isOrderByType(type)) {
+                        orderBySqlList.add(supportFieldMap.get(key) + " " + type.toLowerCase());
                     } else {
                         illegalOrderBy = true;
                     }
+                } else {
+                    illegalOrderBy = true;
                 }
-            } else {
-                illegalOrderBy = true;
             }
         }
         if (illegalOrderBy) {

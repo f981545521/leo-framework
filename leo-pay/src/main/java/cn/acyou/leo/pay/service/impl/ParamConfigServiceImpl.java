@@ -1,7 +1,10 @@
 package cn.acyou.leo.pay.service.impl;
 
+import cn.acyou.leo.framework.commons.PageQuery;
 import cn.acyou.leo.framework.constant.Constant;
+import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
+import cn.acyou.leo.pay.dto.ParamConfigSo;
 import cn.acyou.leo.pay.dto.ParamConfigVo;
 import cn.acyou.leo.pay.entity.ParamConfig;
 import cn.acyou.leo.pay.mapper.ParamConfigMapper;
@@ -53,6 +56,11 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
                 .orderByDesc(ParamConfig::getCreateTime)
                 .list();
         return BeanCopyUtil.copyList(list, ParamConfigVo.class);
+    }
+
+    @Override
+    public PageData<ParamConfigVo> pageSelect(ParamConfigSo paramConfigSo) {
+        return PageQuery.startPage(paramConfigSo).selectMapper(lambdaQuery().list(), ParamConfigVo.class);
     }
 
     @Override

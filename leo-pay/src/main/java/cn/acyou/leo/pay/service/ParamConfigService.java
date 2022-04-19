@@ -1,5 +1,7 @@
 package cn.acyou.leo.pay.service;
 
+import cn.acyou.leo.framework.model.PageData;
+import cn.acyou.leo.pay.dto.ParamConfigSo;
 import cn.acyou.leo.pay.dto.ParamConfigVo;
 import cn.acyou.leo.pay.entity.ParamConfig;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -23,4 +25,5 @@ public interface ParamConfigService extends IService<ParamConfig> {
 
     void clearAllCache();
 
+    PageData<ParamConfigVo> pageSelect(ParamConfigSo paramConfigSo);
 }
