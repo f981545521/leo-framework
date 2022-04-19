@@ -3,10 +3,8 @@ package cn.acyou.leo.framework.commons;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.exception.*;
-import cn.acyou.leo.framework.model.PageSo;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.prop.LeoProperty;
-import cn.acyou.leo.framework.util.BeanCopyUtil;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +34,9 @@ import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,7 +104,6 @@ public class GlobalExceptionHandler {
     public Result<Object> handleValidException(MethodArgumentNotValidException e) {
         return handlerParamNotValidException(e.getBindingResult());
     }
-
     /**
      * 参数校验 3
      */
@@ -124,7 +123,6 @@ public class GlobalExceptionHandler {
         error.setData(map);
         return error;
     }
-
     /**
      * 分页参数不合法异常关键字
      */
@@ -165,7 +163,6 @@ public class GlobalExceptionHandler {
         error.setData(map);
         return error;
     }
-
     /** 正在处理 */
     @ExceptionHandler(ConcurrentException.class)
     @ResponseBody
@@ -222,7 +219,6 @@ public class GlobalExceptionHandler {
         AppContext.setExceptionResult(resultInfo);
         return resultInfo;
     }
-
     /** 违反数据库唯一约束：Duplicate entry 'DEMO:KEY' for key 'idx_param_config_code' */
     private static final Pattern MESSAGE_MATCHER = Pattern.compile("'([^']+)'");
     @ExceptionHandler(DuplicateKeyException.class)
@@ -285,7 +281,6 @@ public class GlobalExceptionHandler {
         AppContext.setExceptionResult(resultInfo);
         return resultInfo;
     }
-
     /**处理自定义服务异常*/
     @ExceptionHandler(ServiceException.class)
     @ResponseBody
@@ -349,5 +344,4 @@ public class GlobalExceptionHandler {
             ex.printStackTrace();
         }
     }
-
 }
