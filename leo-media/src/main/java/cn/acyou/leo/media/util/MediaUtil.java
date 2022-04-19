@@ -13,10 +13,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author youfang
@@ -170,14 +171,15 @@ public class MediaUtil {
      * @param urls       url
      * @param targetPath 目标路径
      */
-    public static void concatVideo(List<String> urls, String targetPath) {
+    public static void concatVideo(List<String> urls, String targetPath) throws Exception {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
         log.info("拼接视频 params:[urls:{},  target:{}] 目标目录：{}", urls, targetPath, (mkdirs ? "创建成功" : "无需创建"));
-        File tempDir = createTempDir("MediaUtil_concatVideo_" + UUID.randomUUID().toString().replaceAll("-", ""));
+        Path tempDir = null;
         try {
+            tempDir = Files.createTempDirectory("MediaUtil_concatVideo_");
             List<String> tsList = new ArrayList<>();
             for (int i = 0; i < urls.size(); i++) {
-                File tempTs = new File(tempDir, i + ".ts");
+                File tempTs = new File(tempDir.toFile(), i + ".ts");
                 //转换成TS格式
                 MediaUtil.exec("-i", urls.get(i), "-c", "copy", "-bsf:v", "h264_mp4toannexb", "-f", "mpegts", tempTs.getAbsolutePath());
                 tsList.add(tempTs.getAbsolutePath());
@@ -191,22 +193,6 @@ public class MediaUtil {
 
     public static void main(String[] args) {
 
-    }
-
-    /*————————————————————————————————————  工具方法  ———————————————————————————————————————————*/
-
-    /**
-     * 创建临时目录
-     *
-     * @param subDirName 子目录名称
-     * @return {@link File}
-     */
-    private static File createTempDir(String subDirName) {
-        File dirFolder = new File(System.getProperty("java.io.tmpdir"), subDirName);
-        if (!dirFolder.exists()) {
-            dirFolder.mkdirs();
-        }
-        return dirFolder;
     }
 
 }
