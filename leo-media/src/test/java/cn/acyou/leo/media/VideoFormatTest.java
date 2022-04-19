@@ -309,6 +309,10 @@ public class VideoFormatTest {
         //attrs.setAudioAttributes(audio);
         //Encoder encoder = new Encoder();
         //encoder.encode(mediaObject, new File("D:\\temp\\channel\\5.wav"), attrs);
+
+        //### 压缩图片
+        //ImageUtil.compressImage(new URL("http://qiniu.acyou.cn/images/12.jpg"), new File("D:\\te\\12.jpg"));
+        //ImageUtil.compressImage(new File("D:\\temp\\image\\6.jpg"), new File("D:\\temp\\image\\6_c.jpg"));
     }
 
 }
