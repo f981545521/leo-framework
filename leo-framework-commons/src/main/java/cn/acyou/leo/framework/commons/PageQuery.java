@@ -1,15 +1,22 @@
 package cn.acyou.leo.framework.commons;
 
+import cn.acyou.leo.framework.constant.CommonErrorEnum;
+import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.PageSo;
 import cn.acyou.leo.framework.util.Assert;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
-import cn.acyou.leo.framework.util.SqlUtil;
+import cn.acyou.leo.framework.util.CollectionUtils;
+import cn.acyou.leo.framework.util.MapUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.data.domain.Page;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 分页查询工具
@@ -161,7 +168,7 @@ public class PageQuery {
      * @return 开启查询
      */
     public static PageQuery startPage(PageSo pageSo) {
-        return startPage(pageSo.getPageNum(), pageSo.getPageSize(), SqlUtil.convertOrderBy(pageSo));
+        return startPage(pageSo.getPageNum(), pageSo.getPageSize(), convertOrderBy(pageSo));
     }
 
     /**
@@ -176,7 +183,7 @@ public class PageQuery {
     public static PageQuery startPage(PageSo pageSo, Boolean pageSizeZero) {
         judgeNotNull(pageSo.getPageNum(), pageSo.getPageSize());
         PageHelper.startPage(pageSo.getPageNum(), pageSo.getPageSize(), true, null, pageSizeZero);
-        PageHelper.orderBy(SqlUtil.convertOrderBy(pageSo));
+        PageHelper.orderBy(convertOrderBy(pageSo));
         return new PageQuery();
     }
 
@@ -233,9 +240,80 @@ public class PageQuery {
      * @param pageNum  页面num
      * @param pageSize 页面大小
      */
-    private static void judgeNotNull(Integer pageNum, Integer pageSize){
+    private static void judgeNotNull(Integer pageNum, Integer pageSize) {
         Assert.notNull(pageNum, "[pageNum]不能为空！");
         Assert.notNull(pageSize, "[pageSize]不能为空！");
+    }
+
+
+    /**
+     * 转换为OrderBy 条件
+     *
+     * <p>示例: createTime-desc,roleCode-asc</p>
+     *
+     * @param pageSo 分页参数
+     * @return order by sql
+     */
+    public static String convertOrderBy(PageSo pageSo) {
+        List<String> orderBySqlList = new ArrayList<>();
+        Map<String, String> supportFieldMap = pageSo.supportField();
+        String sortsStr = pageSo.getSorts();
+        //非法的sort参数
+        boolean illegalOrderBy = false;
+        if (StringUtils.hasText(sortsStr) && MapUtils.isNotEmpty(supportFieldMap)) {
+            Set<String> supportKeys = supportFieldMap.keySet();
+            String[] orderItems = sortsStr.split(",");
+            if (orderItems.length % 2 == 0) {
+                for (String orderItem : orderItems) {
+                    String[] split = orderItem.split("-");
+                    if (split.length % 2 == 0) {
+                        String key = split[0];
+                        String type = split[1];
+                        if (StringUtils.hasText(key) && StringUtils.hasText(type) &&
+                                supportKeys.contains(key) && isOrderByType(type)) {
+                            orderBySqlList.add(supportFieldMap.get(key) + " " + type.toLowerCase());
+                        } else {
+                            illegalOrderBy = true;
+                        }
+                    } else {
+                        illegalOrderBy = true;
+                    }
+                }
+            } else {
+                illegalOrderBy = true;
+            }
+        }
+        if (illegalOrderBy) {
+            throw new ServiceException(CommonErrorEnum.E_INVALID_SORT_PARAMETER);
+        }
+        if (CollectionUtils.isNotEmpty(orderBySqlList)) {
+            return StringUtils.collectionToDelimitedString(orderBySqlList, ", ");
+        }
+        return null;
+    }
+
+    /**
+     * 是排序类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
+    private static boolean isOrderByType(String type) {
+        return OrderBySymbols.asc.name().equalsIgnoreCase(type) || OrderBySymbols.desc.name().equalsIgnoreCase(type);
+    }
+
+    /**
+     * order by符号
+     */
+    private enum OrderBySymbols {
+        /**
+         * 正序
+         */
+        asc,
+        /**
+         * 倒序
+         */
+        desc
     }
 
 }

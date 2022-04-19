@@ -6,6 +6,8 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 
 /**
+ * Spring 工具
+ *
  * @author youfang
  * @version [1.0.0, 2020/7/28]
  **/
@@ -74,9 +76,7 @@ public class SpringHelper implements BeanFactoryPostProcessor {
      *     <li>1. 可以进行AutoWired注解的注入</li>
      *     <li>2. 可以进行Constructor的注入</li>
      * </ul>
-     *
-     * <p>
-     * 注意： 此处创建的bean为原型，不受Spring管理。**可以被GC回收**
+     * <p>注意： 此处创建的bean为原型，不受Spring管理。<strong>可以被GC回收！!<strong/></p>
      *
      * @param clz 类型class
      * @return {@link T} 实例
