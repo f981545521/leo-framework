@@ -4,10 +4,7 @@ import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.PageSo;
-import cn.acyou.leo.framework.util.Assert;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
-import cn.acyou.leo.framework.util.CollectionUtils;
-import cn.acyou.leo.framework.util.MapUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.data.domain.Page;
@@ -241,8 +238,12 @@ public class PageQuery {
      * @param pageSize 页面大小
      */
     private static void judgeNotNull(Integer pageNum, Integer pageSize) {
-        Assert.notNull(pageNum, "[pageNum]不能为空！");
-        Assert.notNull(pageSize, "[pageSize]不能为空！");
+        if (pageNum == null) {
+            throw new ServiceException("[pageNum]不能为空！");
+        }
+        if (pageSize == null) {
+            throw new ServiceException("[pageSize]不能为空！");
+        }
     }
 
 
@@ -260,7 +261,7 @@ public class PageQuery {
         String sortsStr = pageSo.getSorts();
         //非法的sort参数
         boolean illegalOrderBy = false;
-        if (StringUtils.hasText(sortsStr) && MapUtils.isNotEmpty(supportFieldMap)) {
+        if (StringUtils.hasText(sortsStr) && (supportFieldMap != null && !supportFieldMap.isEmpty())) {
             Set<String> supportKeys = supportFieldMap.keySet();
             String[] orderItems = sortsStr.split(",");
             for (String orderItem : orderItems) {
@@ -282,7 +283,7 @@ public class PageQuery {
         if (illegalOrderBy) {
             throw new ServiceException(CommonErrorEnum.E_INVALID_SORT_PARAMETER);
         }
-        if (CollectionUtils.isNotEmpty(orderBySqlList)) {
+        if (!orderBySqlList.isEmpty()) {
             return StringUtils.collectionToDelimitedString(orderBySqlList, ", ");
         }
         return null;
