@@ -1,7 +1,5 @@
 package cn.acyou.leo.framework.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -21,8 +19,6 @@ import java.util.regex.Pattern;
  * @version [1.0.0, 2020-4-6 下午 06:20]
  **/
 public class UrlUtil {
-
-    public static final String SLASH = "\\";
 
     /**
      * 是URL
@@ -62,23 +58,6 @@ public class UrlUtil {
         return jsonpStr.substring(startIndex + 1, endIndex);
     }
 
-
-    /**
-     * 获取指定节点的 Str
-     *
-     * @param jsonStr json Str
-     * @param key     关键
-     * @return {@link String}
-     */
-    public static String getAppointJsonStr(String jsonStr, String key) {
-        JSONObject obj = JSONObject.parseObject(jsonStr);
-        Object o = obj.get(key);
-        if (o != null) {
-            return JSON.toJSONString(o);
-        } else {
-            return "";
-        }
-    }
 
     /**
      * 从URL中提取参数Map
@@ -241,6 +220,29 @@ public class UrlUtil {
         }
     }
 
+    /**
+     * 获取网址的扩展名
+     * <pre>
+     *  https://sale.vmall.com/ttt/huaweizone.html?cid=10618
+     *   -> html
+     * </pre>
+     *
+     * @param url 网址
+     * @return pathname
+     */
+    public static String getExtendName(String url) {
+        try {
+            URL realUrl = new URL(url);
+            String path = realUrl.getPath();
+            if (path.contains(".")) {
+                return path.substring(path.lastIndexOf(".") + 1);
+            }
+        } catch (Exception e) {
+            return "";
+        }
+        return "";
+    }
+
 
     /**
      * 获取指定URL对应资源的内容长度，对于Http，其长度使用Content-Length头决定。
@@ -394,7 +396,7 @@ public class UrlUtil {
         System.out.println(UrlUtil.getFile(url));//: /lifeLike/movie/movie001.mov?type=oss
         System.out.println(UrlUtil.getPathName(url));//: /lifeLike/movie/movie001.mov
         System.out.println(UrlUtil.getQueryString(url));//: map:{type:oss}
-
+        System.out.println(UrlUtil.getExtendName(url));//: mov
     }
 
 }
