@@ -15,6 +15,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * URL 处理工具
+ * <pre>
+ * String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov?type=oss";
+ * System.out.println(UrlUtil.getContentLength(new URL(url)));//16009340
+ * System.out.println(UrlUtil.getName(url));//: movie001.mov
+ * System.out.println(UrlUtil.getNameWithOutExt(url));//: movie001
+ * System.out.println(UrlUtil.getExtendName(url));//: mov
+ * System.out.println(UrlUtil.getSearch(url));//: type=oss
+ * System.out.println(UrlUtil.getFile(url));//: /lifeLike/movie/movie001.mov?type=oss
+ * System.out.println(UrlUtil.getPathName(url));//: /lifeLike/movie/movie001.mov
+ * System.out.println(UrlUtil.getQueryString(url));//: map:{type:oss}
+ * </pre>
+ *
  * @author youfang
  * @version [1.0.0, 2020-4-6 下午 06:20]
  **/
@@ -26,13 +39,29 @@ public class UrlUtil {
      * @param url url
      * @return boolean 是/否
      */
-    public static boolean isUrl(String url){
+    public static boolean isUrl(String url) {
         try {
             new URL(url);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * 以 `http | https` 开头
+     *
+     * @param url url
+     * @return boolean
+     */
+    public static boolean startWithHttp(String url) {
+        if (url != null) {
+            if (url.startsWith("http") || url.startsWith("https")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -288,6 +317,24 @@ public class UrlUtil {
     }
 
     /**
+     * 得到URL上的文件名
+     * <pre>
+     * String url = "http://qiniu.acyou.cn/images/1.jpg?name=oss";
+     * System.out.println(UrlUtil.getName(url));//==> 1
+     * </pre>
+     *
+     * @param url url
+     * @return {@link String}
+     */
+    public static String getNameWithOutExt(String url) {
+        String name = getName(url);
+        if (name.contains(".")) {
+            return name.substring(0, name.indexOf("."));
+        }
+        return name;
+    }
+
+    /**
      * 获取网址的path
      * <pre>
      *  https://sale.vmall.com/huaweizone.html?cid=10618
@@ -388,15 +435,16 @@ public class UrlUtil {
         return cookieMap;
     }
 
-    public static void main(String[] args) throws Exception{
-        String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov?type=oss";
-        System.out.println(UrlUtil.getContentLength(new URL(url)));//16009340
-        System.out.println(UrlUtil.getName(url));//: movie001.mov
-        System.out.println(UrlUtil.getSearch(url));//: type=oss
-        System.out.println(UrlUtil.getFile(url));//: /lifeLike/movie/movie001.mov?type=oss
-        System.out.println(UrlUtil.getPathName(url));//: /lifeLike/movie/movie001.mov
-        System.out.println(UrlUtil.getQueryString(url));//: map:{type:oss}
-        System.out.println(UrlUtil.getExtendName(url));//: mov
-    }
+    //public static void main(String[] args) throws Exception{
+    //    String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov?type=oss";
+    //    System.out.println(UrlUtil.getContentLength(new URL(url)));//16009340
+    //    System.out.println(UrlUtil.getName(url));//: movie001.mov
+    //    System.out.println(UrlUtil.getNameWithOutExt(url));//: movie001
+    //    System.out.println(UrlUtil.getExtendName(url));//: mov
+    //    System.out.println(UrlUtil.getSearch(url));//: type=oss
+    //    System.out.println(UrlUtil.getFile(url));//: /lifeLike/movie/movie001.mov?type=oss
+    //    System.out.println(UrlUtil.getPathName(url));//: /lifeLike/movie/movie001.mov
+    //    System.out.println(UrlUtil.getQueryString(url));//: map:{type:oss}
+    //}
 
 }
