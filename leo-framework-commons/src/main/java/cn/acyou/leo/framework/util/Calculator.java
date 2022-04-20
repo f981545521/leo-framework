@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -25,6 +26,74 @@ public class Calculator {
     private Calculator(String v) {
         result = new BigDecimal(v);
     }
+
+    /**
+     * 大于
+     *
+     * @param o2 o2
+     * @return boolean
+     */
+    public boolean gt(Object o2) {
+        return result.compareTo(new BigDecimal(o2.toString())) > 0;
+    }
+
+    /**
+     * 大于或者等于
+     *
+     * @param o2 o2
+     * @return boolean
+     */
+    public boolean gte(Object o2) {
+        return result.compareTo(new BigDecimal(o2.toString())) >= 0;
+    }
+
+    /**
+     * 小于
+     *
+     * @param o2 o2
+     * @return boolean
+     */
+    public boolean lt(Object o2) {
+        return result.compareTo(new BigDecimal(o2.toString())) < 0;
+    }
+
+    /**
+     * 小于或者等于
+     *
+     * @param o2 o2
+     * @return boolean
+     */
+    public boolean lte(Object o2) {
+        return result.compareTo(new BigDecimal(o2.toString())) <= 0;
+    }
+
+    /**
+     * 等于
+     *
+     * @param o2 o2
+     * @return boolean
+     */
+    public boolean eq(Object o2) {
+        return result.compareTo(new BigDecimal(o2.toString())) == 0;
+    }
+
+    /**
+     * 取平均值
+     *
+     * @param values 值列表
+     * @return {@link BigDecimal}
+     */
+    public static BigDecimal avg(List<BigDecimal> values) {
+        if (values == null || values.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal total = new BigDecimal("0");
+        for (BigDecimal val : values) {
+            total = total.add(val);
+        }
+        return total.divide(new BigDecimal(values.size()));
+    }
+
 
     /**
      * 得到结果值
@@ -87,6 +156,13 @@ public class Calculator {
         return divide(o2, 2, RoundingMode.FLOOR);
     }
 
+
+    @Override
+    public String toString() {
+        return "Calculator{" +
+                "result=" + result +
+                '}';
+    }
 
     /**
      * 计算表达式的值
