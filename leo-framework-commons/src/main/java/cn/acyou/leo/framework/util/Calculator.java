@@ -19,8 +19,8 @@ public class Calculator {
      */
     private BigDecimal result;
 
-    public static Calculator val(Object o1) {
-        return new Calculator(o1.toString());
+    public static Calculator val(Object v) {
+        return new Calculator(v.toString());
     }
 
     private Calculator(String v) {
@@ -30,51 +30,51 @@ public class Calculator {
     /**
      * 大于
      *
-     * @param o2 o2
+     * @param compareValue compareValue
      * @return boolean
      */
-    public boolean gt(Object o2) {
-        return result.compareTo(new BigDecimal(o2.toString())) > 0;
+    public boolean gt(Object compareValue) {
+        return result.compareTo(new BigDecimal(compareValue.toString())) > 0;
     }
 
     /**
      * 大于或者等于
      *
-     * @param o2 o2
+     * @param compareValue compareValue
      * @return boolean
      */
-    public boolean gte(Object o2) {
-        return result.compareTo(new BigDecimal(o2.toString())) >= 0;
+    public boolean gte(Object compareValue) {
+        return result.compareTo(new BigDecimal(compareValue.toString())) >= 0;
     }
 
     /**
      * 小于
      *
-     * @param o2 o2
+     * @param compareValue compareValue
      * @return boolean
      */
-    public boolean lt(Object o2) {
-        return result.compareTo(new BigDecimal(o2.toString())) < 0;
+    public boolean lt(Object compareValue) {
+        return result.compareTo(new BigDecimal(compareValue.toString())) < 0;
     }
 
     /**
      * 小于或者等于
      *
-     * @param o2 o2
+     * @param compareValue compareValue
      * @return boolean
      */
-    public boolean lte(Object o2) {
-        return result.compareTo(new BigDecimal(o2.toString())) <= 0;
+    public boolean lte(Object compareValue) {
+        return result.compareTo(new BigDecimal(compareValue.toString())) <= 0;
     }
 
     /**
      * 等于
      *
-     * @param o2 o2
+     * @param compareValue compareValue
      * @return boolean
      */
-    public boolean eq(Object o2) {
-        return result.compareTo(new BigDecimal(o2.toString())) == 0;
+    public boolean eq(Object compareValue) {
+        return result.compareTo(new BigDecimal(compareValue.toString())) == 0;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Calculator {
      * @param values 值列表
      * @return {@link BigDecimal}
      */
-    public static BigDecimal avg(List<BigDecimal> values) {
+    public static BigDecimal avg(List<BigDecimal> values, int scale, RoundingMode roundingMode) {
         if (values == null || values.isEmpty()) {
             return BigDecimal.ZERO;
         }
@@ -91,7 +91,7 @@ public class Calculator {
         for (BigDecimal val : values) {
             total = total.add(val);
         }
-        return total.divide(new BigDecimal(values.size()));
+        return total.divide(new BigDecimal(values.size()), scale, roundingMode);
     }
 
 
@@ -107,53 +107,67 @@ public class Calculator {
     /**
      * 加
      *
-     * @param o2 o2
+     * @param v v
      * @return {@link BigDecimal}
      */
-    public BigDecimal add(Object o2) {
-        return result.add(new BigDecimal(o2.toString()));
+    public BigDecimal add(Object v) {
+        return result.add(new BigDecimal(v.toString()));
     }
 
     /**
      * 减
      *
-     * @param o2 o2
+     * @param v v
      * @return {@link BigDecimal}
      */
-    public BigDecimal subtract(Object o2) {
-        return result.subtract(new BigDecimal(o2.toString()));
+    public BigDecimal subtract(Object v) {
+        return result.subtract(new BigDecimal(v.toString()));
     }
 
     /**
      * 乘
      *
-     * @param o2 o2
+     * @param v v
      * @return {@link BigDecimal}
      */
-    public BigDecimal multiply(Object o2) {
-        return result.multiply(new BigDecimal(o2.toString()));
+    public BigDecimal multiply(Object v) {
+        return result.multiply(new BigDecimal(v.toString()));
     }
 
     /**
      * 除
      *
-     * @param o2           o2
+     * @param v            v
      * @param scale        规模
      * @param roundingMode 舍入模式
      * @return {@link BigDecimal}
      */
-    public BigDecimal divide(Object o2, int scale, RoundingMode roundingMode) {
-        return result.divide(new BigDecimal(o2.toString()), 2, RoundingMode.FLOOR);
+    public BigDecimal divide(Object v, int scale, RoundingMode roundingMode) {
+        return result.divide(new BigDecimal(v.toString()), scale, roundingMode);
+    }
+
+    /**
+     * 除 (四舍五入保留两位)
+     *
+     * @param v v
+     * @return {@link BigDecimal}
+     */
+    public BigDecimal divide_10_HALF_UP(Object v) {
+        return result.divide(new BigDecimal(v.toString()), 2, RoundingMode.HALF_UP);
     }
 
     /**
      * 除
+     * <pre>
+     *     注意：
+     *     使用 BigDecimal 进行 10/3 时;//java.lang.ArithmeticException: Non-terminating decimal expansion; no exact representable decimal result.
+     * </pre>
      *
-     * @param o2 o2
+     * @param v v
      * @return {@link BigDecimal}
      */
-    public BigDecimal divide(Object o2) {
-        return divide(o2, 2, RoundingMode.FLOOR);
+    public BigDecimal divide_10_FLOOR(Object v) {
+        return result.divide(new BigDecimal(v.toString()), 10, RoundingMode.FLOOR);
     }
 
 
