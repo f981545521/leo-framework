@@ -46,6 +46,17 @@ public class ImageUtil {
     /**
      * 压缩图像
      *
+     * <pre>
+     * BufferedImage read = ImageIO.read(new URL("http://qiniu.acyou.cn/images/13.jpg"));
+     * BufferedImage bi = new BufferedImage(read.getWidth(), read.getHeight(), BufferedImage.TYPE_INT_RGB);
+     * Graphics g = bi.getGraphics();
+     * g.drawImage(read, 0, 0, read.getWidth(), read.getHeight(), Color.LIGHT_GRAY, null);
+     * g.dispose();
+     * FileOutputStream os = new FileOutputStream("D:\\temp\\image\\123456.jpg");
+     * ImageIO.write(bi, "jpg", os);
+     * os.close();
+     * </pre>
+     *
      * @param is 输入流
      * @param os 输出流
      * @throws Exception 异常
