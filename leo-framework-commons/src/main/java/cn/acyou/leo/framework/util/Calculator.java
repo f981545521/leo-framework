@@ -78,6 +78,16 @@ public class Calculator {
     }
 
     /**
+     * 不等于
+     *
+     * @param compareValue compareValue
+     * @return boolean
+     */
+    public boolean neq(Object compareValue) {
+        return result.compareTo(new BigDecimal(compareValue.toString())) != 0;
+    }
+
+    /**
      * 取平均值
      *
      * @param values 值列表

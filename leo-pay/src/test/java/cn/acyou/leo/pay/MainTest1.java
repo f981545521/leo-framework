@@ -21,9 +21,10 @@ public class MainTest1 {
     public void test24() {
         System.out.println(Calculator.val(0.2346).gt(0.2345));
         System.out.println(Calculator.val(0.2345).gte(0.2345));
-        System.out.println(Calculator.val(0.2345).eq(0.2345));
         System.out.println(Calculator.val(0.2345).lt(0.2345));
         System.out.println(Calculator.val(0.2345).lte(0.2345));
+        System.out.println(Calculator.val(0.2345).eq(0.2345));
+        System.out.println(Calculator.val(0.2345).neq(0.2345));
         System.out.println(Calculator.val(0.234));
         System.out.println(new BigDecimal(0.234));
         BigDecimal divide = Calculator.val(10).divide(3, 10, RoundingMode.FLOOR);
