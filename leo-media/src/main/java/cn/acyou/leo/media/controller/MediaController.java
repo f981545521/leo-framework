@@ -48,13 +48,8 @@ public class MediaController {
             video.setCodec("png");
             video.setSize(videoInfo.getSize());
             EncodingAttributes attrs = new EncodingAttributes();
-            //VideoAttributes attrs = ecodeAttrs.getVideoAttributes().get();
             attrs.setOutputFormat("image2");
-            if (multimediaInfo.getDuration() > 1500) {
-                attrs.setOffset(1f);//设置偏移位置，即开始转码位置（11秒）
-            }else {
-                attrs.setOffset(0.01f);//设置偏移位置，即开始转码位置（11秒）
-            }
+            //offset 未赋值的时候采用默认
             if (StringUtils.isNotBlank(offset)) {
                 attrs.setOffset(Float.valueOf(offset));
             }

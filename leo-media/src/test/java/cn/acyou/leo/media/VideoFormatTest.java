@@ -130,7 +130,7 @@ public class VideoFormatTest {
             EncodingAttributes attrs = new EncodingAttributes();
             //VideoAttributes attrs = ecodeAttrs.getVideoAttributes().get();
             attrs.setOutputFormat("image2");
-            attrs.setOffset(1f);//设置偏移位置，即开始转码位置（11秒）
+            //attrs.setOffset(1f);//设置偏移位置，即开始转码位置（11秒）
             attrs.setDuration(0.01f);//设置转码持续时间（1秒）
             attrs.setVideoAttributes(video);
             Encoder encoder = new Encoder();
