@@ -2,12 +2,10 @@ package cn.acyou.leo.framework.util;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.FileSystemUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,7 +66,6 @@ public class FileUtil {
      * 用户文件目录
      */
     public static final String USER_HOME_DIR = System.getProperty("user.home");
-
     /**
      * 默认 NOT_FOUND
      */
@@ -81,7 +78,6 @@ public class FileUtil {
      * The Unix separator character.
      */
     private static final char UNIX_SEPARATOR = '/';
-
     /**
      * The Windows separator character.
      */
@@ -96,7 +92,6 @@ public class FileUtil {
     public static File getTmpDir() {
         return new File(TEMP_DIR);
     }
-
 
     /**
      * 获取用户目录
@@ -169,16 +164,34 @@ public class FileUtil {
     }
 
     /**
+     * 使用输入流 复制 到输出流，当拷贝完成后关闭流
+     *
+     * @param in  输入流
+     * @param out 输出流
+     * @return 拷贝字节数
+     * @throws IOException in case of I/O errors
+     */
+    public static int copy(InputStream in, OutputStream out) throws Exception {
+        return FileCopyUtils.copy(in, out);
+    }
+
+    /**
      * 在文件夹下创建临时文件
      *
      * <pre>
-     *     示例：
-     *     FileUtil.createTempFile("", ".txt")
-     *     := C:\Users\1\AppData\Local\Temp\636785312213824955.txt
-     *     FileUtil.createTempFile("video", ".txt")
-     *     := C:\Users\1\AppData\Local\Temp\video636785312213824955.txt
+     * 示例：
+     * FileUtil.createTempFile("", ".txt")
+     * := C:\Users\1\AppData\Local\Temp\636785312213824955.txt
+     * FileUtil.createTempFile("video", ".txt")
+     * := C:\Users\1\AppData\Local\Temp\video636785312213824955.txt
+     *
+     * 注意：
+     * 不推荐使用：File.createTempFile("11", "33")
+     * //前缀必须大于3个字符！java.lang.IllegalArgumentException: Prefix string too short
+     *
      * </pre>
-     * @param prefix 文件前缀
+     *
+     * @param prefix     文件前缀
      * @param extendName 文件扩展名
      * @return 文件
      * @throws IOException 异常
@@ -240,18 +253,37 @@ public class FileUtil {
         return new File(createTempDir(subDir), fullName);
     }
 
+    /**
+     * 存在
+     *
+     * @param path 路径
+     * @return boolean
+     */
     public static boolean exists(String path) {
         return Files.exists(Paths.get(path));
     }
 
+    /**
+     * 不存在
+     *
+     * @param path 路径
+     * @return boolean
+     */
     public static boolean notExists(String path) {
         return Files.notExists(Paths.get(path));
     }
 
+    /**
+     * 复制
+     *
+     * @param source 源
+     * @param target 目标
+     * @return {@link Path}
+     * @throws Exception 异常
+     */
     public static Path copy(String source, String target) throws Exception {
         return Files.copy(Paths.get(source), Paths.get(target));
     }
-
 
     private static final Map<String, String> FILE_TYPE_MAP;
 
@@ -440,11 +472,9 @@ public class FileUtil {
 
     public static void main(String[] args) throws Exception {
         File file = new File("D:\\ToUpload\\G.E.M.邓紫棋 - A.I.N.Y..mp3");
-        System.out.println(FileUtil.getName(file.getAbsolutePath()));//G.E.M.邓紫棋 - A.I.N.Y..mp3
-        System.out.println(FileUtil.getBaseName(file.getAbsolutePath()));//G.E.M.邓紫棋 - A.I.N.Y.
-        System.out.println(FileUtil.getExtension(file.getAbsolutePath()));//mp3
-        System.out.println(FileUtil.getFullPath(file.getAbsolutePath()));//D:\ToUpload\
-        System.out.println(FileUtil.getFullPathNoEndSeparator(file.getAbsolutePath()));//D:\ToUpload
+
+        System.out.println(FileUtil.createTempFile("", "33"));
+        System.out.println(File.createTempFile("", "33"));
     }
 
     //===========================================
