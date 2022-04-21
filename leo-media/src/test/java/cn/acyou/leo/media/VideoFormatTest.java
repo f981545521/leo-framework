@@ -1,6 +1,7 @@
 package cn.acyou.leo.media;
 
 import cn.acyou.leo.media.util.MediaUtil;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
@@ -13,11 +14,14 @@ import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoInfo;
 import ws.schild.jave.info.VideoSize;
+import ws.schild.jave.process.ProcessWrapper;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.jave.utils.RBufferedReader;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -313,6 +317,35 @@ public class VideoFormatTest {
         //### 压缩图片
         //ImageUtil.compressImage(new URL("http://qiniu.acyou.cn/images/12.jpg"), new File("D:\\te\\12.jpg"));
         //ImageUtil.compressImage(new File("D:\\temp\\image\\6.jpg"), new File("D:\\temp\\image\\6_c.jpg"));
+    }
+
+    @Test
+    public void test2() throws Exception{
+        final ProcessWrapper executor = ffmpegLocator.createExecutor();
+        //ffmpeg-amd64-3.2.0.exe -i E:\media\060817_537.mp4 -vn -acodec libmp3lame -ab 128000 -ac 2 -ar 44100 -f mp3 -y E:\media\060817_537_audio_2.mp3 -hide_banner
+        executor.addArgument("-i");
+        executor.addArgument("E:\\media\\060817_537.mp4");
+        executor.addArgument("-vn");
+        executor.addArgument("-acodec");
+        executor.addArgument("libmp3lame");
+        executor.addArgument("-ab");
+        executor.addArgument("128000");
+        executor.addArgument("-ac");
+        executor.addArgument("2");
+        executor.addArgument("-ar");
+        executor.addArgument("44100");
+        executor.addArgument("-f");
+        executor.addArgument("mp3");
+        executor.addArgument("-y");
+        executor.addArgument("E:\\media\\060817_537_audio_2_999.mp3");
+        executor.addArgument("-hide_banner");
+        executor.execute();
+        RBufferedReader reader = new RBufferedReader(new InputStreamReader(executor.getErrorStream()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+        System.out.println("ok");
     }
 
 }
