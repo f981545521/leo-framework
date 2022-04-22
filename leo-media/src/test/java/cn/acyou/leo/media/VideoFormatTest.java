@@ -1,6 +1,6 @@
 package cn.acyou.leo.media;
 
-import cn.acyou.leo.media.util.MediaUtil;
+import cn.acyou.leo.media.encoder.MediaUtil;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,6 @@ import java.util.Map;
  * @author youfang
  * @version [1.0.0, 2022/2/22 19:19]
  **/
-@Deprecated
 public class VideoFormatTest {
 
     public static Logger Log = LoggerFactory.getLogger(VideoFormatTest.class);
