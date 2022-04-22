@@ -1,6 +1,5 @@
 package cn.acyou.leo.media;
 
-import cn.acyou.leo.media.util.MediaEncoder;
 import cn.acyou.leo.media.util.MediaUtil;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -17,7 +16,6 @@ import ws.schild.jave.info.VideoInfo;
 import ws.schild.jave.info.VideoSize;
 import ws.schild.jave.process.ProcessWrapper;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
-import ws.schild.jave.progress.EchoingEncoderProgressListener;
 import ws.schild.jave.utils.RBufferedReader;
 
 import java.io.File;
@@ -25,7 +23,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -345,32 +345,6 @@ public class VideoFormatTest {
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
-        System.out.println("ok");
-    }
-
-    @Test
-    public void test23() throws Exception {
-        MediaEncoder mediaEncoder = new MediaEncoder();
-        List<MultimediaObject> src = new ArrayList<>();
-        src.add(new MultimediaObject(new File("D:\\ToUpload\\WeChat_20220421161548.mp4")));
-
-        List<String> commands = new ArrayList<>();
-        commands.add("-i");
-        commands.add("D:\\ToUpload\\WeChat_20220421161548.mp4");
-        commands.add("-vn");
-        commands.add("-acodec");
-        commands.add("libmp3lame");
-        commands.add("-ab");
-        commands.add("128000");
-        commands.add("-ac");
-        commands.add("2");
-        commands.add("-ar");
-        commands.add("44100");
-        commands.add("-f");
-        commands.add("mp3");
-
-        mediaEncoder.encode(src, new File("D:\\ToUpload\\WeChat_20220421161548_1.mp3"), commands, new EchoingEncoderProgressListener());
-
         System.out.println("ok");
     }
 
