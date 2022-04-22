@@ -52,7 +52,7 @@ public class MediaUtil {
      *
      * @param command 命令
      */
-    private void exec(String... command) {
+    public void exec(String... command) {
         String[] args = ArrayUtils.addFirst(command, ffmpegLocator.getExecutablePath());
         log.info("执行FFMPEG开始 命令:{}", StringUtils.join(args, " "));
         List<?> objects = CollectionUtils.arrayToList(args);
@@ -118,7 +118,7 @@ public class MediaUtil {
      * @param mss 海量存储系统(mss)中
      * @return {@link String}
      */
-    public String formatDuring(long mss) {
+    public static String formatDuring(long mss) {
         String hours = ((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) + "";
         hours = hours.length() == 1 ? 0 + hours : hours;
         String minutes = ((mss % (1000 * 60 * 60)) / (1000 * 60)) + "";
@@ -218,77 +218,6 @@ public class MediaUtil {
         } finally {
             FileSystemUtils.deleteRecursively(tempDir);
         }
-    }
-
-
-    public static void main2(String[] args) {
-        List<String> commands = new ArrayList<>();
-        commands.add("-i");
-        commands.add("D:\\ToUpload\\WeChat_20220421161548.mp4");
-        commands.add("-vn");
-        commands.add("-acodec");
-        commands.add("libmp3lame");
-        commands.add("-ab");
-        commands.add("128000");
-        commands.add("-ac");
-        commands.add("2");
-        commands.add("-ar");
-        commands.add("44100");
-        commands.add("-f");
-        commands.add("mp3");
-        commands.add("-y");
-        commands.add("D:\\ToUpload\\WeChat_20220421161548_3.mp3");
-
-        MediaUtil.instance(new ExecProcess() {
-            @Override
-            public void progress(long perm) {
-                System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
-            }
-        }).exec(commands.toArray(new String[0]));
-
-        System.out.println("ok");
-    }
-
-    public static void main22(String[] args) {
-        //拆分视频序列帧
-        //ffmpeg.exe -i .\333.mp4  -q:v 2 .\frames\222222_%03d.png
-        List<String> commands = new ArrayList<>();
-        commands.add("-i");
-        commands.add("D:\\ToUpload\\3\\333.mp4");
-        commands.add("-q:v");
-        commands.add("2");
-        commands.add("D:\\ToUpload\\3\\frames\\333_%03d.png");
-
-        MediaUtil.instance(new ExecProcess() {
-            @Override
-            public void progress(long perm) {
-                System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
-            }
-        }).exec(commands.toArray(new String[0]));
-
-        System.out.println("ok");
-    }
-
-
-    public static void main(String[] args) {
-        //拆分视频序列帧
-        //-i https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221554549.MOV -vcodec h264 -y D:\ToUpload\4\T1.mp4
-        List<String> commands = new ArrayList<>();
-        commands.add("-i");
-        commands.add("http://qiniu.acyou.cn/media/mobile/IMG_0026.MOV");
-        commands.add("-vcodec");
-        commands.add("h264");
-        commands.add("-y");
-        commands.add("E:\\media\\4\\T2.mp4");
-
-        MediaUtil.instance(new ExecProcess() {
-            @Override
-            public void progress(long perm) {
-                System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
-            }
-        }).exec(commands.toArray(new String[0]));
-
-        System.out.println("ok");
     }
 
 }

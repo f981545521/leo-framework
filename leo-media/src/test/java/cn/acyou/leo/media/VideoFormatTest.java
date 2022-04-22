@@ -33,6 +33,7 @@ import java.util.Map;
  * @author youfang
  * @version [1.0.0, 2022/2/22 19:19]
  **/
+@Deprecated
 public class VideoFormatTest {
 
     public static Logger Log = LoggerFactory.getLogger(VideoFormatTest.class);

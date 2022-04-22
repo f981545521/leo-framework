@@ -24,6 +24,7 @@ import java.util.Map;
  * @version [1.0.0, 2022/3/23 14:14]
  **/
 @Slf4j
+@Deprecated
 public class MediaUtil {
     /**
      * 获取ffmpeg加载器（可以获取ffmpeg.exe路径）
