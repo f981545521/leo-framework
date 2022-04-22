@@ -565,6 +565,109 @@ public class MediaEncoder {
         }
     }
 
+
+    /**
+     * Re-encode a multimedia file(s).
+     *
+     * <p>This method is not reentrant, instead create multiple object instances
+     *
+     * @param multimediaObjects The source multimedia files. It cannot be null. Be sure this file can
+     *                          be decoded (see null null null null {@link ws.schild.jave.Encoder#getSupportedDecodingFormats()}, {@link
+     *                          ws.schild.jave.Encoder#getAudioDecoders()} and* {@link ws.schild.jave.Encoder#getVideoDecoders()}) When passing multiple
+     *                          sources, make sure that they are compatible in the way that ffmpeg can concat them. We
+     *                          don't use the complex filter at the moment Perhaps you will need to first transcode/resize
+     *                          them https://trac.ffmpeg.org/wiki/Concatenate @see "Concat protocol"
+     * @param target            The target multimedia re-encoded file. It cannot be null. If this file already
+     *                          exists, it will be overwrited.
+     * @param attributes        A set of attributes for the encoding process.
+     * @param listener          An optional progress listener for the encoding process. It can be null.
+     * @throws IllegalArgumentException If both audio and video parameters are null.
+     * @throws InputFormatException     If the source multimedia file cannot be decoded.
+     * @throws EncoderException         If a problems occurs during the encoding process.
+     */
+    public void encode(
+            List<MultimediaObject> multimediaObjects,
+            File target,
+            List<String> attributes,
+            EncoderProgressListener listener)
+            throws IllegalArgumentException, InputFormatException, EncoderException {
+
+        target = target.getAbsoluteFile();
+        target.getParentFile().mkdirs();
+        ffmpeg = locator.createExecutor();
+
+        attributes.forEach(i -> ffmpeg.addArgument(i));
+
+        ffmpeg.addArgument("-y");
+        ffmpeg.addArgument(target.getAbsolutePath());
+
+        try {
+            ffmpeg.execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            String lastWarning = null;
+            long duration = 0;
+            MultimediaInfo info = null;
+            /*
+             * TODO: This is an awkward way of determining duration of input videos. This calls a separate
+             * FFMPEG process to getInfo when the output of running FFMPEG just above will list the info
+             * of the input videos as "Input #0" -> "Input #N". Capture _that_ output instead of calling
+             * *back* into FFMPEG. Furthermore, expressing the percentage of the transcoding job as a
+             * simple "what percentage of the input duration have we output" feels too naive given all of
+             * the interesting video filters that can be applied. It feels like the user would know the
+             * duration of the output video as:
+             * 1. The duration of the input video (as we have expressed here)
+             * 2. The sum of the durations of the input videos
+             * 3. A particular duration calculated with the context of all the inputs/encoding attributes.
+             * So, if the calling method tells this method the expected duration, then we can express
+             * progress as a percentage. I would like to make #1 and #2 very simple to do, however.
+             * Perhaps a method that would take the input MultimediaInfo objects that are generated from
+             * this FFMPEG invocation, the EncodingAttributes, and would output a duration. Then we could
+             * have named methods that would calculate durations as in #1 and #2.
+             */
+            if (multimediaObjects.size() == 1
+                    && (!multimediaObjects.get(0).isURL() || !multimediaObjects.get(0).isReadURLOnce())) {
+                info = multimediaObjects.get(0).getInfo();
+                duration = info.getDuration();
+            }
+
+            if (listener != null) {
+                listener.sourceInfo(info);
+            }
+            String line;
+            ConversionOutputAnalyzer outputAnalyzer = new ConversionOutputAnalyzer(duration, listener);
+            RBufferedReader reader = new RBufferedReader(new InputStreamReader(ffmpeg.getErrorStream()));
+            while ((line = reader.readLine()) != null) {
+                outputAnalyzer.analyzeNewLine(line);
+            }
+            if (outputAnalyzer.getLastWarning() != null) {
+                if (!SUCCESS_PATTERN.matcher(lastWarning).matches()) {
+                    throw new RuntimeException("No match for: " + SUCCESS_PATTERN + " in " + lastWarning);
+                }
+            }
+            /*
+             * TODO: This is not thread safe. This needs to be a resulting value from the call to the
+             * Encoder. We can create a separate EncoderResult, but not a stateful variable.
+             */
+            unhandledMessages = outputAnalyzer.getUnhandledMessages();
+            int exitCode = ffmpeg.getProcessExitCode();
+            if (exitCode != 0) {
+                LOG.error("Process exit code: {}  to {}", exitCode, target.getName());
+                throw new RuntimeException("Exit code of ffmpeg encoding run is " + exitCode);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (ffmpeg != null) {
+                ffmpeg.destroy();
+            }
+            ffmpeg = null;
+        }
+    }
+
     /**
      * Return the list of unhandled output messages of the ffmpeng encoder run
      *
