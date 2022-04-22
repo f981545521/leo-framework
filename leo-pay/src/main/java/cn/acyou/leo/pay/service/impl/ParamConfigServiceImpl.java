@@ -53,7 +53,7 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
                 .in(StringUtils.isNotBlank(namespace), ParamConfig::getNamespace, (Object[]) namespace.split(","))
                 .eq(StringUtils.isNotBlank(code), ParamConfig::getCode, code)
                 .eq(ParamConfig::getIsDelete, Constant.FLAG_FALSE_0)
-                .orderByDesc(ParamConfig::getCreateTime)
+                .orderByDesc(ParamConfig::getSort)
                 .list();
         return BeanCopyUtil.copyList(list, ParamConfigVo.class);
     }
@@ -63,6 +63,7 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
         return PageQuery.startPage(paramConfigSo).selectMapper(lambdaQuery()
                 .eq(StringUtils.isNotBlank(paramConfigSo.getNamespace()), ParamConfig::getNamespace, paramConfigSo.getNamespace())
                 .eq(StringUtils.isNotBlank(paramConfigSo.getCode()), ParamConfig::getCode, paramConfigSo.getCode())
+                .orderByDesc(ParamConfig::getSort)
                 .list(), ParamConfigVo.class);
     }
 
