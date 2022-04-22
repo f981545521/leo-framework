@@ -262,7 +262,10 @@ public abstract class ExecProcess {
                                     }
 
                                     int perm = (int) Math.round((seconds * 1000L * 1000L) / (double) inputDuration);
-                                    // > 1000的时候由结束方法调用 ：execProcess.progress(1000);
+                                    /**
+                                     *  > 1000的时候由结束方法调用 ：execProcess.progress(1000);
+                                     * @see MediaUtil#exec(java.lang.String...)
+                                     */
                                     if (perm < 1000) {
                                         progress(perm);
                                     }
