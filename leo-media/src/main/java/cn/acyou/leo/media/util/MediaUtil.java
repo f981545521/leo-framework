@@ -37,7 +37,7 @@ public class MediaUtil {
      */
     private static void exec(String... command) {
         String[] args = ArrayUtils.addFirst(command, ffmpegLocator.getExecutablePath());
-        log.info("执行FFMPEG 命令:{}", StringUtils.join(args, " "));
+        log.info("执行FFMPEG开始 命令:{}", StringUtils.join(args, " "));
         Process proc;
         try {
             proc = Runtime.getRuntime().exec(args);
@@ -45,6 +45,8 @@ public class MediaUtil {
         } catch (IOException | InterruptedException e) {
             log.error("执行FFMPEG出错了 命令:{}", StringUtils.join(args, " "));
             e.printStackTrace();
+        }finally {
+            log.info("执行FFMPEG完成了 命令:{}", StringUtils.join(args, " "));
         }
     }
 
