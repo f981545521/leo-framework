@@ -238,11 +238,6 @@ public class MediaUtil {
 
         MediaUtil.instance(new ExecProcess() {
             @Override
-            public void mediaInfo(MultimediaInfo multimediaInfo) {
-                System.out.println("文件解析成功");
-            }
-
-            @Override
             public void progress(long perm) {
                 System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
             }

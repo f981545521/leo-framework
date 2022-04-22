@@ -282,9 +282,17 @@ public abstract class ExecProcess {
         }
     }
 
-    public abstract void mediaInfo(MultimediaInfo multimediaInfo);
+    public void mediaInfo(MultimediaInfo multimediaInfo) {
 
-    public abstract void progress(long perm);
+    }
+
+    ;
+
+    public void progress(long perm) {
+
+    }
+
+    ;
 
     private static final Pattern PROGRESS_INFO_PATTERN = Pattern.compile("\\s*(\\w+)\\s*=\\s*(\\S+)\\s*", Pattern.CASE_INSENSITIVE);
 
