@@ -33,18 +33,31 @@ public class MediaUtil {
 
     private ExecProcess execProcess;
 
+    private MediaUtil(){
+
+    }
+
+    private MediaUtil(ExecProcess execProcess){
+        this.execProcess = execProcess;
+    }
+
+    /**
+     * 实例
+     *
+     * @return {@link MediaUtil}
+     */
     public static MediaUtil instance() {
         return new MediaUtil();
     }
 
+    /**
+     * 实例（进度）
+     *
+     * @param execProcess 执行过程
+     * @return {@link MediaUtil}
+     */
     public static MediaUtil instance(ExecProcess execProcess) {
-        MediaUtil mediaUtil = new MediaUtil();
-        mediaUtil.setExecProcess(execProcess);
-        return mediaUtil;
-    }
-
-    private void setExecProcess(ExecProcess execProcess) {
-        this.execProcess = execProcess;
+        return new MediaUtil(execProcess);
     }
 
     /**
