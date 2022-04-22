@@ -68,6 +68,7 @@ public class MediaUtil {
                 execProcess.handlerOutPut(input, proc.getErrorStream());
             }
             proc.waitFor();
+            execProcess.progress(1000);
         } catch (IOException | InterruptedException e) {
             log.error("执行FFMPEG出错了 命令:{}", StringUtils.join(args, " "));
             e.printStackTrace();
@@ -272,11 +273,11 @@ public class MediaUtil {
         //-i https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221554549.MOV -vcodec h264 -y D:\ToUpload\4\T1.mp4
         List<String> commands = new ArrayList<>();
         commands.add("-i");
-        commands.add("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221554549.MOV");
+        commands.add("http://qiniu.acyou.cn/media/mobile/IMG_0026.MOV");
         commands.add("-vcodec");
         commands.add("h264");
         commands.add("-y");
-        commands.add("D:\\ToUpload\\4\\T2.mp4");
+        commands.add("E:\\media\\4\\T2.mp4");
 
         MediaUtil.instance(new ExecProcess() {
             @Override

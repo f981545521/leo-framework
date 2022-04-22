@@ -262,10 +262,10 @@ public abstract class ExecProcess {
                                     }
 
                                     int perm = (int) Math.round((seconds * 1000L * 1000L) / (double) inputDuration);
-                                    if (perm > 1000) {
-                                        perm = 1000;
+                                    // > 1000的时候由结束方法调用 ：execProcess.progress(1000);
+                                    if (perm < 1000) {
+                                        progress(perm);
                                     }
-                                    progress(perm);
                                 }
                             }
                         }
@@ -286,13 +286,9 @@ public abstract class ExecProcess {
 
     }
 
-    ;
-
     public void progress(long perm) {
 
     }
-
-    ;
 
     private static final Pattern PROGRESS_INFO_PATTERN = Pattern.compile("\\s*(\\w+)\\s*=\\s*(\\S+)\\s*", Pattern.CASE_INSENSITIVE);
 
