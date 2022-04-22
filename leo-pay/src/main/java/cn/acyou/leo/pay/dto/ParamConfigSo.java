@@ -15,6 +15,10 @@ import java.util.Map;
 @ApiModel(description = "支持排序字段：createTime，sort")
 public class ParamConfigSo extends PageSo {
 
+    private String namespace;
+
+    private String code;
+
     @Override
     public Map<String, String> supportField() {
         Map<String, String> supportFieldMap = new HashMap<>();
