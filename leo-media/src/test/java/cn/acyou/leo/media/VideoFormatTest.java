@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -346,6 +347,38 @@ public class VideoFormatTest {
             System.out.println(line);
         }
         System.out.println("ok");
+    }
+
+    @Test
+    public void testS() throws Exception {
+        MultimediaObject multimediaObject = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/129-2-20220120171139029.mp4"));
+        MultimediaInfo info = multimediaObject.getInfo();
+        System.out.println(info);
+    }
+
+    @Test
+    public void test5() throws Exception {
+        MultimediaObject multimediaObject = new MultimediaObject(new File("D:\\ToUpload\\3\\444.mp4"));
+        MultimediaInfo info = multimediaObject.getInfo();
+        System.out.println(info);
+    }
+
+    @Test
+    public void convertFormat() throws Exception {
+        MultimediaObject sourceInfo = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221554549.MOV"));
+        File target = new File("D:\\ToUpload\\3\\TARGET.mp4");
+
+        VideoAttributes video = new VideoAttributes();
+        video.setCodec("h264");
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setOutputFormat("mp4");
+        attrs.setVideoAttributes(video);
+        Encoder encoder = new Encoder();
+        try {
+            encoder.encode(sourceInfo, target, attrs);
+        } catch (EncoderException e) {
+            e.printStackTrace();
+        }
     }
 
 }

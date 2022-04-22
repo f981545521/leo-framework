@@ -246,7 +246,7 @@ public class MediaUtil {
         System.out.println("ok");
     }
 
-    public static void main(String[] args) {
+    public static void main22(String[] args) {
         //拆分视频序列帧
         //ffmpeg.exe -i .\333.mp4  -q:v 2 .\frames\222222_%03d.png
         List<String> commands = new ArrayList<>();
@@ -255,6 +255,28 @@ public class MediaUtil {
         commands.add("-q:v");
         commands.add("2");
         commands.add("D:\\ToUpload\\3\\frames\\333_%03d.png");
+
+        MediaUtil.instance(new ExecProcess() {
+            @Override
+            public void progress(long perm) {
+                System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
+            }
+        }).exec(commands.toArray(new String[0]));
+
+        System.out.println("ok");
+    }
+
+
+    public static void main(String[] args) {
+        //拆分视频序列帧
+        //-i https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221554549.MOV -vcodec h264 -y D:\ToUpload\4\T1.mp4
+        List<String> commands = new ArrayList<>();
+        commands.add("-i");
+        commands.add("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221554549.MOV");
+        commands.add("-vcodec");
+        commands.add("h264");
+        commands.add("-y");
+        commands.add("D:\\ToUpload\\4\\T2.mp4");
 
         MediaUtil.instance(new ExecProcess() {
             @Override
