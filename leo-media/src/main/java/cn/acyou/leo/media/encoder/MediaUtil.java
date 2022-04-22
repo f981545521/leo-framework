@@ -218,7 +218,7 @@ public class MediaUtil {
     }
 
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         List<String> commands = new ArrayList<>();
         commands.add("-i");
         commands.add("D:\\ToUpload\\WeChat_20220421161548.mp4");
@@ -235,6 +235,26 @@ public class MediaUtil {
         commands.add("mp3");
         commands.add("-y");
         commands.add("D:\\ToUpload\\WeChat_20220421161548_3.mp3");
+
+        MediaUtil.instance(new ExecProcess() {
+            @Override
+            public void progress(long perm) {
+                System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
+            }
+        }).exec(commands.toArray(new String[0]));
+
+        System.out.println("ok");
+    }
+
+    public static void main(String[] args) {
+        //拆分视频序列帧
+        //ffmpeg.exe -i .\333.mp4  -q:v 2 .\frames\222222_%03d.png
+        List<String> commands = new ArrayList<>();
+        commands.add("-i");
+        commands.add("D:\\ToUpload\\3\\333.mp4");
+        commands.add("-q:v");
+        commands.add("2");
+        commands.add("D:\\ToUpload\\3\\frames\\333_%03d.png");
 
         MediaUtil.instance(new ExecProcess() {
             @Override
