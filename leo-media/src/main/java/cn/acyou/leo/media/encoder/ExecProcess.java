@@ -40,7 +40,7 @@ public abstract class ExecProcess {
     private static final Pattern SAMPLING_RATE_PATTERN = Pattern.compile("(\\d+)\\s+Hz", Pattern.CASE_INSENSITIVE);
     private static final Pattern CHANNELS_PATTERN = Pattern.compile("(mono|stereo|quad)", Pattern.CASE_INSENSITIVE);
 
-    private MultimediaInfo parseMultimediaInfo(String source, RBufferedReader reader) {
+    private void parseMultimediaInfo(String source, RBufferedReader reader) {
         Pattern p1 = Pattern.compile("^\\s*Input #0, (\\w+).+$\\s*", Pattern.CASE_INSENSITIVE);
         Pattern p21 = Pattern.compile("^\\s*Duration:.*$", Pattern.CASE_INSENSITIVE);
         Pattern p22 = Pattern.compile("^\\s*Duration: (\\d\\d):(\\d\\d):(\\d\\d)\\.(\\d\\d).*$", Pattern.CASE_INSENSITIVE);
@@ -280,7 +280,6 @@ public abstract class ExecProcess {
         if (info == null) {
             throw new RuntimeException();
         }
-        return info;
     }
 
     public abstract void mediaInfo(MultimediaInfo multimediaInfo);
