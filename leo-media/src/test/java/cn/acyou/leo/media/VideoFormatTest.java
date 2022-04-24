@@ -397,8 +397,10 @@ public class VideoFormatTest {
 
     @Test
     public void testr2t3gd() throws Exception {
-        MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo("http://qiniu.acyou.cn/video/shortVideo.mp4");
+        //MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo("http://qiniu.acyou.cn/video/shortVideo.mp4");
+        MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo("E:\\media\\file1.mov");
         System.out.println(mediaInfo.getDuration());
+        System.out.println(MediaUtil.formatDuring(298500));
     }
 
 }
