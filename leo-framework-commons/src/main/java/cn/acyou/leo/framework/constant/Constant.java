@@ -72,6 +72,11 @@ public class Constant {
      */
     public static final String TOKEN_NAME = "Authentication";
     /**
+     * 幂等序列参数
+     */
+    public static final String AUTO_IDEMPOTENT_SEQUENCE = "sequence";
+
+    /**
      * 系统角色
      */
     public static class SysRole {

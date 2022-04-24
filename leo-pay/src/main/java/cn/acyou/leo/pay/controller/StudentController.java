@@ -1,6 +1,7 @@
 package cn.acyou.leo.pay.controller;
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
+import cn.acyou.leo.framework.annotation.AutoIdempotent;
 import cn.acyou.leo.framework.commons.PageQuery;
 import cn.acyou.leo.framework.ftp.FTPUtil;
 import cn.acyou.leo.framework.model.PageData;
@@ -68,6 +69,7 @@ public class StudentController {
 
     @GetMapping(value = "/page")
     @ApiOperation("分页获取数据")
+    @AutoIdempotent(prefix = "student.page")
     public Result<PageData<Student>> page(PageSo pageSo) {
         PageData<Student> studentPageData = PageQuery.startPage(pageSo).selectMapper(studentService.list());
         return Result.success(studentPageData);

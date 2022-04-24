@@ -24,6 +24,7 @@ public enum CommonErrorEnum implements ErrorEnum {
     E_INVALID_SORT_PARAMETER(101003, "非法的排序参数，请检查！"),
     E_MAX_UPLOAD_SIZE_EXCEEDED(101004, "文件超过上传限制！"),
     ACCESS_LIMIT(101005, "重复请求，请稍后再试！"),
+    REPETITIVE_OPERATION(101015, "请勿重复操作！"),
     E_PARAM_VALID_ERROR(101006, "请求参数校验错误，请检查！"),
     CONCURRENT_ERROR(101007, "正在处理中，请稍后..."),
     /**

@@ -2,9 +2,12 @@ package cn.acyou.leo.framework.commons;
 
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.framework.util.IdUtil;
+import cn.acyou.leo.framework.util.redis.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 系统公共使用 允许匿名访问
@@ -24,6 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/sys/common")
 @Api(tags = "系统公共使用", hidden = true)
 public class SysCommonController {
+
+    @Autowired(required = false)
+    private RedisUtils redisUtils;
 
 
     @GetMapping(value = "/status")
@@ -38,6 +45,15 @@ public class SysCommonController {
     @ResponseBody
     public Result<Void> unauthorized() {
         return Result.error(CommonErrorEnum.E_UNAUTHORIZED);
+    }
+
+    @GetMapping(value = "/getSequence")
+    @ApiOperation(value = "获取幂等序列")
+    @ResponseBody
+    public Result<String> getSequence(String prefix) {
+        String uuid = IdUtil.uuidStrWithoutLine();
+        redisUtils.set(RedisKeyConstant.AUTO_IDEMPOTENT_SEQUENCE + prefix + uuid, "1", 1, TimeUnit.HOURS);
+        return Result.success(uuid);
     }
 
     @GetMapping(value = "/error")
