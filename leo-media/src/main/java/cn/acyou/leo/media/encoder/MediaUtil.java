@@ -10,7 +10,6 @@ import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
@@ -81,12 +80,14 @@ public class MediaUtil {
                 execProcess.handlerOutPut(input, proc.getErrorStream());
             }
             proc.waitFor();
-            execProcess.progress(1000);
-        } catch (IOException | InterruptedException e) {
-            log.error("执行FFMPEG出错了 命令:{}", StringUtils.join(args, " "));
+            if (execProcess != null) {
+                execProcess.progress(1000);
+            }
+        } catch (Exception e) {
+            log.error("执行FFMPEG出错 命令:{}", StringUtils.join(args, " "));
             e.printStackTrace();
         } finally {
-            log.info("执行FFMPEG完成了 命令:{}", StringUtils.join(args, " "));
+            log.info("执行FFMPEG成功 命令:{}", StringUtils.join(args, " "));
         }
     }
 
@@ -101,7 +102,7 @@ public class MediaUtil {
     public void cutAudio(String source, long ss, long to, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
         log.info("剪切音频文件 params:[source:{}, ss:{}, to:{}, target:{}] 目标目录：{}", source, ss, to, targetPath, (mkdirs ? "创建成功" : "无需创建"));
-        MediaUtil.instance().exec("-y", "-i", source, "-ss", formatDuring(ss), "-to", formatDuring(to), "-c", "copy", targetPath);
+        exec("-y", "-i", source, "-ss", formatDuring(ss), "-to", formatDuring(to), "-c", "copy", targetPath);
     }
 
     /**
@@ -114,7 +115,7 @@ public class MediaUtil {
     public void mergeAudioAndVideo(String audioSource, String videoSource, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
         log.info("合并音/视频文件 params:[audioSource:{}, videoSource:{}, target:{}] 目标目录：{}", audioSource, videoSource, targetPath, (mkdirs ? "创建成功" : "无需创建"));
-        MediaUtil.instance().exec("-i", audioSource, "-i", videoSource, "-vcodec", "copy", "-acodec", "copy", targetPath);
+        exec("-i", audioSource, "-i", videoSource, "-vcodec", "copy", "-acodec", "copy", targetPath);
     }
 
     /**
@@ -152,7 +153,7 @@ public class MediaUtil {
     public void extractFrame(String i, String ss, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
         log.info("提取帧 params:[i:{}, ss:{}, target:{}] 目标目录：{}", i, ss, targetPath, (mkdirs ? "创建成功" : "无需创建"));
-        MediaUtil.instance().exec("-i", i, "-ss", ss, "-f", "image2", targetPath);
+        exec("-i", i, "-ss", ss, "-f", "image2", targetPath);
     }
 
     /**
@@ -172,7 +173,7 @@ public class MediaUtil {
         for (int i = 0; i < speedRatio.length; i++) {
             int t = (int) (duration * (speedRatio[i] * 0.01));
             String targetPath = targetDir + File.separator + "frame_" + t + ".jpg";
-            MediaUtil.instance().extractFrame(url, new BigDecimal(t).multiply(new BigDecimal("0.001")).toString(), targetPath);
+            extractFrame(url, new BigDecimal(t).multiply(new BigDecimal("0.001")).toString(), targetPath);
             paths[i] = targetPath;
         }
         return paths;
@@ -205,7 +206,7 @@ public class MediaUtil {
             command.add(k);
             command.add(v);
         });
-        MediaUtil.instance().exec(command.toArray(new String[0]));
+        exec(command.toArray(new String[0]));
     }
 
     /**
@@ -224,13 +225,23 @@ public class MediaUtil {
             for (int i = 0; i < urls.size(); i++) {
                 File tempTs = new File(tempDir.toFile(), i + ".ts");
                 //转换成TS格式
-                MediaUtil.instance().exec("-i", urls.get(i), "-c", "copy", "-bsf:v", "h264_mp4toannexb", "-f", "mpegts", tempTs.getAbsolutePath());
+                exec("-i", urls.get(i), "-c", "copy", "-bsf:v", "h264_mp4toannexb", "-f", "mpegts", tempTs.getAbsolutePath());
                 tsList.add(tempTs.getAbsolutePath());
             }
-            MediaUtil.instance().exec("-i", "concat:" + StringUtils.join(tsList, "|"), "-c", "copy", "-bsf:a", "aac_adtstoasc", "-movflags", "+faststart", targetPath);
+            exec("-i", "concat:" + StringUtils.join(tsList, "|"), "-c", "copy", "-bsf:a", "aac_adtstoasc", "-movflags", "+faststart", targetPath);
         } finally {
             FileSystemUtils.deleteRecursively(tempDir);
         }
     }
 
+    public MultimediaInfo getMediaInfo(String i) throws Exception {
+        if (StringUtils.isNotBlank(i)) {
+            if (i.toLowerCase().startsWith("http")) {
+                return new MultimediaObject(new URL(i)).getInfo();
+            } else {
+                return new MultimediaObject(new File(i)).getInfo();
+            }
+        }
+        throw new IllegalArgumentException("获取媒体信息出错：" + i);
+    }
 }

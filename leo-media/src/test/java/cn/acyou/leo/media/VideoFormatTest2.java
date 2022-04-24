@@ -2,10 +2,21 @@ package cn.acyou.leo.media;
 
 import cn.acyou.leo.media.encoder.ExecProcess;
 import cn.acyou.leo.media.encoder.MediaUtil;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.jupiter.api.Test;
+import ws.schild.jave.Encoder;
+import ws.schild.jave.EncoderException;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.info.MultimediaInfo;
+import ws.schild.jave.info.VideoInfo;
 
+import java.io.File;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,7 +27,25 @@ public class VideoFormatTest2 {
 
     @Test
     public void testMain() throws Exception {
-
+        MultimediaObject object = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/634-1-202204211746399.mp4"));
+        File firstFrameFile = new File("E:\\media\\5\\1.jpg");
+        try {
+            MultimediaInfo multimediaInfo = object.getInfo();
+            VideoInfo videoInfo = multimediaInfo.getVideo();
+            VideoAttributes video = new VideoAttributes();
+            video.setCodec("png");
+            video.setSize(videoInfo.getSize());
+            EncodingAttributes attrs = new EncodingAttributes();
+            attrs.setOutputFormat("image2");
+            attrs.setDuration(0.01f);//设置转码持续时间（1秒）
+            attrs.setVideoAttributes(video);
+            Encoder encoder = new Encoder();
+            encoder.encode(object, firstFrameFile, attrs);
+        } catch (EncoderException e) {
+            e.printStackTrace();
+        } finally {
+            firstFrameFile.delete();
+        }
     }
 
     /**
@@ -82,19 +111,20 @@ public class VideoFormatTest2 {
     public void test3() throws Exception {
         List<String> commands = new ArrayList<>();
         commands.add("-i");
-        commands.add("http://qiniu.acyou.cn/media/mobile/IMG_0026.MOV");
+        commands.add("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221851007.MOV");
         commands.add("-vcodec");
         commands.add("h264");
         commands.add("-y");
-        commands.add("E:\\media\\4\\T2.mp4");
+        commands.add("E:\\media\\4\\BIG6.mp4");
 
+        System.out.println(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
         MediaUtil.instance(new ExecProcess() {
             @Override
             public void progress(long perm) {
                 System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
             }
         }).exec(commands.toArray(new String[0]));
-
+        System.out.println(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
         System.out.println("ok");
     }
 }

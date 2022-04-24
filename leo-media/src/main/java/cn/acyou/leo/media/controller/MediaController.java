@@ -1,5 +1,7 @@
 package cn.acyou.leo.media.controller;
 
+import cn.acyou.leo.media.encoder.ExecProcess;
+import cn.acyou.leo.media.encoder.MediaUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,12 @@ import ws.schild.jave.info.VideoInfo;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author youfang
@@ -118,6 +125,30 @@ public class MediaController {
             e.printStackTrace();
         }
         return m;
+    }
+
+    private final static ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+    @RequestMapping(value = "test1", method = {RequestMethod.GET})
+    @ResponseBody
+    public String test1() throws Exception {
+        executorService.execute(() -> {
+            List<String> commands = new ArrayList<>();
+            commands.add("-i");
+            commands.add("http://qiniu.acyou.cn/media/mobile/IMG_0026.MOV");
+            commands.add("-vcodec");
+            commands.add("h264");
+            commands.add("-y");
+            commands.add("E:\\media\\4\\T5.mp4");
+
+            MediaUtil.instance(new ExecProcess() {
+                @Override
+                public void progress(long perm) {
+                    System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
+                }
+            }).exec(commands.toArray(new String[0]));
+        });
+        return "ok";
     }
 
 

@@ -2,8 +2,13 @@ package cn.acyou.leo.pay;
 
 
 import cn.acyou.leo.framework.util.Calculator;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.StreamProgress;
+import cn.hutool.core.lang.Console;
+import cn.hutool.http.HttpUtil;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -31,5 +36,26 @@ public class MainTest1 {
         //BigDecimal divide = Calculator.val(10).divide(3);
         //java.lang.ArithmeticException: Non-terminating decimal expansion; no exact representable decimal result.
         System.out.println(divide);
+    }
+
+    @Test
+    public void test224() {
+        File targetFile = new File("E:\\media\\file1.mov");
+        HttpUtil.downloadFile("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221851007.MOV", targetFile, new StreamProgress() {
+            @Override
+            public void start() {
+
+            }
+
+            @Override
+            public void progress(long l) {
+                Console.log("已下载：{}", FileUtil.readableFileSize(l));
+            }
+
+            @Override
+            public void finish() {
+
+            }
+        });
     }
 }

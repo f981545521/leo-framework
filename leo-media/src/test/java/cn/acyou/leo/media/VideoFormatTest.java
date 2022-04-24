@@ -293,8 +293,8 @@ public class VideoFormatTest {
         //MediaUtil.mergeAudioAndVideo("D:\\temp\\merge\\audio.mp4", "D:\\temp\\merge\\video.mp4", "D:\\temp\\merge\\9.mp4");
         //MediaUtil.mergeAudioAndVideo("http://qiniu.acyou.cn/video/merge/audio.mp4", "http://qiniu.acyou.cn/video/merge/video.mp4", "D:\\temp\\merge\\10.mp4");
         //### 进度比例获取视频帧
-        //String[] targetPaths = MediaUtil.extractFrameBySpeedRatio("http://qiniu.acyou.cn/DouYin/2.mp4", new int[]{10, 20, 50, 70, 90}, "D:\\temp\\frame\\");
-        //System.out.println(Arrays.toString(targetPaths));
+        String[] targetPaths = MediaUtil.instance().extractFrameBySpeedRatio("http://qiniu.acyou.cn/DouYin/2.mp4", new int[]{10, 20, 50, 70, 90}, "D:\\temp\\frame2");
+        System.out.println(Arrays.toString(targetPaths));
         //### 分离音频通道
         //Map<String, String> param = new HashMap<>();
         //param.put("0.0.0", "D:\\temp\\channel\\1.wav");
@@ -379,6 +379,26 @@ public class VideoFormatTest {
         } catch (EncoderException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testrtgd() throws Exception {
+        MultimediaObject sourceInfo = new MultimediaObject(new URL("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/634-1-202204211746399.mp4"));
+        long duration = sourceInfo.getInfo().getDuration();
+        System.out.println(duration);
+    }
+
+    @Test
+    public void testr2tgd() throws Exception {
+        MultimediaObject sourceInfo = new MultimediaObject(new URL("http://qiniu.acyou.cn/video/shortVideo.mp4"));
+        long duration = sourceInfo.getInfo().getDuration();
+        System.out.println(duration);
+    }
+
+    @Test
+    public void testr2t3gd() throws Exception {
+        MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo("http://qiniu.acyou.cn/video/shortVideo.mp4");
+        System.out.println(mediaInfo.getDuration());
     }
 
 }
