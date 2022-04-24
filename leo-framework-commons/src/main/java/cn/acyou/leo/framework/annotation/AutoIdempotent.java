@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
 public @interface AutoIdempotent {
     /**
      * 缓存key的前缀
+     * <p>
+     * TODO: 思考：是否需要这个前缀
      *
      * @return 自定义缓存前缀
      */
