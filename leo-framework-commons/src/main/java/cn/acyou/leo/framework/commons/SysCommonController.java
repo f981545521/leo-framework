@@ -51,9 +51,9 @@ public class SysCommonController {
     }
 
     @GetMapping(value = "/idempotent")
-    @ApiOperation(value = "获取幂等序列 prefix前缀（必传） sequence：空时生成，非空时判断 ")
+    @ApiOperation(value = "获取幂等序列 prefix前缀（必传）。sequence：空时生成，非空时判断。operate：校验并删除")
     @ResponseBody
-    public Result<String> idempotent(@RequestParam("prefix") String prefix, String sequence) {
+    public Result<String> idempotent(@RequestParam("prefix") String prefix, String sequence, String operate) {
         if (sequence == null || StringUtils.isBlank(sequence)) {
             String uuid = IdUtil.uuidStrWithoutLine();
             redisUtils.set(RedisKeyConstant.AUTO_IDEMPOTENT_SEQUENCE + prefix + uuid, "1", 1, TimeUnit.HOURS);
@@ -66,10 +66,12 @@ public class SysCommonController {
                 if (!org.springframework.util.StringUtils.hasText(v)) {
                     throw new ServiceException(CommonErrorEnum.REPETITIVE_OPERATION);
                 }
-                return Result.success();
+                return Result.success(sequence);
             } finally {
-                //使用过就删除序列
-                redisUtils.delete(key);
+                if (StringUtils.isNotBlank(operate) && "delete".equalsIgnoreCase(operate)) {
+                    //使用过就删除序列
+                    redisUtils.delete(key);
+                }
             }
         }
     }
