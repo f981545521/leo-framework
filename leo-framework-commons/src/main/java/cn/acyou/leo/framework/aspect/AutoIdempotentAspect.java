@@ -44,21 +44,22 @@ public class AutoIdempotentAspect {
         assert requestAttributes != null;
         HttpServletRequest request = requestAttributes.getRequest();
         String sequence = request.getParameter(Constant.AUTO_IDEMPOTENT_SEQUENCE);
-        if (!StringUtils.hasText(sequence)) {
-            throw new ServiceException("请先获取序列号！");
-        }
-        String key = RedisKeyConstant.AUTO_IDEMPOTENT_SEQUENCE + prefix + sequence;
-        String v = null;
-        try {
-            v = redisUtils.get(key);
-            if (!StringUtils.hasText(v)) {
-                throw new ServiceException(CommonErrorEnum.REPETITIVE_OPERATION);
+        //throw new ServiceException("请先获取序列号！");
+        if (StringUtils.hasText(sequence)) {
+            String key = RedisKeyConstant.AUTO_IDEMPOTENT_SEQUENCE + prefix + sequence;
+            String v = null;
+            try {
+                v = redisUtils.get(key);
+                if (!StringUtils.hasText(v)) {
+                    throw new ServiceException(CommonErrorEnum.REPETITIVE_OPERATION);
+                }
+                return joinPoint.proceed();
+            } finally {
+                //使用过就删除序列
+                redisUtils.delete(key);
             }
-            return joinPoint.proceed();
-        } finally {
-            //使用过就删除序列
-            redisUtils.delete(key);
         }
+        return joinPoint.proceed();
     }
 
 }
