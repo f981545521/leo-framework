@@ -1,6 +1,8 @@
 package cn.acyou.leo.framework.tests;
 
-import cn.acyou.leo.framework.downloader.DownloadUtil;
+import cn.acyou.leo.framework.downloader.MultiThreadFileDownloader;
+import cn.acyou.leo.framework.downloader.support.MultiThreadDownloadProgressPrinter;
+import cn.acyou.leo.framework.util.MathUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -11,10 +13,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author fangyou
@@ -24,6 +23,7 @@ public class MainTest1 {
     public static void main(String[] args) throws Exception {
         String fileURL = "https://robot.guiji.ai/nfs/vte/video/2dr/624654168652787848/624654168652787848.mp4";
         String bigFileURL = "https://download.jetbrains.8686c.com/idea/ideaIU-2020.3.dmg";
+        String bigFileURL2 = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/403-1-202204241115229.MOV";
 
         //============ 方式一
         //Downloader downloader = new SimpleDownloader();
@@ -34,26 +34,26 @@ public class MainTest1 {
         //fileDownloader.download(fileURL, "D:\\tmp2\\");
 
         //============ 方式三：大文件下载
-        //MultiThreadDownloadProgressPrinter downloadProgressPrinter = new MultiThreadDownloadProgressPrinter(5);
-        //CompletableFuture.runAsync(() -> {
-        //    while (true) {
-        //        long alreadyDownloadLength = downloadProgressPrinter.getAlreadyDownloadLength();
-        //        long contentLength = downloadProgressPrinter.getContentLength();
-        //        System.out.println(contentLength + "  =>  " + alreadyDownloadLength + "|" + MathUtil.calculationPercent(alreadyDownloadLength, contentLength) + "%");
-        //        if (alreadyDownloadLength != 0 && alreadyDownloadLength > contentLength) {
-        //            break;
-        //        }
-        //        try {
-        //            Thread.sleep(1000L);
-        //        } catch (InterruptedException e) {
-        //            e.printStackTrace();
-        //        }
-        //    }
-        //});
-        //long l = System.currentTimeMillis();
-        //MultiThreadFileDownloader fileDownloader = new MultiThreadFileDownloader(5, downloadProgressPrinter);
-        //fileDownloader.download(bigFileURL, "D:\\tmp2\\");
-        //System.out.println("结束：" + (System.currentTimeMillis() - l));//结束：1526
+        MultiThreadDownloadProgressPrinter downloadProgressPrinter = new MultiThreadDownloadProgressPrinter(5);
+        CompletableFuture.runAsync(() -> {
+            while (true) {
+                long alreadyDownloadLength = downloadProgressPrinter.getAlreadyDownloadLength();
+                long contentLength = downloadProgressPrinter.getContentLength();
+                System.out.println(contentLength + "  =>  " + alreadyDownloadLength + "|" + MathUtil.calculationPercent(alreadyDownloadLength, contentLength) + "%");
+                if (alreadyDownloadLength != 0 && alreadyDownloadLength > contentLength) {
+                    break;
+                }
+                try {
+                    Thread.sleep(1000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        long l = System.currentTimeMillis();
+        MultiThreadFileDownloader fileDownloader = new MultiThreadFileDownloader(5, downloadProgressPrinter);
+        fileDownloader.download(bigFileURL2, "E:\\media\\6");
+        System.out.println("结束：" + (System.currentTimeMillis() - l));//结束：1526
 
         //============ 方式四：自定义header
         //Map<String, String> headerMap = new HashMap<>();
@@ -76,9 +76,9 @@ public class MainTest1 {
         //inputStream.close();
 
         //============ 方式六：HTTPClient
-        long l = System.currentTimeMillis();
-        downloadFile(fileURL, "D:\\tmp2\\1234_777.mp4");
-        System.out.println("结束：" + (System.currentTimeMillis() - l));//结束：2019
+        //long l = System.currentTimeMillis();
+        //downloadFile(fileURL, "D:\\tmp2\\1234_777.mp4");
+        //System.out.println("结束：" + (System.currentTimeMillis() - l));//结束：2019
     }
 
 
