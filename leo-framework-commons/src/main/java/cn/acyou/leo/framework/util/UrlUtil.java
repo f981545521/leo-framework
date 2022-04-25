@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
  * String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov?type=oss";
  * System.out.println(UrlUtil.getContentLength(new URL(url)));//16009340
  * System.out.println(UrlUtil.getName(url));//: movie001.mov
- * System.out.println(UrlUtil.getNameWithOutExt(url));//: movie001
- * System.out.println(UrlUtil.getExtendName(url));//: mov
+ * System.out.println(UrlUtil.getBaseName(url));//: movie001
+ * System.out.println(UrlUtil.getExtension(url));//: mov
  * System.out.println(UrlUtil.getSearch(url));//: type=oss
  * System.out.println(UrlUtil.getFile(url));//: /lifeLike/movie/movie001.mov?type=oss
  * System.out.println(UrlUtil.getPathName(url));//: /lifeLike/movie/movie001.mov
@@ -259,7 +259,7 @@ public class UrlUtil {
      * @param url 网址
      * @return pathname
      */
-    public static String getExtendName(String url) {
+    public static String getExtension(String url) {
         try {
             URL realUrl = new URL(url);
             String path = realUrl.getPath();
@@ -326,7 +326,7 @@ public class UrlUtil {
      * @param url url
      * @return {@link String}
      */
-    public static String getNameWithOutExt(String url) {
+    public static String getBaseName(String url) {
         String name = getName(url);
         if (name.contains(".")) {
             return name.substring(0, name.indexOf("."));
@@ -439,8 +439,8 @@ public class UrlUtil {
     //    String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov?type=oss";
     //    System.out.println(UrlUtil.getContentLength(new URL(url)));//16009340
     //    System.out.println(UrlUtil.getName(url));//: movie001.mov
-    //    System.out.println(UrlUtil.getNameWithOutExt(url));//: movie001
-    //    System.out.println(UrlUtil.getExtendName(url));//: mov
+    //    System.out.println(UrlUtil.getBaseName(url));//: movie001
+    //    System.out.println(UrlUtil.getExtension(url));//: mov
     //    System.out.println(UrlUtil.getSearch(url));//: type=oss
     //    System.out.println(UrlUtil.getFile(url));//: /lifeLike/movie/movie001.mov?type=oss
     //    System.out.println(UrlUtil.getPathName(url));//: /lifeLike/movie/movie001.mov
