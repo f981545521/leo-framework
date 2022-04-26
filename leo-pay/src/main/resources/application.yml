@@ -3,7 +3,7 @@ server:
   servlet:
     context-path: '/leo-pay'
   tomcat:
-    max-http-form-post-size: -1
+    max-http-form-post-size: -1 #Tomcat不限制文件大小
 spring:
   profiles:
     active: dev
@@ -19,9 +19,9 @@ spring:
 #    suffix: .html
   servlet:
     multipart:
-      max-file-size: 50MB
+      max-file-size: 50MB #由Servlet限制文件大小
       enabled: true
-      max-request-size: 50MB
+      max-request-size: 50MB #由Servlet限制文件大小
       resolve-lazily: true
 leo:
   debug:
