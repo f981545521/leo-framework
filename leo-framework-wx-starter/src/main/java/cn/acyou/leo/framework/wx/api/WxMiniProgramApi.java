@@ -24,18 +24,20 @@ import java.util.Map;
  * wx.miniProgram.appid=xx
  * wx.miniProgram.secret=xxx
  * <p>
- * 获取access_token
- * https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
+ * 获取access_token：
  * <p>
+ * https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
  * <p>
  * 获取session_key    "xxx"
  * <pre>
- *     WXML
+ *     WXML：
+ *     {@code
  *     <button class='bottom' type='primary' open-type="getPhoneNumber" lang="zh_CN" bindgetphonenumber="getPhoneNumber">
  *         授权登录（手机号）
  *     </button>
+ *     }
  *
- *     JS
+ *     JS：
  *     getPhoneNumber: function(e){
  *         console.log(e.detail.errMsg)
  *         console.log(e.detail.iv)
@@ -95,15 +97,15 @@ public class WxMiniProgramApi {
 
     /**
      * 解密用户信息
-     * 注意：企业微信中无法解密用户手机号信息
-     * https://developers.weixin.qq.com/community/develop/doc/0008caf41c0408dc0d79cf40851000
+     * <p>注意：企业微信中无法解密用户手机号信息</p>
+     * <p>https://developers.weixin.qq.com/community/develop/doc/0008caf41c0408dc0d79cf40851000</p>
      *
      * @param encryptedData 加密的数据
      * @param sessionKey    会话密钥
      * @param iv            四世
      * @return {@link JSONObject}
      */
-    private static WxUserEncryptInfo decryptUserInfo(String encryptedData, String sessionKey, String iv) {
+    public static WxUserEncryptInfo decryptUserInfo(String encryptedData, String sessionKey, String iv) {
         // 被加密的数据
         byte[] dataByte = Base64.getDecoder().decode(encryptedData);
         // 加密秘钥

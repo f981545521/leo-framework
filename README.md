@@ -307,8 +307,9 @@ System.out.println(IdUtil.getDatePrefixId("RK"));     //RK2021090300003
 System.out.println(IdUtil.getDatePrefixId("RK", 8));  //RK2021090300000004
 ```
 
-### 三、防止重复提交
+### 三、幂等性
 
+#### 弱幂等性（接口限流）
 通过`@AccessLimit`注解，有两个参数：
 
 1. interval： 访问间隔（毫秒）
@@ -323,6 +324,54 @@ System.out.println(IdUtil.getDatePrefixId("RK", 8));  //RK2021090300000004
     public Result<String> get(String name) {
         return Result.success(name);
     }
+```
+
+#### 强幂等性（Token校验）
+通过`@AutoIdempotent`注解
+
+> 原理：通过redis + token机制实现接口幂等性校验。
+> 1. 为需要保证幂等性的每一次请求创建一个唯一标识token, 先获取token, 并将此token存入redis。 
+> 2. 请求接口时, 将此token作为请求参数（?sequence=token）请求接口。
+> 3. 后端接口判断redis中是否存在此token。
+>   - 如果存在, 正常处理业务逻辑, 并从redis中删除此token。 
+>   - 如果不存在，那么此次是重复请求, 由于token已被删除, 则不能通过校验, 返回请勿重复操作提示。
+>   - **如果参数不存在, 暂不校验。**
+
+1. 获取token（全局唯一）
+2. 在Controller上使用
+```
+    @GetMapping(value = "/page")
+    @ApiOperation("分页获取数据")
+    @AutoIdempotent(prefix = "student.page")
+    public Result<PageData<Student>> page(PageSo pageSo) {
+        PageData<Student> studentPageData = PageQuery.startPage(pageSo).selectMapper(studentService.list());
+        return Result.success(studentPageData);
+    }
+```
+流程示例：
+```
+### 获取幂等Token
+GET http://localhost:8075/leo-pay/sys/common/idempotent?prefix=student.page
+{
+   "code": 200,
+   "message": "处理成功",
+   "data": "6973a95941b14d3fa9766f88c6985dc6"//token
+}
+### 接口调用
+//第一次调用
+GET http://localhost:8075/leo-pay/student/page?sequence=6973a95941b14d3fa9766f88c6985dc6
+{
+   "code": 200,
+   "message": "处理成功",
+   "data": {}
+}
+//第二次调用
+GET http://localhost:8075/leo-pay/student/page?sequence=6973a95941b14d3fa9766f88c6985dc6
+{
+   "code": 101015,
+   "message": "请勿重复操作！",
+   "data": null
+}
 ```
 
 ### 四、权限控制
