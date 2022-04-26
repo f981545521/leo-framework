@@ -62,6 +62,15 @@ public class MediaUtil {
     /**
      * 执行FFMPEG命令
      *
+     * @param commands 命令
+     */
+    public void exec(List<String> commands) {
+        exec(commands.toArray(new String[0]));
+    }
+
+    /**
+     * 执行FFMPEG命令
+     *
      * @param command 命令
      */
     public void exec(String... command) {

@@ -123,7 +123,7 @@ public class VideoFormatTest2 {
             public void progress(long perm) {
                 System.out.println("进度：" + (new BigDecimal(perm).multiply(new BigDecimal("0.1"))));
             }
-        }).exec(commands.toArray(new String[0]));
+        }).exec(commands);
         System.out.println(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
         System.out.println("ok");
     }
