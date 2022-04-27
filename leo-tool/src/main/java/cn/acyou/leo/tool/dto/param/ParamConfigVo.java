@@ -1,4 +1,4 @@
-package cn.acyou.leo.pay.dto;
+package cn.acyou.leo.tool.dto.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

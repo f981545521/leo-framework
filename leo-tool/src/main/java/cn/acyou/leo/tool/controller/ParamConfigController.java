@@ -1,10 +1,10 @@
-package cn.acyou.leo.pay.controller;
+package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.Result;
-import cn.acyou.leo.pay.dto.ParamConfigSo;
-import cn.acyou.leo.pay.dto.ParamConfigVo;
-import cn.acyou.leo.pay.service.ParamConfigService;
+import cn.acyou.leo.tool.dto.param.ParamConfigSo;
+import cn.acyou.leo.tool.dto.param.ParamConfigVo;
+import cn.acyou.leo.tool.service.ParamConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
-package cn.acyou.leo.pay.mapper;
+package cn.acyou.leo.tool.mapper;
 
-import cn.acyou.leo.pay.entity.ParamConfig;
+import cn.acyou.leo.tool.entity.ParamConfig;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

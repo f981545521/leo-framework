@@ -1,9 +1,9 @@
-package cn.acyou.leo.pay.service;
+package cn.acyou.leo.tool.service;
 
 import cn.acyou.leo.framework.model.PageData;
-import cn.acyou.leo.pay.dto.ParamConfigSo;
-import cn.acyou.leo.pay.dto.ParamConfigVo;
-import cn.acyou.leo.pay.entity.ParamConfig;
+import cn.acyou.leo.tool.dto.param.ParamConfigSo;
+import cn.acyou.leo.tool.dto.param.ParamConfigVo;
+import cn.acyou.leo.tool.entity.ParamConfig;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
