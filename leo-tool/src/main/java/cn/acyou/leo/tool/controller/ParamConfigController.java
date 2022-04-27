@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/paramConfig")
-@Api(tags = "参数配置")
+@Api(tags = "参数配置接口")
 public class ParamConfigController {
 
     @Autowired
