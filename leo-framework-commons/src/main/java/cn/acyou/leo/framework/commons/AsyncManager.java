@@ -3,7 +3,9 @@ package cn.acyou.leo.framework.commons;
 import cn.acyou.leo.framework.util.SpringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
+import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -11,6 +13,14 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 异步任务管理器
+ *
+ * <h3>scheduleAtFixedRate 和 scheduleWithFixedDelay 方法之间的区别</h3>
+ * <ul>
+ *     <li>scheduleAtFixedRate 方法的执行是按照固定时间间隔进行执行的，我们可以理解为等差数列的执行方式，假设 n 为初始延迟，即 n 执行，n + period 执行，然后 n + 2 * period 执行，依次往后。但是必须等待上个任务执行完毕，下个任务才能开始执行，即实际上是这么执行的，假设 run 是任务执行时间，则 n 执行，然后 n + max(period,run) 依次执行。</li>
+ *     <li>scheduleWithFixedDelay 方法的执行是上个任务执行完，然后过 delay 时间后执行下个任务，假设 n 为初始延迟，即 n 执行，n + run + delay 执行，然后 n + 2 * (run + delay) 执行。</li>
+ * </ul>
+ * <p>
+ * 两种方法都是遇到异常后，后序都无法再执行。
  *
  * @author youfang
  */
@@ -23,7 +33,7 @@ public class AsyncManager {
     /**
      * 定时任务线程池
      */
-    private static final ScheduledExecutorService scheduledExecutor;
+    private static final ThreadPoolTaskScheduler scheduledExecutor;
 
     static {
         //使用的时候，没有Bean的时候会报错
@@ -53,7 +63,7 @@ public class AsyncManager {
      *
      * @return {@link ScheduledExecutorService}
      */
-    public static ScheduledExecutorService scheduleExecutor(){
+    public static ThreadPoolTaskScheduler scheduleExecutor() {
         return scheduledExecutor;
     }
 
@@ -97,7 +107,7 @@ public class AsyncManager {
      */
     public static void schedule(Runnable task) {
         //操作延迟5秒
-        scheduledExecutor.schedule(task, 5, TimeUnit.SECONDS);
+        schedule(task, 5, TimeUnit.SECONDS);
     }
 
     /**
@@ -108,7 +118,7 @@ public class AsyncManager {
      * @param unit  时间单位
      */
     public static void schedule(Runnable task, long delay, TimeUnit unit) {
-        scheduledExecutor.schedule(task, delay, unit);
+        scheduledExecutor.schedule(task, new Date(unit.toMillis(delay) + System.currentTimeMillis()));
     }
 
     /**
@@ -119,8 +129,8 @@ public class AsyncManager {
      * @param period       周期
      * @param unit         时间单位
      */
-    public static void scheduleAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit) {
-        scheduledExecutor.scheduleAtFixedRate(task, initialDelay, period, unit);
+    public static void scheduleAtFixedRate(Runnable task, Date startTime, long period, TimeUnit unit) {
+        scheduledExecutor.scheduleAtFixedRate(task, startTime, period);
     }
 
     /**
@@ -131,8 +141,8 @@ public class AsyncManager {
      * @param delay        延迟
      * @param unit         时间单位
      */
-    public static void scheduleWithFixedDelay(Runnable task, long initialDelay, long delay, TimeUnit unit) {
-        scheduledExecutor.scheduleWithFixedDelay(task, initialDelay, delay, unit);
+    public static void scheduleWithFixedDelay(Runnable task, Date startTime, long delay) {
+        scheduledExecutor.scheduleWithFixedDelay(task, startTime, delay);
     }
 
     /**

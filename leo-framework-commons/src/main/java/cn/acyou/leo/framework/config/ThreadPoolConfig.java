@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Executor;
@@ -59,7 +60,6 @@ public class ThreadPoolConfig extends AsyncConfigurerSupport {
     /**
      * 执行周期性或定时任务
      */
-    @Bean(name = "scheduledExecutorService")
     protected ScheduledExecutorService scheduledExecutorService() {
         return new ScheduledThreadPoolExecutor(SCHEDULE_CORE_POOL_SIZE,
                 new BasicThreadFactory.Builder().namingPattern(SCHEDULED_THREAD_NAME).daemon(true).build()) {
@@ -68,6 +68,17 @@ public class ThreadPoolConfig extends AsyncConfigurerSupport {
                 super.afterExecute(r, t);
             }
         };
+    }
+
+    /**
+     * 执行周期性或定时任务
+     */
+    @Bean(name = "scheduledExecutorService")
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(SCHEDULE_CORE_POOL_SIZE);
+        scheduler.setThreadFactory(new BasicThreadFactory.Builder().namingPattern(SCHEDULED_THREAD_NAME).daemon(true).build());
+        return scheduler;
     }
 
     @Override
