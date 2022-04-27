@@ -59,6 +59,7 @@
         <module>leo-framework-wx-starter</module>
         <module>leo-framework-retrofit-starter</module>
         <module>leo-framework-push-starter</module>
+        <module>leo-tool</module>
     </modules>
 
     <dependencyManagement>

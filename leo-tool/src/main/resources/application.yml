@@ -1,0 +1,54 @@
+server:
+  port: 8076
+  servlet:
+    context-path: '/leo-tool'
+  tomcat:
+    max-http-form-post-size: -1 #Tomcat不限制文件大小
+spring:
+  profiles:
+    active: dev
+  application:
+    name: leo-tool
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  #  thymeleaf:
+  #    enabled: true
+  #    encoding: UTF-8
+  #    prefix: classpath:/templates/
+  #    suffix: .html
+  servlet:
+    multipart:
+      max-file-size: 50MB #由Servlet限制文件大小
+      enabled: true
+      max-request-size: 50MB #由Servlet限制文件大小
+      resolve-lazily: true
+leo:
+  debug:
+    interface-call-statistics: false
+    print-request-body: true
+    print-response-body: false
+    print-to-result: false
+    token-verify: false
+    ignore-uri-list:
+      - ${server.servlet.context-path}/doc.html
+      - ${server.servlet.context-path}/swagger-resources
+      - ${server.servlet.context-path}/v2/api-docs
+      - ${server.servlet.context-path}/webjars/**
+  api:
+    enable: true
+    title: Leo tool 接口文档
+    description: \# 接口调试页面。✍
+    termsOfServiceUrl: http://www.acyou.cn/
+    version: 1.0
+    basePackage: cn.acyou.leo.tool.controller
+    contact: youfang
+  xss:
+    enabled: true
+# knife4j增强模式
+knife4j:
+  enable: true
+  documents:
+    - locations: classpath:knife4j_doc/*
+      group: 1.0
+      name: 文档手册
