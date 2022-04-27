@@ -4,7 +4,7 @@ import cn.acyou.leo.framework.util.SpringHelper;
 import cn.acyou.leo.tool.entity.ScheduleJob;
 import cn.acyou.leo.tool.mapper.ScheduleJobMapper;
 import cn.acyou.leo.tool.service.ScheduleJobService;
-import cn.acyou.leo.tool.task.AbstractTaskParent;
+import cn.acyou.leo.tool.task.base.AbstractTaskParent;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

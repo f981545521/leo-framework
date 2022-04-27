@@ -10,7 +10,7 @@ import cn.acyou.leo.tool.dto.task.TaskVo;
 import cn.acyou.leo.tool.entity.ScheduleJobLog;
 import cn.acyou.leo.tool.service.ScheduleJobLogService;
 import cn.acyou.leo.tool.service.ScheduleJobService;
-import cn.acyou.leo.tool.task.AbstractTaskParent;
+import cn.acyou.leo.tool.task.base.AbstractTaskParent;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

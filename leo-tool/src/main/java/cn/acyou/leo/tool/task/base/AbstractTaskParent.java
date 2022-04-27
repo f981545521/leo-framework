@@ -1,4 +1,4 @@
-package cn.acyou.leo.tool.task;
+package cn.acyou.leo.tool.task.base;
 
 
 import cn.acyou.leo.framework.constant.Constant;

@@ -1,5 +1,6 @@
 package cn.acyou.leo.tool.task;
 
+import cn.acyou.leo.tool.task.base.AbstractTaskParent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

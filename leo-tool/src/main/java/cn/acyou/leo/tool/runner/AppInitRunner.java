@@ -5,7 +5,7 @@ import cn.acyou.leo.framework.util.SpringHelper;
 import cn.acyou.leo.tool.entity.ScheduleJob;
 import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.ScheduleJobService;
-import cn.acyou.leo.tool.task.AbstractTaskParent;
+import cn.acyou.leo.tool.task.base.AbstractTaskParent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
