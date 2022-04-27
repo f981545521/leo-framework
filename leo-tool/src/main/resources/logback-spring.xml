@@ -88,5 +88,6 @@
     <logger name="cn.acyou.leo.tool.mapper" level="DEBUG"/>
     <logger name="org.mybatis" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
+    <logger name="cn.acyou.leo.tool.mapper.ScheduleJobLogMapper" level="WARN"/>
 
 </configuration>
