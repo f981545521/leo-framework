@@ -240,3 +240,52 @@ INSERT INTO `t_dict`
 VALUES (3190, '主任护师', '主任护师', 2667, 1, NULL, 1);
 INSERT INTO `t_dict`
 VALUES (3191, '主任医师', '主任医师', 2667, 1, NULL, 1);
+
+
+-- ----------------------------
+-- Table structure for t_task_schedule_job
+-- ----------------------------
+DROP TABLE IF EXISTS `t_schedule_job`;
+CREATE TABLE `t_schedule_job`
+(
+    `job_id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '任务id',
+    `bean_name`       varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL     DEFAULT NULL COMMENT 'spring bean名称',
+    `params`          varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL     DEFAULT NULL COMMENT '参数',
+    `cron_expression` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL     DEFAULT NULL COMMENT 'cron表达式',
+    `status`          int(11)                                                 NOT NULL DEFAULT 1 COMMENT '任务状态  0：暂停  1：正常',
+    `remark`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL     DEFAULT NULL COMMENT '备注',
+    `create_time`     datetime                                                NULL     DEFAULT NULL COMMENT '创建时间',
+    PRIMARY KEY (`job_id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1000
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT = '定时任务';
+
+-- ----------------------------
+-- Records of t_task_schedule_job
+-- ----------------------------
+INSERT INTO `t_schedule_job`
+VALUES (10, 'myDynamicTask', NULL, '0/5 * * * * *', 0, '测试', '2020-04-04 21:56:48');
+
+-- ----------------------------
+-- Table structure for t_task_schedule_job_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_schedule_job_log`;
+CREATE TABLE `t_schedule_job_log`
+(
+    `log_id`      bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '任务日志id',
+    `job_id`      bigint(20)                                              NOT NULL COMMENT '任务id',
+    `bean_name`   varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL DEFAULT NULL COMMENT 'spring bean名称',
+    `params`      varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '参数',
+    `status`      int(11)                                                 NOT NULL COMMENT '任务状态    0：失败    1：成功',
+    `error`       varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '失败信息',
+    `times`       int(11)                                                 NOT NULL COMMENT '耗时(单位：毫秒)',
+    `create_time` datetime                                                NULL DEFAULT NULL COMMENT '创建时间',
+    `remark`      varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+    `local_ip`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL DEFAULT NULL COMMENT '运行设备IP',
+    PRIMARY KEY (`log_id`) USING BTREE,
+    INDEX `job_id` (`job_id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 100
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_bin COMMENT = '定时任务日志';
