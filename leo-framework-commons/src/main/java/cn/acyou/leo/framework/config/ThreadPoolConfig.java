@@ -33,11 +33,11 @@ public class ThreadPoolConfig extends AsyncConfigurerSupport {
     /**
      * 线程池名称
      */
-    private static final String TASK_THREAD_NAME = "Leo-Executor-";
+    private static final String TASK_THREAD_NAME = "Leo-executor-";
     /**
      * 计划线程池名称
      */
-    private static final String SCHEDULED_THREAD_NAME = "Leo-Scheduled-Executor-%d";
+    private static final String SCHEDULED_THREAD_NAME = "Leo-scheduled-%d";
 
     @Bean(name = "threadPoolTaskExecutor")
     public ThreadPoolTaskExecutor threadPoolExecutor() {
