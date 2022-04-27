@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.acyou.leo.tool.mapper.AreaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.acyou.leo.tool.entity.Area">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="merger_name" property="mergerName"/>
+        <result column="short_name" property="shortName"/>
+        <result column="merger_short_name" property="mergerShortName"/>
+        <result column="level_type" property="levelType"/>
+        <result column="city_code" property="cityCode"/>
+        <result column="zip_code" property="zipCode"/>
+        <result column="pinyin" property="pinyin"/>
+        <result column="jianpin" property="jianpin"/>
+        <result column="first_char" property="firstChar"/>
+        <result column="lng" property="lng"/>
+        <result column="lat" property="lat"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , parent_id, name, merger_name, short_name, merger_short_name, level_type, city_code, zip_code, pinyin, jianpin, first_char, lng, lat, remark
+    </sql>
+
+</mapper>
