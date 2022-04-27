@@ -18,7 +18,7 @@ SpringCloud项目
 7. 使用`ElasticSearch`全文搜索
 
 #### 微服务：
-1. SpringBoot+SpringMvc+Mybatis
+1. SpringBoot+SpringMvc+Mybatis(MybatisPlus)
 2. Redis
 3. Mysql
 4. 整合 [PageHelper件](https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md) 分页，一行代码搞定分页
@@ -28,14 +28,12 @@ SpringCloud项目
     public Result<PageData<Student>> pageSo(@RequestBody StudentSo studentSo) {
         PageData<Student> convertType =  
                 PageQuery.startPage(studentSo)
-                .selectMapper(studentService.selectByProperties("name", studentSo.getName(), "age", studentSo.getAge()));
+                .selectMapper(studentService.list());
         return Result.success(convertType);
     }
 ```
-5. [通用Mapper省去单表增删改查](https://gitee.com/free/Mapper/wikis/Home)
-    - [通用Service](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-commons/src/main/java/cn/acyou/leo/framework/service/Service.java)
-    - [通用Mapper](https://gitee.com/f981545521/leo-framework/blob/master/leo-framework-commons/src/main/java/cn/acyou/leo/framework/mapper/Mapper.java)
-    - 支持乐观锁、逻辑删除....
+
+5. [MybatisPlus官网](https://baomidou.com/)
 6. Mybatis拦截器，继承`BaseEntity`，不用set createTime、createUser、updateUser、updateTime
 7. 参数校验，使用JSR303规范
 
