@@ -1,8 +1,10 @@
 ### Mybatis Plus代码生成器
 
-#### 使用说明：
+基于Mybatis Plus的代码生成器
 
-示例一：
+### 使用说明：
+
+#### 示例一：单Module项目
 
 ```
     public static void main(String[] args) {
@@ -11,17 +13,17 @@
                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
                 .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false")
                 .packageParent("cn.acyou.leo.pay")
-                .put(ConstVal.ENTITY_PATH, "leo-pay", "entity2")
-                .put(ConstVal.MAPPER_PATH, "leo-pay", "mapper2")
-                .put(ConstVal.XML_PATH, "leo-pay", "mapper2")
-                .put(ConstVal.SERVICE_PATH, "leo-pay", "service2")
-                .put(ConstVal.SERVICE_IMPL_PATH, "leo-pay", "service2.impl")
-                .put(ConstVal.CONTROLLER_PATH, "leo-pay", "controller2")
+                .put(ConstVal.ENTITY_PATH, "", "entity2")
+                .put(ConstVal.MAPPER_PATH, "", "mapper2")
+                .put(ConstVal.XML_PATH, "", "mapper2")
+                .put(ConstVal.SERVICE_PATH, "", "service2")
+                .put(ConstVal.SERVICE_IMPL_PATH, "", "service2.impl")
+                .put(ConstVal.CONTROLLER_PATH, "", "controller2")
                 .doGenerator();
     }
 ```
 
-示例二：
+#### 示例二：多Module项目
 
 ```
     public static void main(String[] args) {
