@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,6 +21,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@TableName("t_param_config")
 @ApiModel(value="ParamConfig对象", description="参数配置表")
 public class ParamConfig implements Serializable {
 

@@ -1,4 +1,4 @@
-CREATE TABLE `param_config`
+CREATE TABLE `t_param_config`
 (
     `id`          bigint                                                 NOT NULL AUTO_INCREMENT COMMENT '参数主键(PK)',
     `namespace`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '命名空间/组',
