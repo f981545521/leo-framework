@@ -84,12 +84,6 @@ public class MathUtil {
         return Long.parseLong(StringUtils.concatLengthChar(length, '9'));
     }
 
-    public static void main(String[] args) {
-        System.out.println(calculateQy(2, 0));
-        System.out.println(calculateQy(3, 2));
-        System.out.println(calculateQy(19, 3));
-        System.out.println(calculateQy(0, 19));
-    }
 
     /**
      * 计算环比/同比 方法都是一样的，就是上期值不一样
@@ -114,11 +108,49 @@ public class MathUtil {
      */
     public static Integer calculateQy(Integer currentNum, Integer lastNum) {
         BigDecimal result = new BigDecimal(currentNum).subtract(new BigDecimal(lastNum));
-        if (lastNum == 0){
+        if (lastNum == 0) {
             return 0;
         }
         BigDecimal multiply = result.divide(new BigDecimal(lastNum), 2, RoundingMode.UP).multiply(HUNDRED);
         return multiply.intValue();
+    }
+
+    /**
+     * 求最大公约数
+     *
+     * @param M 值1
+     * @param N 值2
+     * @return 最大公约数
+     */
+    private static int commonDivisor(int M, int N) {
+        M = Math.abs(M);
+        N = Math.abs(N);
+        if (N == 0) {
+            return M;
+        }
+        return commonDivisor(N, M % N);
+    }
+
+    /**
+     * 根据像素 计算屏幕比例（分辨率）
+     * <pre>
+     * System.out.println(proportion(1920, 1080));//16:9
+     * System.out.println(proportion(3000, 2000));//3:2
+     * System.out.println(commonDivisor(3840, 0));//3840
+     * System.out.println(commonDivisor(0, 2160));//2160
+     * System.out.println(proportion(3840, 0));//1:0
+     * System.out.println(proportion(0, 2160));//0:1
+     * System.out.println(proportion(3840, -2160));//16:-9
+     * System.out.println(proportion(-3840, 2160));//-16:9
+     * </pre>
+     *
+     * @param x x
+     * @param y y
+     * @return {@link String}
+     */
+    public static String proportion(int x, int y) {
+        int i = commonDivisor(x, y);
+        return x / i + ":" + y / i;
     }
 
 }
