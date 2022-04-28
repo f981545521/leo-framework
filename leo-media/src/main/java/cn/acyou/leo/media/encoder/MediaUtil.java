@@ -30,13 +30,12 @@ public class MediaUtil {
      */
     private final static DefaultFFMPEGLocator ffmpegLocator = new DefaultFFMPEGLocator();
 
-    private ExecProcess execProcess;
+    /**
+     * 必须有（否则存在卡住问题：要处理 prop.getErrorStream）
+     */
+    private final ExecProcess execProcess;
 
-    private MediaUtil(){
-
-    }
-
-    private MediaUtil(ExecProcess execProcess){
+    private MediaUtil(ExecProcess execProcess) {
         this.execProcess = execProcess;
     }
 
@@ -46,7 +45,8 @@ public class MediaUtil {
      * @return {@link MediaUtil}
      */
     public static MediaUtil instance() {
-        return new MediaUtil();
+        return new MediaUtil(new ExecProcess() {
+        });
     }
 
     /**
@@ -92,11 +92,11 @@ public class MediaUtil {
             if (execProcess != null) {
                 execProcess.progress(1000);
             }
-        } catch (Exception e) {
-            log.error("执行FFMPEG出错 命令:{}", StringUtils.join(args, " "));
-            e.printStackTrace();
-        } finally {
             log.info("执行FFMPEG成功 命令:{}", StringUtils.join(args, " "));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("执行FFMPEG出错 命令:{}", StringUtils.join(args, " "));
+            throw new RuntimeException("执行FFMPEG出错 命令:{}" + StringUtils.join(args, " "));
         }
     }
 
@@ -124,7 +124,7 @@ public class MediaUtil {
     public void mergeAudioAndVideo(String audioSource, String videoSource, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
         log.info("合并音/视频文件 params:[audioSource:{}, videoSource:{}, target:{}] 目标目录：{}", audioSource, videoSource, targetPath, (mkdirs ? "创建成功" : "无需创建"));
-        exec("-i", audioSource, "-i", videoSource, "-vcodec", "copy", "-acodec", "copy", targetPath);
+        exec("-y", "-i", audioSource, "-i", videoSource, "-vcodec", "copy", "-acodec", "copy", targetPath);
     }
 
     /**
@@ -162,7 +162,7 @@ public class MediaUtil {
     public void extractFrame(String i, String ss, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
         log.info("提取帧 params:[i:{}, ss:{}, target:{}] 目标目录：{}", i, ss, targetPath, (mkdirs ? "创建成功" : "无需创建"));
-        exec("-i", i, "-ss", ss, "-f", "image2", targetPath);
+        exec("-y", "-i", i, "-ss", ss, "-f", "image2", targetPath);
     }
 
     /**
