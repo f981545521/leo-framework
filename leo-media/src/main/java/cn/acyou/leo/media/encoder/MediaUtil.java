@@ -171,7 +171,7 @@ public class MediaUtil {
      * @param url        url
      * @param speedRatio 进度比例
      * @param targetDir  目标目录 无"/"结尾 。可以直接使用 getAbsolutePath()
-     * @return {@link String[]} 目标文件路径列表
+     * @return String[] 目标文件路径列表
      * @throws Exception 异常
      */
     public String[] extractFrameBySpeedRatio(String url, int[] speedRatio, String targetDir) throws Exception {
@@ -243,14 +243,26 @@ public class MediaUtil {
         }
     }
 
-    public MultimediaInfo getMediaInfo(String i) throws Exception {
-        if (StringUtils.isNotBlank(i)) {
-            if (i.toLowerCase().startsWith("http")) {
-                return new MultimediaObject(new URL(i)).getInfo();
-            } else {
-                return new MultimediaObject(new File(i)).getInfo();
+    /**
+     * 得到媒体信息
+     *
+     * @param i 文件绝对路径 或者 URL
+     * @return {@link MultimediaInfo}
+     * @throws Exception 异常
+     */
+    public MultimediaInfo getMediaInfo(String i) {
+        try {
+            if (StringUtils.isNotBlank(i)) {
+                if (i.toLowerCase().startsWith("http")) {
+                    return new MultimediaObject(new URL(i)).getInfo();
+                } else {
+                    return new MultimediaObject(new File(i)).getInfo();
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         throw new IllegalArgumentException("获取媒体信息出错：" + i);
     }
+
 }
