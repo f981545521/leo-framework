@@ -35,7 +35,6 @@ public class RegexUtil extends RegExUtils {
      * 日期字符串正则表达式
      */
     private static final Pattern REGEX_DATE_STR = Pattern.compile("(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)");
-
     /**
      * 日期+时间字符串正则表达式
      */
@@ -130,7 +129,6 @@ public class RegexUtil extends RegExUtils {
         return sb.toString();
     }
 
-
     /**
      * 判断是否正整数
      *
@@ -172,6 +170,7 @@ public class RegexUtil extends RegExUtils {
         }
         return phoneNumber.matches(REGEX_MOBILEPHONE);
     }
+
     /**
      * 判断是否是固话号码
      *
@@ -252,6 +251,7 @@ public class RegexUtil extends RegExUtils {
         }
         return str.matches(REGEX_NUMBER_LETTER_COMBINATION);
     }
+
     /**
      * 是字母和数字和符号组合
      *
@@ -278,6 +278,7 @@ public class RegexUtil extends RegExUtils {
         Matcher m = REGEX_DATE_TIME_STR.matcher(dateTimeStr);
         return m.find();
     }
+
     /**
      * 是时间字符串
      *
@@ -309,7 +310,13 @@ public class RegexUtil extends RegExUtils {
                 || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION;
     }
 
-    public static int onlyKeepNumbers(String str){
+    /**
+     * 只保留数字
+     *
+     * @param str str
+     * @return int
+     */
+    public static int onlyKeepNumbers(String str) {
         String s = NOT_NUMBER.matcher(str).replaceAll("");
         return Integer.parseInt(s);
     }
@@ -327,7 +334,16 @@ public class RegexUtil extends RegExUtils {
     }
 
     /**
-     * 得到匹配str
+     * 获取正则匹配的字符串列表
+     *
+     *
+     * <pre>
+     * example:
+     *     {@code
+     * String s = "the request was rejected because its size (57176420) exceeds the configured maximum (52428800)";
+     * List<String> matchStr = RegexUtil.getMatchStr(s, "\\d+");//[57176420, 52428800]
+     *     }
+     * </pre>
      *
      * @param sourceStr 源str
      * @param regex     正则表达式
