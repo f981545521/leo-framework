@@ -8,11 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableLeoFramework
 @SpringBootApplication(scanBasePackages = "cn.acyou.leo")
 @MapperScan("cn.acyou.leo.tool.mapper")
-public class Application {
+public class LeoToolApplication {
 
     public static void main(String[] args) {
         System.setProperty("pagehelper.banner", "false");
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(LeoToolApplication.class, args);
     }
 
 }
