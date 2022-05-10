@@ -42,9 +42,9 @@ public class RedisUtils {
      * 默认 getAndCache 超时时间 {@link #getAndCache(String, Function)}
      */
     private static final int DEFAULT_CACHE_SECONDS = 60 ;
-    @Autowired
+    @Autowired(required = false)
     private StringRedisTemplate redisTemplate;
-    @Autowired
+    @Autowired(required = false)
     private RedisTemplate<Object, Object> redisObjTemplate;
 
     //私有化构造方法，无法通过new创建。而不影响Spring通过反射创建Bean
