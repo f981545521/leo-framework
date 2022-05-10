@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.mapper.DictMapper;
+import cn.acyou.leo.tool.service.DictService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,8 @@ import java.util.List;
 public class ApplicationTests {
     @Autowired
     private DictMapper dictMapper;
+    @Autowired
+    private DictService dictService;
 
     @Test
     public void test1() {

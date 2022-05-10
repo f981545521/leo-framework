@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -62,6 +63,7 @@ public class ParamConfig implements Serializable {
     private Integer sort;
 
     @ApiModelProperty(value = "是否删除  0-正常 1-删除")
+    @TableLogic
     private Integer isDelete;
 
     @ApiModelProperty(value = "创建时间，默认当前创建时间")

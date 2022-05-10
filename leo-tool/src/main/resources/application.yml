@@ -52,3 +52,22 @@ knife4j:
     - locations: classpath:knife4j_doc/*
       group: 1.0
       name: 文档手册
+mybatis-plus:
+  mapper-locations: classpath*:/mappers/**/*.xml
+  type-aliases-package: cn.acyou.leo.tool.entity
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-field: isDelete
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  #开启驼峰命名
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+#分页pageHelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: false
+  support-methods-arguments: false
+  page-size-zero: false
