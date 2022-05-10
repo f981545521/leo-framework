@@ -10,7 +10,7 @@ import java.util.List;
  * @author youfang
  * @version [1.0.0, 2022/5/10 11:01]
  */
-public interface CustomerMapper<T> extends BaseMapper<T> {
+public interface Mapper<T> extends BaseMapper<T> {
     /**
      * 插入数据，如果中已经存在相同的记录，则忽略当前新数据
      *

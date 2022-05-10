@@ -1,6 +1,6 @@
 package cn.acyou.leo.tool.mapper;
 
-import cn.acyou.leo.framework.mapper.CustomerMapper;
+import cn.acyou.leo.framework.mapper.Mapper;
 import cn.acyou.leo.tool.dto.dict.DictSo;
 import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.entity.Dict;
@@ -16,7 +16,7 @@ import java.util.List;
  * @author youfang
  * @since 2022-04-27
  */
-public interface DictMapper extends CustomerMapper<Dict> {
+public interface DictMapper extends Mapper<Dict> {
 
     /**
      * 根据code查询所有数据字典值
