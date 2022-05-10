@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LeoToolApplication {
 
     public static void main(String[] args) {
-        System.setProperty("pagehelper.banner", "false");
         SpringApplication.run(LeoToolApplication.class, args);
     }
 
