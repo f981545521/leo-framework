@@ -34,23 +34,22 @@ public class FrameworkBeanConfig {
         constraintMapping.constraintDefinition(ListValue.class)
                 .includeExistingValidators(false)
                 .validatedBy(ListValueConstraintValidator.class);
-        //全属性级别脚本判断
-        constraintMapping.constraintDefinition(PropertyScriptAssert.class)
-                .includeExistingValidators(false)
-                .validatedBy(PropertyScriptAssertValidator.class);
         //数据字典类型校验
         constraintMapping.constraintDefinition(DictValue.class)
                 .includeExistingValidators(false)
                 .validatedBy(DictValueConstraintValidator.class);
-
+        //全属性级别脚本判断
+        constraintMapping.constraintDefinition(PropertyScriptAssert.class)
+                .includeExistingValidators(false)
+                .validatedBy(PropertyScriptAssertValidator.class);
+        configuration.failFast(true);
         return configuration.addMapping(constraintMapping)
                 .buildValidatorFactory()
                 .getValidator();
     }
 
     /**
-     * 自定义sql注入器
-     * 关键部位重要的事情说三遍，不注入不生效，不注入不生效，不注入不生效
+     * MybatisPlus自定义sql注入器
      */
     @Bean
     public ISqlInjector iSqlInjector() {

@@ -4,8 +4,7 @@ import cn.acyou.leo.framework.annotation.valid.ListValue;
 import cn.acyou.leo.framework.annotation.valid.PropertyScriptAssert;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,22 +13,25 @@ import java.util.List;
  * @version [1.0.0, 2021-10-17]
  **/
 @Data
+//Class级别的校验执行会优先与属性级别
 @PropertyScriptAssert(script = "_this.password==_this.confirmation", message = "密码输入不一致！")
-//@ScriptAssert(script = "_this.password==_this.confirmation", message = "密码输入不一致！", lang = "javascript")
 public class StudentReq implements Serializable {
-    @NotNull(message = "name 不能为空！")
+    @NotBlank(message = "姓名不能为空")
     private String name;
 
-    @NotNull(message = "interests 不能为空！")
-    @Size(min = 1, message = "interests 取值不正确")
+    @NotNull(message = "兴趣不能为空")
+    @Size(min = 2, message = "兴趣至少填写2项")
     private List<String> interests;
 
-    @ListValue(values = {1,2,3}, message = "age 取值不正确")
+    @NotNull(message = "年龄不能为空")
+    @Min(value = 0, message = "年龄不能小于0")
+    @Max(value = 200, message = "年龄不能大于200")
     private Integer age;
 
-    @ListValue(strValues = {"Y","N"}, message = "enable 取值不正确")
+    @ListValue(strValues = {"Y", "N"}, message = "启用状态不正确")
     private String enable;
 
+    @NotBlank(message = "密码不能为空")
     private String password;
 
     private String confirmation;
