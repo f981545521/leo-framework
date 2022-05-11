@@ -253,6 +253,7 @@ public class MediaUtil {
      * @throws Exception 异常
      */
     public MultimediaInfo getMediaInfo(String i) {
+        log.info("获取媒体信息：{}", i);
         try {
             if (StringUtils.isNotBlank(i)) {
                 if (i.toLowerCase().startsWith("http")) {
