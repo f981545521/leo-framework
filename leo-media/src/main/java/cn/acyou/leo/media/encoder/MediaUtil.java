@@ -7,6 +7,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.FileSystemUtils;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.MultimediaInfo;
+import ws.schild.jave.info.VideoInfo;
+import ws.schild.jave.info.VideoSize;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 
 import java.io.File;
@@ -265,4 +267,23 @@ public class MediaUtil {
         throw new IllegalArgumentException("获取媒体信息出错：" + i);
     }
 
+    /**
+     * 获得真正的视频大小
+     *
+     * @param multimediaInfo 多媒体信息
+     * @return {@link VideoSize}
+     */
+    public static VideoSize getRealVideoSize(MultimediaInfo multimediaInfo) {
+        VideoInfo video = multimediaInfo.getVideo();
+        Map<String, String> metadata = video.getMetadata();
+        String rotate = metadata.get("rotate");
+        if (StringUtils.isNotBlank(rotate)) {
+            //旋转时纠正分辨率
+            if ("90".equals(rotate) || "270".equals(rotate)) {
+                VideoSize size = video.getSize();
+                return new VideoSize(size.getHeight(), size.getWidth());
+            }
+        }
+        return video.getSize();
+    }
 }
