@@ -75,3 +75,6 @@ knife4j:
     - locations: classpath:knife4j_doc/*
       group: 1.0
       name: 文档手册
+    - locations: classpath:api_doc/*
+      group: 1.0
+      name: 文档手册2
