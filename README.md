@@ -391,25 +391,44 @@ GET http://localhost:8075/leo-pay/student/page?sequence=6973a95941b14d3fa9766f88
         return Result.success(stu);
     }
 ```
+
 > 思考： 为什么要使用`shiro`、`Spring Security`？？？我一个切面就能搞定的事情。ி
 
 ## 项目使用定制化配置
 
-``` properties
+### 配置
+
+``` yaml
 leo:
   debug:
-    # 打印错误堆栈到Result中
-    print-to-result: false
-    # 是否开启接口统计分析功能
     interface-call-statistics: false
-    # 统计分析功能忽略的路径
+    print-request-body: true
+    print-response-body: false
+    print-to-result: false
+    token-verify: false
     ignore-uri-list:
-      - /student/get
-xss:
-  # 开启XSS过滤
-  enabled: true
-  # XSS过滤排除路径
-  excludes: 
+      - ${server.servlet.context-path}/doc.html
+      - ${server.servlet.context-path}/swagger-resources
+      - ${server.servlet.context-path}/v2/api-docs
+      - ${server.servlet.context-path}/webjars/**
+  api:
+    enable: true
+    title: Leo crawler 接口文档
+    description: \# 接口调试页面。✍
+    termsOfServiceUrl: http://www.acyou.cn/
+    version: 1.0
+    basePackage: cn.acyou.leo.crawler.controller
+    contact: youfang
+  xss:
+    enabled: true
+```
+
+### 不使用Redis
+
+在启动类上增加：`exclude = RedisAutoConfiguration.class` 配置
+
+```
+@SpringBootApplication(scanBasePackages = "cn.acyou.leo", exclude = RedisAutoConfiguration.class)
 ```
 
 ## 参与贡献
