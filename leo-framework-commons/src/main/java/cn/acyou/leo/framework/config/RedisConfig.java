@@ -1,7 +1,6 @@
 package cn.acyou.leo.framework.config;
 
 import cn.acyou.leo.framework.cache.MyRedisCacheManager;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +25,7 @@ import java.time.Duration;
 @Configuration
 @EnableCaching
 @ConditionalOnClass(RedisConnectionFactory.class)
-@ConditionalOnBean(RedisConnectionFactory.class)
+//@ConditionalOnBean(RedisConnectionFactory.class) @ConditionalOnBean不可靠和Bean的加载顺序有关系
 public class RedisConfig {
 
     @Bean
