@@ -431,6 +431,14 @@ leo:
 @SpringBootApplication(scanBasePackages = "cn.acyou.leo", exclude = RedisAutoConfiguration.class)
 ```
 
+### 不使用Mysql
+
+在启动类上增加：`exclude = DataSourceAutoConfiguration.class` 配置
+
+```
+@SpringBootApplication(scanBasePackages = "cn.acyou.leo", exclude = DataSourceAutoConfiguration.class)
+```
+
 ## 参与贡献
 
 无需贡献
