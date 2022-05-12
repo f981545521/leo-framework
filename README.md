@@ -396,7 +396,7 @@ GET http://localhost:8075/leo-pay/student/page?sequence=6973a95941b14d3fa9766f88
 
 ## 项目使用定制化配置
 
-### 配置
+### application 配置
 
 ``` yaml
 leo:
