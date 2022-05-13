@@ -439,6 +439,42 @@ leo:
 @SpringBootApplication(scanBasePackages = "cn.acyou.leo", exclude = DataSourceAutoConfiguration.class)
 ```
 
+## 演示项目
+
+1. 基于[Spring Initializr](https://start.spring.io/) 创建项目
+2. 修改`pom.xml`中的`parent`依赖，dependencies中增加`leo-framework-commons`依赖，其他去掉即可。
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 调整parent依赖 -->
+    <parent>
+        <version>1.3.0.RELEASE</version>
+        <artifactId>leo-framework</artifactId>
+        <groupId>cn.acyou</groupId>
+    </parent>
+    ...
+    ...
+    <dependencies>
+        <!-- 增加`leo-framework-commons`依赖 -->
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>leo-framework-commons</artifactId>
+            <version>1.3.0.RELEASE</version>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+3. 启动类上增加注解`@EnableLeoFramework`：
+
+```
+@EnableLeoFramework
+@SpringBootApplication(exclude = {RedisAutoConfiguration.class, DataSourceAutoConfiguration.class})
+```
+
 ## 参与贡献
 
 无需贡献
