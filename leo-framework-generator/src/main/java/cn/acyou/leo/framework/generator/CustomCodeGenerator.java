@@ -96,25 +96,53 @@ public final class CustomCodeGenerator {
      * 数据库驱动
      */
     private String JDBC_URL = "jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false";
-    //项目地址，无需关系
+    //项目地址，无需关心
     private static final String projectPath = System.getProperty("user.dir");
-    //Module 文件存放项目配置
+    //Module 文件存放项目配置，无需关心
     public Map<String, String[]> modulesMap = new HashMap<>();
+    //包信息，无需关心
+    private static Map<String, String> packageInfo = CollectionUtils.newHashMapWithExpectedSize(7);
 
+    /**
+     * 设置生成的表
+     *
+     * @param tableName 表名
+     */
     public CustomCodeGenerator(String tableName) {
         this.tableName = tableName;
     }
 
+    /**
+     * 设置生成的表（移除前缀）
+     * <pre>
+     * <code>使t_user -> User</code>
+     * </pre>
+     *
+     * @param tableName         表名
+     * @param removeTablePrefix 需要移除的前缀
+     */
     public CustomCodeGenerator(String tableName, String removeTablePrefix) {
         this.tableName = tableName;
         this.tablePrefix = removeTablePrefix;
     }
 
+    /**
+     * 作者
+     *
+     * @param AUTHOR 作者
+     */
     public CustomCodeGenerator author(String AUTHOR) {
         this.AUTHOR = AUTHOR;
         return this;
     }
 
+    /**
+     * 设置数据库配置
+     *
+     * @param DRIVER   数据库驱动
+     * @param USER     用户
+     * @param PASSWORD 密码
+     */
     public CustomCodeGenerator setDbConfig(String DRIVER, String USER, String PASSWORD) {
         this.DRIVER = DRIVER;
         this.USER = USER;
@@ -122,11 +150,22 @@ public final class CustomCodeGenerator {
         return this;
     }
 
+    /**
+     * 设置数据库的url
+     *
+     * @param JDBC_URL jdbc url
+     */
     public CustomCodeGenerator setDbUrl(String JDBC_URL) {
         this.JDBC_URL = JDBC_URL;
         return this;
     }
 
+    /**
+     * 所有文件的父包
+     *
+     * @param PACKAGE_PARENT 父包
+     * @return {@link CustomCodeGenerator}
+     */
     public CustomCodeGenerator packageParent(String PACKAGE_PARENT) {
         this.PACKAGE_PARENT = PACKAGE_PARENT;
         return this;
@@ -134,6 +173,12 @@ public final class CustomCodeGenerator {
 
     /**
      * 设置各个文件的父类
+     *
+     * @param superMapperClass      mapper超类
+     * @param superServiceClass     服务超类
+     * @param superServiceImplClass 服务impl超类
+     * @param superControllerClass  控制器超类
+     * @return {@link CustomCodeGenerator}
      */
     public CustomCodeGenerator superClass(String superMapperClass, String superServiceClass, String superServiceImplClass, String superControllerClass) {
         this.superMapperClass = superMapperClass;
@@ -143,33 +188,78 @@ public final class CustomCodeGenerator {
         return this;
     }
 
+    /**
+     * 单独设置mapper超类
+     *
+     * @param superMapperClass 超级mapper类
+     * @return {@link CustomCodeGenerator}
+     */
     public CustomCodeGenerator superMapperClass(String superMapperClass) {
         this.superMapperClass = superMapperClass;
         return this;
     }
 
+    /**
+     * 单独设置service超类
+     *
+     * @param superServiceClass service超类
+     * @return {@link CustomCodeGenerator}
+     */
     public CustomCodeGenerator superServiceClass(String superServiceClass) {
         this.superServiceClass = superServiceClass;
         return this;
     }
 
+    /**
+     * 单独设置serviceImpl超类
+     *
+     * @param superServiceImplClass serviceImpl超类
+     * @return {@link CustomCodeGenerator}
+     */
     public CustomCodeGenerator superServiceImplClass(String superServiceImplClass) {
         this.superServiceImplClass = superServiceImplClass;
         return this;
     }
 
+    /**
+     * 单独设置Controller超类
+     *
+     * @param superControllerClass Controller超类
+     * @return {@link CustomCodeGenerator}
+     */
     public CustomCodeGenerator superControllerClass(String superControllerClass) {
         this.superControllerClass = superControllerClass;
         return this;
     }
 
+    /**
+     * 设置各个模块的Module信息
+     * <pre>
+     *     {@code
+     *  ...
+     *  .put(ConstVal.ENTITY_PATH, "leo-pay", "entity")
+     *  .put(ConstVal.MAPPER_PATH, "leo-pay", "mapper")
+     *  .put(ConstVal.XML_PATH, "leo-pay", "mappers")
+     *  .put(ConstVal.SERVICE_PATH, "leo-pay", "service")
+     *  .put(ConstVal.SERVICE_IMPL_PATH, "leo-pay", "service.impl")
+     *  .put(ConstVal.CONTROLLER_PATH, "leo-pay", "controller")
+     *  ...
+     *     }
+     * </pre>
+     *
+     * @param pathKey     关键路径
+     * @param moduleName  模块名称
+     * @param packageName 包名
+     * @return {@link CustomCodeGenerator}
+     */
     public CustomCodeGenerator put(String pathKey, String moduleName, String packageName) {
         modulesMap.put(pathKey, new String[]{moduleName, packageName});
         return this;
     }
 
-    private static Map<String, String> packageInfo = CollectionUtils.newHashMapWithExpectedSize(7);
-
+    /**
+     * 自定义类型转换
+     */
     private static final ITypeConvert typeConvert = new ITypeConvert() {
         /**
          * datetime默认生成的java类型为localDateTime, 改成Date类型
@@ -187,6 +277,9 @@ public final class CustomCodeGenerator {
         }
     };
 
+    /**
+     * 执行
+     */
     public void doGenerator() {
         if (modulesMap.size() == 0) {
             return;
@@ -299,12 +392,6 @@ public final class CustomCodeGenerator {
         autoGenerator.execute();
     }
 
-    private static void setPathInfo(Map<String, String> pathInfo, String template, String outputDir, String path, String module) {
-        if (StringUtils.isNotBlank(template)) {
-            pathInfo.put(path, joinPath(outputDir, packageInfo.get(module)));
-        }
-    }
-
     /**
      * 连接路径字符串
      *
@@ -323,7 +410,19 @@ public final class CustomCodeGenerator {
         return parentDir + packageName;
     }
 
+    /**
+     * 包信息
+     */
     private static String joinPackage(String parent, String subPackage) {
         return StringUtils.isBlank(parent) ? subPackage : (parent + StringPool.DOT + subPackage);
+    }
+
+    /**
+     * 设置路径信息
+     */
+    private static void setPathInfo(Map<String, String> pathInfo, String template, String outputDir, String path, String module) {
+        if (StringUtils.isNotBlank(template)) {
+            pathInfo.put(path, joinPath(outputDir, packageInfo.get(module)));
+        }
     }
 }
