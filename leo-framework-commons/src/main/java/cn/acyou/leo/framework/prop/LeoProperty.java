@@ -27,7 +27,7 @@ public class LeoProperty {
     /**
      * 打印响应信息
      */
-    private boolean printResponseBody = true;
+    private boolean printResponseBody = false;
 
     /**
      * SpringMvcInterceptor Token校验
