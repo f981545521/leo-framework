@@ -37,7 +37,7 @@ public class LeoProperty {
     /**
      * 接口统计分析
      */
-    private boolean interfaceCallStatistics = true;
+    private boolean interfaceCallStatistics = false;
 
     /**
      * 接口统计分析 忽略的接口地址
