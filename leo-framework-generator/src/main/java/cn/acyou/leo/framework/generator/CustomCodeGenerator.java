@@ -77,6 +77,22 @@ public final class CustomCodeGenerator {
      */
     private String PACKAGE_PARENT = "cn.acyou.leo.content";
     /**
+     * Mapper文件父类
+     */
+    private String superMapperClass = "";
+    /**
+     * Service文件父类
+     */
+    private String superServiceClass = "";
+    /**
+     * ServiceImpl文件父类
+     */
+    private String superServiceImplClass = "";
+    /**
+     * Controller文件父类
+     */
+    private String superControllerClass = "";
+    /**
      * 数据库驱动
      */
     private String JDBC_URL = "jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false";
@@ -113,6 +129,37 @@ public final class CustomCodeGenerator {
 
     public CustomCodeGenerator packageParent(String PACKAGE_PARENT) {
         this.PACKAGE_PARENT = PACKAGE_PARENT;
+        return this;
+    }
+
+    /**
+     * 设置各个文件的父类
+     */
+    public CustomCodeGenerator superClass(String superMapperClass, String superServiceClass, String superServiceImplClass, String superControllerClass) {
+        this.superMapperClass = superMapperClass;
+        this.superServiceClass = superServiceClass;
+        this.superServiceImplClass = superServiceImplClass;
+        this.superControllerClass = superControllerClass;
+        return this;
+    }
+
+    public CustomCodeGenerator superMapperClass(String superMapperClass) {
+        this.superMapperClass = superMapperClass;
+        return this;
+    }
+
+    public CustomCodeGenerator superServiceClass(String superServiceClass) {
+        this.superServiceClass = superServiceClass;
+        return this;
+    }
+
+    public CustomCodeGenerator superServiceImplClass(String superServiceImplClass) {
+        this.superServiceImplClass = superServiceImplClass;
+        return this;
+    }
+
+    public CustomCodeGenerator superControllerClass(String superControllerClass) {
+        this.superControllerClass = superControllerClass;
         return this;
     }
 
@@ -232,6 +279,19 @@ public final class CustomCodeGenerator {
         // 写于父类中的公共字段
         //strategy.setSuperEntityColumns("id");
         strategy.setInclude(tableName);
+        //自定义文件的父类
+        if (StringUtils.isNotBlank(superMapperClass)) {
+            strategy.setSuperMapperClass(superMapperClass);
+        }
+        if (StringUtils.isNotBlank(superServiceClass)) {
+            strategy.setSuperServiceClass(superServiceClass);
+        }
+        if (StringUtils.isNotBlank(superServiceImplClass)) {
+            strategy.setSuperServiceImplClass(superServiceImplClass);
+        }
+        if (StringUtils.isNotBlank(superControllerClass)) {
+            strategy.setSuperControllerClass(superControllerClass);
+        }
         strategy.setControllerMappingHyphenStyle(false);
         strategy.setTablePrefix(tablePrefix);
         autoGenerator.setStrategy(strategy);
