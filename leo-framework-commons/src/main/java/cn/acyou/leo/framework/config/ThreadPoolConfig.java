@@ -2,28 +2,26 @@ package cn.acyou.leo.framework.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
-import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
-
 /**
- * spring通过 TaskExecutor来实现多线程并发编程。使用ThreadPoolExecutor可实现基于线程池的TaskExecutor,
- * 使用@EnableAsync开启对异步任务的支持，并通过在实际执行bean方法中使用@Async注解来声明一个异步任务
+ * Leo-Framework默认线程池配置
+ * <br/>
+ * 注意：异步支持{@link ThreadAsyncConfig}中使用到线程池。
+ * 若想调整线程池参数，自定义Bean覆盖即可。
+ * <br/>
+ * 参照：
+ * <code>@Bean(name = "threadPoolTaskExecutor")</code>
  */
 @Slf4j
-@EnableAsync
 @Configuration
-public class ThreadPoolConfig extends AsyncConfigurerSupport {
+public class ThreadPoolConfig {
 
     /**
      * 核心线程池大小
@@ -38,7 +36,7 @@ public class ThreadPoolConfig extends AsyncConfigurerSupport {
      */
     private static final String SCHEDULED_THREAD_NAME = "Leo-scheduled-%d";
 
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(name = "threadPoolTaskExecutor")
     @Bean(name = "threadPoolTaskExecutor")
     public ThreadPoolTaskExecutor threadPoolExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -56,10 +54,11 @@ public class ThreadPoolConfig extends AsyncConfigurerSupport {
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return executor;
     }
+
     /**
      * 执行周期性或定时任务
      */
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(name = "scheduledExecutorService")
     @Bean(name = "scheduledExecutorService")
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
@@ -68,16 +67,4 @@ public class ThreadPoolConfig extends AsyncConfigurerSupport {
         return scheduler;
     }
 
-    @Override
-    public Executor getAsyncExecutor() {
-        return threadPoolExecutor();
-    }
-
-    @Override
-    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        return (Throwable arg0, Method arg1, Object... arg2) -> {
-            log.error("==========================" + arg0.getMessage() + "=======================", arg0);
-            log.error("exception method:" + arg1.getName());
-        };
-    }
 }

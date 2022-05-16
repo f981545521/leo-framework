@@ -1,3 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-cn.acyou.leo.framework.config.RedisConfig
+cn.acyou.leo.framework.config.RedisConfig,\
+cn.acyou.leo.framework.config.ThreadAsyncConfig
