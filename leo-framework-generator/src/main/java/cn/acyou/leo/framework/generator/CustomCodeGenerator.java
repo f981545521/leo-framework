@@ -47,9 +47,8 @@ import java.util.Map;
  * @version [1.0.0, 2021-7-11]
  **/
 public final class CustomCodeGenerator {
-
     /**
-     * 要生产的表名
+     * 要生成的表名
      */
     private String tableName = "student";
     /**
@@ -71,11 +70,11 @@ public final class CustomCodeGenerator {
     /**
      * 文件作者
      */
-    private String AUTHOR = "youfang";
+    private String AUTHOR = System.getProperty("user.name");
     /**
      * 父包
      */
-    private String PACKAGE_PARENT = "cn.acyou.leo.content";
+    private String PACKAGE_PARENT = "cn.acyou.leo";
     /**
      * Mapper文件父类
      */
@@ -97,11 +96,25 @@ public final class CustomCodeGenerator {
      */
     private String JDBC_URL = "jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false";
     //项目地址，无需关心
-    private static final String projectPath = System.getProperty("user.dir");
+    private final String projectPath = System.getProperty("user.dir");
     //Module 文件存放项目配置，无需关心
-    public Map<String, String[]> modulesMap = new HashMap<>();
+    private Map<String, String[]> modulesMap = new HashMap<>();
     //包信息，无需关心
-    private static Map<String, String> packageInfo = CollectionUtils.newHashMapWithExpectedSize(7);
+    private Map<String, String> packageInfo = CollectionUtils.newHashMapWithExpectedSize(7);
+
+    /**
+     * 初始化默认配置
+     *
+     * @param customCodeGenerator 自定义代码生成器
+     */
+    private void initDefaultConfig(CustomCodeGenerator customCodeGenerator) {
+        customCodeGenerator.put(ConstVal.ENTITY_PATH, "", "entity");
+        customCodeGenerator.put(ConstVal.MAPPER_PATH, "", "mapper");
+        customCodeGenerator.put(ConstVal.XML_PATH, "", "mappers");
+        customCodeGenerator.put(ConstVal.SERVICE_PATH, "", "service");
+        customCodeGenerator.put(ConstVal.SERVICE_IMPL_PATH, "", "service.impl");
+        customCodeGenerator.put(ConstVal.CONTROLLER_PATH, "", "controller");
+    }
 
     /**
      * 设置生成的表
@@ -110,6 +123,7 @@ public final class CustomCodeGenerator {
      */
     public CustomCodeGenerator(String tableName) {
         this.tableName = tableName;
+        initDefaultConfig(this);
     }
 
     /**
@@ -124,6 +138,7 @@ public final class CustomCodeGenerator {
     public CustomCodeGenerator(String tableName, String removeTablePrefix) {
         this.tableName = tableName;
         this.tablePrefix = removeTablePrefix;
+        initDefaultConfig(this);
     }
 
     /**
@@ -492,7 +507,7 @@ public final class CustomCodeGenerator {
     /**
      * 设置路径信息
      */
-    private static void setPathInfo(Map<String, String> pathInfo, String template, String outputDir, String path, String module) {
+    private void setPathInfo(Map<String, String> pathInfo, String template, String outputDir, String path, String module) {
         if (StringUtils.isNotBlank(template)) {
             pathInfo.put(path, joinPath(outputDir, packageInfo.get(module)));
         }
