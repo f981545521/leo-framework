@@ -258,6 +258,78 @@ public final class CustomCodeGenerator {
     }
 
     /**
+     * 设置Entity Module路径
+     *
+     * @param moduleName  模块名称
+     * @param packageName 包名
+     * @return {@link CustomCodeGenerator}
+     */
+    public CustomCodeGenerator putEntityPath(String moduleName, String packageName) {
+        modulesMap.put(ConstVal.ENTITY_PATH, new String[]{moduleName, packageName});
+        return this;
+    }
+
+    /**
+     * 设置Mapper Module路径
+     *
+     * @param moduleName  模块名称
+     * @param packageName 包名
+     * @return {@link CustomCodeGenerator}
+     */
+    public CustomCodeGenerator putMapperPath(String moduleName, String packageName) {
+        modulesMap.put(ConstVal.MAPPER_PATH, new String[]{moduleName, packageName});
+        return this;
+    }
+
+    /**
+     * 设置Xml Module路径
+     *
+     * @param moduleName  模块名称
+     * @param packageName 包名
+     * @return {@link CustomCodeGenerator}
+     */
+    public CustomCodeGenerator putXmlPath(String moduleName, String packageName) {
+        modulesMap.put(ConstVal.XML_PATH, new String[]{moduleName, packageName});
+        return this;
+    }
+
+    /**
+     * 设置Service Module路径
+     *
+     * @param moduleName  模块名称
+     * @param packageName 包名
+     * @return {@link CustomCodeGenerator}
+     */
+    public CustomCodeGenerator putServicePath(String moduleName, String packageName) {
+        modulesMap.put(ConstVal.SERVICE_PATH, new String[]{moduleName, packageName});
+        return this;
+    }
+
+    /**
+     * 设置ServiceImpl Module路径
+     *
+     * @param moduleName  模块名称
+     * @param packageName 包名
+     * @return {@link CustomCodeGenerator}
+     */
+    public CustomCodeGenerator putServiceImplPath(String moduleName, String packageName) {
+        modulesMap.put(ConstVal.SERVICE_IMPL_PATH, new String[]{moduleName, packageName});
+        return this;
+    }
+
+    /**
+     * 设置Controller Module路径
+     *
+     * @param moduleName  模块名称
+     * @param packageName 包名
+     * @return {@link CustomCodeGenerator}
+     */
+    public CustomCodeGenerator putControllerPath(String moduleName, String packageName) {
+        modulesMap.put(ConstVal.CONTROLLER_PATH, new String[]{moduleName, packageName});
+        return this;
+    }
+
+    /**
      * 自定义类型转换
      */
     private static final ITypeConvert typeConvert = new ITypeConvert() {
