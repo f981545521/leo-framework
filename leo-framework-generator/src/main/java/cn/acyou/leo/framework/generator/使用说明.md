@@ -8,7 +8,7 @@
 
 ```
     public static void main(String[] args) {
-        new CustomCodeGenerator("prompter_upload_video_issue")
+        CustomCodeGenerator.instance("prompter_upload_video_issue")
                 .author("youfang")
                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
                 .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false")
@@ -27,7 +27,7 @@
 
 ```
     public static void main(String[] args) {
-        new CustomCodeGenerator("prompter_upload_video_issue")
+        CustomCodeGenerator.instance("prompter_upload_video_issue")
                 .author("youfang")
                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
                 .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false")

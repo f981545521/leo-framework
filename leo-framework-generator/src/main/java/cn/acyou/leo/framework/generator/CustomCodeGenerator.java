@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * public class PayCodeGenerator {
  *     public static void main(String[] args) {
- *         new CustomCodeGenerator("t_point_rule", "t_")
+ *         CustomCodeGenerator.instance("t_point_rule", "t_")
  *                 .author("youfang")
  *                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
  *                 .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false")
@@ -121,13 +121,26 @@ public final class CustomCodeGenerator {
      *
      * @param tableName 表名
      */
-    public CustomCodeGenerator(String tableName) {
-        this.tableName = tableName;
-        initDefaultConfig(this);
+    public static CustomCodeGenerator instance(String tableName) {
+        return new CustomCodeGenerator(tableName, "");
     }
+
 
     /**
      * 设置生成的表（移除前缀）
+     *
+     * <pre>
+     * <code>使t_user -> User</code>
+     * </pre>
+     *
+     * @param tableName 表名
+     */
+    public static CustomCodeGenerator instance(String tableName, String removeTablePrefix) {
+        return new CustomCodeGenerator(tableName, removeTablePrefix);
+    }
+
+    /**
+     * 构造器设置生成的表（移除前缀）
      * <pre>
      * <code>使t_user -> User</code>
      * </pre>
@@ -135,7 +148,7 @@ public final class CustomCodeGenerator {
      * @param tableName         表名
      * @param removeTablePrefix 需要移除的前缀
      */
-    public CustomCodeGenerator(String tableName, String removeTablePrefix) {
+    private CustomCodeGenerator(String tableName, String removeTablePrefix) {
         this.tableName = tableName;
         this.tablePrefix = removeTablePrefix;
         initDefaultConfig(this);
