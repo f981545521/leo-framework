@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
@@ -12,8 +13,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 
@@ -22,8 +21,8 @@ import java.util.concurrent.ThreadPoolExecutor;
  * 使用@EnableAsync开启对异步任务的支持，并通过在实际执行bean方法中使用@Async注解来声明一个异步任务
  */
 @Slf4j
-@Configuration
 @EnableAsync
+@Configuration
 public class ThreadPoolConfig extends AsyncConfigurerSupport {
 
     /**
@@ -39,6 +38,7 @@ public class ThreadPoolConfig extends AsyncConfigurerSupport {
      */
     private static final String SCHEDULED_THREAD_NAME = "Leo-scheduled-%d";
 
+    @ConditionalOnMissingBean
     @Bean(name = "threadPoolTaskExecutor")
     public ThreadPoolTaskExecutor threadPoolExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -56,23 +56,10 @@ public class ThreadPoolConfig extends AsyncConfigurerSupport {
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return executor;
     }
-
     /**
      * 执行周期性或定时任务
      */
-    protected ScheduledExecutorService scheduledExecutorService() {
-        return new ScheduledThreadPoolExecutor(SCHEDULE_CORE_POOL_SIZE,
-                new BasicThreadFactory.Builder().namingPattern(SCHEDULED_THREAD_NAME).daemon(true).build()) {
-            @Override
-            protected void afterExecute(Runnable r, Throwable t) {
-                super.afterExecute(r, t);
-            }
-        };
-    }
-
-    /**
-     * 执行周期性或定时任务
-     */
+    @ConditionalOnMissingBean
     @Bean(name = "scheduledExecutorService")
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
