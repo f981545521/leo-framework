@@ -43,7 +43,7 @@ public class ThreadPoolConfig {
         //线程名称的前缀
         executor.setThreadNamePrefix(TASK_THREAD_NAME);
         //核心线程池数量
-        executor.setCorePoolSize(5);
+        executor.setCorePoolSize(6);
         //最大线程数量
         executor.setMaxPoolSize(50);
         //线程池的队列容量
@@ -52,6 +52,8 @@ public class ThreadPoolConfig {
         executor.setKeepAliveSeconds(300);
         //setRejectedExecutionHandler：当pool已经达到max size的时候，如何处理新任务 - CallerRunsPolicy：不在新线程中执行任务，而是由调用者所在的线程来执行
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        //是否允许核心线程超时。默认false
+        executor.setAllowCoreThreadTimeOut(false);
         return executor;
     }
 
