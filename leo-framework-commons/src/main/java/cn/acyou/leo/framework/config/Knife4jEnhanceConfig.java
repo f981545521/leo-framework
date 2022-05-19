@@ -46,7 +46,6 @@ public class Knife4jEnhanceConfig {
     @Bean(value = "defaultApi2")
     @ConditionalOnProperty(value = "leo.api.enable", havingValue = "true")
     public Docket defaultApi2() {
-        log.info("[开发文档] 初始化完成！");
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(new ApiInfoBuilder()
                         .title(apiDocProperty.getTitle())
@@ -63,6 +62,7 @@ public class Knife4jEnhanceConfig {
         if (openApiExtensionResolver != null) {
             docket.extensions(openApiExtensionResolver.buildExtensions(GROUP_NAME));
         }
+        log.info("[开发文档] 初始化完成！");
         return docket;
     }
 
