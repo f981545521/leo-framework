@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util.redis;
 
+import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ConcurrentException;
 import cn.acyou.leo.framework.exception.ServiceException;
 import org.slf4j.Logger;
@@ -1272,6 +1273,20 @@ public class RedisUtils {
             result.add(typedTuple);
         }
         return result;
+    }
+
+    /**
+     * 访问限制
+     *
+     * @param key            关键值
+     * @param accessInterval 访问时间间隔
+     */
+    public void accessLimit(String key, long accessInterval) {
+        //Redis setNx
+        Boolean res = setIfAbsent(key, "1", accessInterval, TimeUnit.MILLISECONDS);
+        if (!res) {
+            throw new ServiceException(CommonErrorEnum.ACCESS_LIMIT);
+        }
     }
 
     /* *********************************** Redis 缓存  **************************** */

@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.service.common.AsyncService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,11 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @Autowired
     private AsyncService asyncService;
+    @Autowired
+    private RedisUtils redisUtils;
 
     @ApiOperation("测试异步缓存")
     @GetMapping("test")
     public Result<Void> test() {
         asyncService.printOk();
+        return Result.success();
+    }
+
+    @ApiOperation("测试访问限制（编码实现）")
+    @GetMapping("accessLimit")
+    public Result<Void> accessLimit(String key) {
+        redisUtils.accessLimit(key, 5000);
         return Result.success();
     }
 
