@@ -1,5 +1,6 @@
 package cn.acyou.leo.tool.controller;
 
+import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.service.common.AsyncService;
@@ -34,6 +35,13 @@ public class TestController {
     @GetMapping("accessLimit")
     public Result<Void> accessLimit(String key) {
         redisUtils.accessLimit(key, 5000);
+        return Result.success();
+    }
+
+    @ApiOperation("测试访问限制（注解实现）")
+    @GetMapping("accessLimit2")
+    @AccessLimit(interval = 5000, value = "#key")
+    public Result<Void> accessLimit2(String key) {
         return Result.success();
     }
 

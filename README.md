@@ -311,16 +311,16 @@ System.out.println(IdUtil.getDatePrefixId("RK", 8));  //RK2021090300000004
 通过`@AccessLimit`注解，有两个参数：
 
 1. interval： 访问间隔（毫秒）
-2. includeArgs：包含参数（不同的参数访问间隔不一样）
+2. value：参数表达式，同`@Cacheable`使用的表达式（根据不同的参数限制访问间隔）
 
 示例：
 
 ```
-    @RequestMapping(value = "get", method = {RequestMethod.GET})
-    @ApiOperation("防止重复提交测试")
-    @AccessLimit(interval = 5000, includeArgs = true)
-    public Result<String> get(String name) {
-        return Result.success(name);
+    @ApiOperation("测试访问限制（注解实现）")
+    @GetMapping("accessLimit2")
+    @AccessLimit(interval = 5000, value = "#key")
+    public Result<Void> accessLimit2(String key) {
+        return Result.success();
     }
 ```
 
