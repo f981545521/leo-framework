@@ -25,7 +25,7 @@ canal.conf:
 
   srcDataSources:
     defaultDS:
-      url: jdbc:mysql://127.0.0.1:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false
+      url: jdbc:mysql://127.0.0.1:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
       username: canal
       password: canal
   canalAdapters:

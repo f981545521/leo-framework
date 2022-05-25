@@ -29,7 +29,7 @@ import java.util.Map;
  *         CustomCodeGenerator.instance("t_point_rule", "t_")
  *                 .author("youfang")
  *                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
- *                 .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false")
+ *                 .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false")
  *                 .packageParent("cn.acyou.leo.pay")
  *                 .put(ConstVal.ENTITY_PATH, "leo-pay", "entity")
  *                 .put(ConstVal.MAPPER_PATH, "leo-pay", "mapper")
@@ -94,7 +94,7 @@ public final class CustomCodeGenerator {
     /**
      * 数据库驱动
      */
-    private String JDBC_URL = "jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false";
+    private String JDBC_URL = "jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false";
     //项目地址，无需关心
     private final String projectPath = System.getProperty("user.dir");
     //Module 文件存放项目配置，无需关心

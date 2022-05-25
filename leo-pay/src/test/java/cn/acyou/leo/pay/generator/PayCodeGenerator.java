@@ -12,7 +12,7 @@ public class PayCodeGenerator {
         CustomCodeGenerator.instance("t_point_rule", "t_")
                 .author("youfang")
                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
-                .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&useSSL=false")
+                .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false")
                 .packageParent("cn.acyou.leo.pay")
                 .put(ConstVal.ENTITY_PATH, "leo-pay", "entity")
                 .put(ConstVal.MAPPER_PATH, "leo-pay", "mapper")
