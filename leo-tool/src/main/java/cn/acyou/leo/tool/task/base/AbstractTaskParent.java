@@ -87,10 +87,11 @@ public abstract class AbstractTaskParent {
     /**
      * 添加日志
      *
-     * @param log 日志
+     * @param logStr 日志信息
      */
-    protected void addLog(String log) {
-        logs.add(log);
+    protected void addLog(String logStr) {
+        logs.add(logStr);
+        log.info(logStr);
     }
 
 
