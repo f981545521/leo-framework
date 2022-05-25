@@ -21,6 +21,7 @@ import java.util.Date;
  */
 @Service
 public class ScheduleJobLogServiceImpl extends ServiceImpl<ScheduleJobLogMapper, ScheduleJobLog> implements ScheduleJobLogService {
+
     @Override
     public void success(ScheduleJob scheduleJob, String remark, String logs, Integer times) {
         ScheduleJobLog jobLog = new ScheduleJobLog();

@@ -30,7 +30,6 @@ import java.util.concurrent.ScheduledFuture;
  **/
 @Slf4j
 public abstract class AbstractTaskParent {
-
     @Autowired
     private ScheduleJobService scheduleJobService;
     @Autowired
@@ -46,8 +45,8 @@ public abstract class AbstractTaskParent {
 
     private ScheduleJob scheduleJob;
     private ScheduledFuture<?> future;
-    private TriggerContext triggerContext = new SimpleTriggerContext();
-    private List<String> logs = new ArrayList<>();
+    private final TriggerContext triggerContext = new SimpleTriggerContext();
+    private final List<String> logs = new ArrayList<>();
 
     /**
      * 抽象方法 ： 子类必须重写
