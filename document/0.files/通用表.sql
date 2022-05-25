@@ -282,6 +282,7 @@ CREATE TABLE `t_schedule_job_log`
     `times`       int(11)                                                 NOT NULL COMMENT '耗时(单位：毫秒)',
     `create_time` datetime                                                NULL DEFAULT NULL COMMENT '创建时间',
     `remark`      varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+    `logs`        longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin      NULL DEFAULT NULL COMMENT '运行日志',
     `local_ip`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL DEFAULT NULL COMMENT '运行设备IP',
     PRIMARY KEY (`log_id`) USING BTREE,
     INDEX `job_id` (`job_id`) USING BTREE

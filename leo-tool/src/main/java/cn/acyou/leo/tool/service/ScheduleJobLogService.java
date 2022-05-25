@@ -20,7 +20,7 @@ public interface ScheduleJobLogService extends IService<ScheduleJobLog> {
      * @param remark      备注
      * @param times       耗时
      */
-    void success(ScheduleJob scheduleJob, String remark, Integer times);
+    void success(ScheduleJob scheduleJob, String remark, String logs, Integer times);
 
     /**
      * 记录失败日志

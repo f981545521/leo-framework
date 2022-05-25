@@ -55,6 +55,9 @@ public class ScheduleJobLog implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
+    @ApiModelProperty(value = "运行日志")
+    private String logs;
+
     @ApiModelProperty(value = "运行设备IP")
     private String localIp;
 

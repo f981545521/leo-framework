@@ -2,15 +2,20 @@ package cn.acyou.leo.tool.task.base;
 
 
 import cn.acyou.leo.framework.constant.Constant;
+import cn.acyou.leo.framework.util.DateUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.entity.ScheduleJob;
 import cn.acyou.leo.tool.service.ScheduleJobLogService;
 import cn.acyou.leo.tool.service.ScheduleJobService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
 /**
@@ -41,6 +46,8 @@ public abstract class AbstractTaskParent {
 
     private ScheduleJob scheduleJob;
     private ScheduledFuture<?> future;
+    private TriggerContext triggerContext = new SimpleTriggerContext();
+    private List<String> logs = new ArrayList<>();
 
     /**
      * 抽象方法 ： 子类必须重写
@@ -61,10 +68,11 @@ public abstract class AbstractTaskParent {
                 long start = System.currentTimeMillis();
                 run(scheduleJob.getParams());
                 long times = System.currentTimeMillis() - start;
+                String remarkLog = String.join("\r\n", logs);
                 if (auto) {
-                    scheduleJobLogService.success(scheduleJob, "自动执行成功", (int) times);
+                    scheduleJobLogService.success(scheduleJob, "自动执行成功", remarkLog, (int) times);
                 } else {
-                    scheduleJobLogService.success(scheduleJob, "手动执行成功", (int) times);
+                    scheduleJobLogService.success(scheduleJob, "手动执行成功", remarkLog, (int) times);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -74,6 +82,15 @@ public abstract class AbstractTaskParent {
         } else {
             log.warn("已经有任务正在执行...");
         }
+    }
+
+    /**
+     * 添加日志
+     *
+     * @param log 日志
+     */
+    protected void addLog(String log) {
+        logs.add(log);
     }
 
 
@@ -112,8 +129,9 @@ public abstract class AbstractTaskParent {
             future.cancel(true);
         }
         scheduleJob = job;
-        future = threadPoolTaskScheduler.schedule(() -> recordLogStart(true), new CronTrigger(job.getCronExpression()));
-        log.info("resume job start : " + job.getBeanName());
+        final CronTrigger cronTrigger = new CronTrigger(job.getCronExpression());
+        future = threadPoolTaskScheduler.schedule(() -> recordLogStart(true), cronTrigger);
+        log.info("resume job start : {} | next exec time: {}", job.getBeanName(), DateUtil.getDateFormat(cronTrigger.nextExecutionTime(triggerContext)));
     }
 
     /**

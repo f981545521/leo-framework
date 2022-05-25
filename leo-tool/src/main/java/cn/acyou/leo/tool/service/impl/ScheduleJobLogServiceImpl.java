@@ -22,7 +22,7 @@ import java.util.Date;
 @Service
 public class ScheduleJobLogServiceImpl extends ServiceImpl<ScheduleJobLogMapper, ScheduleJobLog> implements ScheduleJobLogService {
     @Override
-    public void success(ScheduleJob scheduleJob, String remark, Integer times) {
+    public void success(ScheduleJob scheduleJob, String remark, String logs, Integer times) {
         ScheduleJobLog jobLog = new ScheduleJobLog();
         jobLog.setJobId(scheduleJob.getJobId());
         jobLog.setBeanName(scheduleJob.getBeanName());
@@ -32,6 +32,7 @@ public class ScheduleJobLogServiceImpl extends ServiceImpl<ScheduleJobLogMapper,
         jobLog.setStatus(Constant.CONS_1);
         jobLog.setTimes(times);
         jobLog.setRemark(remark);
+        jobLog.setLogs(logs);
         save(jobLog);
     }
 

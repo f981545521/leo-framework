@@ -9,7 +9,6 @@ import cn.acyou.leo.tool.dto.param.ParamConfigVo;
 import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.mapper.ParamConfigMapper;
 import cn.acyou.leo.tool.service.ParamConfigService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -62,14 +61,9 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
 
     @Override
     public ParamConfigVo getConfig(String namespace, String code) {
-        QueryWrapper<ParamConfig> configWrapper = new QueryWrapper<>();
-        configWrapper.lambda().eq(ParamConfig::getIsDelete, Constant.FLAG_FALSE_0)
-                .eq(ParamConfig::getNamespace, namespace)
-                .eq(ParamConfig::getCode, code)
-                .orderByAsc(ParamConfig::getCreateTime);
-        List<ParamConfig> prompterBaseConfigs = baseMapper.selectList(configWrapper);
-        if (!CollectionUtils.isEmpty(prompterBaseConfigs)) {
-            return BeanCopyUtil.copy(prompterBaseConfigs.get(0), ParamConfigVo.class);
+        List<ParamConfigVo> configList = baseService.getConfigList(namespace, code);
+        if (!CollectionUtils.isEmpty(configList)) {
+            return BeanCopyUtil.copy(configList.get(0), ParamConfigVo.class);
         }
         return null;
     }
