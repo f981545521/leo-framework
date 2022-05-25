@@ -69,6 +69,7 @@ public abstract class AbstractTaskParent {
                 run(scheduleJob.getParams());
                 long times = System.currentTimeMillis() - start;
                 String remarkLog = String.join("\r\n", logs);
+                logs.clear();
                 if (auto) {
                     scheduleJobLogService.success(scheduleJob, "自动执行成功", remarkLog, (int) times);
                 } else {
