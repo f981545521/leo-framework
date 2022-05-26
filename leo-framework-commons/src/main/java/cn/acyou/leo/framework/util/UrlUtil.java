@@ -445,7 +445,7 @@ public class UrlUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return url;
     }
 
     /**
@@ -460,7 +460,7 @@ public class UrlUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return url;
     }
 
     //public static void main(String[] args) throws Exception{
