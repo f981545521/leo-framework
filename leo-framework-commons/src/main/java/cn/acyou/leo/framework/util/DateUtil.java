@@ -765,13 +765,51 @@ public final class DateUtil {
     /**
      * 解析时间
      *
-     * @param date 指定日期
-     * @param timeStr   时间  in format "hh:mm:ss"
+     * @param date    指定日期
+     * @param timeStr 时间字符串  in format "hh:mm:ss"
      * @return {@link Date}
      */
     public static Date parseTime(Date date, String timeStr) {
         String dateFormat = getDateFormat(date, FORMAT_DEFAULT_DATE);
         return parseSpecificDateTime(dateFormat + " " + timeStr);
+    }
+
+    /**
+     * 判断日期是否为当日指定时间之后
+     * <pre>
+     *     //current time is 09:27:01
+     *     System.out.println(beforeTime(new Date(), "12:00:00"));//true
+     *     System.out.println(beforeTime(new Date(), "09:00:00"));//false
+     *     System.out.println(afterTime(new Date(), "12:00:00"));//false
+     *     System.out.println(afterTime(new Date(), "09:00:00"));//true
+     * </pre>
+     *
+     * @param date    指定日期
+     * @param timeStr 时间字符串 in format "hh:mm:ss"
+     * @return 是否
+     */
+    public static boolean afterTime(Date date, String timeStr) {
+        Date when = parseTime(date, timeStr);
+        return date.after(when);
+    }
+
+    /**
+     * 判断日期是否为当日指定时间之前
+     * <pre>
+     *     //current time is 09:27:01
+     *     System.out.println(beforeTime(new Date(), "12:00:00"));//true
+     *     System.out.println(beforeTime(new Date(), "09:00:00"));//false
+     *     System.out.println(afterTime(new Date(), "12:00:00"));//false
+     *     System.out.println(afterTime(new Date(), "09:00:00"));//true
+     * </pre>
+     *
+     * @param date    指定日期
+     * @param timeStr 时间字符串 in format "hh:mm:ss"
+     * @return 是否
+     */
+    public static boolean beforeTime(Date date, String timeStr) {
+        Date when = parseTime(date, timeStr);
+        return date.before(when);
     }
 
     /**
@@ -974,10 +1012,16 @@ public final class DateUtil {
      * @param date 日期
      * @return {@link String}
      */
-    public static String getDateUTC(Date date){
+    public static String getDateUTC(Date date) {
         return new DateTime(date).withZone(DateTimeZone.UTC).toString("yyyy-MM-dd'T'HH:mm:ssZ");
     }
 
 
+    public static void main(String[] args) {
+        System.out.println(beforeTime(new Date(), "12:00:00"));
+        System.out.println(beforeTime(new Date(), "09:00:00"));
+        System.out.println(afterTime(new Date(), "12:00:00"));
+        System.out.println(afterTime(new Date(), "09:00:00"));
+    }
 
 }

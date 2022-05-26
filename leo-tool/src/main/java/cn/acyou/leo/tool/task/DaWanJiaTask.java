@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -39,13 +40,17 @@ public class DaWanJiaTask extends AbstractTaskParent {
         header.put("authorization", config.getValue());
         String s = HttpUtil2.get("https://pw.gzych.vip/ykb_huiyuan/api/v1/MemberMine/BasicInfo", new HashMap<>(), header);
         addLog(s);
-        String currentDateFormat = DateUtil.getCurrentDateShortFormat();
-        Boolean hasKey = redisUtils.hasKey(PREFIX + currentDateFormat);
-        addLog(String.format("当前是否签到：%s", hasKey));
-        if (!hasKey) {
-            String s2 = HttpUtil2.get("https://pw.gzych.vip/ykb_huiyuan/api/v1/MemberCheckIn/Submit", new HashMap<>(), header);
-            addLog(String.format("执行签到：%s", s2));
-            redisUtils.set(PREFIX + currentDateFormat, "1", 2, TimeUnit.DAYS);
+        Date now = new Date();
+        Date startDate = DateUtil.parseTime(now, "07:01:00");
+        if (now.after(startDate)) {
+            String currentDateFormat = DateUtil.getDateShortFormat(now);
+            Boolean hasKey = redisUtils.hasKey(PREFIX + currentDateFormat);
+            addLog(String.format("当前是否签到：%s", hasKey));
+            if (!hasKey) {
+                String s2 = HttpUtil2.get("https://pw.gzych.vip/ykb_huiyuan/api/v1/MemberCheckIn/Submit", new HashMap<>(), header);
+                addLog(String.format("执行签到：%s", s2));
+                redisUtils.set(PREFIX + currentDateFormat, "1", 2, TimeUnit.DAYS);
+            }
         }
     }
 }
