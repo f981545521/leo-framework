@@ -368,6 +368,7 @@ public class RedisUtils {
         };
         return redisTemplate.execute(sessionCallback);
     }
+
     /**
      * 返回 key 所关联的字符串值。
      *
@@ -377,6 +378,18 @@ public class RedisUtils {
      */
     public String get(String key) {
         return redisTemplate.opsForValue().get(key);
+    }
+
+    /**
+     * 返回 key 所关联的 Object 值。
+     *
+     * @param key 关键
+     * @return 当 key 不存在时，返回 nil ，否则，返回 key 的值。
+     * 如果 key 不是字符串类型，那么返回一个错误。
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getObject(String key) {
+        return (T) redisObjTemplate.opsForValue().get(key);
     }
 
     /**
@@ -431,6 +444,20 @@ public class RedisUtils {
      */
     public void set(String key, String value) {
         redisTemplate.opsForValue().set(key, value);
+    }
+
+    /**
+     * 将 Object 值 value 关联到 key 。
+     * <p>
+     * 如果 key 已经持有其他值， SET 就覆写旧值，无视类型。
+     * <p>
+     * 对于某个原本带有生存时间（TTL）的键来说， 当 SET 命令成功在这个键上执行时， 这个键原有的 TTL 将被清除。
+     *
+     * @param key   关键
+     * @param value 价值
+     */
+    public void setObject(String key, Object value) {
+        redisObjTemplate.opsForValue().set(key, value);
     }
 
     /**
