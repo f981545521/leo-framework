@@ -126,7 +126,7 @@ public abstract class AbstractTaskParent {
      * @return {@link String}
      */
     public String status() {
-        if (future != null) {
+        if (future != null && !future.isCancelled()) {
             return "RUNNING";
         }
         return "STOP";
