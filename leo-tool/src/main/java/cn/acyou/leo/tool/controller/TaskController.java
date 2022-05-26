@@ -5,6 +5,7 @@ import cn.acyou.leo.framework.commons.PageQuery;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
+import cn.acyou.leo.tool.dto.task.ScheduleJobStatusVo;
 import cn.acyou.leo.tool.dto.task.ScheduleJobVo;
 import cn.acyou.leo.tool.dto.task.TaskVo;
 import cn.acyou.leo.tool.entity.ScheduleJobLog;
@@ -73,6 +74,13 @@ public class TaskController {
     public Result<String> pause(@PathVariable("jobId") Long jobId) {
         scheduleJobService.pause(jobId);
         return Result.success();
+    }
+
+    @ApiOperation(value = "查看定时任务状态")
+    @PostMapping("/status/{jobId}")
+    public Result<ScheduleJobStatusVo> status(@PathVariable("jobId") Long jobId) {
+        ScheduleJobStatusVo statusVo = scheduleJobService.status(jobId);
+        return Result.success(statusVo);
     }
 
     @PostMapping("/resume/{jobId}")

@@ -1,5 +1,6 @@
 package cn.acyou.leo.tool.service;
 
+import cn.acyou.leo.tool.dto.task.ScheduleJobStatusVo;
 import cn.acyou.leo.tool.entity.ScheduleJob;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -26,6 +27,13 @@ public interface ScheduleJobService extends IService<ScheduleJob> {
      * @param jobId 任务ID
      */
     void pause(Long jobId);
+
+    /**
+     * 任务状态
+     *
+     * @param jobId 任务ID
+     */
+    ScheduleJobStatusVo status(Long jobId);
 
     /**
      * 恢复任务

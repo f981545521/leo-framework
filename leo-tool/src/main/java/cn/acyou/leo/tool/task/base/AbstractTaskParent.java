@@ -121,6 +121,18 @@ public abstract class AbstractTaskParent {
     }
 
     /**
+     * 状态
+     *
+     * @return {@link String}
+     */
+    public String status() {
+        if (future != null) {
+            return "RUNNING";
+        }
+        return "STOP";
+    }
+
+    /**
      * 恢复定时任务接口
      *
      * @param job 任务

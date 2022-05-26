@@ -4,9 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -433,6 +431,36 @@ public class UrlUtil {
             }
         }
         return cookieMap;
+    }
+
+    /**
+     * 编码
+     *
+     * @param url url
+     * @return {@link String}
+     */
+    public static String encode(String url) {
+        try {
+            return URLEncoder.encode(url, "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * 解码
+     *
+     * @param url url
+     * @return {@link String}
+     */
+    public static String decode(String url) {
+        try {
+            return URLDecoder.decode(url, "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     //public static void main(String[] args) throws Exception{
