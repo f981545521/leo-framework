@@ -32,8 +32,7 @@ public class DaWanJiaTask extends AbstractTaskParent {
         String s = HttpUtil2.get("https://pw.gzych.vip/ykb_huiyuan/api/v1/MemberMine/BasicInfo", new HashMap<>(), header);
         addLog(s);
         Date now = new Date();
-        Date startDate = DateUtil.parseTime(now, "07:01:00");
-        if (now.after(startDate)) {
+        if (DateUtil.afterTime(now, "07:01:00")) {
             String currentDateFormat = DateUtil.getDateShortFormat(now);
             Boolean hasKey = redisUtils.hasKey(PREFIX + currentDateFormat);
             addLog(String.format("当前是否签到：%s", hasKey));
