@@ -1,6 +1,8 @@
 package cn.acyou.leo.framework.util;
 
 import cn.acyou.leo.framework.exception.ServiceException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -59,10 +61,37 @@ public class BeanCopyUtil {
         return list;
     }
 
+    /**
+     * 以JSON的方式复制对象
+     *
+     * @param <E> 目标对象
+     * @param o   源对象
+     * @param clz 目标对象Class
+     * @return 目标对象集合
+     */
+    public static <E> E copyByJson(Object o, Class<E> clz) {
+        String json = JSON.toJSONString(o);
+        return JSON.parseObject(json, clz);
+    }
+
+    /**
+     * 以JSON的方式复制对象（对于泛型对象）
+     *
+     * @param <E>           目标对象
+     * @param o             源对象
+     * @param typeReference 目标对象Class
+     * @return 目标对象集合
+     */
+    public static <E> E copyByJson(Object o, TypeReference<E> typeReference) {
+        String json = JSON.toJSONString(o);
+        return JSON.parseObject(json, typeReference);
+    }
+
 
     /**
      * 合并属性 (不会使用null覆盖目标)
-     * @param <M>   对象类型
+     *
+     * @param <M>         对象类型
      * @param target      目标
      * @param destination 目的
      */
