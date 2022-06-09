@@ -54,9 +54,9 @@ public class SysCommonController {
     }
 
     @ApiOperation("获取服务器外网IP")
-    @GetMapping("getExtranetIp")
+    @GetMapping("ip")
     @ResponseBody
-    public Result<JSONObject> getExtranetIp() {
+    public Result<JSONObject> ip() {
         String s = HttpUtil.get("http://httpbin.org/ip");
         log.info("服务器外网IP：{}", s);
         return Result.success(JSON.parseObject(s));
