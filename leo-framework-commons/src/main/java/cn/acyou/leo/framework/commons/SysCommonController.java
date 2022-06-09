@@ -5,6 +5,9 @@ import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.IdUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +52,16 @@ public class SysCommonController {
     public Result<Void> unauthorized() {
         return Result.error(CommonErrorEnum.E_UNAUTHORIZED);
     }
+
+    @ApiOperation("获取服务器外网IP")
+    @GetMapping("getExtranetIp")
+    @ResponseBody
+    public Result<JSONObject> getExtranetIp() {
+        String s = HttpUtil.get("http://httpbin.org/ip");
+        log.info("服务器外网IP：{}", s);
+        return Result.success(JSON.parseObject(s));
+    }
+
 
     @GetMapping(value = "/idempotent")
     @ApiOperation(value = "获取幂等序列 prefix前缀（必传）。sequence：空时生成，非空时判断。operate：校验并删除")
