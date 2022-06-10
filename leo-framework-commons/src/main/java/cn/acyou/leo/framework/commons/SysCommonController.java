@@ -1,8 +1,10 @@
 package cn.acyou.leo.framework.commons;
 
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
+import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.IdUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.hutool.http.HttpUtil;
@@ -59,7 +61,10 @@ public class SysCommonController {
     public Result<JSONObject> ip() {
         String s = HttpUtil.get("http://httpbin.org/ip");
         log.info("服务器外网IP：{}", s);
-        return Result.success(JSON.parseObject(s));
+        JSONObject jsonObject = JSON.parseObject(s);
+        jsonObject.put("local", IPUtil.getLocalIP());
+        jsonObject.put("client", AppContext.getIp());
+        return Result.success(jsonObject);
     }
 
 
