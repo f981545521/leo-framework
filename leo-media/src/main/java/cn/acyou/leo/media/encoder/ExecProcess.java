@@ -17,6 +17,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * FFMPEG 进度处理
+ *
  * @author youfang
  * @version [1.0.0, 2022/4/22 13:45]
  **/
@@ -30,6 +32,12 @@ public abstract class ExecProcess {
 
     private boolean callInfo = false;
 
+    /**
+     * 处理输出信息
+     *
+     * @param input       输入
+     * @param errorStream 错误流
+     */
     public void handlerOutPut(String input, InputStream errorStream) {
         parseMultimediaInfo(input, new RBufferedReader(new InputStreamReader(errorStream)));
     }
@@ -47,6 +55,12 @@ public abstract class ExecProcess {
     private static final Pattern p4 = Pattern.compile("^\\s*Metadata:", Pattern.CASE_INSENSITIVE);
     private static final Pattern p5 = Pattern.compile("^\\s*(\\w+)\\s*:\\s*(\\S+)\\s*$", Pattern.CASE_INSENSITIVE);
 
+    /**
+     * 解析多媒体信息
+     *
+     * @param source 源
+     * @param reader 读者
+     */
     private void parseMultimediaInfo(String source, RBufferedReader reader) {
         try {
             int step = 0;
@@ -286,14 +300,30 @@ public abstract class ExecProcess {
         }
     }
 
+    /**
+     * 媒体信息
+     *
+     * @param multimediaInfo 多媒体信息
+     */
     public void mediaInfo(MultimediaInfo multimediaInfo) {
 
     }
 
+    /**
+     * 进步
+     *
+     * @param perm 百分之
+     */
     public void progress(long perm) {
 
     }
 
+    /**
+     * 解析进展信息
+     *
+     * @param line 行
+     * @return {@link HashMap}<{@link String}, {@link String}>
+     */
     private HashMap<String, String> parseProgressInfoLine(String line) {
         HashMap<String, String> table = null;
         Matcher m = PROGRESS_INFO_PATTERN.matcher(line);
