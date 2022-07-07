@@ -3,6 +3,8 @@ package cn.acyou.leo.framework.util.redis;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ConcurrentException;
 import cn.acyou.leo.framework.exception.ServiceException;
+import cn.acyou.leo.framework.util.function.CallTask;
+import cn.acyou.leo.framework.util.function.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1496,11 +1498,4 @@ public class RedisUtils {
         }
     }
 
-    public interface Task {
-        void run() throws RuntimeException;
-    }
-
-    public interface CallTask<T> {
-        T run() throws RuntimeException;
-    }
 }

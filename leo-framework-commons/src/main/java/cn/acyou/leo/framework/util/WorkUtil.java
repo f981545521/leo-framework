@@ -1,5 +1,8 @@
 package cn.acyou.leo.framework.util;
 
+import cn.acyou.leo.framework.util.function.Task;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -7,6 +10,7 @@ import java.util.function.Supplier;
  * @author youfang
  * @version [1.0.0, 2022/3/31 14:55]
  **/
+@Slf4j
 public class WorkUtil {
     public static <T> T doCallWork(long timeout, TimeUnit unit, Supplier<T> supplier){
         long startTime = System.nanoTime();
@@ -31,10 +35,20 @@ public class WorkUtil {
         return null;
     }
 
-    public static void main(String[] args) {
-        String res = doCallWork(5, TimeUnit.SECONDS, ()->{
-            return null;
-        });
-        System.out.println(res);
+    public static void tryRun(Task task) {
+        try {
+            task.run();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
+
+    //public static void main(String[] args) {
+    //    tryRun(()->{
+    //        System.out.println("ok");
+    //        int i = 9/0;
+    //        System.out.println("ok");
+    //    });
+    //    System.out.println("end");
+    //}
 }
