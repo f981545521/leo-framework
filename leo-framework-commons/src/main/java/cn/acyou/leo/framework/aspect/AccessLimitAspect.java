@@ -9,7 +9,6 @@ import cn.acyou.leo.framework.util.ElParser;
 import cn.acyou.leo.framework.util.Md5Util;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,10 +16,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.DefaultParameterNameDiscoverer;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.Expression;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -68,12 +63,25 @@ public class AccessLimitAspect {
         }
         keyBuffer.append("ARGS:");
         keyBuffer.append(Md5Util.md5(keyValue));
+        if (accessInterval == -1) {
+            //设置 1 小时 ：3600000
+            accessInterval = 60 * 60 * 1000;
+        }
         //Redis setNx
         Boolean aBoolean = redisUtils.setIfAbsent(keyBuffer.toString(), "1", accessInterval, TimeUnit.MILLISECONDS);
         if (!aBoolean) {
-            return Result.error(CommonErrorEnum.ACCESS_LIMIT);
+            log.error("接口访问限制 |访问最低间隔：{}", accessLimit.interval());
+            if (accessLimit.interval() == -1) {
+                return Result.error(CommonErrorEnum.CONCURRENT_ERROR);
+            } else {
+                return Result.error(CommonErrorEnum.ACCESS_LIMIT);
+            }
         }
-        return joinPoint.proceed();
+        try {
+            return joinPoint.proceed();
+        } finally {
+            redisUtils.delete(keyBuffer.toString());
+        }
     }
 
     public String getKeyValue(ProceedingJoinPoint joinPoint , String express) {

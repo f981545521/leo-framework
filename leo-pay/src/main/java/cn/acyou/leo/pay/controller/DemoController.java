@@ -27,18 +27,16 @@ public class DemoController {
     private CommonService commonService;
 
     @RequestMapping(value = "/start", method = {RequestMethod.GET})
-    @ResponseBody
     @ApiOperation("测试RedisLock注解使用")
     public Result<String> test1(String key) {
         String s = commonService.testRedisLock(key);
         return Result.success(s);
     }
     @RequestMapping(value = "/testDestroyBean", method = {RequestMethod.GET})
-    @ResponseBody
     @ApiOperation("测试使用 SpringHelper.createBean 创建的对象可以被GC回收")
     public Result<String> testDestroyBean(int count) {
         System.out.println(SpringHelper.getSingletonCount());
-        AsyncManager.execute(()->{
+        AsyncManager.execute(() -> {
             for (int i = 0; i < count; i++) {
                 SpringHelper.createBean(TestDestroyBean.class);
                 try {

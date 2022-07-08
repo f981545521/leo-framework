@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.service.common.AsyncService;
 import io.swagger.annotations.Api;
@@ -42,6 +43,14 @@ public class TestController {
     @GetMapping("accessLimit2")
     @AccessLimit(interval = 5000, value = "#key")
     public Result<Void> accessLimit2(String key) {
+        return Result.success();
+    }
+
+    @ApiOperation("测试访问限制（注解实现3）")
+    @GetMapping("accessLimit3")
+    @AccessLimit(interval = -1, value = "#key")
+    public Result<Void> accessLimit3(String key) {
+        WorkUtil.trySleep(5000);
         return Result.success();
     }
 

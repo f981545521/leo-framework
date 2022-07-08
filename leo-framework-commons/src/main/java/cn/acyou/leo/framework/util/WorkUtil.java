@@ -12,7 +12,16 @@ import java.util.function.Supplier;
  **/
 @Slf4j
 public class WorkUtil {
-    public static <T> T doCallWork(long timeout, TimeUnit unit, Supplier<T> supplier){
+
+    /**
+     * 执行有返回值的任务
+     *
+     * @param timeout  超时
+     * @param unit     单位
+     * @param supplier 供应商
+     * @return {@link T}
+     */
+    public static <T> T doCallWork(long timeout, TimeUnit unit, Supplier<T> supplier) {
         long startTime = System.nanoTime();
         long rem = unit.toNanos(timeout);
         do {
@@ -21,7 +30,7 @@ public class WorkUtil {
                 if (t != null) {
                     return t;
                 }
-            } catch(IllegalThreadStateException ex) {
+            } catch (Exception ex) {
                 if (rem > 0) {
                     try {
                         Thread.sleep(Math.min(TimeUnit.NANOSECONDS.toMillis(rem) + 1, 100));
@@ -35,9 +44,28 @@ public class WorkUtil {
         return null;
     }
 
+
+    /**
+     * 执行忽略异常的任务
+     *
+     * @param task 任务
+     */
     public static void tryRun(Task task) {
         try {
             task.run();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 尝试阻塞线程
+     *
+     * @param millis 任务
+     */
+    public static void trySleep(long millis) {
+        try {
+            Thread.sleep(millis);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

@@ -19,7 +19,7 @@ public @interface AccessLimit {
      *
      * @return 间隔毫秒数
      */
-    long interval() default 1000;
+    long interval() default 5000;
 
     /**
      * 参数表达式 (相同参数的才会被拦截)
