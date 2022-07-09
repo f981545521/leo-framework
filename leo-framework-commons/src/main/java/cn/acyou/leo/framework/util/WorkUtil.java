@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
+ * 工作工具
+ *
  * @author youfang
  * @version [1.0.0, 2022/3/31 14:55]
  **/
@@ -34,7 +36,8 @@ public class WorkUtil {
                 if (rem > 0) {
                     try {
                         Thread.sleep(Math.min(TimeUnit.NANOSECONDS.toMillis(rem) + 1, 100));
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -59,9 +62,16 @@ public class WorkUtil {
     }
 
     /**
+     * 尝试阻塞线程 5s
+     */
+    public static void trySleep5000() {
+        trySleep(5000);
+    }
+
+    /**
      * 尝试阻塞线程
      *
-     * @param millis 任务
+     * @param millis 毫秒
      */
     public static void trySleep(long millis) {
         try {
@@ -71,12 +81,4 @@ public class WorkUtil {
         }
     }
 
-    //public static void main(String[] args) {
-    //    tryRun(()->{
-    //        System.out.println("ok");
-    //        int i = 9/0;
-    //        System.out.println("ok");
-    //    });
-    //    System.out.println("end");
-    //}
 }

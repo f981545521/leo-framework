@@ -57,5 +57,12 @@ public class ParamConfigController {
         return Result.success();
     }
 
+    @ApiOperation("修改状态")
+    @GetMapping("status")
+    public Result<Void> status(@RequestParam Long id, @RequestParam Integer status) {
+        paramConfigService.updateStatus(id, status);
+        return Result.success();
+    }
+
 
 }

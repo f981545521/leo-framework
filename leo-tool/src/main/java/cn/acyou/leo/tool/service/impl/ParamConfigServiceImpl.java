@@ -2,8 +2,10 @@ package cn.acyou.leo.tool.service.impl;
 
 import cn.acyou.leo.framework.commons.PageQuery;
 import cn.acyou.leo.framework.constant.Constant;
+import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
+import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.tool.dto.param.ParamConfigSo;
 import cn.acyou.leo.tool.dto.param.ParamConfigVo;
 import cn.acyou.leo.tool.entity.ParamConfig;
@@ -87,6 +89,21 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
             }
         }
         return defaultValue;
+    }
+
+    @Override
+    public void updateStatus(Long id, Integer status) {
+        boolean update = lambdaUpdate()
+                .set(ParamConfig::getStatus, status)
+                .eq(ParamConfig::getId, id)
+                .ne(ParamConfig::getStatus, status)
+                .update();
+        WorkUtil.trySleep5000();
+        if (update) {
+            log.info("操作成功！ id :{} status:{}", id, status);
+        } else {
+            throw new ServiceException("已经完成操作。");
+        }
     }
 
     @Override

@@ -67,4 +67,12 @@ public interface ParamConfigService extends IService<ParamConfig> {
      * @param defaultValue 默认值
      */
     String getValueOrDefault(String namespace, String code, String defaultValue);
+
+    /**
+     * 更新状态
+     *
+     * @param id     id
+     * @param status 状态
+     */
+    void updateStatus(Long id, Integer status);
 }
