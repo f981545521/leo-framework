@@ -3,6 +3,7 @@ package cn.acyou.leo.pay.controller;
 import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.SpringHelper;
+import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.pay.dto.TestBooleanVo;
 import cn.acyou.leo.pay.dto.TestDestroyBean;
 import cn.acyou.leo.pay.service.CommonService;
@@ -44,11 +45,7 @@ public class DemoController {
         AsyncManager.execute(() -> {
             for (int i = 0; i < count; i++) {
                 SpringHelper.createBean(TestDestroyBean.class);
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                WorkUtil.trySleep(3000);
                 System.out.println(SpringHelper.getSingletonCount());
             }
         });
