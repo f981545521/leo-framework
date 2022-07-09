@@ -3,16 +3,14 @@ package cn.acyou.leo.pay.controller;
 import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.SpringHelper;
+import cn.acyou.leo.pay.dto.TestBooleanVo;
 import cn.acyou.leo.pay.dto.TestDestroyBean;
 import cn.acyou.leo.pay.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author youfang
@@ -32,6 +30,13 @@ public class DemoController {
         String s = commonService.testRedisLock(key);
         return Result.success(s);
     }
+
+    @PostMapping(value = "/testBoolean")
+    @ApiOperation("测试Boolean")
+    public Result<TestBooleanVo> testBoolean(@RequestBody TestBooleanVo vo) {
+        return Result.success(vo);
+    }
+
     @RequestMapping(value = "/testDestroyBean", method = {RequestMethod.GET})
     @ApiOperation("测试使用 SpringHelper.createBean 创建的对象可以被GC回收")
     public Result<String> testDestroyBean(int count) {
