@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public class WorkUtil {
 
     /**
-     * 执行有返回值的任务
+     * 执行有返回值的任务，返回null则重试，非空则结束
      *
      * @param timeout  超时
      * @param unit     单位
