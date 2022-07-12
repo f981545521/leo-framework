@@ -188,6 +188,7 @@ public class GlobalExceptionHandler {
         //org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' not supported
         resultInfo.setMessage(e.getMessage());
         AppContext.setExceptionResult(resultInfo);
+        log.error("请求接口 {} {}", request.getRequestURI(), e.getMessage());
         return resultInfo;
     }
     /** 请求参数转换错误 (RequestBody 接收的字符串转换不了Bean) */
