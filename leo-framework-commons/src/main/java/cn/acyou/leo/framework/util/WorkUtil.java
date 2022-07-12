@@ -57,7 +57,13 @@ public class WorkUtil {
         try {
             task.run();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            String reason = e.getMessage();
+            StackTraceElement[] stackTrace = e.getStackTrace();
+            if (stackTrace != null && stackTrace.length > 0) {
+                StackTraceElement stackTraceElement = stackTrace[0];
+                reason = reason + "  trace stack: " + stackTraceElement.getClassName() + "|" + stackTraceElement.getMethodName() + ":" + stackTraceElement.getLineNumber();
+            }
+            log.error(reason);
         }
     }
 
