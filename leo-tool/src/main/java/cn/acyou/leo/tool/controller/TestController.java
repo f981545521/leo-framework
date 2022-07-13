@@ -4,13 +4,14 @@ import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
+import cn.acyou.leo.tool.entity.ParamConfig;
+import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.common.AsyncService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author youfang
@@ -19,16 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/test")
 @Api(tags = "测试接口")
+@Slf4j
 public class TestController {
     @Autowired
     private AsyncService asyncService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private ParamConfigService paramConfigService;
 
     @ApiOperation("测试异步缓存")
     @GetMapping("test")
     public Result<Void> test() {
         asyncService.printOk();
+        return Result.success();
+    }
+
+    @ApiOperation("测试异步缓存 AsyncService")
+    @GetMapping("testAsyncService")
+    public Result<Void> test(String name) {
+        asyncService.exec(name);
         return Result.success();
     }
 
@@ -51,8 +62,34 @@ public class TestController {
     @AccessLimit(interval = -1, value = "#key")
     public Result<Void> accessLimit3(String key) {
         WorkUtil.trySleep(5000);
+        WorkUtil.tryRun(() -> {
+            System.out.println("111");
+            int i = 1 / 0;
+        });
         return Result.success();
     }
 
+    @ApiOperation("测试修改后查询")
+    @GetMapping("test223")
+    public Result<ParamConfig> test223(@RequestParam Long id, @RequestParam Integer status) {
+        ParamConfig db1 = paramConfigService.getById(id);
+        db1.setStatus(status);
+        paramConfigService.updateById(db1);
+        //select
+        ParamConfig db2 = paramConfigService.getById(id);
+        log.info("test result : {}", db2);
+        return Result.success(db2);
+    }
+
+    @ApiOperation("测试新增后查询")
+    @PostMapping("test224")
+    public Result<ParamConfig> test224(@RequestBody ParamConfig param) {
+        paramConfigService.saveOrUpdate(param);
+        //select
+        ParamConfig db2 = paramConfigService.getById(param.getId());
+        //结果：能够查出createTime
+        log.info("test result : {}", db2);
+        return Result.success(db2);
+    }
 
 }

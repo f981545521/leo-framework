@@ -57,14 +57,23 @@ public class WorkUtil {
         try {
             task.run();
         } catch (Exception e) {
-            String reason = e.getMessage();
-            StackTraceElement[] stackTrace = e.getStackTrace();
-            if (stackTrace != null && stackTrace.length > 0) {
-                StackTraceElement stackTraceElement = stackTrace[0];
-                reason = reason + "  trace stack: " + stackTraceElement.getClassName() + "|" + stackTraceElement.getMethodName() + ":" + stackTraceElement.getLineNumber();
-            }
-            log.error(reason);
+            printFirstStack(e);
         }
+    }
+
+    /**
+     * 打印第一个栈信息
+     *
+     * @param e e
+     */
+    public static void printFirstStack(Throwable e) {
+        String reason = e.getMessage();
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        if (stackTrace != null && stackTrace.length > 0) {
+            StackTraceElement stackTraceElement = stackTrace[0];
+            reason = reason + " ERROR MSG: " + stackTraceElement.getClassName() + "|" + stackTraceElement.getMethodName() + ":" + stackTraceElement.getLineNumber();
+        }
+        log.error(reason);
     }
 
     /**

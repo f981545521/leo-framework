@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.config;
 
+import cn.acyou.leo.framework.util.WorkUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,8 @@ public class ThreadAsyncConfig extends AsyncConfigurerSupport {
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return (Throwable arg0, Method arg1, Object... arg2) -> {
-            log.error("==========================" + arg0.getMessage() + "=======================", arg0);
-            log.error("exception method:" + arg1.getName());
+            log.error("An error has occurred on async thread ========" + arg0.getMessage() + "========", arg0);
+            WorkUtil.printFirstStack(arg0);
         };
     }
 }

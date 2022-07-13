@@ -16,4 +16,14 @@ public class AsyncService {
     public void printOk() {
         log.info("ok");
     }
+
+    @Async
+    public void exec(String name) {
+        log.info("开始执行");
+        log.info(name);
+        if ("Exception".equals(name)) {
+            int i = 1 / 0;
+        }
+        log.info("执行结束");
+    }
 }
