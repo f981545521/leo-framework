@@ -17,12 +17,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,6 +51,18 @@ public class SysCommonController {
     @ResponseBody
     public Result<Void> unauthorized() {
         return Result.error(CommonErrorEnum.E_UNAUTHORIZED);
+    }
+
+    @ApiOperation("打印请求信息")
+    @RequestMapping(value = "printRequest", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Result<JSONObject> printRequest(HttpServletRequest request, @RequestBody(required = false) Object requestBody, @RequestHeader Map<String, Object> requestHeader) {
+        Map<String, String[]> requestParameter = request.getParameterMap();
+        JSONObject response = new JSONObject();
+        response.put("requestParameter", requestParameter);
+        response.put("requestBody", requestBody);
+        response.put("requestHeader", requestHeader);
+        return Result.success(response);
     }
 
     @ApiOperation("获取服务器外网IP")
