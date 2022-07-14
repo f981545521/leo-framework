@@ -60,6 +60,11 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>leo-framework-retrofit-starter</artifactId>
+            <version>1.3.0.RELEASE</version>
+        </dependency>
     </dependencies>
 
 

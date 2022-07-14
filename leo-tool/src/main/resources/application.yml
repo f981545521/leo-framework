@@ -71,3 +71,16 @@ pagehelper:
   reasonable: false
   support-methods-arguments: false
   page-size-zero: false
+retrofit:
+  log:
+    enable: true
+    logging-interceptor: cn.acyou.leo.framework.retrofit.RetrofitClientRecords
+    global-log-strategy: none
+    global-log-level: info
+  retry:
+    # 不启用全局重试
+    enable-global-retry: false
+  global-read-timeout-ms: 60000
+  global-call-timeout-ms: 0
+  global-connect-timeout-ms: 60000
+  global-write-timeout-ms: 60000
