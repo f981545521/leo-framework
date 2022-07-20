@@ -140,7 +140,7 @@ public class MediaUtil {
      *   System.out.println(formatDuring(33333));//00:00:33.333
      * </pre>
      *
-     * @param mss 海量存储系统(mss)中
+     * @param mss 毫秒
      * @return {@link String}
      */
     public static String formatDuring(long mss) {
@@ -149,6 +149,7 @@ public class MediaUtil {
         String minutes = ((mss % (1000 * 60 * 60)) / (1000 * 60)) + "";
         minutes = minutes.length() == 1 ? 0 + minutes : minutes;
         String seconds = new BigDecimal((mss % (1000 * 60))).divide(new BigDecimal(1000), 3, RoundingMode.CEILING).toString();
+        seconds = seconds.indexOf(".") == 1 ? 0 + seconds : seconds;
         return hours + ":" + minutes + ":" + seconds;
     }
 
