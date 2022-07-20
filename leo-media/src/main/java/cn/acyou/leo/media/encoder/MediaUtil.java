@@ -113,7 +113,7 @@ public class MediaUtil {
     public void cutAudio(String source, long ss, long to, String targetPath) {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
         log.info("剪切音频文件 params:[source:{}, ss:{}, to:{}, target:{}] 目标目录：{}", source, ss, to, targetPath, (mkdirs ? "创建成功" : "无需创建"));
-        exec("-y", "-i", source, "-ss", formatDuring(ss), "-to", formatDuring(to), "-c", "copy", targetPath);
+        exec("-y", "-i", source, "-ss", formatDuration(ss), "-to", formatDuration(to), "-c", "copy", targetPath);
     }
 
     /**
@@ -133,17 +133,17 @@ public class MediaUtil {
      * 格式化毫秒数
      *
      * <pre>
-     *   System.out.println(formatDuring(30000));//00:00:30.000
-     *   System.out.println(formatDuring(33000));//00:00:33.000
-     *   System.out.println(formatDuring(33300));//00:00:33.300
-     *   System.out.println(formatDuring(33330));//00:00:33.330
-     *   System.out.println(formatDuring(33333));//00:00:33.333
+     *   System.out.println(formatDuration(30000));//00:00:30.000
+     *   System.out.println(formatDuration(33000));//00:00:33.000
+     *   System.out.println(formatDuration(33300));//00:00:33.300
+     *   System.out.println(formatDuration(33330));//00:00:33.330
+     *   System.out.println(formatDuration(33333));//00:00:33.333
      * </pre>
      *
      * @param mss 毫秒
      * @return {@link String}
      */
-    public static String formatDuring(long mss) {
+    public static String formatDuration(long mss) {
         String hours = ((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) + "";
         hours = hours.length() == 1 ? 0 + hours : hours;
         String minutes = ((mss % (1000 * 60 * 60)) / (1000 * 60)) + "";
@@ -151,6 +151,27 @@ public class MediaUtil {
         String seconds = new BigDecimal((mss % (1000 * 60))).divide(new BigDecimal(1000), 3, RoundingMode.CEILING).toString();
         seconds = seconds.indexOf(".") == 1 ? 0 + seconds : seconds;
         return hours + ":" + minutes + ":" + seconds;
+    }
+
+    /**
+     * 将媒体时间格式转换成毫秒数
+     *
+     * <pre>
+     *     MediaUtil.parseDuration("01:21:51.100"); //4911100
+     * </pre>
+     *
+     * @param str str
+     * @return long
+     */
+    public static long parseDuration(String str) {
+        String[] split = str.split("\\.");
+        String hms = split[0];
+        long ms = Long.parseLong(split[1]);
+        String[] hmsArray = hms.split(":");
+        long h = Long.parseLong(hmsArray[0]);
+        long m = Long.parseLong(hmsArray[1]);
+        long s = Long.parseLong(hmsArray[2]);
+        return ms + (s * 1000) + (m * 60 * 1000) + (h * 60 * 60 * 1000);
     }
 
     /**

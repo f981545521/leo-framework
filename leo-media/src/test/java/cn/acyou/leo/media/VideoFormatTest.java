@@ -265,7 +265,7 @@ public class VideoFormatTest {
         File targetFile = new File(targetPath);
         File sourceFile = new File(sourcePath);
         Process proc;
-        String[] args = new String[]{ffmpegLocator.getExecutablePath(), "-y", "-i", sourceFile.getAbsolutePath(),"-ss", MediaUtil.formatDuring(start),"-to", MediaUtil.formatDuring(end), "-c","copy", targetFile.getAbsolutePath()};
+        String[] args = new String[]{ffmpegLocator.getExecutablePath(), "-y", "-i", sourceFile.getAbsolutePath(), "-ss", MediaUtil.formatDuration(start), "-to", MediaUtil.formatDuration(end), "-c", "copy", targetFile.getAbsolutePath()};
 
         System.out.println(Arrays.toString(args));
         try {
@@ -400,7 +400,7 @@ public class VideoFormatTest {
         //MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo("http://qiniu.acyou.cn/video/shortVideo.mp4");
         MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo("E:\\media\\file1.mov");
         System.out.println(mediaInfo.getDuration());
-        System.out.println(MediaUtil.formatDuring(298500));
+        System.out.println(MediaUtil.formatDuration(298500));
     }
 
 }

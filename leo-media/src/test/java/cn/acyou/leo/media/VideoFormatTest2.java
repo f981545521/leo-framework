@@ -127,4 +127,21 @@ public class VideoFormatTest2 {
         System.out.println(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
         System.out.println("ok");
     }
+
+    @Test
+    public void test21() {
+        System.out.println(MediaUtil.formatDuration(60000));
+        System.out.println(MediaUtil.formatDuration(420000));
+        System.out.println(MediaUtil.formatDuration(600000));
+        MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo("http://guiyu-tici.oss-cn-shanghai.aliyuncs.com/resources/aiTestAudio/female/Aixia_10mins.wav");
+        System.out.println(mediaInfo.getDuration());
+        System.out.println(MediaUtil.formatDuration(mediaInfo.getDuration()));
+    }
+
+    @Test
+    public void test22() {
+        System.out.println(MediaUtil.formatDuration(4911100));
+        System.out.println(MediaUtil.parseDuration("01:21:51.100"));
+    }
+
 }
