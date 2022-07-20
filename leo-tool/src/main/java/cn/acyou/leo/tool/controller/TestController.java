@@ -13,6 +13,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author youfang
@@ -103,6 +108,14 @@ public class TestController {
         //结果：能够查出createTime
         log.info("test result : {}", db2);
         return Result.success(db2);
+    }
+
+    @ApiOperation("测试在代码中获取请求对象")
+    @PostMapping("testReq")
+    public Result<ParamConfig> testReq() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+        return Result.success();
     }
 
 }
