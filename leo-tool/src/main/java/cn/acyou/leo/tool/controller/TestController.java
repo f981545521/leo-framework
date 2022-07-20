@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
+import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
@@ -33,6 +34,18 @@ public class TestController {
     @GetMapping("test")
     public Result<Void> test() {
         asyncService.printOk();
+        return Result.success();
+    }
+
+    @ApiOperation("测试异步缓存2")
+    @GetMapping("test2")
+    public Result<Void> test2() {
+        AsyncManager.execute(() -> {
+            log.info("HELLO");
+        });
+        AsyncManager.schedule(() -> {
+            log.info("HELLO");
+        });
         return Result.success();
     }
 
