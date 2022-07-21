@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.Future;
 
 /**
  * @author youfang
@@ -51,7 +52,17 @@ public class TestController {
         AsyncManager.schedule(() -> {
             log.info("HELLO");
         });
+        Future<String> submit = AsyncManager.submit(() -> {
+            return "GOGO";
+        });
         return Result.success();
+    }
+
+    @ApiOperation("测试异步 有结果")
+    @GetMapping("test3")
+    public Result<String> test3() throws Exception {
+        Future<String> result = asyncService.getResult();
+        return Result.success(result.get());
     }
 
     @ApiOperation("测试异步缓存 AsyncService")

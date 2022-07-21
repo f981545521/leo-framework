@@ -2,7 +2,10 @@ package cn.acyou.leo.tool.service.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.Future;
 
 /**
  * @author youfang
@@ -15,6 +18,12 @@ public class AsyncService {
     @Async
     public void printOk() {
         log.info("ok");
+    }
+
+    @Async
+    public Future<String> getResult() {
+        log.info("ok");
+        return new AsyncResult<>("ok");
     }
 
     @Async
