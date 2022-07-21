@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.config;
 
+import cn.acyou.leo.framework.thread.MdcThreadPoolTaskExecutor;
+import cn.acyou.leo.framework.thread.MdcThreadPoolTaskScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -39,7 +41,7 @@ public class ThreadPoolConfig {
     @ConditionalOnMissingBean(name = "threadPoolTaskExecutor")
     @Bean(name = "threadPoolTaskExecutor")
     public ThreadPoolTaskExecutor threadPoolExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        ThreadPoolTaskExecutor executor = new MdcThreadPoolTaskExecutor();
         //线程名称的前缀
         executor.setThreadNamePrefix(TASK_THREAD_NAME);
         //核心线程池数量
@@ -63,7 +65,7 @@ public class ThreadPoolConfig {
     @ConditionalOnMissingBean(name = "scheduledExecutorService")
     @Bean(name = "scheduledExecutorService")
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
-        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        ThreadPoolTaskScheduler scheduler = new MdcThreadPoolTaskScheduler();
         scheduler.setPoolSize(SCHEDULE_CORE_POOL_SIZE);
         scheduler.setThreadFactory(new BasicThreadFactory.Builder().namingPattern(SCHEDULED_THREAD_NAME).daemon(true).build());
         return scheduler;

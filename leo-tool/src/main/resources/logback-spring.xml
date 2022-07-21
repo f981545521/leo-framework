@@ -11,7 +11,7 @@
     <property name="log.pattern2"
               value="[%date{yyyy-MM-dd HH:mm:ss.SSS}] %level %X{thread} %logger{36}:%line -> %msg%n"/>
     <property name="log.pattern.console"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5level}) %clr(%X{leoTraceNo}){blue} %clr([%11.11thread]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){blue}%-5.10line%msg%n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5level}) %clr(%X{leoTraceNo}){blue} %clr([%15.15thread]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){blue}%-5.10line%msg%n"/>
     <property name="log.pattern.file"
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} -%5level [%15.15thread] -%X{leoTraceNo}- %-41.41logger{40},%line : %msg%n"/>
 
