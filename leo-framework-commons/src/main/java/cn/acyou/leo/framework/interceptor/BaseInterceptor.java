@@ -22,7 +22,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Extension;
 import io.swagger.annotations.ExtensionProperty;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StreamUtils;
@@ -40,7 +39,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 基本的Token拦截器
@@ -70,7 +72,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-", ""));
+
         AppContext.setRequestTimeStamp(System.currentTimeMillis());
         String requestURI = request.getRequestURI();
         final String requestMethod = request.getMethod();
@@ -202,7 +204,6 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         //clear context
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
-        MDC.clear();
     }
 
     /**
