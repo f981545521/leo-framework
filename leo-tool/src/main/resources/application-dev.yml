@@ -35,3 +35,4 @@ spring:
         min-idle: 0
 api:
   leo-pay-api-url: http://192.168.4.65:8075/leo-pay/
+  access-token: 88888888

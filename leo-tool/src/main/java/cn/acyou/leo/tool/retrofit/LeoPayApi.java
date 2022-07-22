@@ -12,6 +12,7 @@ import java.util.Map;
  * @version [1.0.0, 2022/7/14 10:16]
  **/
 @RetrofitClient(baseUrl = "${api.leo-pay-api-url}")
+@AccessToken(accessToken = "${api.access-token}")
 public interface LeoPayApi {
 
     @RetrofitApi("远程调用")
