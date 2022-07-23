@@ -5,6 +5,9 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * Spring 工具
  *
@@ -41,6 +44,14 @@ public class SpringHelper implements BeanFactoryPostProcessor {
      */
     public static <T> T getBean(Class<T> clz) throws BeansException {
         return beanFactory.getBean(clz);
+    }
+
+    /**
+     * 获取指定type的Bean列表
+     */
+    public static <T> Collection<T> getBeans(Class<T> clz) throws BeansException {
+        final Map<String, T> beanMap = beanFactory.getBeansOfType(clz);
+        return beanMap.values();
     }
 
     /**
