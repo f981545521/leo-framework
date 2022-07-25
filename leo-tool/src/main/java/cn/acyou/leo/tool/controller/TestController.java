@@ -137,4 +137,34 @@ public class TestController {
         return Result.success(res);
     }
 
+
+    @ApiOperation("测试MybatisPlus更新NULL值")
+    @GetMapping("testUpdateNull")
+    public Result<Void> testUpdateNull(String id, String value) {
+        //方法一：
+        //boolean update = paramConfigService.update()
+        //        .set("value", value)
+        //        .set("ext_value", null)
+        //        .eq("id", id)
+        //        .update();
+        //log.info("更新结果：{}", update);
+
+        //方法二：
+        //boolean update = paramConfigService.update(new ParamConfig(),
+        //        new UpdateWrapper<ParamConfig>().eq("id", id)
+        //                .set("value", value)
+        //                .set("ext_value", null));
+        //log.info("更新结果：{}", update);
+
+        //方法三（推荐）：
+        boolean update = paramConfigService.lambdaUpdate()
+                .eq(ParamConfig::getId, id)
+                .set(ParamConfig::getValue, value)
+                .set(ParamConfig::getExtValue, null)
+                .update();
+        log.info("更新结果：{}", update);
+        return Result.success();
+    }
+
+
 }
