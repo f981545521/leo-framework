@@ -187,7 +187,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         processInterfaceStatistics(request);
         final Long requestTimeStamp = AppContext.getRequestTimeStamp();
-        String logMessage = String.format("访问结束 <——  [status:%s 请求耗时:%s ms]",
+        String logMessage = String.format("访问结束 <——  [status:%s 耗时:%s ms]",
                 response.getStatus(),
                 requestTimeStamp != null ? (System.currentTimeMillis() - AppContext.getRequestTimeStamp()) : "-");
         if (leoProperty.isPrintResponseBody()) {

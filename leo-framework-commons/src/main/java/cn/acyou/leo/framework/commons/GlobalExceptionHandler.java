@@ -14,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -55,8 +56,20 @@ public class GlobalExceptionHandler {
     private LeoProperty leoProperty;
 
     /**
+     * SQL语法错误
+     */
+    @ResponseBody
+    @ExceptionHandler(value = BadSqlGrammarException.class)
+    public Result<Object> handleBadSqlGrammarException(HttpServletRequest request, Exception e) {
+        Result<Object> resultInfo = Result.error(CommonErrorEnum.BAD_SQL_ERROR);
+        log.error(e.getMessage());
+        AppContext.setExceptionResult(resultInfo);
+        return resultInfo;
+    }
+
+    /**
      * 非法请求 (被禁止的)
-     *
+     * <p>
      * 表示请求走到这里不合逻辑（疑似黑客攻击）
      */
     @ExceptionHandler(value = IllegalRequestException.class)
