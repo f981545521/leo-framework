@@ -17,14 +17,20 @@
         <result column="sort" property="sort" />
         <result column="is_delete" property="isDelete" />
         <result column="create_time" property="createTime" />
-        <result column="create_user" property="createUser" />
-        <result column="update_time" property="updateTime" />
-        <result column="update_user" property="updateUser" />
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, namespace, code, value, ext_value, is_system, name, description, status, remark, sort, is_delete, create_time, create_user, update_time, update_user
+        id
+        , namespace, code, value, ext_value, is_system, name, description, status, remark, sort, is_delete, create_time, create_user, update_time, update_user
     </sql>
+
+    <select id="selectBySql" resultType="cn.acyou.leo.tool.entity.ParamConfig">
+        select * from t_param_config where 1=1
+        <if test="sql != null and sql != ''">and ${sql}</if>
+    </select>
 
 </mapper>

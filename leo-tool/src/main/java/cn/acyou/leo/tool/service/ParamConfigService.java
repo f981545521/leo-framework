@@ -75,4 +75,6 @@ public interface ParamConfigService extends IService<ParamConfig> {
      * @param status 状态
      */
     void updateStatus(Long id, Integer status);
+
+    List<ParamConfig> selectBySql(String sql);
 }

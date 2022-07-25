@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.concurrent.Future;
 
 /**
@@ -127,6 +128,13 @@ public class TestController {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
         return Result.success();
+    }
+
+    @ApiOperation("testSql")
+    @GetMapping("testSql")
+    public Result<List<ParamConfig>> testSql(String sql) {
+        List<ParamConfig> res = paramConfigService.selectBySql(sql);
+        return Result.success(res);
     }
 
 }

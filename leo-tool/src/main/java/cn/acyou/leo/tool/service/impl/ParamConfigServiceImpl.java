@@ -111,4 +111,9 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
     public void clearAllCache() {
         log.info("清除所有缓存成功！");
     }
+
+    @Override
+    public List<ParamConfig> selectBySql(String sql) {
+        return baseMapper.selectBySql(sql);
+    }
 }
