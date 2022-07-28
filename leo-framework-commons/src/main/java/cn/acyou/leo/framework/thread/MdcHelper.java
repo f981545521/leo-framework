@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.thread;
 import org.slf4j.MDC;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 /**
@@ -22,6 +23,15 @@ class MdcHelper {
 
 
     /**
+     * 如果不存在设置追踪唯一id
+     */
+    private static void setTraceIdIfAbsent() {
+        if (MDC.get("leoTraceNo") == null) {
+            MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-", ""));
+        }
+    }
+
+    /**
      * 包装 Callable
      *
      * @param task    任务
@@ -30,13 +40,14 @@ class MdcHelper {
      */
     public static <T> Callable<T> wrap(final Callable<T> task, final Map<String, String> context) {
         return () -> {
-            if (!context.isEmpty()) {
+            if (context != null && !context.isEmpty()) {
                 MDC.setContextMap(context);
             }
             try {
+                setTraceIdIfAbsent();
                 return task.call();
             } finally {
-                if (!context.isEmpty()) {
+                if (context != null && !context.isEmpty()) {
                     MDC.clear();
                 }
             }
@@ -53,13 +64,14 @@ class MdcHelper {
      */
     public static Runnable wrap(final Runnable runnable, final Map<String, String> context) {
         return () -> {
-            if (!context.isEmpty()) {
+            if (context != null && !context.isEmpty()) {
                 MDC.setContextMap(context);
             }
             try {
+                setTraceIdIfAbsent();
                 runnable.run();
             } finally {
-                if (!context.isEmpty()) {
+                if (context != null && !context.isEmpty()) {
                     MDC.clear();
                 }
             }
