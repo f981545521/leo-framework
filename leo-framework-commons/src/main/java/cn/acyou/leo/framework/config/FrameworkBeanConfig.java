@@ -13,6 +13,7 @@ import org.hibernate.validator.HibernateValidatorConfiguration;
 import org.hibernate.validator.cfg.ConstraintMapping;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.annotation.EnableRetry;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -22,6 +23,7 @@ import javax.validation.Validator;
  * @version [1.0.0, 2021-10-19 10:19]
  */
 @Configuration
+@EnableRetry
 public class FrameworkBeanConfig {
     @Bean
     public Validator getValidator() {

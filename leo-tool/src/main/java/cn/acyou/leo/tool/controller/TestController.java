@@ -8,6 +8,7 @@ import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.common.AsyncService;
+import cn.acyou.leo.tool.service.common.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,8 @@ import java.util.concurrent.Future;
 public class TestController {
     @Autowired
     private AsyncService asyncService;
+    @Autowired
+    private CommonService commonService;
     @Autowired
     private RedisUtils redisUtils;
     @Autowired
@@ -166,5 +169,10 @@ public class TestController {
         return Result.success();
     }
 
-
+    @ApiOperation("测试重试方法")
+    @GetMapping("testRetry")
+    public Result<Void> testRetry(String key) {
+        commonService.testRetry(key);
+        return Result.success();
+    }
 }

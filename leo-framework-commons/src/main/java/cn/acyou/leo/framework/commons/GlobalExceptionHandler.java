@@ -296,7 +296,7 @@ public class GlobalExceptionHandler {
         return resultInfo;
     }
     /**处理自定义服务异常*/
-    @ExceptionHandler(ServiceException.class)
+    @ExceptionHandler({ServiceException.class, RetryLaterException.class})
     @ResponseBody
     public Result<Object> handleServiceException(HttpServletRequest request, Exception e) {
         Result<Object> resultInfo = Result.error();
@@ -305,7 +305,9 @@ public class GlobalExceptionHandler {
             if (serviceException.getResult() != null){
                 return serviceException.getResult();
             }else {
-                resultInfo.setMessage(e.getMessage());
+                if (StringUtils.isNotBlank(e.getMessage())) {
+                    resultInfo.setMessage(e.getMessage());
+                }
                 printErrorStackTraceInResultData(e, resultInfo);
             }
         }

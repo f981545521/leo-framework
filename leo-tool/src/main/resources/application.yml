@@ -28,7 +28,7 @@ leo:
     interface-call-statistics: false
     print-request-body: true
     print-response-body: false
-    print-to-result: true
+    print-to-result: false
     token-verify: false
     ignore-uri-list:
       - ${server.servlet.context-path}/doc.html
