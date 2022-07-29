@@ -1,6 +1,8 @@
 package cn.acyou.leo.tool.test;
 
+import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
+import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.service.DictService;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,15 @@ public class ApplicationTests {
     private DictMapper dictMapper;
     @Autowired
     private DictService dictService;
+    @Autowired
+    private AreaMapper areaMapper;
+
+    @Test
+    public void test3() {
+        List<Area> areas = areaMapper.selectIncludeParent(320000L);
+        List<Area> areas1 = areaMapper.selectIncludeChild(320000L);
+        System.out.println("ok");
+    }
 
     @Test
     public void test1() {

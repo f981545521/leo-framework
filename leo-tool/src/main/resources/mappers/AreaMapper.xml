@@ -27,4 +27,38 @@
         , parent_id, name, merger_name, short_name, merger_short_name, level_type, city_code, zip_code, pinyin, jianpin, first_char, lng, lat, remark
     </sql>
 
+    <select id="selectIncludeParent" resultType="cn.acyou.leo.tool.entity.Area">
+        SELECT T2.*
+        FROM (
+                 SELECT @r AS _id,
+                     (SELECT @r := parent_id FROM t_area WHERE id = _id) AS parent_id,
+                     @l := @l + 1 AS lvl
+                 FROM
+                     (SELECT @r := #{id}, @l := 0) vars,
+                     t_area h
+             ) T1
+                 JOIN t_area T2
+                      ON T1._id = T2.id and T1._id != 0
+        ORDER BY T1.lvl DESC
+    </select>
+
+    <select id="selectIncludeChild" resultType="cn.acyou.leo.tool.entity.Area">
+        SELECT finishtable.*
+        FROM (
+                 SELECT t3.*
+                 FROM (
+                          SELECT t1.id,
+                                 IF
+                                     (find_in_set(t1.parent_id, @pids) > 0, @pids := concat(@pids, ',', t1.id),
+                                      0) AS ischild
+                          FROM (SELECT id, parent_id FROM t_area t ORDER BY parent_id, id) t1,
+                               (SELECT @pids := #{id} id) t2
+                      ) t3
+                 WHERE t3.ischild != 0
+                    or t3.id = #{id}
+             ) tempout
+                 JOIN t_area finishtable ON tempout.id = finishtable.id
+    </select>
+
+
 </mapper>
