@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.mapper.ParamConfigMapper;
 import cn.acyou.leo.tool.retrofit.LeoPayApi;
 import cn.acyou.leo.tool.service.ParamConfigService;
@@ -44,5 +45,17 @@ public class Test1 extends ApplicationBaseTests {
     public void test4() {
         int i = paramConfigMapper.deleteById(101);
         System.out.println(i);
+    }
+
+    @Test
+    public void test5() {
+        boolean update = paramConfigService.lambdaUpdate()
+                .set(ParamConfig::getStatus, "100")
+                .eq(ParamConfig::getId, 101)
+                .and(wrapper ->
+                        wrapper.notIn(ParamConfig::getStatus, Lists.newArrayList("100", "-100"))
+                                .or().isNull(ParamConfig::getStatus)
+                ).update();
+        System.out.println(update);
     }
 }
