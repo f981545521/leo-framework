@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -33,8 +34,18 @@ import java.util.concurrent.Future;
 public class TestController {
     @Autowired
     private AsyncService asyncService;
-    @Autowired
-    private CommonService commonService;
+    /**
+     * Resource注解的主要属性：
+     * name：指定需注入的bean的名称
+     * type： 指定需注入的bean的类型
+     * 1. 如果不写，默认回到ByType匹配
+     * 2. 如果写name，会根据name匹配
+     * 3. 如果写name+type，会根据name和type匹配
+     * 源码：
+     * {@link org.springframework.context.annotation.CommonAnnotationBeanPostProcessor#fallbackToDefaultTypeMatch}
+     */
+    @Resource
+    private CommonService commonService8888;
     @Autowired
     private RedisUtils redisUtils;
     @Autowired
@@ -172,7 +183,7 @@ public class TestController {
     @ApiOperation("测试重试方法")
     @GetMapping("testRetry")
     public Result<Void> testRetry(String key) {
-        commonService.testRetry(key);
+        commonService8888.testRetry(key);
         return Result.success();
     }
 }
