@@ -5,6 +5,7 @@ import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
+import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.common.AsyncService;
@@ -184,6 +185,13 @@ public class TestController {
     @GetMapping("testRetry")
     public Result<Void> testRetry(String key) {
         commonService8888.testRetry(key);
+        return Result.success();
+    }
+
+    @ApiOperation("测试Service的同步方法")
+    @GetMapping("testSynchronized")
+    public Result<Void> testSynchronized(DictVo dictVo) {
+        commonService8888.testSynchronized2(dictVo.getName());
         return Result.success();
     }
 }
