@@ -38,13 +38,17 @@ public class RedisUtils {
      */
     private static final String LOCK_KEY_PREFIX = "REDIS_LOCK:";
     /**
+     * 默认锁 Loop等待时间 120S
+     */
+    public static final int DEFAULT_LOCK_WAIT_TIME_OUT = 2 * 60 * 1000;
+    /**
      * 默认锁 超时时间 60S
      */
     public static final int DEFAULT_LOCK_TIME_OUT = 60 * 1000;
     /**
      * 默认 getAndCache 超时时间 {@link #getAndCache(String, Function)}
      */
-    private static final int DEFAULT_CACHE_SECONDS = 60 ;
+    private static final int DEFAULT_CACHE_SECONDS = 60;
     @Autowired(required = false)
     private StringRedisTemplate redisTemplate;
     @Autowired(required = false)
@@ -1367,9 +1371,11 @@ public class RedisUtils {
     /**
      * 获得锁
      *
-     * 使用注意：
-     * 1. 正确的评估执行时间（默认 60S）
-     * 2. unLock的时候带入返回的`lockId`标识
+     * <h3>使用注意：</h3>
+     * <ul>
+     *     <li>1. 正确的评估执行时间（默认 60S）</li>
+     *     <li>2. unLock的时候带入返回的`lockId`标识</li>
+     * </ul>
      *
      * @param lockKey 锁定键
      * @return lockId锁标识，解锁时使用标识解锁
@@ -1379,11 +1385,11 @@ public class RedisUtils {
     }
 
     /**
-     * 获得锁
+     * 获得锁（并设置过期时间）
      *
-     * @param lockKey     锁定键
-     * @param timeOut     锁超时时间（必须大于1秒！！）
-     * @return  lockId锁标识，解锁时使用标识解锁
+     * @param lockKey 锁定键
+     * @param timeOut 锁超时时间（必须大于1秒！！）
+     * @return lockId锁标识，解锁时使用标识解锁
      */
     public String lock(String lockKey, long timeOut) {
         if (!StringUtils.hasText(lockKey)) {
@@ -1408,8 +1414,8 @@ public class RedisUtils {
      * 循环（自旋等待）获取锁
      *
      * @param lockKey     锁定键
-     * @param waitTimeout 等待超时    (单位毫秒)
-     * @param timeOut     时间        (单位毫秒)
+     * @param waitTimeout 等待时间    (单位毫秒)
+     * @param timeOut     过期时间    (单位毫秒)
      * @return {@link String}
      */
     public String lockLoop(String lockKey, long waitTimeout, long timeOut) {
@@ -1456,18 +1462,63 @@ public class RedisUtils {
         }
     }
 
+    /**
+     * 执行任务【不等待】
+     *
+     * @param key  锁关键词
+     * @param task 任务
+     */
+    public void doWork(String key, Task task) {
+        doWork(key, 0, DEFAULT_LOCK_TIME_OUT, task);
+    }
 
     /**
-     * 执行任务
+     * 执行任务（有返回值）【不等待】
+     *
+     * @param key      锁关键词
+     * @param callTask 有返回值的任务
+     */
+    public <T> T doCallWork(String key, CallTask<T> callTask) {
+        return doCallWork(key, 0, DEFAULT_LOCK_TIME_OUT, callTask);
+    }
+
+    /**
+     * 执行任务【不等待】
      *
      * @param key  锁关键词
      * @param time 锁时间（毫秒）
      * @param task 任务
      */
     public void doWork(String key, Long time, Task task) {
+        doWork(key, 0, time, task);
+    }
+
+    /**
+     * 执行任务（有返回值）【不等待】
+     *
+     * @param key      锁关键词
+     * @param time     锁时间（毫秒）
+     * @param callTask 有返回值的任务
+     */
+    public <T> T doCallWork(String key, Long time, CallTask<T> callTask) {
+        return doCallWork(key, 0, time, callTask);
+    }
+
+    /**
+     * 执行任务
+     *
+     * @param key     锁关键词
+     * @param timeOut 锁时间（毫秒）
+     * @param task    任务
+     */
+    public void doWork(String key, long waitTime, long timeOut, Task task) {
         String lockId = null;
         try {
-            lockId = lock(key, time);
+            if (waitTime > 0) {
+                lockId = lockLoop(key, waitTime, timeOut);
+            } else {
+                lockId = lock(key, timeOut);
+            }
             if (lockId == null) {
                 log.warn("Key:{} 正在处理中...", key);
                 throw new ConcurrentException("正在处理中，请稍候...");
@@ -1477,17 +1528,23 @@ public class RedisUtils {
             unLock(key, lockId);
         }
     }
+
+
     /**
      * 执行任务（有返回值）
      *
-     * @param key  锁关键词
-     * @param time 锁时间（毫秒）
+     * @param key      锁关键词
+     * @param timeOut  锁时间（毫秒）
      * @param callTask 有返回值的任务
      */
-    public <T> T doCallWork(String key, Long time, CallTask<T> callTask){
+    public <T> T doCallWork(String key, long waitTime, long timeOut, CallTask<T> callTask) {
         String lockId = null;
         try {
-            lockId = lock(key, time);
+            if (waitTime > 0) {
+                lockId = lockLoop(key, waitTime, timeOut);
+            } else {
+                lockId = lock(key, timeOut);
+            }
             if (lockId == null) {
                 log.warn("Key:{} 正在处理中...", key);
                 throw new ConcurrentException("正在处理中，请稍候...");
