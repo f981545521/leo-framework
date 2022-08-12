@@ -1,10 +1,12 @@
 package cn.acyou.leo.tool.test;
 
+import cn.acyou.leo.framework.util.DateUtil;
 import cn.hutool.core.thread.ConcurrencyTester;
 import cn.hutool.http.HttpUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,5 +28,12 @@ public class Test2 {
         List<String> strings = Arrays.asList("111", "222", "333");
         strings.add("ok");
         System.out.println(strings);
+    }
+
+    //01天19小时11分钟
+    @Test
+    public void test3() {
+        Date add = DateUtil.add(new Date(), 0, 0, 1, 19, 11, 0);
+        System.out.println(DateUtil.getDateFormat(add));
     }
 }

@@ -166,6 +166,39 @@ public final class DateUtil {
         return DateTimeFormat.forPattern(format).parseDateTime(dateStr).toDate();
     }
 
+
+    /**
+     * 给日期添加时间
+     *
+     * @param date   指定日期
+     * @param year   年
+     * @param month  月
+     * @param day    日
+     * @param hour   时
+     * @param minute 分
+     * @param second 秒
+     * @return 日期
+     */
+    public static Date add(Date date, int year, int month, int day, int hour, int minute, int second) {
+        return new DateTime(date).plusYears(year).plusMonths(month).plusDays(day).plusHours(hour).plusMillis(minute).plusSeconds(second).toDate();
+    }
+
+    /**
+     * 给日期减少时间
+     *
+     * @param date   指定日期
+     * @param year   年
+     * @param month  月
+     * @param day    日
+     * @param hour   时
+     * @param minute 分
+     * @param second 秒
+     * @return 日期
+     */
+    public static Date minus(Date date, int year, int month, int day, int hour, int minute, int second) {
+        return new DateTime(date).minusYears(year).minusMonths(month).minusDays(day).minusHours(hour).minusMillis(minute).minusSeconds(second).toDate();
+    }
+
     /**
      * 向日期增加天数
      *
