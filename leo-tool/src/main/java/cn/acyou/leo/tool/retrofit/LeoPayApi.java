@@ -31,7 +31,9 @@ public interface LeoPayApi {
     /**
      * 测试返回类型
      *
-     * @return 这里返回的Object是为Map类型 ！！！
+     * @return 这里返回的Object是为Map/List类型 ！！！
+     * <p>
+     * 需要注意返回的类型。JSONObject / JSONArray 不一致的时候会报错！！！
      */
     @RetrofitApi("远程调用 test2")
     @GET(value = "api/test2")
