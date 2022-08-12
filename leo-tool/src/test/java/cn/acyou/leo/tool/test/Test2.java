@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.test;
 
 import cn.hutool.core.thread.ConcurrencyTester;
+import cn.hutool.http.HttpUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -13,9 +14,10 @@ import java.util.List;
 public class Test2 {
     @Test
     public void test1() {
-        ConcurrencyTester ct = new ConcurrencyTester(10);
+        ConcurrencyTester ct = new ConcurrencyTester(5);
         ct.test(() -> {
-            System.out.println("ok");
+            String post = HttpUtil.post("https://172.16.17.21:8443/operate/userGradeMapping/getUserGradeByUserId", "{\"userId\":1561}");
+            System.out.println(post);
         });
     }
 

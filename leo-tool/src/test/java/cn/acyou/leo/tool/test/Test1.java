@@ -5,6 +5,7 @@ import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.mapper.ParamConfigMapper;
 import cn.acyou.leo.tool.retrofit.LeoPayApi;
 import cn.acyou.leo.tool.service.ParamConfigService;
+import com.alibaba.fastjson.JSONObject;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,17 @@ public class Test1 extends ApplicationBaseTests {
 
     @Test
     public void tewt2342() {
-        Result<Object> aac = leoPayApi.printRequest(1000L, new HashMap<>(), "aac");
+        Result<JSONObject> aac = leoPayApi.printRequest(1000L, new HashMap<>(), "aac");
         System.out.println(aac);
+    }
+
+    @Test
+    public void tewt23412() {
+        Result<JSONObject> jsonObjectResult = leoPayApi.test1();
+
+        Result<Object> objectResult = leoPayApi.test2();
+
+        System.out.println("ok");
     }
 
     @Test

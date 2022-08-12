@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.retrofit;
 
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.retrofit.RetrofitApi;
+import com.alibaba.fastjson.JSONObject;
 import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitClient;
 import retrofit2.http.*;
 
@@ -21,5 +22,18 @@ public interface LeoPayApi {
             "X-Foo: Bar",
             "X-Ping: Pong"
     })
-    Result<Object> printRequest(@Query("id") Long id, @Body Map<String, Object> reqMap, @Header("token") String token);
+    Result<JSONObject> printRequest(@Query("id") Long id, @Body Map<String, Object> reqMap, @Header("token") String token);
+
+    @RetrofitApi("远程调用 test1")
+    @GET(value = "api/test1")
+    Result<JSONObject> test1();
+
+    /**
+     * 测试返回类型
+     *
+     * @return 这里返回的Object是为Map类型 ！！！
+     */
+    @RetrofitApi("远程调用 test2")
+    @GET(value = "api/test2")
+    Result<Object> test2();
 }

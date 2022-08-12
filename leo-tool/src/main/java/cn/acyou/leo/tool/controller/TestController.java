@@ -191,7 +191,7 @@ public class TestController {
     @ApiOperation("测试Service的同步方法")
     @GetMapping("testSynchronized")
     public Result<Void> testSynchronized(DictVo dictVo) {
-        commonService8888.testSynchronized2(dictVo.getName());
+        commonService8888.testSynchronized(dictVo);
         return Result.success();
     }
 }
