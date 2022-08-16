@@ -29,9 +29,16 @@ public class ParamConfigController {
     @Autowired
     private ParamConfigService paramConfigService;
 
+    @ApiOperation("获取配置(单个)")
+    @GetMapping("get")
+    public Result<ParamConfigVo> getConfigMap(@RequestParam("namespace") String namespace, String code) {
+        ParamConfigVo config = paramConfigService.getConfig(namespace, code);
+        return Result.success(config);
+    }
+
     @ApiOperation("获取配置(Map结构)")
     @GetMapping("map")
-    public Result<Map<String, ParamConfigVo>> getConfigMap(@RequestParam("namespace") String namespace, String code){
+    public Result<Map<String, ParamConfigVo>> mapConfigMap(@RequestParam("namespace") String namespace, String code) {
         Map<String, ParamConfigVo> configMap = paramConfigService.getConfigMap(namespace, code);
         return Result.success(configMap);
     }

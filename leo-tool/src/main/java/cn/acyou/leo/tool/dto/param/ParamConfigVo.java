@@ -1,5 +1,7 @@
 package cn.acyou.leo.tool.dto.param;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -32,6 +34,7 @@ public class ParamConfigVo implements Serializable {
     @ApiModelProperty(value = "参数键值")
     private String value;
 
+    @JsonIgnore
     @ApiModelProperty(value = "参数扩展值")
     private String extValue;
 
@@ -56,4 +59,18 @@ public class ParamConfigVo implements Serializable {
     @ApiModelProperty(value = "最后修改人")
     private Long updateUser;
 
+    @ApiModelProperty(value = "配置扩展值 JSON")
+    private Object extValueJson;
+
+    public Object getExtValueJson() {
+        try {
+            if (extValue == null || extValue.isEmpty()) {
+                return null;
+            }
+            return JSON.parse(this.extValue);
+        } catch (Exception e) {
+            //ignore
+        }
+        return null;
+    }
 }

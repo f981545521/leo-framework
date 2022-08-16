@@ -30,10 +30,13 @@ public class Test2 {
         System.out.println(strings);
     }
 
-    //01天19小时11分钟
     @Test
     public void test3() {
+        //01天19小时11分钟
         Date add = DateUtil.add(new Date(), 0, 0, 1, 19, 11, 0);
         System.out.println(DateUtil.getDateFormat(add));
+        //01天06小时37分钟
+        Date add2 = DateUtil.add(new Date(), 0, 0, 1, 6, 37, 0);
+        System.out.println(DateUtil.getDateFormat(add2));
     }
 }

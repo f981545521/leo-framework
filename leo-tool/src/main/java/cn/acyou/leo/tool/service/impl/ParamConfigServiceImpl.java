@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -50,7 +49,7 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
     }
 
     @Override
-    @Cacheable(value="leo:pay:paramConfig#-1", key="#namespace + '-' + #code")
+    //@Cacheable(value="leo:pay:paramConfig#-1", key="#namespace + '-' + #code")
     public List<ParamConfigVo> getConfigList(String namespace, String code) {
         List<ParamConfig> list = lambdaQuery()
                 .in(StringUtils.isNotBlank(namespace), ParamConfig::getNamespace, (Object[]) namespace.split(","))
