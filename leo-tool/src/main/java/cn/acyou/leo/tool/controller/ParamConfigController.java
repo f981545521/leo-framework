@@ -1,5 +1,6 @@
 package cn.acyou.leo.tool.controller;
 
+import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.tool.dto.param.ParamConfigSo;
@@ -59,6 +60,7 @@ public class ParamConfigController {
 
     @ApiOperation("清除所有缓存")
     @GetMapping("clearAllCache")
+    @RequiresRoles("1")
     public Result<Void> clearAllCache() {
         paramConfigService.clearAllCache();
         return Result.success();
@@ -66,6 +68,7 @@ public class ParamConfigController {
 
     @ApiOperation("修改状态")
     @GetMapping("status")
+    @RequiresRoles("1")
     public Result<Void> status(@RequestParam Long id, @RequestParam Integer status) {
         paramConfigService.updateStatus(id, status);
         return Result.success();

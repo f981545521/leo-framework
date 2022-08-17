@@ -29,7 +29,7 @@ leo:
     print-request-body: true
     print-response-body: false
     print-to-result: false
-    token-verify: false
+    token-verify: true
     ignore-uri-list:
       - ${server.servlet.context-path}/doc.html
       - ${server.servlet.context-path}/swagger-resources
