@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.context;
 
+import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
+import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.base.ClientLanguage;
 import cn.acyou.leo.framework.base.ClientType;
 import cn.acyou.leo.framework.base.LoginUser;
@@ -13,7 +15,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author youfang
@@ -22,6 +23,8 @@ import java.util.Map;
 public class AppContext {
     //IP地址
     private static final ThreadLocal<String> IP_TL = new ThreadLocal<>();
+    //请求TOKEN
+    private static final ThreadLocal<String> TOKEN_TL = new ThreadLocal<>();
     //登录用户信息
     private static final ThreadLocal<LoginUser> LOGIN_USER_TL = new ThreadLocal<>();
     //客户端类型
@@ -43,6 +46,7 @@ public class AppContext {
 
     static {
         THREAD_LOCAL_LIST.add(IP_TL);
+        THREAD_LOCAL_LIST.add(TOKEN_TL);
         THREAD_LOCAL_LIST.add(LOGIN_USER_TL);
         THREAD_LOCAL_LIST.add(CLIENT_TYPE_TL);
         THREAD_LOCAL_LIST.add(CLIENT_LANGUAGE_TL);
@@ -63,6 +67,18 @@ public class AppContext {
 
     public static void clearIp() {
         IP_TL.remove();
+    }
+
+    public static String getToken() {
+        return TOKEN_TL.get();
+    }
+
+    public static void setToken(String ip) {
+        TOKEN_TL.set(ip);
+    }
+
+    public static void clearToken() {
+        TOKEN_TL.remove();
     }
 
     public static Long getUserId() {
@@ -240,6 +256,8 @@ public class AppContext {
         private String methodInfo = "";
         private String apiRemark = "";
         private String debug = "true";
+        private RequiresRoles requiresRoles;
+        private RequiresPermissions requiresPermissions;
     }
 
 

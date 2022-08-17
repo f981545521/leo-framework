@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.interceptor;
 
+import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
+import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.base.ClientLanguage;
 import cn.acyou.leo.framework.base.InterfaceCallStatistics;
 import cn.acyou.leo.framework.base.LoginUser;
@@ -74,6 +76,8 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         AppContext.setRequestTimeStamp(System.currentTimeMillis());
+        String token = getToken(request);
+        AppContext.setToken(token);
         String requestURI = request.getRequestURI();
         final String requestMethod = request.getMethod();
         String remoteIp = IPUtil.getClientIp(request);
@@ -106,26 +110,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             }
         }
         log.info(logMessage);
-        //启用Token校验
-        if (leoProperty.isTokenVerify() && !isMatcherPath(request.getRequestURI())) {
-            String token = getToken(request);
-            if (!StringUtils.hasText(token)) {
-                falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
-                return false;
-            }
-            String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
-            if (!StringUtils.hasText(userId)) {
-                String loginAtOtherWhere = redisUtils.get(RedisKeyConstant.USER_LOGIN_AT_OTHER_WHERE + token);
-                if (StringUtils.hasText(loginAtOtherWhere)) {
-                    falseResult(response, CommonErrorEnum.E_LOGIN_AT_OTHER_WHERE);
-                }else {
-                    falseResult(response, CommonErrorEnum.E_LOGIN_TIMEOUT);
-                }
-                return false;
-            }
-            LoginUser loginUser = userTokenService.getLoginUserByUserId(Long.valueOf(userId));
-            AppContext.setLoginUser(loginUser);
-        }
+
         AppContext.setIp(remoteIp);
 
         AppContext.setActionUrl(requestURI);
@@ -138,10 +123,15 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             final String methodInfo = handlerMethod.toString();
             methodInfoBean = CacheUtil.getAndCache("BaseInterceptor.methodDebug." + methodInfo, 0L, (k) -> {
                 Method method = handlerMethod.getMethod();
-                String apiRemark = "";
                 ApiOperation annotation = method.getAnnotation(ApiOperation.class);
+                RequiresRoles requiresRoles = method.getAnnotation(RequiresRoles.class);
+                RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
+                AppContext.MethodInfoBean info = new AppContext.MethodInfoBean();
+                info.setRequiresRoles(requiresRoles);
+                info.setRequiresPermissions(requiresPermissions);
+                info.setMethodInfo(methodInfo);
+                info.setDebug("true");
                 if (annotation != null) {
-                    apiRemark = annotation.value();
                     Extension[] extensions = annotation.extensions();
                     if (extensions != null) {
                         for (Extension extension : extensions) {
@@ -149,7 +139,8 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                                 for (ExtensionProperty property : extension.properties()) {
                                     if (property.name().equalsIgnoreCase("debug")) {
                                         if (property.value().equalsIgnoreCase("false")) {
-                                            return new AppContext.MethodInfoBean(methodInfo, apiRemark, "false");
+                                            info.setDebug("false");
+                                            return info;
                                         }
                                     }
                                 }
@@ -157,9 +148,32 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                         }
                     }
                 }
-                return new AppContext.MethodInfoBean(methodInfo, apiRemark, "true");
+                return info;
             });
+
         }
+        //启用Token校验 并且 存在注解 RequiresRoles || RequiresPermissions
+        if (methodInfoBean.getRequiresRoles() != null || methodInfoBean.getRequiresPermissions() != null) {
+            if (leoProperty.isTokenVerify() && !isMatcherPath(request.getRequestURI())) {
+                if (!StringUtils.hasText(token)) {
+                    falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
+                    return false;
+                }
+                String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
+                if (!StringUtils.hasText(userId)) {
+                    String loginAtOtherWhere = redisUtils.get(RedisKeyConstant.USER_LOGIN_AT_OTHER_WHERE + token);
+                    if (StringUtils.hasText(loginAtOtherWhere)) {
+                        falseResult(response, CommonErrorEnum.E_LOGIN_AT_OTHER_WHERE);
+                    } else {
+                        falseResult(response, CommonErrorEnum.E_LOGIN_TIMEOUT);
+                    }
+                    return false;
+                }
+                LoginUser loginUser = userTokenService.getLoginUserByUserId(Long.valueOf(userId));
+                AppContext.setLoginUser(loginUser);
+            }
+        }
+
         AppContext.setActionApiOperation(new String[]{methodInfoBean.getMethodInfo(), methodInfoBean.getApiRemark(), methodInfoBean.getDebug()});
         return true;
     }
