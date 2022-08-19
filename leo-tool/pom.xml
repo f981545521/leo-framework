@@ -65,6 +65,16 @@
             <artifactId>leo-framework-retrofit-starter</artifactId>
             <version>1.4.0.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>leo-framework-fs-starter</artifactId>
+            <version>1.4.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
 
