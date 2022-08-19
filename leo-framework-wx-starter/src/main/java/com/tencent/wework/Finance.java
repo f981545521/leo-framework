@@ -155,7 +155,7 @@ public class Finance {
                 }
                 System.load(lib4.getPath());
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
             log.info("Windows 加载Finance完成");
         } else {
@@ -167,7 +167,7 @@ public class Finance {
                 }
                 System.load(lib1.getPath());
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
             log.info("Linux 加载Finance完成");
         }

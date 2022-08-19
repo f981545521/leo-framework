@@ -2,6 +2,7 @@ package cn.acyou.leo.media;
 
 import cn.acyou.leo.media.encoder.ExecProcess;
 import cn.acyou.leo.media.encoder.MediaUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.jupiter.api.Test;
 import ws.schild.jave.Encoder;
@@ -23,6 +24,7 @@ import java.util.List;
  * @author youfang
  * @version [1.0.0, 2022-4-22]
  **/
+@Slf4j
 public class VideoFormatTest2 {
 
     @Test
@@ -42,7 +44,7 @@ public class VideoFormatTest2 {
             Encoder encoder = new Encoder();
             encoder.encode(object, firstFrameFile, attrs);
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             firstFrameFile.delete();
         }

@@ -58,7 +58,7 @@ public class OSSUtil {
         try {
             inputStream = new URL(url).openStream();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new OSSException("网络连接失败！");
         }
         uploadInputStream(bucket, fileName, inputStream);
@@ -76,7 +76,7 @@ public class OSSUtil {
         try {
             inputStream = new FileInputStream(localFilePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new OSSException("文件读取失败！");
         }
         uploadInputStream(bucket, fileName, inputStream);

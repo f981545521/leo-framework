@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.tests;
 import cn.acyou.leo.framework.downloader.MultiThreadFileDownloader;
 import cn.acyou.leo.framework.downloader.support.MultiThreadDownloadProgressPrinter;
 import cn.acyou.leo.framework.util.MathUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -19,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
  * @author fangyou
  * @version [1.0.0, 2021-08-16 16:14]
  */
+@Slf4j
 public class MainTest1 {
     public static void main(String[] args) throws Exception {
         String fileURL = "https://robot.guiji.ai/nfs/vte/video/2dr/624654168652787848/624654168652787848.mp4";
@@ -46,7 +48,7 @@ public class MainTest1 {
                 try {
                     Thread.sleep(1000L);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             }
         });
@@ -103,7 +105,7 @@ public class MainTest1 {
             is.close();
             fileout.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 }

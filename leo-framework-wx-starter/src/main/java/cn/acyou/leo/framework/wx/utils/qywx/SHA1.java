@@ -8,6 +8,8 @@
 
 package cn.acyou.leo.framework.wx.utils.qywx;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.security.MessageDigest;
 import java.util.Arrays;
 
@@ -16,6 +18,7 @@ import java.util.Arrays;
  *
  * 计算消息签名接口.
  */
+@Slf4j
 public class SHA1 {
 
     /**
@@ -53,7 +56,7 @@ public class SHA1 {
             }
             return hexstr.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new AesException(AesException.ComputeSignatureError);
         }
     }

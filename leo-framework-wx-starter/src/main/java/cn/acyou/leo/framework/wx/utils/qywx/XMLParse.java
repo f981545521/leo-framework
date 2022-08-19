@@ -8,6 +8,7 @@
 
 package cn.acyou.leo.framework.wx.utils.qywx;
 
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,6 +23,7 @@ import java.io.StringReader;
  *
  * 提供提取消息格式中的密文及生成回复消息格式的接口.
  */
+@Slf4j
 class XMLParse {
 
 	/**
@@ -44,13 +46,13 @@ class XMLParse {
 			// If you can't completely disable DTDs, then at least do the following:
 			// Xerces 1 - http://xerces.apache.org/xerces-j/features.html#external-general-entities
 			// Xerces 2 - http://xerces.apache.org/xerces2-j/features.html#external-general-entities
-			// JDK7+ - http://xml.org/sax/features/external-general-entities 
+			// JDK7+ - http://xml.org/sax/features/external-general-entities
 			FEATURE = "http://xml.org/sax/features/external-general-entities";
 			dbf.setFeature(FEATURE, false);
 
 			// Xerces 1 - http://xerces.apache.org/xerces-j/features.html#external-parameter-entities
 			// Xerces 2 - http://xerces.apache.org/xerces2-j/features.html#external-parameter-entities
-			// JDK7+ - http://xml.org/sax/features/external-parameter-entities 
+			// JDK7+ - http://xml.org/sax/features/external-parameter-entities
 			FEATURE = "http://xml.org/sax/features/external-parameter-entities";
 			dbf.setFeature(FEATURE, false);
 
@@ -62,9 +64,9 @@ class XMLParse {
 			dbf.setXIncludeAware(false);
 			dbf.setExpandEntityReferences(false);
 
-			// And, per Timothy Morgan: "If for some reason support for inline DOCTYPEs are a requirement, then 
+			// And, per Timothy Morgan: "If for some reason support for inline DOCTYPEs are a requirement, then
 			// ensure the entity settings are disabled (as shown above) and beware that SSRF attacks
-			// (http://cwe.mitre.org/data/definitions/918.html) and denial 
+			// (http://cwe.mitre.org/data/definitions/918.html) and denial
 			// of service attacks (such as billion laughs or decompression bombs via "jar:") are a risk."
 
 			// remaining parser logic
@@ -79,7 +81,7 @@ class XMLParse {
 			result[1] = nodelist1.item(0).getTextContent();
 			return result;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 			throw new AesException(AesException.ParseXmlError);
 		}
 	}

@@ -5,9 +5,11 @@ import cn.acyou.leo.framework.push.umeng.AndroidNotification;
 import cn.acyou.leo.framework.push.umeng.PushClient;
 import cn.acyou.leo.framework.push.umeng.android.*;
 import cn.acyou.leo.framework.push.umeng.ios.*;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+@Slf4j
 class Demo {
     private String appkey = null;
     private String appMasterSecret = null;
@@ -19,7 +21,7 @@ class Demo {
             appkey = key;
             appMasterSecret = secret;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             System.exit(1);
         }
     }
@@ -277,7 +279,7 @@ class Demo {
              * demo.sendIOSFilecast();
              */
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
         }
     }
 

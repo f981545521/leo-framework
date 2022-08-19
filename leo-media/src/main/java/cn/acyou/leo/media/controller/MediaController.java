@@ -2,6 +2,7 @@ package cn.acyou.leo.media.controller;
 
 import cn.acyou.leo.media.encoder.ExecProcess;
 import cn.acyou.leo.media.encoder.MediaUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,7 @@ import java.util.concurrent.Executors;
  * @author youfang
  * @version [1.0.0, 2022/2/24 16:33]
  **/
+@Slf4j
 @Controller
 @RequestMapping("media")
 public class MediaController {
@@ -66,7 +68,7 @@ public class MediaController {
             encoder.encode(object, firstFrameFile, attrs);
             IOUtils.copyLarge(new FileInputStream(firstFrameFile), response.getOutputStream());
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             firstFrameFile.delete();
         }
@@ -98,7 +100,7 @@ public class MediaController {
             encoder.encode(mediaObject, extractAudioFile, attrs);
             IOUtils.copyLarge(new FileInputStream(extractAudioFile), response.getOutputStream());
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             extractAudioFile.delete();
         }
@@ -122,7 +124,7 @@ public class MediaController {
             MultimediaObject MultimediaObject = new MultimediaObject(new URL(vPath));
             m = MultimediaObject.getInfo();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return m;
     }

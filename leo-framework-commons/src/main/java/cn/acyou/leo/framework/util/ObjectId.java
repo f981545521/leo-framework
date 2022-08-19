@@ -57,7 +57,7 @@ class ObjectId {
                 // 获取进程ID
                 processId = java.lang.management.ManagementFactory.getRuntimeMXBean().getName().hashCode();
             } catch (Throwable t) {
-                t.printStackTrace();
+                //ignore
             }
             ClassLoader loader = ObjectId.class.getClassLoader();
             // 返回对象哈希码,无论是否重写hashCode方法

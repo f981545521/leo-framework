@@ -26,7 +26,7 @@ public class MinIoUtil {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(name).build());
             }
         }catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

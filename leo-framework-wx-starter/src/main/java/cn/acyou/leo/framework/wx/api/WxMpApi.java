@@ -88,7 +88,7 @@ public class WxMpApi {
                     + "&redirect_uri=" + URLEncoder.encode(wxCallback, "UTF-8")
                     + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         log.info("[微信公众号] 获取微信重定向地址|(url)：" + url);
         return url;

@@ -17,6 +17,7 @@
  */
 package cn.acyou.leo.framework.wx.utils.qywx;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
@@ -41,6 +42,7 @@ import java.util.Random;
  * 	<li>如果安装了JDK，将两个jar文件放到%JDK_HOME%\jre\lib\security目录下覆盖原来文件</li>
  * </ol>
  */
+@Slf4j
 public class WXBizMsgCrypt {
     static Charset CHARSET = Charset.forName("utf-8");
     Base64 base64 = new Base64();
@@ -136,7 +138,7 @@ public class WXBizMsgCrypt {
 
             return base64Encrypted;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new AesException(AesException.EncryptAESError);
         }
     }
@@ -163,7 +165,7 @@ public class WXBizMsgCrypt {
             // 解密
             original = cipher.doFinal(encrypted);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new AesException(AesException.DecryptAESError);
         }
 
@@ -181,7 +183,7 @@ public class WXBizMsgCrypt {
             from_receiveid = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length),
                     CHARSET);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new AesException(AesException.IllegalBuffer);
         }
 

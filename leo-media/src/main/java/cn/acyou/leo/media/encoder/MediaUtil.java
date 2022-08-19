@@ -96,7 +96,7 @@ public class MediaUtil {
             }
             log.info("执行FFMPEG成功 命令:{}", StringUtils.join(args, " "));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             log.error("执行FFMPEG出错 命令:{}", StringUtils.join(args, " "));
             throw new RuntimeException("执行FFMPEG出错 命令:{}" + StringUtils.join(args, " "));
         }
@@ -285,7 +285,7 @@ public class MediaUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         throw new IllegalArgumentException("获取媒体信息出错：" + i);
     }

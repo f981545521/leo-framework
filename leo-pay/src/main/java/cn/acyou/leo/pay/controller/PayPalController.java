@@ -6,7 +6,6 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.ijpay.core.IJPayHttpResponse;
-import com.ijpay.core.kit.HttpKit;
 import com.ijpay.core.kit.PayKit;
 import com.ijpay.paypal.PayPalApi;
 import com.ijpay.paypal.PayPalApiConfig;
@@ -72,7 +71,7 @@ public class PayPalController {
             getConfig();
             return AccessTokenKit.get();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -130,7 +129,7 @@ public class PayPalController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -166,7 +165,7 @@ public class PayPalController {
             }
             return "接口请求错误码为："+resData.getStatus();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -186,7 +185,7 @@ public class PayPalController {
                 return "接口请求错误码为：" + response.getStatus();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -206,7 +205,7 @@ public class PayPalController {
                 return "接口请求错误码为：" + response.getStatus();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -226,7 +225,7 @@ public class PayPalController {
                 return "接口请求错误码为：" + response.getStatus();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -260,7 +259,7 @@ public class PayPalController {
                 return "接口请求错误码为：" + response.getStatus();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -280,7 +279,7 @@ public class PayPalController {
                 return "接口请求错误码为：" + response.getStatus();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -300,7 +299,7 @@ public class PayPalController {
             String resStr = "您已经完成授权，点击：%s 进行确认！";
             return String.format(resStr, config.getDomain() + "/payPal/captureOrder?id=" + token);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }

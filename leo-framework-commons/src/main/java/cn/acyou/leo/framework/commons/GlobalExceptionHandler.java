@@ -357,7 +357,7 @@ public class GlobalExceptionHandler {
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
         }
     }
 }

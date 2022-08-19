@@ -6,15 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.io.*;
-import java.util.Date;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * @author fangyou
@@ -123,7 +118,7 @@ public class FTPUtil {
             log.info("准备上传文件：{}", ftp.printWorkingDirectory() + "/" + filename);
             return ftp.storeFile(filename, input);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             try {
                 input.close();
@@ -156,7 +151,7 @@ public class FTPUtil {
         try {
             return ftp.retrieveFile(remotePath + fileName, os);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             if (ftp.isConnected()) {
                 try {
@@ -194,7 +189,7 @@ public class FTPUtil {
                 ftpClient.disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             log.info("FTP连接失败，请检查。");
         }
         throw new FsException("FTP Client 获取失败！");
@@ -233,7 +228,7 @@ public class FTPUtil {
             ftpClient.dele(filename);
             flag = true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             if (ftpClient.isConnected()) {
                 try {

@@ -1,6 +1,7 @@
 package cn.acyou.leo.media;
 
 import cn.acyou.leo.media.encoder.MediaUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import java.util.Map;
  * @author youfang
  * @version [1.0.0, 2022/2/22 19:19]
  **/
+@Slf4j
 public class VideoFormatTest {
 
     public static Logger Log = LoggerFactory.getLogger(VideoFormatTest.class);
@@ -96,20 +98,20 @@ public class VideoFormatTest {
             videoInfo.put("format", m.getFormat());
             System.out.println(videoInfo);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             if (null != fc) {
                 try {
                     fc.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             }
             if (null != fis) {
                 try {
                     fis.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             }
         }
@@ -142,7 +144,7 @@ public class VideoFormatTest {
             encoder.encode(object,imageTarget,attrs);
             return true;
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return false;
         }
     }
@@ -167,7 +169,7 @@ public class VideoFormatTest {
         try {
             encoder.encode(new MultimediaObject(source), target, attrs);
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -188,7 +190,7 @@ public class VideoFormatTest {
         try {
             encoder.encode(new MultimediaObject(source), target, attrs);
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -218,7 +220,7 @@ public class VideoFormatTest {
         try {
             encoder.encode(new MultimediaObject(source), target, attrs);
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -236,7 +238,7 @@ public class VideoFormatTest {
         try {
             encoder.encode(multimediaObject, target, attrs);
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -276,7 +278,7 @@ public class VideoFormatTest {
             proc = Runtime.getRuntime().exec(args);
             proc.waitFor();
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         stopWatch.stop();
         Log.info("剪辑文件{}完成，{}ms-{}ms，耗时{}秒", sourcePath, start, end, stopWatch.getTotalTimeSeconds());
@@ -377,7 +379,7 @@ public class VideoFormatTest {
         try {
             encoder.encode(sourceInfo, target, attrs);
         } catch (EncoderException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

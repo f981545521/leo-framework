@@ -136,7 +136,7 @@ public class WxMiniProgramApi {
                 return JSONObject.parseObject(result, WxUserEncryptInfo.class);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         throw new WxServiceException("微信数据解密失败！");
     }

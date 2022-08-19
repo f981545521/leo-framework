@@ -75,7 +75,7 @@ public abstract class AbstractTaskParent {
                     scheduleJobLogService.success(scheduleJob, "手动执行成功", remarkLog, (int) times);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 scheduleJobLogService.error(scheduleJob, e.getMessage());
             }
             redisUtils.unLock(TASK_RUNNING_LOCK + scheduleJob.getJobId(), lockId);

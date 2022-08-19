@@ -36,11 +36,11 @@ public class BeanCopyUtil {
             return null;
         }
         try {
-            E e = clz.newInstance();
-            BeanUtils.copyProperties(t, e);
-            return e;
-        } catch (Exception e1) {
-            e1.printStackTrace();
+            E instance = clz.newInstance();
+            BeanUtils.copyProperties(t, instance);
+            return instance;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
         //return null;会导致编译器空指针检查警告，理论上不会出现此情况，所以抛出异常。
         throw new ServiceException("BeanCopy出错了！{}->{}", t, clz.getName());

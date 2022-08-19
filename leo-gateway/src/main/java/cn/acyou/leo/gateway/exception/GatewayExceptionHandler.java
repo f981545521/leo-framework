@@ -65,7 +65,7 @@ public class GatewayExceptionHandler extends AbstractExceptionHandler implements
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
-        ex.printStackTrace();
+        log.error(ex.getMessage(), ex);
         String errorMessage = super.formatMessage(ex);
         if (errorMessage.startsWith(INSTANCE_NOT_FOUND)) {
             errorMessage = String.format("服务[%s]不可用，请检查服务是否启动！",
