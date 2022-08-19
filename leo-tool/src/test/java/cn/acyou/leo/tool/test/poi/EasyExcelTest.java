@@ -4,11 +4,21 @@ import cn.acyou.leo.tool.test.poi.pojo.DemoData;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.read.metadata.ReadSheet;
+import com.google.common.io.Resources;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 /**
+ * EasyExcel参考文档：
+ * <ul>
+ *     <li> <a href="https://github.com/alibaba/easyexcel">GitHub 地址</li>
+ *     <li> <a href="https://gitee.com/mirrors/easyexcel">Gitee 地址</li>
+ * </ul>
+ *
  * @author fangyou
  * @version [1.0.0, 2021-11-03 14:34]
  */
@@ -47,5 +57,12 @@ public class EasyExcelTest {
                 excelReader.finish();
             }
         }
+    }
+
+    @Test
+    public void test1() throws Exception {
+        URL resource = Resources.getResource("test_data.xlsx");
+        List<Map<String, String>> objects = EasyExcel.read(new File(resource.getPath())).sheet(0).doReadSync();
+        System.out.println(objects);
     }
 }
