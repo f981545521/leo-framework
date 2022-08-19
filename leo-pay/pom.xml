@@ -86,6 +86,11 @@
             <artifactId>leo-framework-push-starter</artifactId>
             <version>1.4.0.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
 

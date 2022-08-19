@@ -210,6 +210,34 @@ public class OSSUtil {
 
 
     /**
+     * 删除文件
+     *
+     * @param bucketName Bucket
+     * @param objectName 对象
+     */
+    public void deleteFile(String bucketName, String objectName) {
+        ossClient.deleteObject(bucketName, objectName);
+    }
+
+    /**
+     * 删除 Bucket
+     *
+     * @param bucketName bucketName
+     */
+    public void deleteBucket(String bucketName) {
+        ossClient.deleteBucket(bucketName);
+    }
+
+    /**
+     * 创建 Bucket
+     *
+     * @param bucketName bucketName
+     */
+    public Bucket createBucket(String bucketName) {
+        return ossClient.createBucket(bucketName);
+    }
+
+    /**
      * 列举存储空间。
      */
     public List<String> listBuckets() {

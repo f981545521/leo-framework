@@ -59,6 +59,13 @@ public class TestController {
         return Result.success();
     }
 
+    @ApiOperation("测试异常")
+    @GetMapping("testException")
+    public Result<Void> testException() {
+        int i = 1 / 0;
+        return Result.success();
+    }
+
     @ApiOperation("测试异步缓存2")
     @GetMapping("test2")
     public Result<Void> test2() {
