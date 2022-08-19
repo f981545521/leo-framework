@@ -412,7 +412,7 @@ public class FileUtil {
         try {
             return getType(IOUtil.readHex28Upper(in));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return UNKNOWN;
     }

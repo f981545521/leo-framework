@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -7,6 +9,7 @@ import java.net.InetAddress;
  * @author youfang
  * @version [1.0.0, 2020/12/29]
  **/
+@Slf4j
 public class NetworkUtil {
 
     /**
@@ -20,7 +23,7 @@ public class NetworkUtil {
         try {
             return InetAddress.getByName(ip).isReachable(timeOut);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return false;
         }
     }

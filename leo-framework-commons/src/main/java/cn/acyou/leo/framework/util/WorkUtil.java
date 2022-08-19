@@ -38,7 +38,7 @@ public class WorkUtil {
                         Thread.sleep(Math.min(TimeUnit.NANOSECONDS.toMillis(rem) + 1, 100));
                     } catch (Exception e) {
                         log.error(e.getMessage());
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                     }
                 }
             }

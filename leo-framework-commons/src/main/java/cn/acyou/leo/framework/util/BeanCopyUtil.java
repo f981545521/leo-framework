@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.util;
 import cn.acyou.leo.framework.exception.ServiceException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -18,6 +19,7 @@ import java.util.List;
  *
  * @author youfang
  */
+@Slf4j
 public class BeanCopyUtil {
 
     /**
@@ -120,7 +122,7 @@ public class BeanCopyUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

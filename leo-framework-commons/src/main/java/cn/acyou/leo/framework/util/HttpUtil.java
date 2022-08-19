@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.util;
 
 import com.google.common.collect.Multimap;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -51,6 +52,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author youfang
  */
+@Slf4j
 public class HttpUtil {
 
     private static PoolingHttpClientConnectionManager cm;
@@ -519,7 +521,7 @@ public class HttpUtil {
         try {
             download(url, "D:\\images\\");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

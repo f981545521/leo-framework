@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -29,6 +30,7 @@ import java.util.regex.Pattern;
  * @author youfang
  * @version [1.0.0, 2020-4-6 下午 06:20]
  **/
+@Slf4j
 public class UrlUtil {
 
     /**
@@ -443,7 +445,7 @@ public class UrlUtil {
         try {
             return URLEncoder.encode(url, "UTF-8");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return url;
     }
@@ -458,7 +460,7 @@ public class UrlUtil {
         try {
             return URLDecoder.decode(url, "UTF-8");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return url;
     }

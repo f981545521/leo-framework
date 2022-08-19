@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.util;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.objenesis.instantiator.util.ClassUtils;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Slf4j
 public class BeanUtil {
 
     /**
@@ -69,7 +71,7 @@ public class BeanUtil {
                     resMap.put(value , desc);
                 }
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return resMap;

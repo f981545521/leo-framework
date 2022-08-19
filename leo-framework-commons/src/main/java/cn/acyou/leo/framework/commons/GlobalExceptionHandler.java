@@ -256,7 +256,7 @@ public class GlobalExceptionHandler {
     public Result<Object> handleDataIntegrityViolationException(HttpServletRequest request, Exception e) {
         Result<Object> resultInfo = Result.error();
         resultInfo.setMessage("违反数据完整性异常，请检查！");
-        e.printStackTrace();
+        log.error(e.getMessage(), e);
         printErrorStackTraceInResultData(e, resultInfo);
         return resultInfo;
     }
@@ -319,7 +319,7 @@ public class GlobalExceptionHandler {
     public Result<Object> handleException(HttpServletRequest request, Exception e) {
         Result<Object> resultInfo = Result.error();
         log.error("统一未知异常处理 => 请求路径：" + request.getRequestURI() + "，异常信息：" + e.getMessage());
-        e.printStackTrace();
+        log.error(e.getMessage(), e);
         Throwable rootCause = Throwables.getRootCause(e);
         if (rootCause instanceof ModifiedByAnotherUserException){
             resultInfo = Result.error(CommonErrorEnum.E_OPTMISTIC_MODIFIED);

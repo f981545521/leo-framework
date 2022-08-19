@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.xss;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
  *
  * @author youfang
  */
+@Slf4j
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     private byte[] requestBody;
@@ -58,7 +60,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
                     requestBody = new byte[0];
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
     }

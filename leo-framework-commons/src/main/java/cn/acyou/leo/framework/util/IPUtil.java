@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -16,6 +18,7 @@ import java.util.regex.Pattern;
  * @author youfang
  * @version [1.0.0, 2020/7/10]
  **/
+@Slf4j
 public class IPUtil {
     private static String localIP = null;
     /**
@@ -79,7 +82,7 @@ public class IPUtil {
                 }
             }
         } catch (SocketException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return localIps;
     }

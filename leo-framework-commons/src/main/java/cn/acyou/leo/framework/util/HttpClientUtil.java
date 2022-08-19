@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -29,6 +30,7 @@ import java.util.Map;
  * HttpClientUtil
  * @author youfang
  */
+@Slf4j
 public class HttpClientUtil {
 
     public static String doGet(String url) {
@@ -71,7 +73,7 @@ public class HttpClientUtil {
                 resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             try {
                 if (response != null) {
@@ -79,7 +81,7 @@ public class HttpClientUtil {
                 }
                 httpclient.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return resultString;
@@ -107,7 +109,7 @@ public class HttpClientUtil {
             response = httpClient.execute(httpPost);
             resultString = EntityUtils.toString(response.getEntity(), "utf-8");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             try {
                 if (response != null) {
@@ -115,7 +117,7 @@ public class HttpClientUtil {
                 }
                 httpClient.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return resultString;
@@ -140,7 +142,7 @@ public class HttpClientUtil {
             response = httpClient.execute(httpPost);
             resultString = EntityUtils.toString(response.getEntity(), "utf-8");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             try {
                 if (response != null) {
@@ -148,7 +150,7 @@ public class HttpClientUtil {
                 }
                 httpClient.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return resultString;
@@ -177,7 +179,7 @@ public class HttpClientUtil {
             response = httpClient.execute(httpPost);
             resultString = EntityUtils.toString(response.getEntity(), "utf-8");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             try {
                 if (response != null) {
@@ -185,7 +187,7 @@ public class HttpClientUtil {
                 }
                 httpClient.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return resultString;
@@ -215,7 +217,7 @@ public class HttpClientUtil {
             is.close();
             fileout.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -240,7 +242,7 @@ public class HttpClientUtil {
             is.close();
             fileout.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 }

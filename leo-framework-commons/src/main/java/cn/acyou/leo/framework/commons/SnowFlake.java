@@ -134,7 +134,7 @@ public class SnowFlake {
             byte[] ipByte = ip.getAddress();
             lastip = ipByte[ipByte.length - 1];
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            //ignore
         }
         return lastip;
     }

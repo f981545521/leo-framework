@@ -2,6 +2,7 @@ package cn.acyou.leo.framework.downloader;
 
 import cn.acyou.leo.framework.downloader.ext.FileResponseExtractor;
 import cn.acyou.leo.framework.downloader.support.DownloadProgressPrinter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RequestCallback;
@@ -18,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Slf4j
 public class MultiThreadFileDownloader extends AbstractDownloader {
     private int threadNum;
 
@@ -56,7 +58,7 @@ public class MultiThreadFileDownloader extends AbstractDownloader {
                 };
                 return restTemplate.execute(fileURL, HttpMethod.GET, callback, extractor);
             }, executorService).exceptionally(e -> {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 return null;
             });
             futures.add(future);
@@ -76,7 +78,7 @@ public class MultiThreadFileDownloader extends AbstractDownloader {
                 tmpIn.close();
                 tmpFile.delete(); //合并完成后删除临时文件
             } catch (InterruptedException | ExecutionException | IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         });
         outChannel.close();

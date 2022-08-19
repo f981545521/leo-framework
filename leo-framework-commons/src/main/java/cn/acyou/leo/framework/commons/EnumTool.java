@@ -2,6 +2,7 @@ package cn.acyou.leo.framework.commons;
 
 import cn.acyou.leo.framework.base.EnumEntity;
 import cn.acyou.leo.framework.util.ReflectUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author youfang
  * @version [1.0.0, 2020/7/28]
  **/
+@Slf4j
 public class EnumTool {
     protected Class<?> clazz;
 
@@ -49,7 +51,7 @@ public class EnumTool {
                 field.setAccessible(false);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return resultList;
     }

@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.constraintvalidators;
 
 import cn.acyou.leo.framework.annotation.valid.PropertyScriptAssert;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scripting.support.StandardScriptEvaluator;
 import org.springframework.scripting.support.StaticScriptSource;
 
@@ -22,6 +23,7 @@ import java.util.Map;
  * @author fangyou
  * @version [1.0.0, 2021-10-18 13:45]
  */
+@Slf4j
 public class PropertyScriptAssertValidator implements ConstraintValidator<PropertyScriptAssert, Object> {
 
     private String script;
@@ -44,7 +46,7 @@ public class PropertyScriptAssertValidator implements ConstraintValidator<Proper
                 return (boolean) result;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return false;
     }

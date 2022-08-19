@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -17,6 +19,7 @@ import java.util.UUID;
  * 。
  * 注意：DES加密和解密过程中，密钥长度都必须是8的倍数
  */
+@Slf4j
 public class DES {
     /**
      * 加密密钥 长度要是8的倍数
@@ -47,7 +50,7 @@ public class DES {
             byte[] decrypt = DES.decrypt(decode, ENCRYPT_SECRET);
             return new String(decrypt, StandardCharsets.UTF_8);
         }catch (Exception e){
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
     }
@@ -63,7 +66,7 @@ public class DES {
             byte[] encode = Base64.getEncoder().encode(result);
             return new String(encode, StandardCharsets.UTF_8);
         }catch (Exception e){
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
     }

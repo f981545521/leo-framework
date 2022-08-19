@@ -1,12 +1,14 @@
 package cn.acyou.leo.framework.downloader.ext;
 
 import cn.acyou.leo.framework.downloader.support.DownloadProgressPrinter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseExtractor;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 public abstract class AbstractDownloadProgressMonitorResponseExtractor<T> implements ResponseExtractor<T>, DownloadProgressMonitor {
 
     protected DownloadProgressPrinter downloadProgressPrinter;
@@ -42,7 +44,7 @@ public abstract class AbstractDownloadProgressMonitorResponseExtractor<T> implem
                 sleep();
             }
         }).exceptionally(e->{
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         });
     }
@@ -55,7 +57,7 @@ public abstract class AbstractDownloadProgressMonitorResponseExtractor<T> implem
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.util;
 import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -10,6 +11,7 @@ import org.springframework.util.StringUtils;
 /**
  * @author youfang
  */
+@Slf4j
 public class PinYinHelper {
     private static final Logger logger = LoggerFactory.getLogger(PinYinHelper.class);
     private static final String EMPTY_STR = "";
@@ -104,7 +106,7 @@ public class PinYinHelper {
                     }
                 }
             } catch (PinyinException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return INITIAL_OTHER;
