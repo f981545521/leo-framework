@@ -26,20 +26,27 @@ public class DaWanJiaTask extends AbstractTaskParent {
 
     @Override
     public void run(String params) {
+        String[] split = params.split(",");
+        for (int i = 0; i < split.length; i++) {
+            exec(split[i]);
+        }
+    }
+
+    public void exec(String token) {
         log.info("执行了DaWanJiaTask...");
         Map<String, String> header = new HashMap<>();
-        header.put("authorization", params);
+        header.put("authorization", token);
         String s = HttpUtil2.get("https://pw.gzych.vip/ykb_huiyuan/api/v1/MemberMine/BasicInfo", new HashMap<>(), header);
         addLog(s);
         Date now = new Date();
         if (DateUtil.afterTime(now, "07:01:00")) {
-            String currentDateFormat = DateUtil.getDateShortFormat(now);
-            Boolean hasKey = redisUtils.hasKey(PREFIX + currentDateFormat);
+            String key = PREFIX + DateUtil.getDateShortFormat(now) + token;
+            Boolean hasKey = redisUtils.hasKey(key);
             addLog(String.format("当前是否签到：%s", hasKey));
             if (!hasKey) {
                 String s2 = HttpUtil2.get("https://pw.gzych.vip/ykb_huiyuan/api/v1/MemberCheckIn/Submit", new HashMap<>(), header);
                 addLog(String.format("执行签到：%s", s2));
-                redisUtils.set(PREFIX + currentDateFormat, "1", 2, TimeUnit.DAYS);
+                redisUtils.set(key, "1", 2, TimeUnit.DAYS);
             }
         }
     }
