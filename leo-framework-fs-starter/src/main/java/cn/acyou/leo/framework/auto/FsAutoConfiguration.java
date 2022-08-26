@@ -2,9 +2,11 @@ package cn.acyou.leo.framework.auto;
 
 import cn.acyou.leo.framework.ftp.FTPUtil;
 import cn.acyou.leo.framework.minio.MinIoUtil;
+import cn.acyou.leo.framework.obs.OBSUtil;
 import cn.acyou.leo.framework.oss.OSSUtil;
 import cn.acyou.leo.framework.prop.FTPProperty;
 import cn.acyou.leo.framework.prop.MinIoProperty;
+import cn.acyou.leo.framework.prop.OBSProperty;
 import cn.acyou.leo.framework.prop.OSSProperty;
 import io.minio.MinioClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -18,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
  * @version [1.0.0, 2022/3/31 17:01]
  **/
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({MinIoProperty.class, OSSProperty.class, FTPProperty.class})
+@EnableConfigurationProperties({MinIoProperty.class, OSSProperty.class, OBSProperty.class, FTPProperty.class})
 public class FsAutoConfiguration {
 
     @Bean
@@ -41,6 +43,13 @@ public class FsAutoConfiguration {
     public OSSUtil ossUtil(OSSProperty ossProperty) {
         return new OSSUtil(ossProperty);
     }
+
+    @Bean
+    @ConditionalOnProperty({"leo.fs.obs.endpoint", "leo.fs.obs.access-key-id", "leo.fs.obs.access-key-secret"})
+    public OBSUtil ossUtil(OBSProperty obsProperty) {
+        return new OBSUtil(obsProperty);
+    }
+
     @Bean
     @ConditionalOnProperty({"leo.fs.ftp.host", "leo.fs.ftp.port"})
     public FTPUtil ftpUtil(FTPProperty ftpProperty) {
