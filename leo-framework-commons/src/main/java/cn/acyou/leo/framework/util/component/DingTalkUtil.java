@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.util.bean;
+package cn.acyou.leo.framework.util.component;
 
 import cn.acyou.leo.framework.prop.DingTalkProperty;
 import cn.acyou.leo.framework.prop.DingTalkRobot;

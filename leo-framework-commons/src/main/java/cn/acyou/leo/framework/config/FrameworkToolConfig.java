@@ -2,8 +2,8 @@ package cn.acyou.leo.framework.config;
 
 import cn.acyou.leo.framework.prop.BaiDuShortLinkProperty;
 import cn.acyou.leo.framework.prop.DingTalkProperty;
-import cn.acyou.leo.framework.util.bean.BaiDuShortLinkUtil;
-import cn.acyou.leo.framework.util.bean.DingTalkUtil;
+import cn.acyou.leo.framework.util.component.BaiDuShortLinkUtil;
+import cn.acyou.leo.framework.util.component.DingTalkUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

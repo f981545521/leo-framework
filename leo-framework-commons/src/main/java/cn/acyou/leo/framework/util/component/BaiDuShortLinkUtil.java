@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.util.bean;
+package cn.acyou.leo.framework.util.component;
 
 import cn.acyou.leo.framework.prop.BaiDuShortLinkProperty;
 import cn.hutool.core.collection.CollectionUtil;
@@ -9,7 +9,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 
 /**
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
  * @author youfang
  */
 @Slf4j
-@Component
 public class BaiDuShortLinkUtil {
 
     private final String token;
