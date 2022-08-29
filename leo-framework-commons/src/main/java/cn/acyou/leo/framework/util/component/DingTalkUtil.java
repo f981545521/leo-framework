@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 钉钉消息发送
  * <p>
- * https://open.dingtalk.com/document/group/custom-robot-access
+ * <a href="https://open.dingtalk.com/document/group/custom-robot-access">官方参考文档地址</a>
  *
  * @author youfang
  */
