@@ -98,6 +98,11 @@ public class HttpUtil {
         return new HttpUtil();
     }
 
+    public static void shutdown() {
+        monitor.shutdown();
+        cm.shutdown();
+    }
+
     public static HttpUtil getHttp(String url, Multimap<String, String> paramMap, Map<String, String> headerMap) {
         HttpUtil httpUtil = newInstance();
         URIBuilder uriBuilder = new URIBuilder(URI.create(url));
