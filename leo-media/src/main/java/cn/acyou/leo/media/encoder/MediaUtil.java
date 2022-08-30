@@ -5,7 +5,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.FileSystemUtils;
+import ws.schild.jave.Encoder;
 import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoInfo;
 import ws.schild.jave.info.VideoSize;
@@ -240,6 +243,34 @@ public class MediaUtil {
             command.add(v);
         });
         exec(command.toArray(new String[0]));
+    }
+
+    public void extractCover(File source, File target) {
+        extractCover(source, target, null);
+    }
+
+    public void extractCover(File source, File target, String offset) {
+        MultimediaObject object = new MultimediaObject(source);
+        try {
+            MultimediaInfo multimediaInfo = object.getInfo();
+            VideoInfo videoInfo = multimediaInfo.getVideo();
+            VideoAttributes video = new VideoAttributes();
+            video.setCodec("png");
+            video.setSize(videoInfo.getSize());
+            EncodingAttributes attrs = new EncodingAttributes();
+            attrs.setOutputFormat("image2");
+            //offset未赋值的时候采用默认
+            attrs.setOffset(0.01f);//偏移量
+            attrs.setDuration(0.01f);//设置转码持续时间
+            if (StringUtils.isNotBlank(offset)) {
+                attrs.setOffset(Float.valueOf(offset));
+            }
+            attrs.setVideoAttributes(video);
+            Encoder encoder = new Encoder();
+            encoder.encode(object, target, attrs);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     /**
