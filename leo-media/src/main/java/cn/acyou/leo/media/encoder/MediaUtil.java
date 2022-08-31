@@ -299,11 +299,27 @@ public class MediaUtil {
     }
 
     /**
+     * 获取媒体时长信息
+     *
+     * @param i 文件绝对路径 或者 URL
+     * @return {@link MultimediaInfo}
+     */
+    public long getMediaDuration(String i) {
+        log.info("获取媒体时长信息：{}", i);
+        try {
+            MultimediaInfo mediaInfo = getMediaInfo(i);
+            return mediaInfo.getDuration();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        throw new IllegalArgumentException("获取媒体时长信息：" + i);
+    }
+
+    /**
      * 得到媒体信息
      *
      * @param i 文件绝对路径 或者 URL
      * @return {@link MultimediaInfo}
-     * @throws Exception 异常
      */
     public MultimediaInfo getMediaInfo(String i) {
         log.info("获取媒体信息：{}", i);
