@@ -81,6 +81,12 @@
             <artifactId>cpdetector</artifactId>
             <version>1.0.10</version>
         </dependency>
+        <!-- 阿里云ASR语言识别 -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>3.7.1</version>
+        </dependency>
     </dependencies>
 
 
