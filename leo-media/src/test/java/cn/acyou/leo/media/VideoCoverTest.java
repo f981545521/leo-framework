@@ -16,4 +16,10 @@ public class VideoCoverTest {
         String v2Path = "C:\\Users\\1\\Downloads\\1(2)(1)\\1-案例二_cover.png";
         MediaUtil.instance().extractCover(new File(vPath), new File(v2Path), "0.01");
     }
+
+    @Test
+    public void test2345() {
+        String s = MediaUtil.formatDuration(1 * 60 * 60 * 1000);
+        System.out.println(s);
+    }
 }

@@ -146,4 +146,15 @@ public class VideoFormatTest2 {
         System.out.println(MediaUtil.parseDuration("01:21:51.100"));
     }
 
+    @Test
+    public void test322() {
+        Long frameCount = MediaUtil.instance().getFrameCount("http://qiniu.acyou.cn/video/1.mp4");
+        System.out.println(frameCount);
+    }
+
+    @Test
+    public void test3322() {
+        System.out.println(0 * 60);
+    }
+
 }
