@@ -32,6 +32,8 @@ public abstract class ExecProcess {
 
     private boolean callInfo = false;
 
+    private Long lastFrame;
+
     /**
      * 处理输出信息
      *
@@ -264,6 +266,10 @@ public abstract class ExecProcess {
                         if (line.length() > 0) {
                             HashMap<String, String> table = parseProgressInfoLine(line);
                             if (table != null) {
+                                String frame = table.get("frame");
+                                if (frame != null) {
+                                    lastFrame = Long.valueOf(frame);
+                                }
                                 String time = table.get("time");
                                 if (time != null) {
                                     String dParts[] = time.split(":");
@@ -295,6 +301,9 @@ public abstract class ExecProcess {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if (lastFrame != null) {
+            frame(lastFrame);
+        }
         if (info == null) {
             throw new RuntimeException();
         }
@@ -306,6 +315,15 @@ public abstract class ExecProcess {
      * @param multimediaInfo 多媒体信息
      */
     public void mediaInfo(MultimediaInfo multimediaInfo) {
+
+    }
+
+    /**
+     * 媒体信息
+     *
+     * @param frame 多媒体信息
+     */
+    public void frame(Long frame) {
 
     }
 

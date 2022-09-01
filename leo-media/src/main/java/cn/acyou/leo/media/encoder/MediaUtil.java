@@ -38,7 +38,7 @@ public class MediaUtil {
     /**
      * 必须有（否则存在卡住问题：要处理 prop.getErrorStream）
      */
-    private final ExecProcess execProcess;
+    private ExecProcess execProcess;
 
     private MediaUtil(ExecProcess execProcess) {
         this.execProcess = execProcess;
@@ -103,6 +103,25 @@ public class MediaUtil {
             log.error("执行FFMPEG出错 命令:{}", StringUtils.join(args, " "));
             throw new RuntimeException("执行FFMPEG出错 命令:{}" + StringUtils.join(args, " "));
         }
+    }
+
+    /**
+     * 获取视频帧数
+     *
+     * @param source 源
+     * @return {@link Long} 帧数
+     */
+    public Long getFrameCount(String source) {
+        log.info("获取视频帧数 params:[source:{}] ", source);
+        final Long[] frameCount = {0L};
+        this.execProcess = new ExecProcess() {
+            @Override
+            public void frame(Long frame) {
+                frameCount[0] = frame;
+            }
+        };
+        exec("-i", source, "-map", "0:v:0", "-c", "copy", "-f", "null", "-");
+        return frameCount[0];
     }
 
     /**
