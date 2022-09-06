@@ -44,6 +44,17 @@ public class ApplicationTests {
     }
 
     @Test
+    public void test221() {
+        Dict dict = new Dict();
+        dict.setCode("AAETGEMNMNMA");
+        dict.setParentId(0L);
+        dict.setName("好");
+        dict.setStatus(0);
+        int i = dictMapper.insertWhereNotExist(dict, "select name from t_dict where id = 21560");
+        System.out.println(i);
+    }
+
+    @Test
     public void test2() {
         List<Dict> dictList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {

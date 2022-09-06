@@ -20,6 +20,8 @@ public class CustomerSqlInjector extends DefaultSqlInjector {
         methodList.add(new InsertIgnore());
         // 批量插入数据，如果中已经存在相同的记录，则忽略当前新数据
         methodList.add(new InsertIgnoreBatch());
+        // 插入数据，当where sql 未查到的时候
+        methodList.add(new InsertWhereNotExist());
         return methodList;
     }
 }

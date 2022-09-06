@@ -12,6 +12,10 @@ public enum CustomerSqlMethod {
      * 插入
      */
     INSERT_IGNORE_ONE("insertIgnore", "插入一条数据（选择字段插入），如果中已经存在相同的记录，则忽略当前新数据", "<script>\nINSERT IGNORE INTO %s %s VALUES %s\n</script>"),
+    /**
+     * 当 where sql 未查到的时候
+     */
+    INSERT_WHERE_NOT_EXIST("insertWhereNotExist", "插入一条数据（选择字段插入），当 where sql 未查到的时候", "<script>\nINSERT INTO %s %s SELECT %s FROM DUAL\n WHERE NOT EXISTS (%s)</script>"),
 
     /**
      * 批量插入
