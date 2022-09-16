@@ -418,10 +418,6 @@ public class FileUtil {
     }
 
 
-    /**
-     * 常用静态图片文件类型
-     */
-    private static final List<String> imageTypes = Lists.newArrayList("png", "jpg", "jpeg");
 
     /**
      * 获取文件扩展名，扩展名不带“.”
@@ -458,6 +454,20 @@ public class FileUtil {
     }
 
     /**
+     * 常用图片文件类型
+     */
+    private static final List<String> imageTypes = Lists.newArrayList("png", "jpg", "jpeg", "gif", "bmp", "tiff", "exif", "svg");
+    /**
+     * 常用音频文件类型
+     */
+    private static final List<String> audioTypes = Lists.newArrayList("mp3", "acc", "wav", "wma", "cda", "flac", "m4a", "mid", "mka", "mp2", "mpa", "mp2", "mpc", "ape", "ofr", "ogg", "ra", "wv", "tta", "ac3", "dts");
+    /**
+     * 常用视频文件类型
+     */
+    private static final List<String> videoTypes = Lists.newArrayList("wmv", "asf", "asx", "rm", "rmvb", "mp4", "3gp", "mov", "m4v", "avi", "dat", "mkv", "flv", "vob");
+
+
+    /**
      * 判断是否是图片格式
      *
      * @param extName 文件扩展名
@@ -468,6 +478,33 @@ public class FileUtil {
             return false;
         }
         return imageTypes.contains(extName.toLowerCase());
+    }
+
+
+    /**
+     * 判断是否是音频格式
+     *
+     * @param extName 文件扩展名
+     * @return boolean
+     */
+    public static boolean isAudio(String extName) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(extName)) {
+            return false;
+        }
+        return audioTypes.contains(extName.toLowerCase());
+    }
+
+    /**
+     * 判断是否是视频格式
+     *
+     * @param extName 文件扩展名
+     * @return boolean
+     */
+    public static boolean isVideo(String extName) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(extName)) {
+            return false;
+        }
+        return videoTypes.contains(extName.toLowerCase());
     }
 
     public static void main(String[] args) throws Exception {
