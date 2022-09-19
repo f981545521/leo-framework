@@ -157,6 +157,16 @@ public class Calculator {
     }
 
     /**
+     * 除 (默认 保留2位小数 向下取整)
+     *
+     * @param v v
+     * @return {@link BigDecimal}
+     */
+    public BigDecimal divide(Object v) {
+        return result.divide(new BigDecimal(v.toString()), 2, RoundingMode.FLOOR);
+    }
+
+    /**
      * 除 (四舍五入保留两位)
      *
      * @param v v

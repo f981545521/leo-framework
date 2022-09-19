@@ -5,6 +5,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,11 +30,17 @@ public final class DateUtil {
     public static final String DATE_DAY_MIN_TIME = " 00:00:00";
     public static final String DATE_DAY_MAX_TIME = " 23:59:59";
     public static final char[] UPPER_NUMBER = "〇一二三四五六七八九十".toCharArray();
-    /** 一小时的秒数 = 60*60 */
+    /**
+     * 一小时的秒数 = 60*60
+     */
     public static final long ONE_HOUR_SECOND = 3600;
     public static final int DAYS_PER_WEEKEND = 2;
     public static final int WEEK_START = DateTimeConstants.MONDAY;
     public static final int WEEK_END = DateTimeConstants.FRIDAY;
+
+    public enum Unit {
+        YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECOND;
+    }
 
     private DateUtil() {
 
@@ -355,6 +363,62 @@ public final class DateUtil {
     public static long getDiffMinutes(Date startDate, Date endDate) {
         long diffSeconds = getDiffSeconds(startDate, endDate);
         return diffSeconds / 60;
+    }
+
+    /**
+     * 比较两个时间相差多少小时
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return long
+     */
+    public static long getDiffHour(Date startDate, Date endDate) {
+        long diffMinutes = getDiffMinutes(startDate, endDate);
+        return diffMinutes / 60;
+    }
+
+    public static BigDecimal getDiff(Date startDate, Date endDate, Unit unit) {
+        long timeStart = startDate.getTime();
+        long timeEnd = endDate.getTime();
+        switch (unit) {
+            case MILLISECOND:
+                return new BigDecimal(timeEnd - timeStart);
+            case SECOND:
+                return new BigDecimal(timeEnd - timeStart)
+                        .divide(new BigDecimal(1000), 10, RoundingMode.FLOOR);
+            case MINUTE:
+                return new BigDecimal(timeEnd - timeStart)
+                        .divide(new BigDecimal(1000), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR);
+            case HOUR:
+                return new BigDecimal(timeEnd - timeStart)
+                        .divide(new BigDecimal(1000), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR);
+            case DAY:
+                return new BigDecimal(timeEnd - timeStart)
+                        .divide(new BigDecimal(1000), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(24), 10, RoundingMode.FLOOR);
+            case MONTH:
+                return new BigDecimal(timeEnd - timeStart)
+                        .divide(new BigDecimal(1000), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(24), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(30), 10, RoundingMode.FLOOR);
+            case YEAR:
+                return new BigDecimal(timeEnd - timeStart)
+                        .divide(new BigDecimal(1000), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(60), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(24), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(30), 10, RoundingMode.FLOOR)
+                        .divide(new BigDecimal(365), 10, RoundingMode.FLOOR);
+
+        }
+        return new BigDecimal(0);
     }
 
     /**

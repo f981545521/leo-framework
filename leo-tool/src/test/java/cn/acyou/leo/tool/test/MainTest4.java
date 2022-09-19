@@ -1,5 +1,7 @@
 package cn.acyou.leo.tool.test;
 
+import cn.acyou.leo.framework.util.Calculator;
+import cn.acyou.leo.framework.util.DateUtil;
 import cn.acyou.leo.framework.util.HttpClientUtil;
 import cn.acyou.leo.framework.util.HttpUtil2;
 import com.google.common.io.Resources;
@@ -18,10 +20,12 @@ import org.springframework.util.StreamUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 /**
  * @author youfang
@@ -71,5 +75,27 @@ public class MainTest4 {
         String s1 = StreamUtils.copyToString(new FileInputStream(file), StandardCharsets.UTF_8);
         System.out.println(s);
         System.out.println(s1);
+    }
+
+
+    @Test
+    public void test12354() {
+        String startDateStr = "08:36";
+        Date startDate = DateUtil.parseTime(new Date(), startDateStr + ":00");
+        Date h1 = DateUtil.parseTime(new Date(), "12:00:00");
+        Date h2 = DateUtil.parseTime(new Date(), "13:30:00");
+        Date endDate = DateUtil.parseSpecificDateTime("2022-09-19 15:30:00");
+        if (endDate.before(h1)) {
+            BigDecimal diffHour = DateUtil.getDiff(startDate, endDate, DateUtil.Unit.HOUR);
+            System.out.println(Calculator.val(diffHour.toBigInteger()).divide(8));
+        } else if (endDate.after(h1) && endDate.before(h2)) {
+            BigDecimal diffHour = DateUtil.getDiff(startDate, endDate, DateUtil.Unit.HOUR);
+            System.out.println(Calculator.val(diffHour.toBigInteger()).divide(8));
+        } else if (endDate.after(h2)) {
+            BigDecimal diffHour = DateUtil.getDiff(startDate, endDate, DateUtil.Unit.HOUR);
+            diffHour = Calculator.val(diffHour).subtract(1.5);
+            System.out.println(Calculator.val(diffHour.toBigInteger()).divide(8));
+        }
+
     }
 }
