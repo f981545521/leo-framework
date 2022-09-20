@@ -7,11 +7,14 @@ import com.obs.services.ObsClient;
 import com.obs.services.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author youfang
@@ -31,6 +34,68 @@ public class OBSUtil {
     private ObsClient initObsClient() {
         log.info("OBS Client 初始化...");
         return new ObsClient(obsProperty.getAccessKeyId(), obsProperty.getAccessKeySecret(), obsProperty.getEndpoint());
+    }
+
+
+    /**
+     * 创建临时授权（表单方式）
+     *
+     * @param xObsAcl     访问控制
+     * @param contextType 类型
+     * @return {@link ObsSignatureVo}
+     */
+    public ObsSignatureVo getSignature(String xObsAcl, String contextType) {
+        ObsSignatureVo obsSignatureVo = new ObsSignatureVo();
+        obsSignatureVo.setAccessKeyId(obsProperty.getAccessKeyId());
+        if (!StringUtils.hasText(xObsAcl)) {
+            xObsAcl = "public-read";
+        }
+        if (!StringUtils.hasText(contextType)) {
+            contextType = "text/plain";
+        }
+        obsSignatureVo.setXObsAcl(xObsAcl);
+        obsSignatureVo.setContextType(contextType);
+        // 创建ObsClient实例
+        PostSignatureRequest request = new PostSignatureRequest();
+        // 设置表单参数
+        Map<String, Object> formParams = new HashMap<>();
+        // 设置对象访问权限为公共读
+        formParams.put("x-obs-acl", xObsAcl);
+        // 设置对象MIME类型
+        formParams.put("content-type", contextType);
+        request.setFormParams(formParams);
+        // 设置表单上传请求有效期，单位：秒
+        request.setExpires(3600);
+        PostSignatureResponse response = obsClient.createPostSignature(request);
+        // 获取表单上传请求参数
+        obsSignatureVo.setPolicy(response.getPolicy());
+        obsSignatureVo.setSignature(response.getSignature());
+        return obsSignatureVo;
+    }
+
+    /**
+     * 创建临时授权
+     *
+     * @param bucketName bucketName
+     * @param objectKey  objectKey
+     * @return {@link ObsSignatureVo}
+     */
+    public ObsSignatureTemporaryVo getTemporarySignature(String bucketName, String objectKey) {
+        TemporarySignatureRequest request = new TemporarySignatureRequest();
+        request.setMethod(HttpMethodEnum.PUT);
+        request.setExpires(3600);
+        request.setBucketName(bucketName);
+        request.setObjectKey(objectKey);
+        request.getHeaders().put("content-type", "application/octet-stream");
+        TemporarySignatureResponse temporarySignature = obsClient.createTemporarySignature(request);
+        ObsSignatureTemporaryVo temporaryVo = new ObsSignatureTemporaryVo();
+        temporaryVo.setSignedUrl(temporarySignature.getSignedUrl());
+        temporaryVo.setActualSignedRequestHeaders(temporarySignature.getActualSignedRequestHeaders());
+        temporaryVo.setFileName(objectKey.substring(objectKey.lastIndexOf("/") + 1));
+        temporaryVo.setFilePath("/" + objectKey);
+        temporaryVo.setEndPoint(obsProperty.getEndpoint());
+        temporaryVo.setBucketName(bucketName);
+        return temporaryVo;
     }
 
 

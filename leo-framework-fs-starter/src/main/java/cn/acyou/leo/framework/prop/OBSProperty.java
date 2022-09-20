@@ -11,15 +11,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "leo.fs.obs")
 public class OBSProperty {
     /**
-     * oss endpoint
+     * obs endpoint
      */
     private String endpoint;
     /**
-     * oss access_key_id
+     * obs access_key_id
      */
     private String accessKeyId;
     /**
-     * oss access_key_secret
+     * obs access_key_secret
      */
     private String accessKeySecret;
 
