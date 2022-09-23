@@ -268,8 +268,17 @@ public class MediaUtil {
         extractCover(source, target, null);
     }
 
-    public void extractCover(File source, File target, String offset) {
-        MultimediaObject object = new MultimediaObject(source);
+    public void extractCover(Object source, File target, String offset) {
+        MultimediaObject object = null;
+        if (source instanceof File) {
+            object = new MultimediaObject((File) source);
+        }
+        if (source instanceof URL) {
+            object = new MultimediaObject((URL) source);
+        }
+        if (object == null) {
+            log.error("原对象不合法：{}", source);
+        }
         try {
             MultimediaInfo multimediaInfo = object.getInfo();
             VideoInfo videoInfo = multimediaInfo.getVideo();

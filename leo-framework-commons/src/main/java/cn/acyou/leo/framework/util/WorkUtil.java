@@ -2,6 +2,7 @@ package cn.acyou.leo.framework.util;
 
 import cn.acyou.leo.framework.util.function.Task;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StopWatch;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -96,4 +97,11 @@ public class WorkUtil {
         }
     }
 
+    public static void watch(Task task) {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        task.run();
+        stopWatch.stop();
+        log.info("StopWatch任务耗时：{}", stopWatch.getTotalTimeMillis());
+    }
 }
