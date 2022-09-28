@@ -14,7 +14,7 @@ public class VideoCoverTest {
     public void test1() throws Exception {
         String vPath = "C:\\Users\\1\\Downloads\\1(2)(1)\\1-案例二.mp4";
         String v2Path = "C:\\Users\\1\\Downloads\\1(2)(1)\\1-案例二_cover.png";
-        MediaUtil.instance().extractCover(new File(vPath), new File(v2Path), "0.01");
+        MediaUtil.instance().extractCover(vPath, new File(v2Path), "0.01");
     }
 
     @Test

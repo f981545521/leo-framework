@@ -7,8 +7,12 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.FileSystemUtils;
 import ws.schild.jave.Encoder;
 import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.filters.Filter;
+import ws.schild.jave.filters.FilterChain;
+import ws.schild.jave.filters.FilterGraph;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoInfo;
 import ws.schild.jave.info.VideoSize;
@@ -265,26 +269,17 @@ public class MediaUtil {
     }
 
     public void extractCover(File source, File target) {
-        extractCover(source, target, null);
+        extractCover(source.getAbsolutePath(), target, null);
     }
 
-    public void extractCover(Object source, File target, String offset) {
-        MultimediaObject object = null;
-        if (source instanceof File) {
-            object = new MultimediaObject((File) source);
-        }
-        if (source instanceof URL) {
-            object = new MultimediaObject((URL) source);
-        }
+    public void extractCover(String source, File target, String offset) {
+        MultimediaObject object = getMediaObject(source);
         if (object == null) {
             log.error("原对象不合法：{}", source);
         }
         try {
-            MultimediaInfo multimediaInfo = object.getInfo();
-            VideoInfo videoInfo = multimediaInfo.getVideo();
             VideoAttributes video = new VideoAttributes();
             video.setCodec("png");
-            video.setSize(videoInfo.getSize());
             EncodingAttributes attrs = new EncodingAttributes();
             attrs.setOutputFormat("image2");
             //offset未赋值的时候采用默认
@@ -299,6 +294,54 @@ public class MediaUtil {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    /**
+     * concat音频
+     *
+     * @param files  文件
+     * @param target 目标
+     * @return {@link File}
+     */
+    public File concatAudio(List<File> files, String target) {
+        try {
+            File file = new File(target);
+            List<MultimediaObject> multimediaObjects = new ArrayList<>();
+            files.forEach(s -> multimediaObjects.add(new MultimediaObject(s)));
+            Encoder encoder = new Encoder();
+            AudioAttributes audioAttributes = new AudioAttributes();
+            VideoAttributes videoAttributes = new VideoAttributes();
+            FilterGraph customFilter = new FilterGraph();
+            FilterChain filterChain = new FilterChain();
+            String s = buildString(files.size());
+            filterChain.addFilter(new Filter(s));
+            customFilter.addChain(filterChain);
+            videoAttributes.setComplexFiltergraph(customFilter);
+            EncodingAttributes attrs = new EncodingAttributes();
+            attrs.setVideoAttributes(videoAttributes);
+            attrs.setAudioAttributes(audioAttributes);
+            encoder.encode(multimediaObjects, file, attrs);
+            return file;
+        } catch (Exception ex) {
+            log.warn("mergeWav ex", ex);
+        }
+        return null;
+    }
+
+    private static String buildStringVideo(Integer num) {
+        String build = "";
+        for (int i = 0; i < num; i++) {
+            build = build + "[" + i + ":0][" + i + ":1]";
+        }
+        return build + "concat=n=" + num + ":v=1:a=1";
+    }
+
+    private static String buildString(Integer num) {
+        String build = "";
+        for (int i = 0; i < num; i++) {
+            build = build + "[" + i + ":0]";
+        }
+        return build + "concat=n=" + num + ":v=0:a=1";
     }
 
     /**
@@ -363,6 +406,28 @@ public class MediaUtil {
             log.error(e.getMessage(), e);
         }
         throw new IllegalArgumentException("获取媒体信息出错：" + i);
+    }
+
+    /**
+     * 得到媒体信息
+     *
+     * @param i 文件绝对路径 或者 URL
+     * @return {@link MultimediaInfo}
+     */
+    public MultimediaObject getMediaObject(String i) {
+        log.info("获取媒体对象：{}", i);
+        try {
+            if (StringUtils.isNotBlank(i)) {
+                if (i.toLowerCase().startsWith("http")) {
+                    return new MultimediaObject(new URL(i));
+                } else {
+                    return new MultimediaObject(new File(i));
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        throw new IllegalArgumentException("获取媒体对象出错：" + i);
     }
 
     /**
