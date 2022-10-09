@@ -78,3 +78,16 @@ knife4j:
     - locations: classpath:api_doc/*
       group: 1.0
       name: 文档手册2
+ijpay:
+  paypal:
+    configMap:
+      DEFAULT:
+        clientId: 1
+        secret: 1-1-1
+        sandBox: true
+        domain: https://pay.acyou.cn/pay-api/
+      CONFIG2:
+        clientId: 2
+        secret: 2-2-2
+        sandBox: true
+        domain: https://pay.acyou.cn/pay-api/

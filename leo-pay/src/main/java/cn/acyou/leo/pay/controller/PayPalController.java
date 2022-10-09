@@ -1,6 +1,7 @@
 package cn.acyou.leo.pay.controller;
 
 import cn.acyou.leo.pay.config.PayPalBean;
+import cn.acyou.leo.pay.config.PayPalConfig;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -50,16 +51,17 @@ public class PayPalController {
 
     @GetMapping("test")
     @ResponseBody
-    public PayPalBean test() {
-        return payPalBean;
+    public Map<String, PayPalConfig> test() {
+        return payPalBean.getConfigMap();
     }
 
     public PayPalApiConfig getConfig() {
         PayPalApiConfig config = new PayPalApiConfig();
-        config.setClientId(payPalBean.getClientId());
-        config.setSecret(payPalBean.getSecret());
-        config.setSandBox(payPalBean.getSandBox());
-        config.setDomain(payPalBean.getDomain());
+        PayPalConfig payPalConfig = payPalBean.getConfigMap().get("DEFAULT");
+        config.setClientId(payPalConfig.getClientId());
+        config.setSecret(payPalConfig.getSecret());
+        config.setSandBox(payPalConfig.getSandBox());
+        config.setDomain(payPalConfig.getDomain());
         PayPalApiConfigKit.setThreadLocalApiConfig(config);
         return config;
     }
