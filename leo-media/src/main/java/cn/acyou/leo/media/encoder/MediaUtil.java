@@ -328,6 +328,38 @@ public class MediaUtil {
         return null;
     }
 
+    /**
+     * concat音频
+     *
+     * @param files  文件
+     * @param target 目标
+     * @return {@link File}
+     */
+    public File concatVideo2(List<String> files, String target) {
+        try {
+            File file = new File(target);
+            List<MultimediaObject> multimediaObjects = new ArrayList<>();
+            files.forEach(s -> multimediaObjects.add(getMediaObject(s)));
+            Encoder encoder = new Encoder();
+            AudioAttributes audioAttributes = new AudioAttributes();
+            VideoAttributes videoAttributes = new VideoAttributes();
+            FilterGraph customFilter = new FilterGraph();
+            FilterChain filterChain = new FilterChain();
+            String s = buildStringVideo(files.size());
+            filterChain.addFilter(new Filter(s));
+            customFilter.addChain(filterChain);
+            videoAttributes.setComplexFiltergraph(customFilter);
+            EncodingAttributes attrs = new EncodingAttributes();
+            attrs.setVideoAttributes(videoAttributes);
+            attrs.setAudioAttributes(audioAttributes);
+            encoder.encode(multimediaObjects, file, attrs);
+            return file;
+        } catch (Exception ex) {
+            log.warn("mergeWav ex", ex);
+        }
+        return null;
+    }
+
     private static String buildStringVideo(Integer num) {
         String build = "";
         for (int i = 0; i < num; i++) {
