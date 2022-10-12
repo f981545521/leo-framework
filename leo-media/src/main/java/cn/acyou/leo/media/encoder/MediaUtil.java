@@ -323,13 +323,13 @@ public class MediaUtil {
             encoder.encode(multimediaObjects, file, attrs);
             return file;
         } catch (Exception ex) {
-            log.warn("mergeWav ex", ex);
+            log.error("concatAudio ex", ex);
         }
         return null;
     }
 
     /**
-     * concat音频
+     * concat音频 （必须视频通道一致，否则会报错）
      *
      * @param files  文件
      * @param target 目标
@@ -355,7 +355,7 @@ public class MediaUtil {
             encoder.encode(multimediaObjects, file, attrs);
             return file;
         } catch (Exception ex) {
-            log.warn("mergeWav ex", ex);
+            log.error("concatVideo2 ex", ex);
         }
         return null;
     }
@@ -377,7 +377,7 @@ public class MediaUtil {
     }
 
     /**
-     * 拼接视频
+     * 拼接视频（会出现速度不一致问题）
      *
      * @param urls       url
      * @param targetPath 目标路径
