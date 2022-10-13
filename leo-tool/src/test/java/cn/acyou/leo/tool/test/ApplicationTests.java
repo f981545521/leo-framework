@@ -4,6 +4,7 @@ import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
+import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DictService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,15 @@ public class ApplicationTests {
     private DictService dictService;
     @Autowired
     private AreaMapper areaMapper;
+    @Autowired
+    private AreaService areaService;
+
+
+    @Test
+    public void test233() {
+        List<Area> s = areaService.lambdaQuery().like(Area::getName, "宿").list();
+        System.out.println(s);
+    }
 
     @Test
     public void test3() {
