@@ -53,7 +53,7 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
     public List<ParamConfigVo> getConfigList(String namespace, String code) {
         List<ParamConfig> list = lambdaQuery()
                 .in(StringUtils.isNotBlank(namespace), ParamConfig::getNamespace, (Object[]) namespace.split(","))
-                .eq(StringUtils.isNotBlank(code), ParamConfig::getCode, code)
+                .in(StringUtils.isNotBlank(code), ParamConfig::getCode, (Object[]) code.split(","))
                 .eq(ParamConfig::getIsDelete, Constant.FLAG_FALSE_0)
                 .orderByDesc(ParamConfig::getSort)
                 .list();
