@@ -392,10 +392,10 @@ public class MediaUtil {
             for (int i = 0; i < urls.size(); i++) {
                 File tempTs = new File(tempDir.toFile(), i + ".ts");
                 //转换成TS格式
-                exec("-i", urls.get(i), "-c", "copy", "-bsf:v", "h264_mp4toannexb", "-f", "mpegts", tempTs.getAbsolutePath());
+                exec("-i", urls.get(i), "-vcodec", "copy", "-acodec", "copy", tempTs.getAbsolutePath());
                 tsList.add(tempTs.getAbsolutePath());
             }
-            exec("-i", "concat:" + StringUtils.join(tsList, "|"), "-c", "copy", "-bsf:a", "aac_adtstoasc", "-movflags", "+faststart", targetPath);
+            exec("-i", "concat:" + StringUtils.join(tsList, "|"), "-vcodec", "copy", "-acodec", "copy", targetPath);
         } finally {
             FileSystemUtils.deleteRecursively(tempDir);
         }
