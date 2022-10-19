@@ -53,7 +53,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * @version [1.0.0, 2020/7/29]
  **/
 @Slf4j
-public class FileUtil {
+public class FileUtil extends cn.hutool.core.io.FileUtil {
     /**
      * 文件分隔符
      */
@@ -675,7 +675,7 @@ public class FileUtil {
         }
         if (prefix >= filename.length()) {
             if (includeSeparator) {
-                return getPrefix(filename);  // add end slash if necessary
+                return getNamePrefix(filename);  // add end slash if necessary
             } else {
                 return filename;
             }
@@ -691,7 +691,15 @@ public class FileUtil {
         return filename.substring(0, end);
     }
 
-    private static String getPrefix(final String filename) {
+    /**
+     * 得到名称前缀
+     * <p>
+     * FileUtil.getNamePrefix("C:\\Users\\1\\Videos\\resources\\target\\111.txt") -> C:\
+     *
+     * @param filename 文件名
+     * @return {@link String}
+     */
+    public static String getNamePrefix(final String filename) {
         if (filename == null) {
             return null;
         }

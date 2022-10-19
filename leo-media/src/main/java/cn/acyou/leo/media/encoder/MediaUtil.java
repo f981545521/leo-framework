@@ -401,6 +401,43 @@ public class MediaUtil {
         }
     }
 
+
+    /**
+     * 压缩视频
+     * ffmpeg.exe -i .\1.mp4 -s 1080x1920 -b:v 1M -r 20 -fs 10MB ./output3.mp4
+     *
+     * @param i  输入
+     * @param s  设置视频的分辨率     -s 1920x1080表示分辨率为1920x1080
+     * @param bv 设置视频的码率      -b:v :指定视频的码率、-b:a : 指定音频的码率  1M：码率的值 1M 表示 1Mb/s
+     * @param r  设置视频的帧率      -r 20：表示帧率设置为 20fps
+     * @param fs 将视频压缩指定大小  -fs 10 : 表示文件大小最大值为10MB
+     */
+    public void compressVideo(String i, String s, String bv, String r, String fs, String targetPath) {
+        boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
+        log.info("压缩视频 params:[i:{},  target:{}] 目标目录：{}", i, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        List<String> commands = new ArrayList<>();
+        commands.add("-i");
+        commands.add(i);
+        if (s != null && s.length() > 0) {
+            commands.add("-s");
+            commands.add(s);
+        }
+        if (bv != null && bv.length() > 0) {
+            commands.add("-b:v");
+            commands.add(bv);
+        }
+        if (r != null && r.length() > 0) {
+            commands.add("-r");
+            commands.add(r);
+        }
+        if (fs != null && fs.length() > 0) {
+            commands.add("-fs");
+            commands.add(fs);
+        }
+        commands.add(targetPath);
+        exec(commands);
+    }
+
     /**
      * 获取媒体时长信息
      *
