@@ -73,8 +73,8 @@ public class AppContext {
         return TOKEN_TL.get();
     }
 
-    public static void setToken(String ip) {
-        TOKEN_TL.set(ip);
+    public static void setToken(String token) {
+        TOKEN_TL.set(token);
     }
 
     public static void clearToken() {
