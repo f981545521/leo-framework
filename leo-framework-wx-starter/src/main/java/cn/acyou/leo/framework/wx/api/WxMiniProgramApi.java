@@ -164,6 +164,19 @@ public class WxMiniProgramApi {
     }
 
     /**
+     * 获取url链接
+     * <p>
+     * https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/qrcode-link/url-link/generateUrlLink.html
+     *
+     * @return {@link WxGenerateUrlLinkResp}
+     */
+    public WxGenerateUrlLinkResp getUrlLink() {
+        String url = "https://api.weixin.qq.com/wxa/generate_urllink?access_token=" + getAccessToken();
+        String res = HttpUtil.postJson(url, new HashMap<>());
+        return JSON.parseObject(res, WxGenerateUrlLinkResp.class);
+    }
+
+    /**
      * 获取接口凭证
      * https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
      *
