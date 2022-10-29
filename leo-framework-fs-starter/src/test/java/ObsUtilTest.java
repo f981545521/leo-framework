@@ -16,5 +16,7 @@ public class ObsUtilTest {
         OBSUtil obsUtil = new OBSUtil(obsProperty);
         List<String> strings = obsUtil.listBuckets();
         System.out.println(strings);
+        obsUtil.uploadURL("xxx-dev", "xxx/0/1.wav", "http://xxx.xx.xx/xx/xxx.wav");
+        System.out.println("ok");
     }
 }

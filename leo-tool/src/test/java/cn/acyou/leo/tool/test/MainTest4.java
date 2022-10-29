@@ -1,9 +1,6 @@
 package cn.acyou.leo.tool.test;
 
-import cn.acyou.leo.framework.util.Calculator;
-import cn.acyou.leo.framework.util.DateUtil;
-import cn.acyou.leo.framework.util.HttpClientUtil;
-import cn.acyou.leo.framework.util.HttpUtil2;
+import cn.acyou.leo.framework.util.*;
 import com.google.common.io.Resources;
 import info.monitorenter.cpdetector.io.*;
 import org.apache.http.HttpResponse;
@@ -32,6 +29,23 @@ import java.util.Date;
  * @version [1.0.0, 2022/8/30 9:40]
  **/
 public class MainTest4 {
+    @Test
+    public void test123423() throws Exception {
+        //File file = new File("C:\\Users\\1\\Videos\\resources\\target\\111.txt");
+        //PrintWriter printWriter = new PrintWriter(file);
+        //printWriter.write("你好");
+        //printWriter.flush();
+        //FileUtil.writeString("你好", file, StandardCharsets.UTF_8);
+        System.out.println(FileUtil.getNamePrefix("C:\\Users\\1\\Videos\\resources\\target\\111.txt"));
+        System.out.println(FileUtil.getFullPath("C:\\Users\\1\\Videos\\resources\\target\\111.txt"));
+        System.out.println(FileUtil.getFullPathNoEndSeparator("C:\\Users\\1\\Videos\\resources\\target\\111.txt"));
+        System.out.println(FileUtil.getBaseName("C:\\Users\\1\\Videos\\resources\\target\\111.txt"));
+        System.out.println(FileUtil.getName("C:\\Users\\1\\Videos\\resources\\target\\111.txt"));
+        System.out.println(FileUtil.extName("C:\\Users\\1\\Videos\\resources\\target\\111.txt"));
+        System.out.println(FileUtil.getPrefix("C:\\Users\\1\\Videos\\resources\\target\\111.txt"));
+    }
+
+
     public static void main(String[] args) throws Exception {
         //String s = HttpUtil.get("https://www.fastmock.site/mock/5039c4361c39a7e3252c5b55971f1bd3/api/demo/list?page=1&pageSize=20&_=1661823663208");
         //System.out.println(s);
