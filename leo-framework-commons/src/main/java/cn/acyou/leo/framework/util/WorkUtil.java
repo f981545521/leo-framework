@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util;
 
+import cn.acyou.leo.framework.util.function.CallTask;
 import cn.acyou.leo.framework.util.function.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StopWatch;
@@ -95,6 +96,27 @@ public class WorkUtil {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+    }
+
+    /**
+     * 重试工作
+     *
+     * @param times 次
+     * @param task  任务
+     * @return {@link T}
+     */
+    public static <T> T doRetryWork(int times, CallTask<T> task) {
+        int currentTime = 0;
+        while (currentTime < times) {
+            try {
+                return task.run();
+            } catch (Exception e) {
+                log.error("doRetryWorkError 执行任务出错", e);
+                currentTime++;
+                trySleep(2000);
+            }
+        }
+        return null;
     }
 
     public static void watch(Task task) {
