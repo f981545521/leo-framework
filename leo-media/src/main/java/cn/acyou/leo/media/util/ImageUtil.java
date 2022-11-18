@@ -74,4 +74,29 @@ public class ImageUtil {
         os.close();
     }
 
+    /**
+     * 得到图片信息
+     *
+     * @param source 源
+     * @return {@link ImageInfo}
+     * @throws Exception 异常
+     */
+    public static ImageInfo getImageInfo(String source) throws Exception {
+        ImageInfo imageInfo = new ImageInfo();
+        // 图片对象
+        BufferedImage bufferedImage = null;
+        if (source.startsWith("http")) {
+            URL url = new URL(source);
+            URLConnection c = url.openConnection();
+            imageInfo.setSize(c.getContentLength());
+            bufferedImage = ImageIO.read(c.getInputStream());
+        } else {
+            File file = new File(source);
+            imageInfo.setSize(file.length());
+            bufferedImage = ImageIO.read(new FileInputStream(file));
+        }
+        imageInfo.setHeight(bufferedImage.getHeight());
+        imageInfo.setWidth(bufferedImage.getWidth());
+        return imageInfo;
+    }
 }
