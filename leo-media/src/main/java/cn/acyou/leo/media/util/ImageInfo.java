@@ -22,7 +22,10 @@ public class ImageInfo implements Serializable {
      * 宽
      */
     private int width;
-
+    /**
+     * 文件后缀名(jpg、png、jpeg)
+     */
+    private String type;
 
     public long getSize() {
         return size;
@@ -48,6 +51,13 @@ public class ImageInfo implements Serializable {
         this.width = width;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @Override
     public String toString() {
@@ -55,6 +65,7 @@ public class ImageInfo implements Serializable {
                 "size=" + size +
                 ", height=" + height +
                 ", width=" + width +
+                ", type='" + type + '\'' +
                 '}';
     }
 }

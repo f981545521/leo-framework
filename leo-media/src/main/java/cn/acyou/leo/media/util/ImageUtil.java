@@ -84,19 +84,24 @@ public class ImageUtil {
     public static ImageInfo getImageInfo(String source) throws Exception {
         ImageInfo imageInfo = new ImageInfo();
         // 图片对象
-        BufferedImage bufferedImage = null;
+        BufferedImage image;
         if (source.startsWith("http")) {
             URL url = new URL(source);
             URLConnection c = url.openConnection();
             imageInfo.setSize(c.getContentLength());
-            bufferedImage = ImageIO.read(c.getInputStream());
+            image = ImageIO.read(c.getInputStream());
         } else {
             File file = new File(source);
             imageInfo.setSize(file.length());
-            bufferedImage = ImageIO.read(new FileInputStream(file));
+            image = ImageIO.read(new FileInputStream(file));
         }
-        imageInfo.setHeight(bufferedImage.getHeight());
-        imageInfo.setWidth(bufferedImage.getWidth());
+        imageInfo.setHeight(image.getHeight());
+        imageInfo.setWidth(image.getWidth());
+        String type = "";
+        if (source.lastIndexOf(".") > 0) {
+            type = source.substring(source.lastIndexOf(".") + 1);
+        }
+        imageInfo.setType(type);
         return imageInfo;
     }
 }
