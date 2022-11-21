@@ -23,6 +23,15 @@ public interface Mapper<T> extends BaseMapper<T> {
     /**
      * 插入数据，当where sql 未查到的时候
      *
+     * <pre>
+     *  Dict dict = new Dict();
+     *  dict.setCode("unit");
+     *  dict.setParentId(0L);
+     *  dict.setName("单位");
+     *  dict.setStatus(0);
+     *  int i = dictMapper.insertWhereNotExist(dict, "select name from t_dict where id = 21560");
+     * </pre>
+     *
      * @param entity 实体类
      * @return 影响条数
      */
