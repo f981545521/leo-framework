@@ -3,7 +3,10 @@ package cn.acyou.leo.framework.downloader;
 import cn.acyou.leo.framework.downloader.ext.ByteArrayResponseExtractor;
 import cn.acyou.leo.framework.downloader.support.DownloadProgressPrinter;
 import cn.acyou.leo.framework.downloader.utils.RestTemplateBuilder;
+import cn.acyou.leo.framework.util.UrlUtil;
 import cn.acyou.leo.framework.util.function.Task;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.HttpEntity;
@@ -16,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
@@ -115,13 +119,24 @@ public class DownloadUtil {
         Files.write(Paths.get(fileFullPath), Objects.requireNonNull(body));
     }
 
+    public static void downloadUseHutool(String url, String dir, String fileName){
+        if (fileName == null || fileName.length() == 0) {
+            fileName = UrlUtil.getName(url);
+        }
+        HttpResponse response = HttpUtil.createGet(url, true)
+                .setProxy(proxy)
+                .timeout(18000).executeAsync();
+        final File file = response.completeFileNameFromHeader(new File(dir, fileName));
+        response.writeBody(file);
+    }
+
     public static void downloadUseJdk(String url, String dir, String fileName) throws Exception {
         URL downloadUrl = new URL(url);
         URLConnection connection = null;
         if (proxy != null) {
-            downloadUrl.openConnection(proxy);
+            connection = downloadUrl.openConnection(proxy);
         } else {
-            downloadUrl.openConnection();
+            connection = downloadUrl.openConnection();
         }
         connection.setConnectTimeout(60000);
         connection.setReadTimeout(60000);
@@ -131,7 +146,7 @@ public class DownloadUtil {
             boolean mkdirs = file.mkdirs();
         }
         if (fileName == null || fileName.length() == 0) {
-            fileName = url.substring(url.lastIndexOf("/") + 1);
+            fileName = UrlUtil.getName(url);
         }
         FileOutputStream out = new FileOutputStream(file + "\\" + fileName);
         IOUtils.copyLarge(in, out);
@@ -147,7 +162,7 @@ public class DownloadUtil {
             CompletableFuture<?> completableFuture = CompletableFuture
                     .runAsync(() -> {
                         try {
-                            downloadUseJdk(sourceUrl, dir, null);
+                            downloadUseHutool(sourceUrl, dir, null);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
                         }
@@ -160,6 +175,15 @@ public class DownloadUtil {
         });
         completableFuture.join();
         executorService.shutdown();
+    }
+
+    public static void main(String[] args) throws Exception {
+        String url = "https://acyou.cn/20221121/H5SdYccT/1000kb/hls/YqV4yCnf.ts";
+        HttpResponse response = HttpUtil.createGet(url, true)
+                .setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 10800)))
+                .timeout(18000).executeAsync();
+        final File file = response.completeFileNameFromHeader(new File("D:\\temp\\YqV4yCnf.ts"));
+        response.writeBody(file);
     }
 
     //public static void main(String[] args) {
