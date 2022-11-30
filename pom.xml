@@ -13,7 +13,7 @@
     <groupId>cn.acyou</groupId>
     <artifactId>leo-framework</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.0.RELEASE</version>
+    <version>1.4.1.RELEASE</version>
     <name>leo-framework</name>
     <description>
         Leo-Framework 顶级POM
@@ -53,13 +53,14 @@
         <module>leo-framework-commons</module>
         <module>leo-framework-commons-dubbo</module>
         <module>leo-framework-dto</module>
-        <module>leo-gateway</module>
-        <module>leo-media</module>
-        <module>leo-pay</module>
+        <module>leo-framework-media</module>
         <module>leo-framework-generator</module>
         <module>leo-framework-wx-starter</module>
         <module>leo-framework-retrofit-starter</module>
         <module>leo-framework-push-starter</module>
+        <module>leo-gateway</module>
+        <module>leo-media</module>
+        <module>leo-pay</module>
         <module>leo-tool</module>
     </modules>
 

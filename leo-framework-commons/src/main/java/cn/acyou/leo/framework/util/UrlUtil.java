@@ -224,11 +224,49 @@ public class UrlUtil {
      * @param params 参数个数
      * @return {@link String}
      */
-    public static String append(String url, Map<String, ?> params){
+    public static String append(String url, Map<String, ?> params) {
         for (Map.Entry<String, ?> entry : params.entrySet()) {
             url = append(url, entry.getKey(), entry.getValue().toString());
         }
         return url;
+    }
+
+    /**
+     * 获取网址的Host
+     * <pre>
+     *  https://sale.vmall.com/ttt/huaweizone.html?cid=10618
+     *   -> sale.vmall.com
+     * </pre>
+     *
+     * @param url 网址
+     * @return Host
+     */
+    public static String getHost(String url) {
+        try {
+            URL url1 = new URL(url);
+            return url1.getHost();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    /**
+     * 获取网址的 Http://Host
+     * <pre>
+     *  https://sale.vmall.com/ttt/huaweizone.html?cid=10618
+     *   -> https://sale.vmall.com
+     * </pre>
+     *
+     * @param url 网址
+     * @return Host
+     */
+    public static String getProtocolHost(String url) {
+        try {
+            URL url1 = new URL(url);
+            return url1.getProtocol() + "://" + url1.getHost();
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**
@@ -237,6 +275,7 @@ public class UrlUtil {
      *  https://sale.vmall.com/ttt/huaweizone.html?cid=10618
      *   -> /ttt/huaweizone.html
      * </pre>
+     *
      * @param url 网址
      * @return pathname
      */

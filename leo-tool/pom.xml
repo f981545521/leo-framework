@@ -5,7 +5,7 @@
     <parent>
         <artifactId>leo-framework</artifactId>
         <groupId>cn.acyou</groupId>
-        <version>1.4.0.RELEASE</version>
+        <version>1.4.1.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-commons</artifactId>
-            <version>1.4.0.RELEASE</version>
+            <version>1.4.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-generator</artifactId>
-            <version>1.4.0.RELEASE</version>
+            <version>1.4.1.RELEASE</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -63,12 +63,12 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-retrofit-starter</artifactId>
-            <version>1.4.0.RELEASE</version>
+            <version>1.4.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-fs-starter</artifactId>
-            <version>1.4.0.RELEASE</version>
+            <version>1.4.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
