@@ -3,7 +3,6 @@ package cn.acyou.leo.framework.downloader;
 import cn.acyou.leo.framework.downloader.ext.ByteArrayResponseExtractor;
 import cn.acyou.leo.framework.downloader.support.DownloadProgressPrinter;
 import cn.acyou.leo.framework.downloader.utils.RestTemplateBuilder;
-import cn.acyou.leo.framework.util.UrlUtil;
 import cn.acyou.leo.framework.util.function.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -133,8 +132,7 @@ public class DownloadUtil {
             CompletableFuture<?> completableFuture = CompletableFuture
                     .runAsync(() -> {
                         try {
-                            String fileName = UrlUtil.getBaseName(sourceUrl);
-                            downloadUseJdk(sourceUrl, dir, fileName + ".ts");
+                            downloadUseJdk(sourceUrl, dir, null);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
                         }
