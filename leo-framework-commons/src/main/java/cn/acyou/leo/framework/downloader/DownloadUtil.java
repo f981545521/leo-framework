@@ -9,12 +9,14 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -35,14 +37,22 @@ import java.util.concurrent.Executors;
 public class DownloadUtil {
     private static final RestTemplate restTemplate;
     private static final DownloadProgressPrinter downloadProgressPrinter;
+    private static Proxy proxy;
 
     static {
         restTemplate = RestTemplateBuilder.builder().build();
         downloadProgressPrinter = DownloadProgressPrinter.defaultDownloadProgressPrinter();
     }
 
-    private DownloadUtil(){
+    private DownloadUtil() {
 
+    }
+
+    public static void setProxy(Proxy proxy) {
+        DownloadUtil.proxy = proxy;
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setProxy(proxy);
+        restTemplate.setRequestFactory(requestFactory);
     }
 
     /**
@@ -107,7 +117,12 @@ public class DownloadUtil {
 
     public static void downloadUseJdk(String url, String dir, String fileName) throws Exception {
         URL downloadUrl = new URL(url);
-        URLConnection connection = downloadUrl.openConnection();
+        URLConnection connection = null;
+        if (proxy != null) {
+            downloadUrl.openConnection(proxy);
+        } else {
+            downloadUrl.openConnection();
+        }
         connection.setConnectTimeout(60000);
         connection.setReadTimeout(60000);
         InputStream in = connection.getInputStream();
