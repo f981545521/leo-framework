@@ -463,10 +463,10 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         if (header.length > 0) {
             try (RandomAccessFile src = new RandomAccessFile(filePath, "rw")) {
                 int srcLength = (int) src.length();
-                // 略过前两个字节
+                // 略过length个字节
                 src.skipBytes(header.length);
                 byte[] buff = new byte[srcLength - header.length];
-                // 读取除前两个字节之后的字节
+                // 读取除前length个字节之后的字节
                 src.read(buff);
                 src.seek(0);
                 src.write(header);
