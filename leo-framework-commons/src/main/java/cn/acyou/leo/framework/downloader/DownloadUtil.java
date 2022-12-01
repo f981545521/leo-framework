@@ -53,6 +53,11 @@ public class DownloadUtil {
 
     }
 
+    /**
+     * 为本类设置代理
+     *
+     * @param proxy 代理
+     */
     public static void setProxy(Proxy proxy) {
         DownloadUtil.proxy = proxy;
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
@@ -152,7 +157,7 @@ public class DownloadUtil {
             fileName = UrlUtil.getName(url);
         }
         URL downloadUrl = new URL(url);
-        URLConnection connection = null;
+        URLConnection connection;
         if (proxy != null) {
             connection = downloadUrl.openConnection(proxy);
         } else {
@@ -172,6 +177,14 @@ public class DownloadUtil {
         out.close();
     }
 
+    /**
+     * 使用多线程下载多文件
+     *
+     * @param sourceUrls 源地址
+     * @param dir        目标目录
+     * @param threadNum  线程数
+     * @param task       回调函数
+     */
     public static void downloadMultiFile(List<String> sourceUrls, String dir, int threadNum, Task task) {
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
         List<CompletableFuture<?>> futureList = new ArrayList<>();
@@ -191,9 +204,7 @@ public class DownloadUtil {
                 futureList.add(completableFuture);
             }
             CompletableFuture<Void> completableFuture = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
-            completableFuture.whenComplete((o, e) -> {
-                task.run();
-            });
+            completableFuture.whenComplete((o, e) -> task.run());
             completableFuture.join();
             executorService.shutdown();
             log.info("多线程下载任务执行结束");
@@ -201,13 +212,12 @@ public class DownloadUtil {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        String url = "https://vipmp4i.vodfile.m1905.com/202212021048/b90507f1aa225fbdb02fcacb0118f1d1/video/2022/08/26/v202208267231O6PORJB98FZF/v202208267231O6PORJB98FZF.mp4";
-        //downloadUseHutool(url, "D:\\temp\\", UrlUtil.getName(url));
-        //downloadUseJdk(url, "D:\\temp\\", UrlUtil.getName(url));
-        downloadFile(url, "D:\\temp\\", UrlUtil.getName(url));
-
-    }
+    //public static void main(String[] args) throws Exception {
+    //    String url = "https://vipmp4i.vodfile.m1905.com/202212021048/b90507f1aa225fbdb02fcacb0118f1d1/video/2022/08/26/v202208267231O6PORJB98FZF/v202208267231O6PORJB98FZF.mp4";
+    //    //downloadUseHutool(url, "D:\\temp\\", UrlUtil.getName(url));
+    //    //downloadUseJdk(url, "D:\\temp\\", UrlUtil.getName(url));
+    //    downloadFile(url, "D:\\temp\\", UrlUtil.getName(url));
+    //}
 
     //public static void main(String[] args) {
     //    List<String> sourceUrls = new ArrayList<>();
