@@ -196,7 +196,9 @@ public class DownloadUtil {
                             try {
                                 ThreadPoolExecutor executor = (ThreadPoolExecutor) executorService;
                                 log.info("当前下载：{} 剩余任务：{}", sourceUrl, executor.getQueue().size());
-                                downloadUseHutool(sourceUrl, dir, null);
+                                WorkUtil.doRetryWork(3, ()->{
+                                    downloadUseHutool(sourceUrl, dir, null);
+                                });
                             } catch (Exception e) {
                                 log.error(e.getMessage(), e);
                             }
