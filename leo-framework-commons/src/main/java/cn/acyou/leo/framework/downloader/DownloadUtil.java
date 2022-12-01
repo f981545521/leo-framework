@@ -4,6 +4,7 @@ import cn.acyou.leo.framework.downloader.ext.ByteArrayResponseExtractor;
 import cn.acyou.leo.framework.downloader.support.DownloadProgressPrinter;
 import cn.acyou.leo.framework.downloader.utils.RestTemplateBuilder;
 import cn.acyou.leo.framework.util.UrlUtil;
+import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.framework.util.function.Task;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
@@ -19,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
@@ -32,6 +32,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author fangyou
@@ -158,31 +159,39 @@ public class DownloadUtil {
     public static void downloadMultiFile(List<String> sourceUrls, String dir, int threadNum, Task task) {
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
         List<CompletableFuture<?>> futureList = new ArrayList<>();
-        for (String sourceUrl : sourceUrls) {
-            CompletableFuture<?> completableFuture = CompletableFuture
-                    .runAsync(() -> {
-                        try {
-                            downloadUseHutool(sourceUrl, dir, null);
-                        } catch (Exception e) {
-                            log.error(e.getMessage(), e);
-                        }
-                    }, executorService);
-            futureList.add(completableFuture);
-        }
-        CompletableFuture<Void> completableFuture = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
-        completableFuture.whenComplete((o, e) -> {
-            task.run();
+        WorkUtil.watch(() -> {
+            log.info("多线程下载任务执行开始 -> 任务数：{} 线程数：{}", sourceUrls.size(), threadNum);
+            for (String sourceUrl : sourceUrls) {
+                CompletableFuture<?> completableFuture = CompletableFuture
+                        .runAsync(() -> {
+                            try {
+                                ThreadPoolExecutor executor = (ThreadPoolExecutor) executorService;
+                                log.info("当前下载：{} 剩余任务：{}", sourceUrl, executor.getQueue().size());
+                                downloadUseHutool(sourceUrl, dir, null);
+                            } catch (Exception e) {
+                                log.error(e.getMessage(), e);
+                            }
+                        }, executorService);
+                futureList.add(completableFuture);
+            }
+            CompletableFuture<Void> completableFuture = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
+            completableFuture.whenComplete((o, e) -> {
+                task.run();
+            });
+            completableFuture.join();
+            executorService.shutdown();
+            log.info("多线程下载任务执行结束");
         });
-        completableFuture.join();
-        executorService.shutdown();
+
     }
 
     public static void main(String[] args) throws Exception {
-        String url = "https://acyou.cn/20221121/H5SdYccT/1000kb/hls/YqV4yCnf.ts";
+        String url = "https://vipmp4i.vodfile.m1905.com/202212021048/b90507f1aa225fbdb02fcacb0118f1d1/video/2022/08/26/v202208267231O6PORJB98FZF/v202208267231O6PORJB98FZF.mp4";
         HttpResponse response = HttpUtil.createGet(url, true)
-                .setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 10800)))
-                .timeout(18000).executeAsync();
-        final File file = response.completeFileNameFromHeader(new File("D:\\temp\\YqV4yCnf.ts"));
+                //.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 10800)))
+                .timeout(1000 * 60 * 10)
+                .executeAsync();
+        final File file = response.completeFileNameFromHeader(new File("D:\\temp\\", UrlUtil.getName(url)));
         response.writeBody(file);
     }
 

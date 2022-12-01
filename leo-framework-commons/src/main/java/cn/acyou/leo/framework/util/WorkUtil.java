@@ -121,9 +121,10 @@ public class WorkUtil {
 
     public static void watch(Task task) {
         StopWatch stopWatch = new StopWatch();
+        log.info("任务耗时监控 开始 -> ...");
         stopWatch.start();
         task.run();
         stopWatch.stop();
-        log.info("StopWatch任务耗时：{}", stopWatch.getTotalTimeMillis());
+        log.info("任务耗时监控 结束 <- 耗时：{}ms", stopWatch.getTotalTimeMillis());
     }
 }
