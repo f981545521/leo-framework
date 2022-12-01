@@ -6,6 +6,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.util.FileSystemUtils;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -530,6 +531,30 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
             return false;
         }
         return videoTypes.contains(extName.toLowerCase());
+    }
+
+    /**
+     * 写文件
+     *
+     * @param file    文件
+     * @param charset 字符集
+     * @return {@link BufferedWriter}
+     * @throws FileNotFoundException 文件未发现异常
+     */
+    public static BufferedWriter newWriter(File file, Charset charset) throws FileNotFoundException {
+        return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset));
+    }
+
+    /**
+     * 读文件
+     *
+     * @param file    文件
+     * @param charset 字符集
+     * @return {@link BufferedReader}
+     * @throws FileNotFoundException 文件未发现异常
+     */
+    public static BufferedReader newReader(File file, Charset charset) throws FileNotFoundException {
+        return new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
     }
 
     public static void main(String[] args) throws Exception {
