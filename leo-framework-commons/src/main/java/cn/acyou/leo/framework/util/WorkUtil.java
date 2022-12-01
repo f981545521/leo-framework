@@ -124,20 +124,19 @@ public class WorkUtil {
      *
      * @param times 次
      * @param task  任务
-     * @return {@link T}
      */
-    public static <T> T doRetryWork(int times, Task task) {
+    public static void doRetryWork(int times, Task task) {
         int currentTime = 0;
         while (currentTime < times) {
             try {
                 task.run();
+                return;
             } catch (Exception e) {
                 log.error("doRetryWorkError 执行任务出错", e);
                 currentTime++;
                 trySleep(2000);
             }
         }
-        return null;
     }
 
     public static void watch(Task task) {
