@@ -120,18 +120,37 @@ public class DownloadUtil {
         Files.write(Paths.get(fileFullPath), Objects.requireNonNull(body));
     }
 
-    public static void downloadUseHutool(String url, String dir, String fileName){
+    /**
+     * 下载使用hutool
+     *
+     * @param url      url
+     * @param dir      dir
+     * @param fileName 文件名称
+     */
+    public static void downloadUseHutool(String url, String dir, String fileName) {
         if (fileName == null || fileName.length() == 0) {
             fileName = UrlUtil.getName(url);
         }
         HttpResponse response = HttpUtil.createGet(url, true)
                 .setProxy(proxy)
-                .timeout(18000).executeAsync();
+                .timeout(1000 * 60 * 10)
+                .executeAsync();
         final File file = response.completeFileNameFromHeader(new File(dir, fileName));
         response.writeBody(file);
     }
 
+    /**
+     * 下载使用jdk
+     *
+     * @param url      url
+     * @param dir      dir
+     * @param fileName 文件名称
+     * @throws Exception 异常
+     */
     public static void downloadUseJdk(String url, String dir, String fileName) throws Exception {
+        if (fileName == null || fileName.length() == 0) {
+            fileName = UrlUtil.getName(url);
+        }
         URL downloadUrl = new URL(url);
         URLConnection connection = null;
         if (proxy != null) {
@@ -145,9 +164,6 @@ public class DownloadUtil {
         File file = new File(dir);
         if (!file.exists()) {
             boolean mkdirs = file.mkdirs();
-        }
-        if (fileName == null || fileName.length() == 0) {
-            fileName = UrlUtil.getName(url);
         }
         FileOutputStream out = new FileOutputStream(file + "\\" + fileName);
         IOUtils.copyLarge(in, out);
@@ -187,12 +203,10 @@ public class DownloadUtil {
 
     public static void main(String[] args) throws Exception {
         String url = "https://vipmp4i.vodfile.m1905.com/202212021048/b90507f1aa225fbdb02fcacb0118f1d1/video/2022/08/26/v202208267231O6PORJB98FZF/v202208267231O6PORJB98FZF.mp4";
-        HttpResponse response = HttpUtil.createGet(url, true)
-                //.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 10800)))
-                .timeout(1000 * 60 * 10)
-                .executeAsync();
-        final File file = response.completeFileNameFromHeader(new File("D:\\temp\\", UrlUtil.getName(url)));
-        response.writeBody(file);
+        //downloadUseHutool(url, "D:\\temp\\", UrlUtil.getName(url));
+        //downloadUseJdk(url, "D:\\temp\\", UrlUtil.getName(url));
+        downloadFile(url, "D:\\temp\\", UrlUtil.getName(url));
+
     }
 
     //public static void main(String[] args) {
