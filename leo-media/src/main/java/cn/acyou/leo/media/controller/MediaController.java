@@ -1,7 +1,7 @@
 package cn.acyou.leo.media.controller;
 
-import cn.acyou.leo.media.encoder.ExecProcess;
-import cn.acyou.leo.media.encoder.MediaUtil;
+import cn.acyou.leo.framework.media.encoder.ExecProcess;
+import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;

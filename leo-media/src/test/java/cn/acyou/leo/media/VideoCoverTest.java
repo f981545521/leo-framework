@@ -1,6 +1,6 @@
 package cn.acyou.leo.media;
 
-import cn.acyou.leo.media.encoder.MediaUtil;
+import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

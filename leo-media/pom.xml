@@ -25,27 +25,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ws.schild</groupId>
-            <artifactId>jave-core</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>ws.schild</groupId>
-            <artifactId>jave-nativebin-win64</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>ws.schild</groupId>
-            <artifactId>jave-nativebin-linux64</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>cn.acyou</groupId>
+            <artifactId>leo-framework-media</artifactId>
+            <version>1.4.1.RELEASE</version>
         </dependency>
     </dependencies>
 
