@@ -45,11 +45,7 @@ public class ASRUtil {
 
     public ASRUtil(String accessKeyId, String accessKeySecret) {
         // 设置endpoint
-        try {
-            DefaultProfile.addEndpoint(ENDPOINTNAME, REGIONID, PRODUCT, DOMAIN);
-        } catch (ClientException e) {
-            log.error(e.getErrMsg(), e);
-        }
+        DefaultProfile.addEndpoint(REGIONID, PRODUCT, ENDPOINTNAME);
         // 创建DefaultAcsClient实例并初始化
         DefaultProfile profile = DefaultProfile.getProfile(REGIONID, accessKeyId, accessKeySecret);
         this.client = new DefaultAcsClient(profile);
@@ -61,13 +57,13 @@ public class ASRUtil {
          */
         CommonRequest postRequest = new CommonRequest();
         // 设置域名
-        postRequest.setDomain(DOMAIN);
+        postRequest.setSysDomain(DOMAIN);
         // 设置API的版本号，格式为YYYY-MM-DD。
-        postRequest.setVersion(API_VERSION);
+        postRequest.setSysVersion(API_VERSION);
         // 设置action
-        postRequest.setAction(POST_REQUEST_ACTION);
+        postRequest.setSysAction(POST_REQUEST_ACTION);
         // 设置产品名称
-        postRequest.setProduct(PRODUCT);
+        postRequest.setSysProduct(PRODUCT);
         /*
          * 2. 设置录音文件识别请求参数，以JSON字符串的格式设置到请求Body中。
          */
@@ -85,7 +81,7 @@ public class ASRUtil {
         // 设置以上JSON字符串为Body参数。
         postRequest.putBodyParameter(KEY_TASK, task);
         // 设置为POST方式的请求。
-        postRequest.setMethod(MethodType.POST);
+        postRequest.setSysMethod(MethodType.POST);
         /*
          * 3. 提交录音文件识别请求，获取录音文件识别请求任务的ID，以供识别结果查询使用。
          */
@@ -112,17 +108,17 @@ public class ASRUtil {
          */
         CommonRequest getRequest = new CommonRequest();
         // 设置域名
-        getRequest.setDomain(DOMAIN);
+        getRequest.setSysDomain(DOMAIN);
         // 设置API版本
-        getRequest.setVersion(API_VERSION);
+        getRequest.setSysVersion(API_VERSION);
         // 设置action
-        getRequest.setAction(GET_REQUEST_ACTION);
+        getRequest.setSysAction(GET_REQUEST_ACTION);
         // 设置产品名称
-        getRequest.setProduct(PRODUCT);
+        getRequest.setSysProduct(PRODUCT);
         // 设置任务ID为查询参数
         getRequest.putQueryParameter(KEY_TASK_ID, taskId);
         // 设置为GET方式的请求
-        getRequest.setMethod(MethodType.GET);
+        getRequest.setSysMethod(MethodType.GET);
         /*
          * 2. 提交录音文件识别结果查询请求
          * 以轮询的方式进行识别结果的查询，直到服务端返回的状态描述为“SUCCESS”或错误描述，则结束轮询。
