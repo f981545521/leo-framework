@@ -4,6 +4,12 @@ server:
     context-path: '/leo-tool'
   tomcat:
     max-http-form-post-size: -1 #Tomcat不限制文件大小
+  compression:
+    # 开启 Controller 使用GZIP数据压缩
+    enabled: true
+    mime-types: application/javascript,text/css,application/json,application/xml,text/html,text/xml,text/plain
+    # 开启了 gzip 压缩，但是需要注意并不是说所有的接口都会使用 gzip 压缩，默认情况下，仅会压缩 `1024` 字节以上的内容
+    min-response-size: 1024
 spring:
   profiles:
     active: dev
