@@ -29,6 +29,14 @@ public class CommonService {
         log.info("运行结束");
     }
 
+    /**
+     * service层处理并发事务加锁可能会无效
+     * 由于spring事务是通过AOP实现的，所以在startSeckillLock()方法执行之前会开启事务，之后会有提交事务的逻辑。而lock的动作是发生在事务之内。
+     * 数据库默认的事务隔离级别为可重复读（repeatable-read）。因为是事务先开启后加锁，
+     * 隔离级别为可重复读的情况下，当前线程是读取不到其他线程更新的数据，
+     * 也就是说其他线程虽然更新了库存且事务也提交了，但是因为当前线程已经开启了事务（可重复读的隔离级别）
+     */
+
     //使用synchronized + 对象 来实现锁不同KEY
     private Object KEY = "";
 
