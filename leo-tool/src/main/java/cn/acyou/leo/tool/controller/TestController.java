@@ -11,6 +11,8 @@ import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.common.AsyncService;
 import cn.acyou.leo.tool.service.common.CommonService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,5 +202,16 @@ public class TestController {
     public Result<Void> testSynchronized(DictVo dictVo) {
         commonService8888.testSynchronized(dictVo);
         return Result.success();
+    }
+
+    @ApiOperation("请求并保持 一直到返回结果(非null)")
+    @GetMapping("getWithKeep")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "waitTime", value = "等待时间", required = true, dataType = "long", example = "3000"),
+            @ApiImplicitParam(name = "interval", value = "执行间隔", required = true, dataType = "long", example = "1000")
+    })
+    public Result<String> getWithKeep(long waitTime, long interval) {
+        String res = commonService8888.getWithKeep(waitTime, interval);
+        return Result.success(res);
     }
 }

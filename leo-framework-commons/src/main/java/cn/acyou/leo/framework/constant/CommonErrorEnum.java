@@ -28,6 +28,7 @@ public enum CommonErrorEnum implements ErrorEnum {
     E_PARAM_VALID_ERROR(101006, "请求参数校验错误，请检查！"),
     CONCURRENT_ERROR(101007, "正在处理中，请稍后..."),
     BAD_SQL_ERROR(101008, "SQL语法错误，请检查！"),
+    NO_WAIT_RESULT_ERROR(101009, "未查询到结果！"),
     /**
      * 登录
      */

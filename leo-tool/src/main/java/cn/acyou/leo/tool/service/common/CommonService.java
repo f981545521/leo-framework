@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.service.common;
 
 import cn.acyou.leo.framework.advisor.RedisLock;
 import cn.acyou.leo.framework.exception.RetryLaterException;
+import cn.acyou.leo.framework.util.RandomUtil;
 import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.tool.dto.dict.DictVo;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,24 @@ public class CommonService {
         log.info("testSynchronized start...");
         WorkUtil.trySleep(3000);
         log.info("testSynchronized end.");
+    }
+
+    /**
+     * 获得与保持
+     *
+     * @param waitTime 等待时间
+     * @param interval
+     * @return {@link String}
+     */
+    public String getWithKeep(long waitTime, long interval) {
+        return WorkUtil.doWaitWork(waitTime, interval, () -> {
+            int i = RandomUtil.nextInt(100000);
+            log.info("执行获取随机值：" + i);
+            if (i > 99000) {
+                return i + "";
+            }
+            return null;
+        });
     }
 
 

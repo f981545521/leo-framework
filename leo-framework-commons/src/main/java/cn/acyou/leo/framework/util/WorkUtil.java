@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import cn.acyou.leo.framework.constant.CommonErrorEnum;
+import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.util.function.CallTask;
 import cn.acyou.leo.framework.util.function.Task;
 import lombok.extern.slf4j.Slf4j;
@@ -146,5 +148,25 @@ public class WorkUtil {
         task.run();
         stopWatch.stop();
         log.info("任务耗时监控 结束 <- 耗时：{}ms", stopWatch.getTotalTimeMillis());
+    }
+
+    public static <T> T doWaitWork(long waitTimeout, long interval, CallTask<T> task) {
+        final long deadline = System.currentTimeMillis() + waitTimeout;
+        if (waitTimeout <= 0L) {
+            return task.run();
+        }
+        try {
+            do {
+                T r = task.run();
+                if (r != null) {
+                    return r;
+                }
+                trySleep(Math.min(interval, deadline - System.currentTimeMillis()));
+            } while (System.currentTimeMillis() < deadline);
+        } catch (Exception e) {
+            log.error("内部方法发生错误", e);
+            return null;
+        }
+        throw new ServiceException(CommonErrorEnum.NO_WAIT_RESULT_ERROR);
     }
 }
