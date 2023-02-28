@@ -1,8 +1,12 @@
 package cn.acyou.leo.tool.dto.dict;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author youfang
@@ -35,4 +39,10 @@ public class DictVo implements Serializable {
      * 状态:  1-正常
      */
     private Integer status;
+
+    @ApiModelProperty(value = "创建时间，默认当前创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
 }

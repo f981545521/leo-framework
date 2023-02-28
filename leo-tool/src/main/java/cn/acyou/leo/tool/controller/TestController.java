@@ -214,4 +214,12 @@ public class TestController {
         String res = commonService8888.getWithKeep(waitTime, interval);
         return Result.success(res);
     }
+
+
+    @ApiOperation(value = "测试GET传时间参数", notes = "需要使用：@DateTimeFormat(pattern = \"yyyy-MM-dd HH:mm:ss\")")
+    @GetMapping("testGetDate")
+    public Result<Void> testGetDate(DictVo dictVo) {
+        log.info("GET:{}", dictVo);
+        return Result.success();
+    }
 }
