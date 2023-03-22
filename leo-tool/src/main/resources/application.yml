@@ -29,6 +29,9 @@ spring:
       enabled: true
       max-request-size: 50MB #由Servlet限制文件大小
       resolve-lazily: true
+  #mvc:
+  #  async:
+  #    request-timeout: 20000 # 设置请求超时时间为20000ms即20s
 leo:
   debug:
     interface-call-statistics: false
