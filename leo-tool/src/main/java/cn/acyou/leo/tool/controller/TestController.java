@@ -61,6 +61,13 @@ public class TestController {
         return Result.success();
     }
 
+    @ApiOperation("测试Post大小")
+    @PostMapping("testPostSize")
+    public Result<Void> testPostSize(@RequestBody List<Object> res) {
+        System.out.println(res.size());
+        return Result.success();
+    }
+
     @ApiOperation("测试异常")
     @GetMapping("testException")
     public Result<Void> testException() {
