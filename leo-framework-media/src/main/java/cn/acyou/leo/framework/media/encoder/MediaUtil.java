@@ -518,4 +518,32 @@ public class MediaUtil {
         }
         return video.getSize();
     }
+
+    /**
+     * 垂直翻转（支持 图片/视频）
+     * <p>
+     * ffmpeg.exe -i .\wx.png -vf vflip -y .\wx_1.png
+     *
+     * @param i          输入
+     * @param targetPath 输出目录
+     */
+    public void vflip(String i, String targetPath) {
+        boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
+        log.info("垂直翻转 params:[i:{}, target:{}] 目标目录：{}", i, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        exec("-y", "-i", i, "-vf", "vflip", "-y", targetPath);
+    }
+
+    /**
+     * 水平翻转（支持 图片/视频）
+     * <p>
+     * ffmpeg.exe -i .\wx.png -vf hflip -y .\wx_1.png
+     *
+     * @param i          输入
+     * @param targetPath 输出目录
+     */
+    public void hflip(String i, String targetPath) {
+        boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
+        log.info("水平翻转 params:[i:{}, target:{}] 目标目录：{}", i, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        exec("-y", "-i", i, "-vf", "hflip", "-y", targetPath);
+    }
 }

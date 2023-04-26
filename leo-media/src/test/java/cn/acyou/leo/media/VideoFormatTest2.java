@@ -157,4 +157,10 @@ public class VideoFormatTest2 {
         System.out.println(0 * 60);
     }
 
+    @Test
+    public void test33122() {
+        MediaUtil.instance().hflip("http://qiniu.acyou.cn/video/1.mp4", "D:\\temp\\img\\1_hflip.mp4");
+        System.out.println("ok");
+    }
+
 }
