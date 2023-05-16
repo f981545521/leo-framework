@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.Collections;
  * @author youfang
  * @version [1.0.0, 2020/11/19]
  **/
+@Slf4j
 public class NumberUtil {
     /**
      * 单位进位，中文默认为4位即（万、亿）
@@ -334,5 +336,23 @@ public class NumberUtil {
             nfe.initCause(e);
             throw nfe;
         }
+    }
+
+    public static Integer parseInt(String s) {
+        try {
+            return Integer.valueOf(s);
+        } catch (Exception e) {
+            log.error("转换数字失败：{}", s);
+        }
+        return null;
+    }
+
+    public static Long parseLong(String s) {
+        try {
+            return Long.valueOf(s);
+        } catch (Exception e) {
+            log.error("转换数字失败：{}", s);
+        }
+        return null;
     }
 }
