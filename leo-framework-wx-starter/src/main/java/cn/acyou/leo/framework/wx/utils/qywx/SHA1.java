@@ -1,39 +1,35 @@
-/**
- * 对企业微信发送给企业后台的消息加解密示例代码.
- *
- * @copyright Copyright (c) 1998-2014 Tencent Inc.
- */
-
-// ------------------------------------------------------------------------
-
 package cn.acyou.leo.framework.wx.utils.qywx;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
- * SHA1 class
- *
+ * SHA1 微信签名工具
+ * <p>
  * 计算消息签名接口.
+ * <p>
+ * 对企业微信发送给企业后台的消息加解密示例代码.
  */
 @Slf4j
 public class SHA1 {
 
     /**
      * 用SHA1算法生成安全签名
-     * @param token 票据
+     *
+     * @param token     票据
      * @param timestamp 时间戳
-     * @param nonce 随机字符串
-     * @param encrypt 密文
+     * @param nonce     随机字符串
+     * @param encrypt   密文
      * @return 安全签名
-     * @throws AesException
+     * @throws AesException 异常
      */
     public static String getSHA1(String token, String timestamp, String nonce, String encrypt) throws AesException {
         try {
             String[] array = new String[]{token, timestamp, nonce, encrypt};
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             // 字符串排序
             Arrays.sort(array);
             for (int i = 0; i < 4; i++) {
@@ -45,10 +41,10 @@ public class SHA1 {
             md.update(str.getBytes());
             byte[] digest = md.digest();
 
-            StringBuffer hexstr = new StringBuffer();
+            StringBuilder hexstr = new StringBuilder();
             String shaHex = "";
-            for (int i = 0; i < digest.length; i++) {
-                shaHex = Integer.toHexString(digest[i] & 0xFF);
+            for (byte b : digest) {
+                shaHex = Integer.toHexString(b & 0xFF);
                 if (shaHex.length() < 2) {
                     hexstr.append(0);
                 }
@@ -59,5 +55,55 @@ public class SHA1 {
             log.error(e.getMessage(), e);
             throw new AesException(AesException.ComputeSignatureError);
         }
+    }
+
+    /**
+     * 用SHA1算法验证Token
+     *
+     * @param token     url相关的token
+     * @param timestamp 时间戳
+     * @param nonce     随机数
+     */
+    public static String getSHA1(String token, String timestamp, String nonce) {
+        String[] arr = new String[]{token, timestamp, nonce};
+        Arrays.sort(arr);
+        StringBuilder content = new StringBuilder();
+        for (String s : arr) {
+            content.append(s);
+        }
+        MessageDigest md;
+        String tmpStr = null;
+        try {
+            md = MessageDigest.getInstance("SHA-1");
+            // 将三个参数字符串拼接成一个字符串进行sha1加密
+            byte[] digest = md.digest(content.toString().getBytes());
+            tmpStr = byteToStr(digest);
+        } catch (NoSuchAlgorithmException e) {
+            log.info("错误信息:{}", e.getMessage());
+        }
+        return tmpStr;
+    }
+
+    /**
+     * 将字节数组转换为十六进制字符串
+     */
+    private static String byteToStr(byte[] byteArray) {
+        StringBuilder strDigest = new StringBuilder();
+        for (byte b : byteArray) {
+            strDigest.append(byteToHexStr(b));
+        }
+        return strDigest.toString();
+    }
+
+    /**
+     * 将字节转换为十六进制字符串
+     */
+    private static String byteToHexStr(byte mByte) {
+        char[] Digit = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
+                'B', 'C', 'D', 'E', 'F'};
+        char[] tempArr = new char[2];
+        tempArr[0] = Digit[(mByte >>> 4) & 0X0F];
+        tempArr[1] = Digit[mByte & 0X0F];
+        return new String(tempArr);
     }
 }
