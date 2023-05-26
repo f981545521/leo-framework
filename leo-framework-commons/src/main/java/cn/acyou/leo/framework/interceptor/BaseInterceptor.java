@@ -94,13 +94,13 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         String logMessage = String.format("访问开始 ——> %s [%s %s] ", remoteIp, requestMethod, requestURI);
         String requestBody = "";
         if (leoProperty.isPrintRequestBody()) {
-            if (request.getContentType() != null && request.getContentType().contains("application/json")) {
-                InputStream is = request.getInputStream ();
-                StringBuilder responseStrBuilder = new StringBuilder ();
+            if (request.getContentType() != null && (request.getContentType().contains("application/json") || request.getContentType().contains("xml"))) {
+                InputStream is = request.getInputStream();
+                StringBuilder responseStrBuilder = new StringBuilder();
                 BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
                 String inputStr;
-                while ((inputStr = streamReader.readLine ()) != null){
-                    responseStrBuilder.append (inputStr);
+                while ((inputStr = streamReader.readLine()) != null) {
+                    responseStrBuilder.append(inputStr);
                 }
                 requestBody = responseStrBuilder.toString();
             }
