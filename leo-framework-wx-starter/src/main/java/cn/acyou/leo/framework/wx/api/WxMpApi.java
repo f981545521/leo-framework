@@ -181,6 +181,7 @@ public class WxMpApi {
             String tokenResult = HttpUtil.get("https://api.weixin.qq.com/cgi-bin/token", tokenParams, null);
             WxAccessTokenResp wxAccessTokenResp = JSON.parseObject(tokenResult, WxAccessTokenResp.class);
             if (wxAccessTokenResp.getErrcode() != 0) {
+                log.error("[微信公众号] 获取AccessToken失败：{}", wxAccessTokenResp);
                 throw new WxServiceException(wxAccessTokenResp.getErrmsg());
             }
             return wxAccessTokenResp.getAccess_token();
