@@ -54,6 +54,7 @@ leo:
     contact: youfang
   xss:
     enabled: true
+    excludes: /wx/verifyServer
 # knife4j增强模式
 knife4j:
   enable: true
