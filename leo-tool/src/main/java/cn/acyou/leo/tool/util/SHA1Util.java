@@ -1,4 +1,4 @@
-package cn.acyou.leo.framework.wx.utils.qywx;
+package cn.acyou.leo.tool.util;
 
 import lombok.extern.slf4j.Slf4j;
 
