@@ -83,5 +83,37 @@ public class WxController {
         }
     }
 
+    @ApiOperation("微信服务器 接收微信消息2")
+    @PostMapping(value = "verifyServer2", consumes = {MediaType.TEXT_XML_VALUE}, produces = MediaType.TEXT_XML_VALUE)
+    @ResponseBody
+    public Object verifyServerMessage2(@RequestBody(required = false) DeviceMessage wxMpMsgXml, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        log.info("接收微信消息:{}", wxMpMsgXml);
+        String content = wxMpMsgXml.getContent();
+        String openid = wxMpMsgXml.getFromUserName();
+
+        String res = "success";
+
+        if ("我是老板".equals(content)) {
+            response.setCharacterEncoding("UTF-8");
+            WxMpMsgResp wxMpMsgResp = new WxMpMsgResp();
+            wxMpMsgResp.setFromUserName(wxMpMsgXml.getToUserName());
+            wxMpMsgResp.setToUserName(wxMpMsgXml.getFromUserName());
+            wxMpMsgResp.setCreateTime(new Date().getTime() + "");
+            wxMpMsgResp.setMsgType("text");
+            wxMpMsgResp.setContent("我将为您服务！");
+            return wxMpMsgResp;
+        }
+
+        PrintWriter writer = null;
+        try {
+            writer = response.getWriter();
+            writer.write(res);
+            writer.flush();
+        } catch (IOException e) {
+            log.error("微信服务器验证出错了", e);
+        }
+        return null;
+    }
+
 }
 

@@ -3,15 +3,16 @@
 GET {{api_url}}/leo-tool/wx/verifyServer?signature=D489BB6DDB2037C5B7713165F079FE14D188E011&timestamp=111&nonce=333&echostr=444
 
 ###
-POST {{api_url}}/leo-tool/wx/verifyServer?signature=868a758c9902e957a7e465c269b464824e0be45d&timestamp=1684998522&nonce=1278899045&openid=oY9zx5mIWWUqrAfvz-7qs4239zCY
+POST {{api_url}}/leo-tool/wx/verifyServer2?signature=868a758c9902e957a7e465c269b464824e0be45d&timestamp=1684998522&nonce=1278899045&openid=oY9zx5mIWWUqrAfvz-7qs4239zCY
 Content-Type: text/xml
 
+<?xml version="1.0" encoding="UTF-8"?>
 <xml>
     <ToUserName><![CDATA[gh_c630c6fa44ea]]></ToUserName>
     <FromUserName><![CDATA[oY9zx5mIWWUqrAfvz-7qs4239zCY]]></FromUserName>
     <CreateTime>1684998522</CreateTime>
     <MsgType><![CDATA[text]]></MsgType>
-    <Content><![CDATA[1]]></Content>
+    <Content><![CDATA[我是老板]]></Content>
     <MsgId>1234567890123456</MsgId>
     <MsgDataId>xxxx</MsgDataId>
     <Idx>xxxx</Idx>
