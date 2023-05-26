@@ -18,7 +18,7 @@ public class JSONUtil {
                 JSONObject jsonObject = JSON.parseObject(str);
                 return jsonObject.getString(key);
             } catch (Exception e) {
-                log.error("获取属性出错了", e);
+                log.error("解析JSON出错了", e);
             }
         }
         return null;
@@ -30,7 +30,7 @@ public class JSONUtil {
             try {
                 obj = JSON.parseObject(str);
             } catch (Exception e) {
-                log.error("解析字符串属性出错了", e);
+                log.error("解析JSON出错了", e);
             }
         }
         obj.put(key, val);
