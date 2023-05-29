@@ -12,7 +12,7 @@ import java.io.Serializable;
  **/
 @Data
 @JacksonXmlRootElement(localName = "xml")
-public class DeviceMessage implements Serializable {
+public class WxMpMessage implements Serializable {
     private static final long serialVersionUID = -1L;
 
     @JacksonXmlProperty(localName = "ToUserName")

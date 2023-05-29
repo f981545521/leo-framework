@@ -1,7 +1,7 @@
 package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.util.XMLUtil;
-import cn.acyou.leo.tool.dto.DeviceMessage;
+import cn.acyou.leo.tool.dto.WxMpMessage;
 import cn.acyou.leo.tool.dto.WxMpMsgResp;
 import cn.acyou.leo.tool.util.SHA1Util;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
@@ -53,9 +53,10 @@ public class WxController {
         }
     }
 
-    @ApiOperation("微信服务器 接收微信消息")
+    @ApiOperation(value = "微信服务器 接收微信消息", notes = "" +
+            "接收普通消息: https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Receiving_standard_messages.html")
     @PostMapping(value = "verifyServer", consumes = {MediaType.TEXT_XML_VALUE}, produces = MediaType.TEXT_XML_VALUE)
-    public void verifyServerMessage(@RequestBody(required = false) DeviceMessage wxMpMsgXml, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void verifyServerMessage(@RequestBody(required = false) WxMpMessage wxMpMsgXml, HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.info("接收微信消息:{}", wxMpMsgXml);
         String content = wxMpMsgXml.getContent();
         String openid = wxMpMsgXml.getFromUserName();
@@ -86,7 +87,7 @@ public class WxController {
     @ApiOperation("微信服务器 接收微信消息2")
     @PostMapping(value = "verifyServer2", consumes = {MediaType.TEXT_XML_VALUE}, produces = MediaType.TEXT_XML_VALUE)
     @ResponseBody
-    public Object verifyServerMessage2(@RequestBody(required = false) DeviceMessage wxMpMsgXml, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Object verifyServerMessage2(@RequestBody(required = false) WxMpMessage wxMpMsgXml, HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.info("接收微信消息:{}", wxMpMsgXml);
         String content = wxMpMsgXml.getContent();
         String openid = wxMpMsgXml.getFromUserName();
