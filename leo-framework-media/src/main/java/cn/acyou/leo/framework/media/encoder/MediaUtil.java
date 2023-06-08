@@ -184,6 +184,7 @@ public class MediaUtil {
      *
      * <pre>
      *     MediaUtil.parseDuration("01:21:51.100"); //4911100
+     *     MediaUtil.parseDuration("01:21:51");     //4911000
      * </pre>
      *
      * @param str str
@@ -192,7 +193,10 @@ public class MediaUtil {
     public static long parseDuration(String str) {
         String[] split = str.split("\\.");
         String hms = split[0];
-        long ms = Long.parseLong(split[1]);
+        long ms = 0;
+        if (split.length > 1) {
+            ms = Long.parseLong(split[1]);
+        }
         String[] hmsArray = hms.split(":");
         long h = Long.parseLong(hmsArray[0]);
         long m = Long.parseLong(hmsArray[1]);
