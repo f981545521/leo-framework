@@ -524,6 +524,29 @@ public class MediaUtil {
     }
 
     /**
+     * 转换分辨率为词汇 4K 2K 1080P 720P
+     *
+     * @param w w
+     * @param h h
+     * @return {@link String}
+     */
+    public static String getResolutionWord(int w, int h) {
+        if (w >= 4096) {
+            return "4K";
+        }
+        if (w >= 2048) {
+            return "2K";
+        }
+        if (h >= 1080) {
+            return "1080P";
+        }
+        if (h >= 720) {
+            return "720P";
+        }
+        return "<720P";
+    }
+
+    /**
      * 垂直翻转（支持 图片/视频）
      * <p>
      * ffmpeg.exe -i .\wx.png -vf vflip -y .\wx_1.png
