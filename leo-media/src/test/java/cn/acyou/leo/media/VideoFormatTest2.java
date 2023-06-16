@@ -151,7 +151,11 @@ public class VideoFormatTest2 {
         System.out.println(MediaUtil.getResolutionWord(2048, 1152));
         System.out.println(MediaUtil.getResolutionWord(1920, 1080));
         System.out.println(MediaUtil.getResolutionWord(1280, 720));
+        System.out.println(":::::::::::" + MediaUtil.getResolutionWord(720, 1280));
         System.out.println(MediaUtil.getResolutionWord(720, 480));
+        System.out.println(MediaUtil.parseDuration("00:00:01.510"));
+        System.out.println(MediaUtil.formatDuration(1510));
+        System.out.println(MediaUtil.formatDuration(1510, true));
     }
 
     @Test

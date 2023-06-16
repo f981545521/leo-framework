@@ -170,13 +170,40 @@ public class MediaUtil {
      * @return {@link String}
      */
     public static String formatDuration(long mss) {
+        return formatDuration(mss, false);
+    }
+
+    /**
+     * 格式化毫秒数
+     *
+     * <pre>
+     *   System.out.println(formatDuration(30000));//00:00:30.000
+     *   System.out.println(formatDuration(33000));//00:00:33.000
+     *   System.out.println(formatDuration(33300));//00:00:33.300
+     *   System.out.println(formatDuration(33330));//00:00:33.330
+     *   System.out.println(formatDuration(33333));//00:00:33.333
+     *   System.out.println(MediaUtil.formatDuration(1510));        //00:00:01.510
+     *   System.out.println(MediaUtil.formatDuration(1510, true));  //00:00:01
+     * </pre>
+     *
+     * @param mss      毫秒
+     * @param removeMs 去除毫秒数
+     * @return {@link String}
+     */
+    public static String formatDuration(long mss, boolean removeMs) {
         String hours = ((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) + "";
         hours = hours.length() == 1 ? 0 + hours : hours;
         String minutes = ((mss % (1000 * 60 * 60)) / (1000 * 60)) + "";
         minutes = minutes.length() == 1 ? 0 + minutes : minutes;
         String seconds = new BigDecimal((mss % (1000 * 60))).divide(new BigDecimal(1000), 3, RoundingMode.CEILING).toString();
         seconds = seconds.indexOf(".") == 1 ? 0 + seconds : seconds;
-        return hours + ":" + minutes + ":" + seconds;
+        String key = hours + ":" + minutes + ":" + seconds;
+        if (removeMs) {
+            if (key.contains(".")) {
+                return key.substring(0, key.lastIndexOf("."));
+            }
+        }
+        return key;
     }
 
     /**
@@ -531,6 +558,11 @@ public class MediaUtil {
      * @return {@link String}
      */
     public static String getResolutionWord(int w, int h) {
+        if (w < h) { //翻转宽高为了：1280x720   720x1280 都是720P
+            int t = w;
+            w = h;
+            h = t;
+        }
         if (w >= 4096) {
             return "4K";
         }
