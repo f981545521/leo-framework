@@ -320,6 +320,10 @@ public class HttpUtil {
         return httputil.execute().getString();
     }
 
+    public static InputStream openStream(String url) throws Exception {
+        return new URL(url).openStream();
+    }
+
     public void setSocketTimeout(int socketTimeout) {
         this.configBuilder.setSocketTimeout(socketTimeout);
     }

@@ -3,7 +3,9 @@ package cn.acyou.leo.tool.controller;
 import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.framework.util.HttpUtil;
 import cn.acyou.leo.framework.util.WorkUtil;
+import cn.acyou.leo.framework.util.ZipUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.entity.ParamConfig;
@@ -23,6 +25,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -228,5 +233,17 @@ public class TestController {
     public Result<Void> testGetDate(DictVo dictVo) {
         log.info("GET:{}", dictVo);
         return Result.success();
+    }
+
+    @ApiOperation(value = "下载压缩图片")
+    @GetMapping("downloadZip")
+    public void downloadZip(HttpServletResponse response) throws Exception {
+        InputStream fi1 = HttpUtil.openStream("http://guiyu-tici.oss-cn-shanghai.aliyuncs.com/resources/mengma/banner/GPT%E5%BC%80%E6%92%AD%E5%BC%95%E5%AF%BC%E5%9B%BE/01.png");
+        InputStream fi2 = HttpUtil.openStream("http://guiyu-tici.oss-cn-shanghai.aliyuncs.com/resources/mengma/banner/GPT%E5%BC%80%E6%92%AD%E5%BC%95%E5%AF%BC%E5%9B%BE/02.png");
+        String[] fileNames = new String[]{"01.png", "02.png"};
+        String fileName = "压缩文件";
+        String headerStr = "attachment;filename=" + fileName + ".zip";
+        response.setHeader("Content-Disposition", new String(headerStr.getBytes("GBK"), StandardCharsets.ISO_8859_1));
+        ZipUtil.zipBatch(fileNames, new InputStream[]{fi1, fi2}, response.getOutputStream());
     }
 }
