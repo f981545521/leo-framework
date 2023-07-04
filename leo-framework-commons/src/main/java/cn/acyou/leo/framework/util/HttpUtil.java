@@ -324,6 +324,10 @@ public class HttpUtil {
         return new URL(url).openStream();
     }
 
+    public static long getContentLength(String url) throws Exception {
+        return new URL(url).openConnection().getContentLengthLong();
+    }
+
     public void setSocketTimeout(int socketTimeout) {
         this.configBuilder.setSocketTimeout(socketTimeout);
     }
