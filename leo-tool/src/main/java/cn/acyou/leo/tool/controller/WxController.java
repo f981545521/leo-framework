@@ -1,9 +1,9 @@
 package cn.acyou.leo.tool.controller;
 
+import cn.acyou.leo.framework.util.SHAUtil;
 import cn.acyou.leo.framework.util.XMLUtil;
 import cn.acyou.leo.tool.dto.WxMpMessage;
 import cn.acyou.leo.tool.dto.WxMpMsgResp;
-import cn.acyou.leo.tool.util.SHA1Util;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +38,7 @@ public class WxController {
                              @RequestParam String nonce,
                              @RequestParam String echostr, HttpServletResponse response) {
         log.info("微信服务器验证 signature:{},token:{},timestamp:{},nonce:{}", signature, token, timestamp, nonce);
-        String tmpStr = SHA1Util.getSHA1(token, timestamp, nonce);
+        String tmpStr = SHAUtil.getSHA1(token, timestamp, nonce);
         log.info("随机字符串echostr:{}", echostr);
         log.info("tmpStr:{}", tmpStr);
         if (tmpStr.equals(signature.toUpperCase())) {
