@@ -67,10 +67,21 @@ public class SHAUtil {
     }
 
     /**
-     * 使用 SHA256 加密字符串
+     * 使用 SHA1 加密字符串
      *
      * @param data 原字符串
-     * @return The human-readable SHA256
+     * @return The human-readable SHA1
+     */
+    public static String getMD5(String data) {
+        byte[] dataBytes = getDigest("MD5").digest(data.getBytes(UTF8_CHARSET));
+        return new String(encodeHex(dataBytes));
+    }
+
+    /**
+     * 使用 MD5 加密字符串
+     *
+     * @param data 原字符串
+     * @return The human-readable MD5
      */
     public static String getSHA256(String data) {
         byte[] dataBytes = getDigest("SHA-256").digest(data.getBytes(UTF8_CHARSET));
