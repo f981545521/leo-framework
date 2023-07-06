@@ -226,19 +226,17 @@ public class Calculator {
         prepare(expression);
         Collections.reverse(postfixStack);// 将后缀式栈反转
         String firstValue, secondValue, currentValue;// 参与计算的第一个值，第二个值和算术运算符
-        while (false == postfixStack.isEmpty()) {
+        while (!postfixStack.isEmpty()) {
             currentValue = postfixStack.pop();
-            if (false == isOperator(currentValue.charAt(0))) {// 如果不是运算符则存入操作数栈中
+            if (!isOperator(currentValue.charAt(0))) {// 如果不是运算符则存入操作数栈中
                 currentValue = currentValue.replace("~", "-");
                 resultStack.push(currentValue);
             } else {// 如果是运算符则从操作数栈中取两个值和该数值一起参与运算
                 secondValue = resultStack.pop();
                 firstValue = resultStack.pop();
-
                 // 将负数标记符改为负号
                 firstValue = firstValue.replace("~", "-");
                 secondValue = secondValue.replace("~", "-");
-
                 BigDecimal tempResult = calculate(firstValue, secondValue, currentValue.charAt(0));
                 resultStack.push(tempResult.toString());
             }
@@ -265,11 +263,7 @@ public class Calculator {
      * @return 优先级
      */
     public boolean compare(char cur, char peek) {// 如果是peek优先级高于cur，返回true，默认都是peek优先级要低
-        boolean result = false;
-        if (operatPriority[(peek) - 40] >= operatPriority[(cur) - 40]) {
-            result = true;
-        }
-        return result;
+        return operatPriority[(peek) - 40] >= operatPriority[(cur) - 40];
     }
 
     /**
