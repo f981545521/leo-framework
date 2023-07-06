@@ -27,7 +27,7 @@ public class DES {
     private static final String ENCRYPT_SECRET = "LEO-YYDS";
 
     //测试
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         //待加密内容
         String str = UUID.randomUUID().toString();
         System.out.println("源字符串：" + str);
@@ -35,8 +35,7 @@ public class DES {
         System.out.println("加密后的Base64字符串：" + s);
         //9zivf8xQFZvw75jRBRnqWA==
         String s1 = decryptWithBase64(s);
-        System.out.println("加密后的源串：" + s1);
-
+        System.out.println("解密后的源串：" + s1);
     }
 
     /**

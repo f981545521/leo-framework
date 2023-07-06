@@ -30,7 +30,7 @@ public class RSAUtils {
     /**
      * 用于存放随机产生的公钥与私钥
      */
-    private static final Map<Integer, String> keyMap = new HashMap<Integer, String>();
+    private static final Map<Integer, String> keyMap = new HashMap<>();
 
     /**
      * 随机生成密钥对
