@@ -15,5 +15,7 @@ public class AutoTask {
     @Scheduled(cron = "0 0/5 * * * ?")
     public void autoAudit() {
         log.info("发起机器审核... ");
+        log.warn("发起机器审核... ");
+        log.error("发起机器审核... ");
     }
 }

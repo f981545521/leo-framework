@@ -61,7 +61,8 @@ public abstract class AbstractTaskParent {
      * @param auto 是否为自动
      */
     private void recordLogStart(boolean auto) {
-        String lockId = redisUtils.lock(TASK_RUNNING_LOCK + scheduleJob.getJobId());
+        String lockKey = TASK_RUNNING_LOCK + scheduleJob.getJobId();
+        String lockId = redisUtils.lock(lockKey);
         if (lockId != null) {
             try {
                 long start = System.currentTimeMillis();
@@ -80,7 +81,7 @@ public abstract class AbstractTaskParent {
             }
             redisUtils.unLock(TASK_RUNNING_LOCK + scheduleJob.getJobId(), lockId);
         } else {
-            log.warn("已经有任务正在执行...");
+            log.warn("已经有任务正在执行... lockKey:{}", lockKey);
         }
     }
 
