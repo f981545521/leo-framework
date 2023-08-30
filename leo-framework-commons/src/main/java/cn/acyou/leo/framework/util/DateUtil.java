@@ -156,13 +156,34 @@ public final class DateUtil {
     }
 
     /**
+     * 创建日期日期
+     * <code>
+     * 示例1：
+     * （2023-08-21 10:10:10）
+     * 示例2：
+     * （2023-08-21）
+     * </code>
+     *
+     * @param dateStr yyyy-MM-dd HH:mm:ss 类型
+     * @return {@link Date} Date类型
+     */
+    public static Date newDate(String dateStr) {
+        if (!dateStr.contains(" ")) {
+            return DateUtil.parseDate(dateStr, FORMAT_DEFAULT_DATE);
+        }
+        return DateUtil.parseSpecificDateTime(dateStr);
+    }
+
+    /**
      * 解析具体的时间
+     *
      * @param dateStr yyyy-MM-dd HH:mm:ss 类型
      * @return Date类型
      */
     public static Date parseSpecificDateTime(String dateStr) {
         return parseDate(dateStr, FORMAT_DATE_TIME);
     }
+
     /**
      * 解析日期     以指定格式
      *
