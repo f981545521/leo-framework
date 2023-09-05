@@ -47,9 +47,7 @@ class MdcHelper {
                 setTraceIdIfAbsent();
                 return task.call();
             } finally {
-                if (context != null && !context.isEmpty()) {
-                    MDC.clear();
-                }
+                MDC.clear();
             }
         };
     }
@@ -71,9 +69,7 @@ class MdcHelper {
                 setTraceIdIfAbsent();
                 runnable.run();
             } finally {
-                if (context != null && !context.isEmpty()) {
-                    MDC.clear();
-                }
+                MDC.clear();
             }
         };
     }
