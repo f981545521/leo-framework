@@ -9,6 +9,7 @@ import cn.acyou.leo.tool.dto.req.TaskSo;
 import cn.acyou.leo.tool.dto.task.ScheduleJobStatusVo;
 import cn.acyou.leo.tool.dto.task.ScheduleJobVo;
 import cn.acyou.leo.tool.dto.task.TaskVo;
+import cn.acyou.leo.tool.entity.ScheduleJob;
 import cn.acyou.leo.tool.entity.ScheduleJobLog;
 import cn.acyou.leo.tool.service.ScheduleJobLogService;
 import cn.acyou.leo.tool.service.ScheduleJobService;
@@ -40,6 +41,13 @@ public class TaskController {
     @Autowired
     private ScheduleJobLogService scheduleJobLogService;
 
+
+    @PostMapping("/saveOrUpdate")
+    @ApiOperation(value = "保存/修改 定时器")
+    public Result<Void> saveOrUpdate(@RequestBody ScheduleJob scheduleJob) {
+        scheduleJobService.saveOrUpdate(scheduleJob);
+        return Result.success();
+    }
 
     @PostMapping("/list")
     @ApiOperation(value = "获取所有定时任务")
