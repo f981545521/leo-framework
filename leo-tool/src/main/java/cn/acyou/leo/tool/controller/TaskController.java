@@ -5,6 +5,7 @@ import cn.acyou.leo.framework.commons.PageQuery;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
+import cn.acyou.leo.tool.dto.req.TaskSo;
 import cn.acyou.leo.tool.dto.task.ScheduleJobStatusVo;
 import cn.acyou.leo.tool.dto.task.ScheduleJobVo;
 import cn.acyou.leo.tool.dto.task.TaskVo;
@@ -16,10 +17,7 @@ import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.beans.Introspector;
 import java.util.ArrayList;
@@ -92,8 +90,8 @@ public class TaskController {
 
     @PostMapping("/logs")
     @ApiOperation(value = "获取定时任务执行日志")
-    public Result<PageData<ScheduleJobLog>> logs(Integer pageNum, Integer pageSize) {
-        PageData<ScheduleJobLog> scheduleJobLogPageData = PageQuery.startPage(pageNum, pageSize).selectMapper(scheduleJobLogService.list());
+    public Result<PageData<ScheduleJobLog>> logs(@RequestBody TaskSo taskSo) {
+        PageData<ScheduleJobLog> scheduleJobLogPageData = PageQuery.startPage(taskSo).selectMapper(scheduleJobLogService.list());
         return Result.success(scheduleJobLogPageData);
     }
 

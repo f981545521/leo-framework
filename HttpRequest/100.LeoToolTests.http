@@ -22,3 +22,12 @@ Content-Type: text/xml
 POST {{api_url}}/leo-tool/task/list
 
 
+###
+POST {{api_url}}/leo-tool/task/logs
+content-Type: application/json
+
+{
+  "pageNum": 1,
+  "pageSize": 10,
+  "sorts": "createTime-desc"
+}
