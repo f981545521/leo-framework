@@ -70,12 +70,12 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
     }
 
     @Override
-    public PageData<ParamConfigVo> pageSelect(ParamConfigSo paramConfigSo) {
+    public PageData<ParamConfig> pageSelect(ParamConfigSo paramConfigSo) {
         return PageQuery.startPage(paramConfigSo).selectMapper(lambdaQuery()
                 .eq(StringUtils.isNotBlank(paramConfigSo.getNamespace()), ParamConfig::getNamespace, paramConfigSo.getNamespace())
                 .eq(StringUtils.isNotBlank(paramConfigSo.getCode()), ParamConfig::getCode, paramConfigSo.getCode())
                 .orderByDesc(ParamConfig::getSort)
-                .list(), ParamConfigVo.class);
+                .list());
     }
 
     @Override

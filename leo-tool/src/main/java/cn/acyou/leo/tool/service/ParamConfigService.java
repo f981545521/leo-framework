@@ -57,7 +57,7 @@ public interface ParamConfigService extends IService<ParamConfig> {
      * @param paramConfigSo 参数配置查询参数
      * @return {@link PageData}<{@link ParamConfigVo}>
      */
-    PageData<ParamConfigVo> pageSelect(ParamConfigSo paramConfigSo);
+    PageData<ParamConfig> pageSelect(ParamConfigSo paramConfigSo);
 
     /**
      * 获取值 没有配置或者配置不正确时返回默认值

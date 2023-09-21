@@ -20,10 +20,13 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="ParamConfig对象", description="参数配置表")
+@ApiModel(value = "ParamConfig对象", description = "参数配置表")
 public class ParamConfigVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "参数主键(PK)")
+    private Long id;
 
     @ApiModelProperty(value = "命名空间/组")
     private String namespace;

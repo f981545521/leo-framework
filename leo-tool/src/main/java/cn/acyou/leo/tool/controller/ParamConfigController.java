@@ -1,10 +1,12 @@
 package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
+import cn.acyou.leo.framework.model.IdsReq;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.tool.dto.param.ParamConfigSo;
 import cn.acyou.leo.tool.dto.param.ParamConfigVo;
+import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.service.ParamConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,8 +55,8 @@ public class ParamConfigController {
 
     @ApiOperation("分页查询所有配置")
     @PostMapping("page")
-    public Result<PageData<ParamConfigVo>> page(@RequestBody ParamConfigSo paramConfigSo) {
-        PageData<ParamConfigVo> configList = paramConfigService.pageSelect(paramConfigSo);
+    public Result<PageData<ParamConfig>> page(@RequestBody ParamConfigSo paramConfigSo) {
+        PageData<ParamConfig> configList = paramConfigService.pageSelect(paramConfigSo);
         return Result.success(configList);
     }
 
@@ -67,10 +69,24 @@ public class ParamConfigController {
     }
 
     @ApiOperation("修改状态")
-    @GetMapping("status")
+    @PostMapping("status")
     @RequiresRoles("1")
     public Result<Void> status(@RequestParam Long id, @RequestParam Integer status) {
         paramConfigService.updateStatus(id, status);
+        return Result.success();
+    }
+
+    @ApiOperation("删除")
+    @PostMapping("delete")
+    public Result<Void> delete(@RequestBody IdsReq ids) {
+        paramConfigService.removeByIds(ids.getIds());
+        return Result.success();
+    }
+
+    @ApiOperation("新增/修改")
+    @PostMapping("saveOrUpdate")
+    public Result<Void> saveOrUpdate(@RequestBody ParamConfig paramConfig) {
+        paramConfigService.saveOrUpdate(paramConfig);
         return Result.success();
     }
 
