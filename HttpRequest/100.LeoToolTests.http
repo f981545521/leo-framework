@@ -37,6 +37,40 @@ POST {{api_url}}/leo-tool/task/tasks
 content-Type: application/json
 
 ###
+POST {{api_url}}/leo-tool/dict/allType
+content-Type: application/json
+
+###
+POST {{api_url}}/leo-tool/dict/page
+content-Type: application/json
+
+{
+  "parentId": 2155,
+  "pageNum": 1,
+  "pageSize": 10
+}
+
+###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###
 POST https://www.fastmock.site/mock/e8cbcec0258648967bc1e51337c1b07e/api/test/test1
 
 ###

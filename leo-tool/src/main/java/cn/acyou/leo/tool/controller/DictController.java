@@ -70,9 +70,15 @@ public class DictController {
     }
 
     @ApiOperation(value = "保存数据字典")
-    @PostMapping("/save")
-    public Result<?> save(@Validated @RequestBody DictSaveReq dictSaveReq) {
-        dictService.save(BeanCopyUtil.copy(dictSaveReq, Dict.class));
+    @PostMapping("/saveOrUpdate")
+    public Result<?> saveOrUpdate(@Validated @RequestBody DictSaveReq dictSaveReq) {
+        if (dictSaveReq.getId() != null) {
+            Assert.notNull(dictSaveReq.getId(), "修改数据字典，主键不能为空");
+            Assert.ifTrue(dictSaveReq.getId().equals(dictSaveReq.getParentId()), "上级不能是自己！");
+            dictService.updateById(BeanCopyUtil.copy(dictSaveReq, Dict.class));
+        } else {
+            dictService.save(BeanCopyUtil.copy(dictSaveReq, Dict.class));
+        }
         return Result.success();
     }
 

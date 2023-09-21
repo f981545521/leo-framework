@@ -43,6 +43,7 @@
             <if test="parentId!=null">and parent_id = #{parentId}</if>
             <if test="status!=null">and status = #{status}</if>
         </where>
+        order by id desc
     </select>
     <select id="selectDict" resultType="cn.acyou.leo.tool.entity.Dict">
         SELECT
