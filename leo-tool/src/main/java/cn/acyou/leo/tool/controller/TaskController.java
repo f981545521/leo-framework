@@ -96,10 +96,21 @@ public class TaskController {
         return Result.success();
     }
 
+    @PostMapping("/delete/{jobId}")
+    @ApiOperation(value = "删除定时任务")
+    public Result<String> delete(@PathVariable("jobId") Long jobId) {
+        scheduleJobService.removeById(jobId);
+        return Result.success();
+    }
+
     @PostMapping("/logs")
     @ApiOperation(value = "获取定时任务执行日志")
     public Result<PageData<ScheduleJobLog>> logs(@RequestBody TaskSo taskSo) {
-        PageData<ScheduleJobLog> scheduleJobLogPageData = PageQuery.startPage(taskSo).selectMapper(scheduleJobLogService.list());
+        PageData<ScheduleJobLog> scheduleJobLogPageData = PageQuery.startPage(taskSo)
+                .selectMapper(scheduleJobLogService.lambdaQuery()
+                        .eq(taskSo.getJobId() != null, ScheduleJobLog::getJobId, taskSo.getJobId())
+                        .eq(taskSo.getStatus() != null, ScheduleJobLog::getStatus, taskSo.getStatus())
+                        .list());
         return Result.success(scheduleJobLogPageData);
     }
 
