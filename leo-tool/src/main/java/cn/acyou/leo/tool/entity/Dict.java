@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -48,5 +49,9 @@ public class Dict implements Serializable {
     @ApiModelProperty(value = "状态:  0-停用 1-正常")
     private Integer status;
 
+    @ApiModelProperty(value = "创建时间，默认当前创建时间")
+    private Date createTime;
 
+    @ApiModelProperty(value = "最后修改时间")
+    private Date updateTime;
 }
