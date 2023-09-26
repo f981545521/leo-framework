@@ -60,12 +60,14 @@ public class ExcelUtil {
     public static void exportExcel(OutputStream out, List<Map<String, Object>> dataList, String sheetName) throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet(sheetName);
+        sheet.setDefaultRowHeightInPoints((short) 20);
         Map<String, CellStyle> styles = createStyles(workbook);
         HSSFRow row = sheet.createRow(0);
         Map<String, Object> map = dataList.get(0);
         String[] tableHeaders = map.keySet().toArray(new String[0]);
         // 创建表头
         for (int i = 0; i < tableHeaders.length; i++) {
+            sheet.setColumnWidth(i, 20 * 256);
             HSSFCell cell = row.createCell(i);
             cell.setCellValue(tableHeaders[i]);
             cell.setCellStyle(styles.get("header"));
@@ -134,7 +136,7 @@ public class ExcelUtil {
      */
     private static Map<String, CellStyle> createStyles(Workbook wb) {
         // 写入各条记录,每条记录对应excel表中的一行
-        Map<String, CellStyle> styles = new HashMap<String, CellStyle>();
+        Map<String, CellStyle> styles = new HashMap<>();
         CellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
