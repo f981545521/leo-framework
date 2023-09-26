@@ -1,6 +1,8 @@
 package cn.acyou.leo.framework.util;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 补充 Spring String 相关方法
@@ -342,7 +344,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
             return;
         }
         if (obj instanceof Map) {
-            ((Map<Object, Object>) obj).forEach((k,v)->{
+            ((Map<Object, Object>) obj).forEach((k, v) -> {
                 System.out.println(k + ":" + v);
             });
             return;
@@ -350,6 +352,35 @@ public class StringUtils extends org.springframework.util.StringUtils {
         System.out.println(obj);
     }
 
+    /**
+     * 字符串包含中文
+     *
+     * @param str 字符串
+     * @return boolean
+     */
+    public static boolean containChinese(String str) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(str);
+        return m.find();
+    }
+
+    /**
+     * 校验String是否全是中文
+     *
+     * @param name 被校验的字符串
+     * @return true 代表全是汉字
+     */
+    public static boolean isAllChinese(String name) {
+        boolean res = true;
+        char[] cTemp = name.toCharArray();
+        for (int i = 0; i < name.length(); i++) {
+            if (!containChinese(String.valueOf(cTemp[i]))) {
+                res = false;
+                break;
+            }
+        }
+        return res;
+    }
 
     public static void main(String[] args) {
         String templateStr = "{姓名}今年{岁}啦！";
