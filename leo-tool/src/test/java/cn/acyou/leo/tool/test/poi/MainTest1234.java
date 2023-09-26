@@ -1,7 +1,7 @@
 package cn.acyou.leo.tool.test.poi;
 
+import cn.acyou.leo.framework.util.ExcelUtil;
 import cn.acyou.leo.framework.util.RandomUtil;
-import cn.acyou.leo.tool.test.util.ExcelUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.context.AnalysisContext;
@@ -32,7 +32,7 @@ public class MainTest1234 {
         System.out.println(sheetNameList);
         XSSFSheet sheet = workbook.getSheet(sheetNameList.get(0));
         // 返回数据
-        List<Map<String, Object>> ls = ExcelUtil.transferData(sheet);
+        List<Map<String, Object>> ls = ExcelUtil.importData(sheet);
         System.out.println(ls);
     }
 

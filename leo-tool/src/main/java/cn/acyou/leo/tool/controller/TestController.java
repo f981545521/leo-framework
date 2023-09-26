@@ -3,9 +3,7 @@ package cn.acyou.leo.tool.controller;
 import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.model.Result;
-import cn.acyou.leo.framework.util.HttpUtil;
-import cn.acyou.leo.framework.util.WorkUtil;
-import cn.acyou.leo.framework.util.ZipUtil;
+import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.entity.ParamConfig;
@@ -28,7 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
@@ -246,4 +247,55 @@ public class TestController {
         response.setHeader("Content-Disposition", new String(headerStr.getBytes("GBK"), StandardCharsets.ISO_8859_1));
         ZipUtil.zipBatch(fileNames, new InputStream[]{fi1, fi2}, response.getOutputStream());
     }
+
+    /**
+     * function test4(url) {
+     * var xhr = new XMLHttpRequest();
+     * xhr.open('POST', url, true);
+     * xhr.setRequestHeader("Content-Type", "application/json")
+     * xhr.responseType = 'blob';
+     * xhr.onload = function() {
+     * if (xhr.readyState === 4 && xhr.status === 200) {
+     * var blob = new Blob([xhr.response], { type: 'application/octet-stream' });
+     * //var responseHeader = xhr.getResponseHeader("Content-disposition"); 无法获取文件名
+     * var downloadUrl = URL.createObjectURL(blob);
+     * var a = document.createElement('a');
+     * a.href = downloadUrl;
+     * a.download = 'filename.xlsx';
+     * document.body.appendChild(a);
+     * a.click();
+     * document.body.removeChild(a);
+     * }
+     * };
+     * xhr.send('{"name":"李世明"}');
+     * }
+     */
+    @ApiOperation(value = "测试AJAX下载文件 (不推荐)")
+    @PostMapping("downloadExcel")
+    public void downloadExcel(@RequestBody DictVo dictVo, HttpServletResponse response) throws Exception {
+        List<Map<String, Object>> objects = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Map<String, Object> data = new LinkedHashMap<>();
+            data.put("id", 1000 + i);
+            data.put("name", RandomUtil.randomUserName());
+            data.put("age", RandomUtil.randomAge());
+            objects.add(data);
+        }
+        ExcelUtil.exportExcel(response, objects, "列表");
+    }
+
+    @ApiOperation(value = "测试下载文件 (推荐)")
+    @GetMapping("downloadExcel2")
+    public void downloadExcel2(HttpServletResponse response) throws Exception {
+        List<Map<String, Object>> objects = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Map<String, Object> data = new LinkedHashMap<>();
+            data.put("id", 1000 + i);
+            data.put("name", RandomUtil.randomUserName());
+            data.put("age", RandomUtil.randomAge());
+            objects.add(data);
+        }
+        ExcelUtil.exportExcel(response, objects, "列表");
+    }
+
 }

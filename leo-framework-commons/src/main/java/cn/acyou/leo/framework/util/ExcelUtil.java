@@ -1,4 +1,4 @@
-package cn.acyou.leo.tool.test.util;
+package cn.acyou.leo.framework.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -12,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -27,7 +28,13 @@ public class ExcelUtil {
     private final static SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd"); // 日期格式化
     private final static DecimalFormat df2 = new DecimalFormat("0"); // 格式化数字
 
-    public static List<Map<String, Object>> transferData(XSSFSheet sheet) {
+    /**
+     * 从Sheet页导入数据
+     *
+     * @param sheet Sheet页
+     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
+     */
+    public static List<Map<String, Object>> importData(XSSFSheet sheet) {
         // 返回数据
         List<Map<String, Object>> ls = new ArrayList<>();
         // 取第一行标题
@@ -51,12 +58,30 @@ public class ExcelUtil {
     }
 
 
+    /**
+     * 导出数据到Excel
+     *
+     * @param response  响应
+     * @param dataList  数据
+     * @param sheetName sheet名称
+     * @throws IOException
+     */
     public static void exportExcel(HttpServletResponse response, List<Map<String, Object>> dataList, String sheetName) throws IOException {
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
+        String headerStr = "attachment;filename=" + sheetName + ".xlsx";
+        response.setHeader("Content-Disposition", new String(headerStr.getBytes("GBK"), StandardCharsets.ISO_8859_1));
         exportExcel(response.getOutputStream(), dataList, sheetName);
     }
 
+    /**
+     * 导出数据到Excel
+     *
+     * @param out       输出流
+     * @param dataList  数据
+     * @param sheetName sheet名称
+     * @throws IOException
+     */
     public static void exportExcel(OutputStream out, List<Map<String, Object>> dataList, String sheetName) throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet(sheetName);
