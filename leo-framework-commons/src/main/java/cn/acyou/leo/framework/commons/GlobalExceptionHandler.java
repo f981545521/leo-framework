@@ -149,19 +149,19 @@ public class GlobalExceptionHandler {
     private Result<Object> handlerParamNotValidException(BindingResult bindingResult){
         Result<Object> error = Result.error(CommonErrorEnum.E_PARAM_VALID_ERROR);
         Map<String, String> map = new LinkedHashMap<>();
-        String firstMessage = null;
+        //String firstMessage = null;
         if (bindingResult.hasErrors()) {
             List<ObjectError> allErrors = bindingResult.getAllErrors();
-            for (int i = 0; i < allErrors.size(); i++) {
-                ObjectError item = allErrors.get(i);
-                String message = item.getDefaultMessage();
+            for (ObjectError item : allErrors) {
+                //String message = item.getDefaultMessage();
                 //特殊处理
-                if (message != null && message.contains(Page_Illegal)) {
-                    message = message.substring(message.indexOf(Page_Illegal) + Page_Illegal.length() + 2);
-                }
-                if (i == 0){
-                    firstMessage = message;
-                }
+                //if (message != null && message.contains(Page_Illegal)) {
+                //    message = message.substring(message.indexOf(Page_Illegal) + Page_Illegal.length() + 2);
+                //}
+                //if (i == 0){
+                //    firstMessage = message;
+                //}
+                String message = "类型不正确";
                 if (item instanceof FieldError) {
                     FieldError fieldItem = (FieldError) item;
                     String field = fieldItem.getField();
@@ -172,7 +172,7 @@ public class GlobalExceptionHandler {
                 }
             }
         }
-        error.setMessage(firstMessage);
+        //error.setMessage(firstMessage);
         error.setData(map);
         return error;
     }
