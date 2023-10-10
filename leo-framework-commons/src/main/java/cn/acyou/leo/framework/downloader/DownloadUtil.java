@@ -214,6 +214,39 @@ public class DownloadUtil {
 
     }
 
+    /**
+     * 使用多线程下载多文件
+     *
+     * @param sourceUrls 源地址
+     * @param dir        目标目录
+     * @param executor   执行器
+     * @param task       回调函数
+     */
+    public static void downloadMultiFile(List<String> sourceUrls, String dir, Task task, ThreadPoolExecutor executor) {
+        List<CompletableFuture<?>> futureList = new ArrayList<>();
+        WorkUtil.watch(() -> {
+            log.info("多线程下载任务执行开始 -> 任务数：{} 线程数：{}", sourceUrls.size(), executor.getCorePoolSize());
+            for (String sourceUrl : sourceUrls) {
+                CompletableFuture<?> completableFuture = CompletableFuture
+                        .runAsync(() -> {
+                            try {
+                                log.info("当前下载：{} -> {} 剩余任务：{}", sourceUrl, dir, executor.getQueue().size());
+                                WorkUtil.doRetryWork(3, ()->{
+                                    downloadUseHutool(sourceUrl, dir, null);
+                                });
+                            } catch (Exception e) {
+                                log.error(e.getMessage(), e);
+                            }
+                        }, executor);
+                futureList.add(completableFuture);
+            }
+            CompletableFuture<Void> completableFuture = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
+            completableFuture.whenComplete((o, e) -> task.run());
+            completableFuture.join();
+            log.info("多线程下载任务执行结束");
+        });
+    }
+
     //public static void main(String[] args) throws Exception {
     //    String url = "https://vipmp4i.vodfile.m1905.com/202212021048/b90507f1aa225fbdb02fcacb0118f1d1/video/2022/08/26/v202208267231O6PORJB98FZF/v202208267231O6PORJB98FZF.mp4";
     //    //downloadUseHutool(url, "D:\\temp\\", UrlUtil.getName(url));
