@@ -220,16 +220,19 @@ public class DownloadUtil {
     /**
      * 使用多线程下载多文件
      *
-     * @param sourceUrls   源地址
-     * @param dir          目标目录
-     * @param executor     执行器
-     * @param completeTask 回调函数
+     * @param sourceUrls    源地址
+     * @param dir           目标目录
+     * @param progressTask  进度回调函数
+     * @param progressLimit 1000  1s内重复回调
+     * @param completeTask  回调函数
+     * @param executor      执行器
      */
-    public static void downloadMultiFile(List<String> sourceUrls, String dir, Consumer<Integer> progressTask, Task completeTask, ThreadPoolExecutor executor) {
+    public static void downloadMultiFile(List<String> sourceUrls, String dir, Consumer<Integer> progressTask, long progressLimit, Task completeTask, ThreadPoolExecutor executor) {
         List<CompletableFuture<?>> futureList = new ArrayList<>();
         WorkUtil.watch(() -> {
             log.info("多线程下载任务执行开始 -> 任务数：{} 线程数：{}", sourceUrls.size(), executor.getCorePoolSize());
             AtomicInteger downloadedCount = new AtomicInteger();
+            final long[] lastTimeMillis = {System.currentTimeMillis()};
             for (String sourceUrl : sourceUrls) {
                 CompletableFuture<?> completableFuture = CompletableFuture
                         .runAsync(() -> {
@@ -240,7 +243,11 @@ public class DownloadUtil {
                                     downloadUseHutool(sourceUrl, dir, null);
                                 });
                                 if (progressTask != null) {
-                                    progressTask.accept(perm);
+                                    long currentTimeMillis = System.currentTimeMillis();
+                                    if ((currentTimeMillis - lastTimeMillis[0]) > progressLimit) { // 1s内重复回调
+                                        lastTimeMillis[0] = currentTimeMillis;
+                                        progressTask.accept(perm);
+                                    }
                                 }
                             } catch (Exception e) {
                                 log.error(e.getMessage(), e);
