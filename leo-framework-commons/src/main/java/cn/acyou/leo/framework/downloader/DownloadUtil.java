@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.downloader.utils.RestTemplateBuilder;
 import cn.acyou.leo.framework.util.UrlUtil;
 import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.framework.util.function.Task;
+import cn.hutool.core.math.Calculator;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * @author fangyou
@@ -217,23 +220,28 @@ public class DownloadUtil {
     /**
      * 使用多线程下载多文件
      *
-     * @param sourceUrls 源地址
-     * @param dir        目标目录
-     * @param executor   执行器
-     * @param task       回调函数
+     * @param sourceUrls   源地址
+     * @param dir          目标目录
+     * @param executor     执行器
+     * @param completeTask 回调函数
      */
-    public static void downloadMultiFile(List<String> sourceUrls, String dir, Task task, ThreadPoolExecutor executor) {
+    public static void downloadMultiFile(List<String> sourceUrls, String dir, Consumer<Integer> progressTask, Task completeTask, ThreadPoolExecutor executor) {
         List<CompletableFuture<?>> futureList = new ArrayList<>();
         WorkUtil.watch(() -> {
             log.info("多线程下载任务执行开始 -> 任务数：{} 线程数：{}", sourceUrls.size(), executor.getCorePoolSize());
+            AtomicInteger downloadedCount = new AtomicInteger();
             for (String sourceUrl : sourceUrls) {
                 CompletableFuture<?> completableFuture = CompletableFuture
                         .runAsync(() -> {
                             try {
-                                log.info("当前下载：{} -> {} 剩余任务：{}", sourceUrl, dir, executor.getQueue().size());
-                                WorkUtil.doRetryWork(3, ()->{
+                                int perm = (int) Calculator.conversion(downloadedCount.getAndIncrement() + " / " + sourceUrls.size() + "*100");
+                                log.info("当前下载：{} -> {} 剩余任务：{}  进度：{}%", sourceUrl, dir, executor.getQueue().size(), perm);
+                                WorkUtil.doRetryWork(3, () -> {
                                     downloadUseHutool(sourceUrl, dir, null);
                                 });
+                                if (progressTask != null) {
+                                    progressTask.accept(perm);
+                                }
                             } catch (Exception e) {
                                 log.error(e.getMessage(), e);
                             }
@@ -241,7 +249,12 @@ public class DownloadUtil {
                 futureList.add(completableFuture);
             }
             CompletableFuture<Void> completableFuture = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
-            completableFuture.whenComplete((o, e) -> task.run());
+            completableFuture.whenComplete((o, e) -> {
+                if (progressTask != null) {
+                    progressTask.accept(100);
+                }
+                completeTask.run();
+            });
             completableFuture.join();
             log.info("多线程下载任务执行结束");
         });
