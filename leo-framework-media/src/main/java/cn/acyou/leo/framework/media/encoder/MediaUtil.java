@@ -605,4 +605,18 @@ public class MediaUtil {
         log.info("水平翻转 params:[i:{}, target:{}] 目标目录：{}", i, targetPath, (mkdirs ? "创建成功" : "无需创建"));
         exec("-y", "-i", i, "-vf", "hflip", "-y", targetPath);
     }
+
+    /**
+     * 降低FPS
+     * <p>
+     * ffmpeg.exe -i .\1031865662651375616.mp4 -r 20 .\1031865662651375616_20.mp4
+     *
+     * @param i          输入
+     * @param targetPath 输出目录
+     */
+    public void fps(String i, String fps, String targetPath) {
+        boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
+        log.info("降低FPS params:[i:{}, target:{}] 目标目录：{}", i, targetPath, (mkdirs ? "创建成功" : "无需创建"));
+        exec("-y", "-i", i, "-r", fps, "-y", targetPath);
+    }
 }
