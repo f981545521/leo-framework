@@ -1,7 +1,9 @@
 package cn.acyou.leo.media;
 
+import cn.acyou.leo.framework.media.dto.VideoInfoExt;
 import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONValue;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -295,8 +297,8 @@ public class VideoFormatTest {
         //MediaUtil.mergeAudioAndVideo("D:\\temp\\merge\\audio.mp4", "D:\\temp\\merge\\video.mp4", "D:\\temp\\merge\\9.mp4");
         //MediaUtil.mergeAudioAndVideo("http://qiniu.acyou.cn/video/merge/audio.mp4", "http://qiniu.acyou.cn/video/merge/video.mp4", "D:\\temp\\merge\\10.mp4");
         //### 进度比例获取视频帧
-        String[] targetPaths = MediaUtil.instance().extractFrameBySpeedRatio("http://qiniu.acyou.cn/DouYin/2.mp4", new int[]{10, 20, 50, 70, 90}, "D:\\temp\\frame2");
-        System.out.println(Arrays.toString(targetPaths));
+        //String[] targetPaths = MediaUtil.instance().extractFrameBySpeedRatio("http://qiniu.acyou.cn/DouYin/2.mp4", new int[]{10, 20, 50, 70, 90}, "D:\\temp\\frame2");
+        //System.out.println(Arrays.toString(targetPaths));
         //### 分离音频通道
         //Map<String, String> param = new HashMap<>();
         //param.put("0.0.0", "D:\\temp\\channel\\1.wav");
@@ -320,6 +322,8 @@ public class VideoFormatTest {
         //### 压缩图片
         //ImageUtil.compressImage(new URL("http://qiniu.acyou.cn/images/12.jpg"), new File("D:\\te\\12.jpg"));
         //ImageUtil.compressImage(new File("D:\\temp\\image\\6.jpg"), new File("D:\\temp\\image\\6_c.jpg"));
+        VideoInfoExt videoInfo = MediaUtil.instance().getVideoInfo("http://qiniu.acyou.cn/DouYin/2.mp4");
+        System.out.println(videoInfo);
     }
 
     @Test

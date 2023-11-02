@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.media.encoder;
 
+import cn.acyou.leo.framework.media.dto.VideoInfoExt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -618,5 +619,32 @@ public class MediaUtil {
         boolean mkdirs = new File(targetPath).getParentFile().mkdirs();
         log.info("降低FPS params:[i:{}, target:{}] 目标目录：{}", i, targetPath, (mkdirs ? "创建成功" : "无需创建"));
         exec("-y", "-i", i, "-r", fps, "-y", targetPath);
+    }
+
+    /**
+     * 获取视频的补充信息
+     *
+     * @param i 输入
+     * @return {@link VideoInfoExt}
+     */
+    public VideoInfoExt getVideoInfo(String i) {
+        VideoInfoExt videoInfoVo = new VideoInfoExt();
+        MultimediaInfo mediaInfo = getMediaInfo(i);
+        VideoSize realVideoSize = MediaUtil.getRealVideoSize(mediaInfo);
+        String proportion = Util.proportion(realVideoSize.getWidth(), realVideoSize.getHeight());
+        videoInfoVo.setResolutionRatio(realVideoSize.getWidth() + "x" + realVideoSize.getHeight());
+        videoInfoVo.setResolution(proportion);
+        videoInfoVo.setFrameRate(String.valueOf(mediaInfo.getVideo().getFrameRate()));
+        videoInfoVo.setBitRate(mediaInfo.getVideo().getBitRate() / 1000 / 1024 + "M");
+        videoInfoVo.setDuration(mediaInfo.getDuration());
+        videoInfoVo.setDurationStr(formatDuration(mediaInfo.getDuration()));
+        videoInfoVo.setFormat(mediaInfo.getFormat());
+        videoInfoVo.setMetadata(mediaInfo.getMetadata());
+        videoInfoVo.setVideo(mediaInfo.getVideo());
+        videoInfoVo.setAudio(mediaInfo.getAudio());
+        long length = Util.getContentLength(i);
+        videoInfoVo.setFileSize(length);
+        videoInfoVo.setFileSizeStr(Util.convertFileSize(length));
+        return videoInfoVo;
     }
 }
