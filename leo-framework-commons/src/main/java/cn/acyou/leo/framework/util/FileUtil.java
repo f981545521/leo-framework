@@ -255,6 +255,34 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
     }
 
     /**
+     * 使用父子路径创建File
+     *
+     * @param parent 父File
+     * @param child  子路径
+     * @return {@link File}
+     */
+    public static File newFile(File parent, String child) {
+        return new File(parent, child);
+    }
+
+    /**
+     * 使用路径创建File
+     * <pre>
+     *     示例：
+     *     String[] dirs = new String[]{"D:","AAA","BBB","CCC"};
+     *     FileUtil.newFile(dirs).mkdirs();
+     *     := D:\AAA\BBB\CCC
+     * </pre>
+     *
+     * @param dirs 路径列表
+     * @return {@link File}
+     */
+    public static File newFile(String... dirs) {
+        String path = String.join(File.separator, dirs);
+        return new File(path);
+    }
+
+    /**
      * 存在
      *
      * @param path 路径
