@@ -504,6 +504,38 @@ public class UrlUtil {
         return url;
     }
 
+    /**
+     * 判断url是否可以访问
+     *
+     * @param url URL
+     * @return ture or false
+     */
+    public static boolean canConnect(String url) {
+        if (StringUtils.isEmpty(url)) {
+            return false;
+        }
+        HttpURLConnection conn = null;
+        try {
+            URL url2 = new URL(url);
+            conn = (HttpURLConnection) url2.openConnection();
+            int state = conn.getResponseCode();
+            if (state == 200) {
+                return true;
+            }
+        } catch (Exception ex) {
+            //ignore
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+
+    }
+
     //public static void main(String[] args) throws Exception{
     //    String url = "https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/lifeLike/movie/movie001.mov?type=oss";
     //    System.out.println(UrlUtil.getContentLength(new URL(url)));//16009340
