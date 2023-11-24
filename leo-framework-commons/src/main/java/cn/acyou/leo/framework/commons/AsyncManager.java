@@ -124,10 +124,10 @@ public class AsyncManager {
     /**
      * 执行任务延迟执行
      *
-     * @param task         任务
-     * @param initialDelay 初始延迟
-     * @param period       周期
-     * @param unit         时间单位
+     * @param task      任务
+     * @param startTime 初始延迟
+     * @param period    周期
+     * @param unit      时间单位
      */
     public static void scheduleAtFixedRate(Runnable task, Date startTime, long period, TimeUnit unit) {
         scheduledExecutor.scheduleAtFixedRate(task, startTime, period);
@@ -137,9 +137,8 @@ public class AsyncManager {
      * 执行任务延迟执行
      *
      * @param task         任务
-     * @param initialDelay 初始延迟
+     * @param startTime 初始延迟
      * @param delay        延迟
-     * @param unit         时间单位
      */
     public static void scheduleWithFixedDelay(Runnable task, Date startTime, long delay) {
         scheduledExecutor.scheduleWithFixedDelay(task, startTime, delay);

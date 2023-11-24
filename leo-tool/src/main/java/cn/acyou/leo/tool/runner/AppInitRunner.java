@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.runner;
 
 import cn.acyou.leo.framework.constant.Constant;
+import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.SpringHelper;
 import cn.acyou.leo.tool.entity.ScheduleJob;
 import cn.acyou.leo.tool.service.ParamConfigService;
@@ -41,5 +42,7 @@ public class AppInitRunner implements ApplicationRunner {
                 log.error("定时器 {} 不存在，请检查", scheduleJob.getBeanName());
             }
         }
+        Result.setDefaultSuccess(0, "SUCCESS");
+        Result.setDefaultError(-1, "ERROR");
     }
 }

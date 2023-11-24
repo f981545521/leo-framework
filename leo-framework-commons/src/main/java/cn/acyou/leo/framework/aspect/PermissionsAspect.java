@@ -4,6 +4,7 @@ import cn.acyou.leo.framework.annotation.authz.Logical;
 import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
 import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.base.LoginUser;
+import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.exception.ServiceException;
 import com.google.common.collect.Sets;
@@ -40,7 +41,7 @@ public class PermissionsAspect {
         if (requiresRoles != null) {
             LoginUser loginUser = AppContext.getLoginUser();
             if (loginUser == null) {
-                throw new ServiceException("未登录，请先登录！");
+                throw new ServiceException(CommonErrorEnum.E_UNAUTHENTICATED);
             }
             Set<String> roleCodes = loginUser.getRoleCodes();
             Logical logical = requiresRoles.logical();
@@ -48,13 +49,13 @@ public class PermissionsAspect {
             if (logical.equals(Logical.AND)) {
                 boolean containsAll = roleCodes.containsAll(Sets.newHashSet(needRoles));
                 if (!containsAll) {
-                    throw new ServiceException("权限不足，请联系管理员！");
+                    throw new ServiceException(CommonErrorEnum.E_INSUFFICIENT_PERMISSIONS);
                 }
             }
             if (logical.equals(Logical.OR)) {
                 boolean containsAny = CollectionUtils.containsAny(roleCodes, Sets.newHashSet(needRoles));
                 if (!containsAny) {
-                    throw new ServiceException("权限不足，请联系管理员！");
+                    throw new ServiceException(CommonErrorEnum.E_INSUFFICIENT_PERMISSIONS);
                 }
             }
         }
@@ -62,7 +63,7 @@ public class PermissionsAspect {
         if (requiresPermissions != null) {
             LoginUser loginUser = AppContext.getLoginUser();
             if (loginUser == null) {
-                throw new ServiceException("未登录，请先登录！");
+                throw new ServiceException(CommonErrorEnum.E_UNAUTHENTICATED);
             }
             Set<String> permsList = loginUser.getPermsList();
             Logical logical = requiresPermissions.logical();
@@ -70,13 +71,13 @@ public class PermissionsAspect {
             if (logical.equals(Logical.AND)) {
                 boolean containsAll = permsList.containsAll(Sets.newHashSet(needPermissions));
                 if (!containsAll) {
-                    throw new ServiceException("权限不足，请联系管理员！");
+                    throw new ServiceException(CommonErrorEnum.E_INSUFFICIENT_PERMISSIONS);
                 }
             }
             if (logical.equals(Logical.OR)) {
                 boolean containsAny = CollectionUtils.containsAny(permsList, Sets.newHashSet(needPermissions));
                 if (!containsAny) {
-                    throw new ServiceException("权限不足，请联系管理员！");
+                    throw new ServiceException(CommonErrorEnum.E_INSUFFICIENT_PERMISSIONS);
                 }
             }
         }

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author youfang
- * @since  2020/03/19 11:59
+ * @since 2020/03/19 11:59
  **/
 public class Result<T> extends DTO {
     @ApiModelProperty("编码(默认成功：200)")
@@ -15,12 +15,22 @@ public class Result<T> extends DTO {
     @ApiModelProperty("响应内容")
     private T data;
 
-    private static final int SUCCESS_CODE = 200;
-    private static final String SUCCESS_MESSAGE = "处理成功";
-    private static final int ERROR_CODE = 500;
-    private static final String ERROR_MESSAGE = "服务繁忙，请稍后再试";
+    private static int SUCCESS_CODE = 200;
+    private static String SUCCESS_MESSAGE = "处理成功";
+    private static int ERROR_CODE = 500;
+    private static String ERROR_MESSAGE = "服务繁忙，请稍后再试";
 
-    public Result() {
+    public static void setDefaultSuccess(int SUCCESS_CODE, String SUCCESS_MESSAGE) {
+        Result.SUCCESS_CODE = SUCCESS_CODE;
+        Result.SUCCESS_MESSAGE = SUCCESS_MESSAGE;
+    }
+
+    public static void setDefaultError(int ERROR_CODE, String ERROR_MESSAGE) {
+        Result.ERROR_CODE = ERROR_CODE;
+        Result.ERROR_MESSAGE = ERROR_MESSAGE;
+    }
+
+    private Result() {
 
     }
 
