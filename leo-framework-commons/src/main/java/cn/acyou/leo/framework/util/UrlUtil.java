@@ -279,13 +279,47 @@ public class UrlUtil {
      * @param url 网址
      * @return pathname
      */
-    public static String getPathName(String url) {
+    public static String getPath(String url) {
         try {
             URL url1 = new URL(url);
             return url1.getPath();
         } catch (Exception e) {
             return "";
         }
+    }
+
+    /**
+     * 获取网址最后的path
+     * <pre>
+     *  https://sale.vmall.com/ttt/huaweizone.html?cid=10618
+     *   -> huaweizone.html
+     * </pre>
+     *
+     * @param url 网址
+     * @return pathname
+     */
+    public static String getLastPathName(String url) {
+        String pathName = getPath(url);
+        if (StringUtils.isNotBlank(pathName)) {
+            String[] pathNameArray = pathName.split("/");
+            return pathNameArray[pathNameArray.length - 1];
+        }
+        return "";
+    }
+
+
+    /**
+     * 获取URL上可用的名称
+     *
+     * @param url 网址
+     * @return {@link String}
+     */
+    public static String getUsableName(String url) {
+        String name = UrlUtil.getName(url);
+        if (StringUtils.isBlank(name)) {
+            name = UrlUtil.getLastPathName(url);
+        }
+        return name;
     }
 
     /**
