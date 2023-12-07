@@ -6,6 +6,16 @@ import java.util.Map;
 
 /**
  * 身份证地区对应关系
+ * <p>
+ * //public static void main(String[] args) {
+ * //    System.out.println(getProvinceByIdCard("370685200211202646"));//山东省
+ * //    System.out.println(getCityByIdCard("370685200211202646"));//烟台市
+ * //    System.out.println(getAreaByIdCard("370685200211202646"));//招远市
+ * //    System.out.println(getAgeByIdCard("370685200211202646"));//21
+ * //    System.out.println(getBirth("370685200211202646"));//20021120
+ * //    System.out.println(getAddressByIdCard("370685200211202646"));//山东省烟台市招远市
+ * //    System.out.println(getGenderStringByIdCard("370685200211202646"));//女
+ * //}
  *
  * @author youfang
  * @version [1.0.0, 2019-08-13 11:45]
@@ -3260,7 +3270,7 @@ public class IdCardUtil {
      * @param idCard 身份证号码
      * @return 省市区
      */
-    public static String getRegisterAddressByIdCard(String idCard) {
+    public static String getAddressByIdCard(String idCard) {
         return getProvinceByIdCard(idCard) + getCityByIdCard(idCard) + getAreaByIdCard(idCard);
     }
 
@@ -3352,10 +3362,14 @@ public class IdCardUtil {
         return "未知";
     }
 
-    public static void main(String[] args) {
-        System.out.println(getRegisterAddressByIdCard("370685200211202646"));
-        System.out.println(getAgeByIdCard("370685200211202646"));
-        System.out.println(getGenderStringByIdCard("370685200211202646"));
+    /**
+     * 根据地址编码获取名称
+     *
+     * @param areaCode 地址编码
+     * @return 地址名称
+     */
+    public static String getAreaName(Integer areaCode) {
+        return AREA_CODE.get(areaCode);
     }
 
 
