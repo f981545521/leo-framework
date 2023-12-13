@@ -30,6 +30,11 @@ public class LeoProperty {
     private boolean printResponseBody = false;
 
     /**
+     * 打印执行的SQL
+     */
+    private boolean printPerformanceSql = false;
+
+    /**
      * SpringMvcInterceptor Token校验
      */
     private boolean tokenVerify = false;

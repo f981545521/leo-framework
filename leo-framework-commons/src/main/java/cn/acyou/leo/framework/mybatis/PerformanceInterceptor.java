@@ -74,10 +74,7 @@ public class PerformanceInterceptor implements Interceptor {
         if (simplePrint) {
             log.info(sql);
         }else {
-            log.info("耗时：" + timing + " ms" + " - id:" + statementId);
-            log.info("<—————————————————————————SQL——————————————————————————>");
-            log.info(sql);
-            log.info("<——————————————————————————————————————————————————————>");
+            log.info(String.format("执行SQL：[%s] 耗时：%s ms (%s)", sql, timing, statementId));
         }
         return result;
     }
@@ -96,6 +93,7 @@ public class PerformanceInterceptor implements Interceptor {
 
     private String getSql(BoundSql boundSql, Object parameterObject, Configuration configuration) {
         String sql = boundSql.getSql().replaceAll("[\\s]+", " ");
+        sql = sql.replaceAll("\\?", "@YOÜ@");
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
         TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
         if (parameterMappings != null) {
@@ -133,6 +131,6 @@ public class PerformanceInterceptor implements Interceptor {
         } else {
             result = "null";
         }
-        return sql.replaceFirst("\\?", result);
+        return sql.replaceFirst("@YOÜ@", result);
     }
 }
