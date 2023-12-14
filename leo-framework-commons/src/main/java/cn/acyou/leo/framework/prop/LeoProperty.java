@@ -20,14 +20,9 @@ public class LeoProperty {
     private boolean printToResult = true;
 
     /**
-     * 打印请求体
+     * 打印请求信息
      */
-    private boolean printRequestBody = true;
-
-    /**
-     * 打印响应信息
-     */
-    private boolean printResponseBody = false;
+    private boolean printRequestInfo = true;
 
     /**
      * 打印执行的SQL

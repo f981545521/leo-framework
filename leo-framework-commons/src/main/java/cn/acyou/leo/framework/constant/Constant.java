@@ -67,6 +67,11 @@ public class Constant {
         public static final int CONS_100 = 100;
     }
 
+    public static final String ALL = "debug_printRequestBody_printResponseBody";
+    public static final String DEBUG = "debug";
+    public static final String REQ = "printRequestBody";
+    public static final String RESP = "printResponseBody";
+
     /**
      * 请求头header名称
      */

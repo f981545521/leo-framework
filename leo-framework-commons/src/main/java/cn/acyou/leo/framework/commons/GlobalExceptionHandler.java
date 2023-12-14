@@ -208,9 +208,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
     public Result<Object> handleHttpMessageNotReadableException(HttpServletRequest request, Exception e){
-        Result<Object> resultInfo = Result.error();
+        Result<Object> resultInfo = Result.error(CommonErrorEnum.E_PARAM_CONVERT_ERROR);
         //org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character ('"' (code 34)): ...
-        resultInfo.setMessage("请求参数格式转换错误，请检查！");
         printErrorStackTraceInResultData(e, resultInfo);
         return resultInfo;
     }
@@ -218,9 +217,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseBody
     public Result<Object> handleMethodArgumentTypeMismatchException(HttpServletRequest request, Exception e){
-        Result<Object> resultInfo = Result.error();
+        Result<Object> resultInfo = Result.error(CommonErrorEnum.E_PARAM_CONVERT_ERROR);
         //Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "999X" ...
-        resultInfo.setMessage("请求参数格式转换错误，请检查！");
         printErrorStackTraceInResultData(e, resultInfo);
         return resultInfo;
     }

@@ -35,9 +35,8 @@ spring:
 leo:
   debug:
     interface-call-statistics: false
-    print-request-body: true
-    print-response-body: false
-    print-to-result: false
+    print-performance-sql: true
+    print-to-result: true
     token-verify: true
     ignore-uri-list:
       - ${server.servlet.context-path}/doc.html

@@ -74,14 +74,12 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         AppContext.setRequestTimeStamp(System.currentTimeMillis());
         String token = getToken(request);
         AppContext.setToken(token);
         String requestURI = request.getRequestURI();
         final String requestMethod = request.getMethod();
         String remoteIp = IPUtil.getClientIp(request);
-
         final Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null && parameterMap.size() > 0) {
             List<String> params = new ArrayList<>();
@@ -91,67 +89,40 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             final String joinParam = StringUtils.collectionToDelimitedString(params, "&");
             requestURI = requestURI + "?" + joinParam;
         }
-        String logMessage = String.format("访问开始 ——> %s [%s %s] ", remoteIp, requestMethod, requestURI);
-        String requestBody = "";
-        if (leoProperty.isPrintRequestBody()) {
-            if (request.getContentType() != null && (request.getContentType().contains("application/json") || request.getContentType().contains("xml"))) {
-                InputStream is = request.getInputStream();
-                StringBuilder responseStrBuilder = new StringBuilder();
-                BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-                String inputStr;
-                while ((inputStr = streamReader.readLine()) != null) {
-                    responseStrBuilder.append(inputStr);
+        AppContext.MethodInfoBean methodInfoBean = getMethodInfoBean(handler);
+        if (leoProperty.isPrintRequestInfo()) {
+            String logMessage = String.format("<(%s) %s> 访问开始 ——> %s [%s %s] ",
+                    remoteIp,
+                    org.apache.commons.lang3.StringUtils.defaultIfBlank(AppContext.getToken(), "-"),
+                    methodInfoBean.getApiRemark(),
+                    requestMethod,
+                    requestURI);
+            String requestBody = "无";
+            if (methodInfoBean.isPrintRequestBody()) {
+                if (request.getContentType() != null && (request.getContentType().contains("application/json") || request.getContentType().contains("xml"))) {
+                    InputStream is = request.getInputStream();
+                    StringBuilder responseStrBuilder = new StringBuilder();
+                    BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                    String inputStr;
+                    while ((inputStr = streamReader.readLine()) != null) {
+                        responseStrBuilder.append(inputStr);
+                    }
+                    requestBody = responseStrBuilder.toString();
                 }
-                requestBody = responseStrBuilder.toString();
+                if (requestBody.length() > 0) {
+                    AppContext.setRequestBody(requestBody);
+                    logMessage = logMessage + String.format(" 请求体: %s", requestBody);
+                }
             }
-            if (requestBody.length() > 0) {
-                AppContext.setRequestBody(requestBody);
-                logMessage = logMessage + String.format(" 请求体: %s", requestBody);
-            }
+            log.info(logMessage);
         }
-        log.info(logMessage);
 
         AppContext.setIp(remoteIp);
-
         AppContext.setActionUrl(requestURI);
         AppContext.setClientType(SourceUtil.getClientTypeByUserAgent(request));
         String language = request.getHeader("Language");
         AppContext.setClientLanguage(ClientLanguage.getLanguage(language));
-        AppContext.MethodInfoBean methodInfoBean = new AppContext.MethodInfoBean();
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = ((HandlerMethod) handler);
-            final String methodInfo = handlerMethod.toString();
-            methodInfoBean = CacheUtil.getAndCache("BaseInterceptor.methodDebug." + methodInfo, 0L, (k) -> {
-                Method method = handlerMethod.getMethod();
-                ApiOperation annotation = method.getAnnotation(ApiOperation.class);
-                RequiresRoles requiresRoles = method.getAnnotation(RequiresRoles.class);
-                RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
-                AppContext.MethodInfoBean info = new AppContext.MethodInfoBean();
-                info.setRequiresRoles(requiresRoles);
-                info.setRequiresPermissions(requiresPermissions);
-                info.setMethodInfo(methodInfo);
-                info.setDebug("true");
-                if (annotation != null) {
-                    Extension[] extensions = annotation.extensions();
-                    if (extensions != null) {
-                        for (Extension extension : extensions) {
-                            if (extension.properties() != null) {
-                                for (ExtensionProperty property : extension.properties()) {
-                                    if (property.name().equalsIgnoreCase("debug")) {
-                                        if (property.value().equalsIgnoreCase("false")) {
-                                            info.setDebug("false");
-                                            return info;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return info;
-            });
 
-        }
         //启用Token校验 并且 存在注解 RequiresRoles || RequiresPermissions
         if (methodInfoBean.getRequiresRoles() != null || methodInfoBean.getRequiresPermissions() != null) {
             if (leoProperty.isTokenVerify() && !isMatcherPath(request.getRequestURI())) {
@@ -200,21 +171,23 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         processInterfaceStatistics(request);
-        final Long requestTimeStamp = AppContext.getRequestTimeStamp();
-        String logMessage = String.format("访问结束 <——  [status:%s 耗时:%s ms]",
-                response.getStatus(),
-                requestTimeStamp != null ? (System.currentTimeMillis() - AppContext.getRequestTimeStamp()) : "-");
-        if (leoProperty.isPrintResponseBody()) {
-            String contentType = response.getContentType();
-            if (contentType != null && contentType.contains("application/json")) {
-                ContentCachingResponseWrapper resp =  WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
-                if (resp != null) {
-                    String responseBody = StreamUtils.copyToString(resp.getContentInputStream(), StandardCharsets.UTF_8);
-                    logMessage = logMessage + String.format(" 响应体: %s", responseBody.length() > 1000 ? responseBody.substring(0, 1000) : responseBody);
+        if (leoProperty.isPrintRequestInfo()) {
+            final Long requestTimeStamp = AppContext.getRequestTimeStamp();
+            String logMessage = String.format("访问结束 <——  [status:%s 耗时:%s ms]",
+                    response.getStatus(),
+                    requestTimeStamp != null ? (System.currentTimeMillis() - AppContext.getRequestTimeStamp()) : "-");
+            if (getMethodInfoBean(handler).isPrintResponseBody()) {
+                String contentType = response.getContentType();
+                if (contentType != null && contentType.contains("application/json")) {
+                    ContentCachingResponseWrapper resp = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+                    if (resp != null) {
+                        String responseBody = StreamUtils.copyToString(resp.getContentInputStream(), StandardCharsets.UTF_8);
+                        logMessage = logMessage + String.format(" 响应体: %s", responseBody.length() > 1000 ? responseBody.substring(0, 1000) : responseBody);
+                    }
                 }
             }
+            log.info(logMessage);
         }
-        log.info(logMessage);
         //clear context
         AppContext.clearThreadLocal();
         PageHelper.clearPage();
@@ -256,6 +229,74 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         AsyncManager.execute(() -> {
             log.info(">>> {}", interfaceCallStatistics);
         });
+    }
+
+    private AppContext.MethodInfoBean getMethodInfoBean(Object handler) {
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = ((HandlerMethod) handler);
+            final String methodInfo = handlerMethod.toString();
+            return CacheUtil.getAndCache("BASE_INTERCEPTOR.METHOD_DEBUG." + methodInfo, 0L, (k) -> {
+                Method method = handlerMethod.getMethod();
+                ApiOperation annotation = method.getAnnotation(ApiOperation.class);
+                RequiresRoles requiresRoles = method.getAnnotation(RequiresRoles.class);
+                RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
+                AppContext.MethodInfoBean info = new AppContext.MethodInfoBean();
+                info.setApiOperation(annotation);
+                info.setRequiresRoles(requiresRoles);
+                info.setRequiresPermissions(requiresPermissions);
+                info.setMethodInfo(methodInfo);
+                if (annotation != null) {
+                    info.setApiRemark(annotation.value());
+                    //方法1：
+                    String nickname = annotation.nickname();
+                    if (org.apache.commons.lang3.StringUtils.isNotBlank(nickname)) {
+                        if (cn.acyou.leo.framework.util.StringUtils.containsIgnoreCase(nickname, "debug")) {
+                            info.setDebug("true");
+                        } else {
+                            info.setDebug("false");
+                        }
+                        info.setPrintRequestBody(cn.acyou.leo.framework.util.StringUtils.containsIgnoreCase(nickname, "printRequestBody"));
+                        info.setPrintResponseBody(cn.acyou.leo.framework.util.StringUtils.containsIgnoreCase(nickname, "printResponseBody"));
+                    }
+                    //方法2：
+                    Extension[] extensions = annotation.extensions();
+                    if (extensions != null) {
+                        for (Extension extension : extensions) {
+                            if (extension.properties() != null) {
+                                for (ExtensionProperty property : extension.properties()) {
+                                    if (property.name().equalsIgnoreCase("debug")) {
+                                        if (property.value().equalsIgnoreCase("true")) {
+                                            info.setDebug("true");
+                                        }
+                                        if (property.value().equalsIgnoreCase("false")) {
+                                            info.setDebug("false");
+                                        }
+                                    }
+                                    if (property.name().equalsIgnoreCase("printRequestBody")) {
+                                        if (property.value().equalsIgnoreCase("true")) {
+                                            info.setPrintRequestBody(true);
+                                        }
+                                        if (property.value().equalsIgnoreCase("false")) {
+                                            info.setPrintRequestBody(false);
+                                        }
+                                    }
+                                    if (property.name().equalsIgnoreCase("printResponseBody")) {
+                                        if (property.value().equalsIgnoreCase("true")) {
+                                            info.setPrintResponseBody(true);
+                                        }
+                                        if (property.value().equalsIgnoreCase("false")) {
+                                            info.setPrintResponseBody(false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return info;
+            });
+        }
+        return new AppContext.MethodInfoBean();
     }
 
 }

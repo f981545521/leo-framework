@@ -1,5 +1,6 @@
 package cn.acyou.leo.tool.controller;
 
+import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.model.IdsReq;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.Result;
@@ -48,7 +49,7 @@ public class DictController {
         return Result.success(dictVoList);
     }
 
-    @ApiOperation(value = "分页查询所有数据字典")
+    @ApiOperation(value = "分页查询所有数据字典", nickname = Constant.ALL)
     @PostMapping("/page")
     public Result<?> page(@RequestBody DictSo dictSo) {
         PageData<DictVo> pageData = dictService.pageSelectDicts(dictSo);

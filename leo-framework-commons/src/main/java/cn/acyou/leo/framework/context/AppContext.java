@@ -8,6 +8,7 @@ import cn.acyou.leo.framework.base.LoginUser;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.Result;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -255,7 +256,10 @@ public class AppContext {
     public static class MethodInfoBean {
         private String methodInfo = "";
         private String apiRemark = "";
-        private String debug = "true";
+        private String debug = "false";
+        private boolean printRequestBody = true;
+        private boolean printResponseBody = false;
+        private ApiOperation apiOperation;
         private RequiresRoles requiresRoles;
         private RequiresPermissions requiresPermissions;
     }
