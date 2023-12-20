@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.IdUtil;
+import cn.acyou.leo.framework.util.RSAUtils;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
@@ -77,6 +78,15 @@ public class SysCommonController {
         return Result.success(jsonObject);
     }
 
+    @GetMapping(value = "/rsa")
+    @ApiOperation(value = "获取公钥")
+    @ResponseBody
+    public Result<String> rsa() throws Exception {
+        String token = AppContext.getToken();
+        Map<Integer, String> key = RSAUtils.genKeyPair();
+        redisUtils.set("USER_RSA:" + token, JSON.toJSONString(key), 1, TimeUnit.DAYS);
+        return Result.success(key.get(0));
+    }
 
     @GetMapping(value = "/idempotent")
     @ApiOperation(value = "获取幂等序列 prefix前缀（必传）。sequence：空时生成，非空时判断。operate：校验并删除")

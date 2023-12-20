@@ -27,15 +27,20 @@ public class RSAUtils {
      * 密钥长度 于原文长度对应 以及越长速度越慢
      */
     private final static int KEY_SIZE = 2048;
-    /**
-     * 用于存放随机产生的公钥与私钥
-     */
-    private static final Map<Integer, String> keyMap = new HashMap<>();
+
 
     /**
      * 随机生成密钥对
+     * <p>
+     * 用于存放随机产生的公钥与私钥
+     * 0表示公钥
+     * 1表示私钥
+     *
+     * @return {@link Map}<{@link Integer}, {@link String}>
+     * @throws NoSuchAlgorithmException
      */
-    public static void genKeyPair() throws NoSuchAlgorithmException {
+    public static Map<Integer, String> genKeyPair() throws NoSuchAlgorithmException {
+        Map<Integer, String> keyMap = new HashMap<>();
         // KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
         // 初始化密钥对生成器
@@ -55,6 +60,7 @@ public class RSAUtils {
         //1表示私钥
         keyMap.put(1, privateKeyString);
         System.out.println("生成完毕。");
+        return keyMap;
     }
 
     /**
@@ -125,7 +131,7 @@ public class RSAUtils {
     public static void main(String[] args) throws Exception {
         long temp = System.currentTimeMillis();
         //生成公钥和私钥
-        genKeyPair();
+        Map<Integer, String> keyMap = genKeyPair();
         //加密字符串
         System.out.println("公钥:\r\n" + keyMap.get(0));
         printFormatPublicKey(keyMap.get(0));
