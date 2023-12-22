@@ -55,7 +55,7 @@ public class SysCommonController {
     }
 
     @ApiOperation("打印请求信息")
-    @RequestMapping(value = "printRequest", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "print", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public Result<JSONObject> printRequest(HttpServletRequest request, @RequestBody(required = false) Object requestBody, @RequestHeader Map<String, Object> requestHeader) {
         Map<String, String[]> requestParameter = request.getParameterMap();

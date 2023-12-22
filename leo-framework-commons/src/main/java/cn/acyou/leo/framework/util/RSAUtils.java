@@ -59,7 +59,6 @@ public class RSAUtils {
         keyMap.put(0, publicKeyString);
         //1表示私钥
         keyMap.put(1, privateKeyString);
-        System.out.println("生成完毕。");
         return keyMap;
     }
 
