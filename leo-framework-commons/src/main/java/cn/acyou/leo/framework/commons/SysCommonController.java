@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.commons;
 
+import cn.acyou.leo.framework.base.ColorVo;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.exception.ServiceException;
@@ -7,6 +8,7 @@ import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.IdUtil;
 import cn.acyou.leo.framework.util.RSAUtils;
+import cn.acyou.leo.framework.util.RandomUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
@@ -21,7 +23,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,7 +43,6 @@ public class SysCommonController {
 
     @Autowired(required = false)
     private RedisUtils redisUtils;
-
 
     @GetMapping(value = "/status")
     @ApiOperation(value = "状态检查")
@@ -76,6 +80,17 @@ public class SysCommonController {
         jsonObject.put("local", IPUtil.getLocalIP());
         jsonObject.put("client", AppContext.getIp());
         return Result.success(jsonObject);
+    }
+
+    @GetMapping(value = "/color")
+    @ApiOperation(value = "获取随机颜色")
+    @ResponseBody
+    public Result<List<ColorVo>> color(@RequestParam(value = "count", defaultValue = "1") Integer count, Boolean hasAlpla) {
+        List<ColorVo> res = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            res.add(RandomUtil.randomColor(hasAlpla));
+        }
+        return Result.success(res);
     }
 
     @GetMapping(value = "/rsa")

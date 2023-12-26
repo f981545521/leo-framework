@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import cn.acyou.leo.framework.base.ColorVo;
+
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Random;
@@ -315,6 +317,24 @@ public class RandomUtil {
             str = createRandom(false, length);
         } while (!RegexUtil.isStrongPassword(str));
         return str;
+    }
+
+    /**
+     * 随机颜色值
+     *
+     * @param hasAlpha 有透明通道
+     * @return {@link ColorVo}
+     */
+    public static ColorVo randomColor(Boolean hasAlpha) {
+        Random random = new Random();
+        int red = random.nextInt(255);
+        int green = random.nextInt(255);
+        int blue = random.nextInt(255);
+        int alpha = 255;
+        if (Boolean.TRUE.equals(hasAlpha)) {
+            alpha = random.nextInt(255); //透明度
+        }
+        return new ColorVo(red, green, blue, alpha);
     }
 
 }
