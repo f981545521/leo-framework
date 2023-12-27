@@ -18,6 +18,22 @@ Content-Type: text/xml
     <Idx>xxxx</Idx>
 </xml>
 
+###
+POST {{api_url}}/leo-tool/wx/verifyServer3?signature=868a758c9902e957a7e465c269b464824e0be45d&timestamp=1684998522&nonce=1278899045&openid=oY9zx5mIWWUqrAfvz-7qs4239zCY
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+    <ToUserName><![CDATA[gh_c630c6fa44ea]]></ToUserName>
+    <FromUserName><![CDATA[oY9zx5mIWWUqrAfvz-7qs4239zCY]]></FromUserName>
+    <CreateTime>1684998522</CreateTime>
+    <MsgType><![CDATA[text]]></MsgType>
+    <Content><![CDATA[我是老板]]></Content>
+    <MsgId>1234567890123456</MsgId>
+    <MsgDataId>xxxx</MsgDataId>
+    <Idx>xxxx</Idx>
+</xml>
+
 ### 测试
 POST {{api_url}}/leo-tool/task/list
 

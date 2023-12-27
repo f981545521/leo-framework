@@ -10,12 +10,14 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -105,6 +107,38 @@ public class WxController {
             return wxMpMsgResp;
         }
 
+        PrintWriter writer = null;
+        try {
+            writer = response.getWriter();
+            writer.write(res);
+            writer.flush();
+        } catch (IOException e) {
+            log.error("微信服务器验证出错了", e);
+        }
+        return null;
+    }
+
+    @ApiOperation("微信服务器 接收微信消息3（非内容协商 建议使用）")
+    @PostMapping(value = "verifyServer3", consumes = {MediaType.TEXT_XML_VALUE}, produces = MediaType.TEXT_XML_VALUE)
+    @ResponseBody
+    public Object verifyServerMessage3(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String wxMpMsgXmlStr = StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8);
+        log.info("接收微信消息:{}", wxMpMsgXmlStr);
+        WxMpMessage wxMpMsgXml = XMLUtil.xmlToBean(wxMpMsgXmlStr, WxMpMessage.class);
+        String content = wxMpMsgXml.getContent();
+        String openid = wxMpMsgXml.getFromUserName();
+
+        String res = "success";
+        if ("我是老板".equals(content)) {
+            response.setCharacterEncoding("UTF-8");
+            WxMpMsgResp wxMpMsgResp = new WxMpMsgResp();
+            wxMpMsgResp.setFromUserName(wxMpMsgXml.getToUserName());
+            wxMpMsgResp.setToUserName(wxMpMsgXml.getFromUserName());
+            wxMpMsgResp.setCreateTime(new Date().getTime() + "");
+            wxMpMsgResp.setMsgType("text");
+            wxMpMsgResp.setContent("我将为您服务！");
+            res = XMLUtil.beanToXmlStr(wxMpMsgResp);
+        }
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
