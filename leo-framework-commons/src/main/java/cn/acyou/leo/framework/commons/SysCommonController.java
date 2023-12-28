@@ -5,10 +5,7 @@ import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.Result;
-import cn.acyou.leo.framework.util.IPUtil;
-import cn.acyou.leo.framework.util.IdUtil;
-import cn.acyou.leo.framework.util.RSAUtils;
-import cn.acyou.leo.framework.util.RandomUtil;
+import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
@@ -22,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +90,17 @@ public class SysCommonController {
             res.add(RandomUtil.randomColor(hasAlpla));
         }
         return Result.success(res);
+    }
+
+    @GetMapping(value = "/hashAvatar")
+    @ApiOperation(value = "Hash头像生成")
+    public void hashAvatar(@RequestParam(value = "num", required = false) Integer num, HttpServletResponse response) throws Exception {
+        response.setContentType("image/gif");
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        final ServletOutputStream os = response.getOutputStream();
+        AvatarHelper.create(num != null ? num : RandomUtil.createRandomInt(), os);
     }
 
     @GetMapping(value = "/rsa")
