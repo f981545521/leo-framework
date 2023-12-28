@@ -1,0 +1,18 @@
+### 登录
+POST {{api_url}}/leo-tool/user/login
+content-Type: application/json
+
+{
+  "phone": "10001",
+  "password": "10001"
+}
+
+> {% client.global.set("leo_tool_token", response.body.data.token); %}
+
+### 获取登录用户
+POST {{api_url}}/leo-tool/user/loginInfo
+content-Type: application/json
+Authentication: {{leo_tool_token}}
+
+
+

@@ -564,7 +564,10 @@ public class MediaUtil {
             w = h;
             h = t;
         }
-        if (w >= 4096) {
+        if (w >= 7680) {//
+            return "8K";
+        }
+        if (w >= 3840) {// || w >= 4096
             return "4K";
         }
         if (w >= 2048) {

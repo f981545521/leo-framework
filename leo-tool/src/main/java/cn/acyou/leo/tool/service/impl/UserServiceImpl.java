@@ -11,15 +11,14 @@ import cn.acyou.leo.framework.util.RandomUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.dto.req.UserLoginAccountReq;
 import cn.acyou.leo.tool.entity.User;
-import cn.acyou.leo.tool.mapper.UserMapper;
 import cn.acyou.leo.tool.service.UserService;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,14 +30,20 @@ import java.util.concurrent.TimeUnit;
  * @since 2022-08-16
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService, UserTokenService {
+public class UserServiceImpl implements UserService, UserTokenService {
 
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private List<User> dbUserList;
+
 
     @Override
     public LoginUser getLoginUserByUserId(Long userId) {
-        User user = getById(userId);
+        User user = dbUserList.stream().filter(x -> x.getUserId().equals(userId)).findFirst().orElse(null);
+        if (user == null) {
+            throw new ServiceException("用户不存在！");
+        }
         return prepareLoginUser(AppContext.getToken(), user);
     }
 
@@ -66,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private LoginUser loginByAccount(UserLoginAccountReq accountLogin) {
         String phone = accountLogin.getPhone();
         String password = accountLogin.getPassword();
-        User accountUser = lambdaQuery().eq(User::getPhone, phone).one();
+        User accountUser = dbUserList.stream().filter(x -> x.getPhone().equals(phone)).findFirst().orElse(null);
         if (accountUser == null) {
             throw new ServiceException("用户名或密码错误，请检查！");
         }
