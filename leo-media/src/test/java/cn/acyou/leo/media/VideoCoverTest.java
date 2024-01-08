@@ -22,4 +22,9 @@ public class VideoCoverTest {
         String s = MediaUtil.formatDuration(1 * 60 * 60 * 1000);
         System.out.println(s);
     }
+
+    @Test
+    public void test23453() {
+        MediaUtil.instance().extractCoverDir(new File("C:\\Users\\1\\Downloads\\index\\index"));
+    }
 }

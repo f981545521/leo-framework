@@ -300,10 +300,46 @@ public class MediaUtil {
         exec(command.toArray(new String[0]));
     }
 
+    /**
+     * 扫描文件截取封面：
+     * 后缀名为【文件名_cover.png】
+     * C:\Users\1\Downloads\index\index\avatar\cn\m1_9_16.mp4
+     * C:\Users\1\Downloads\index\index\avatar\cn\m1_9_16_cover.png
+     *
+     * @param file 文件 or 文件夹
+     */
+    public void extractCoverDir(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File file1 : files) {
+                    extractCoverDir(file1);
+                }
+            }
+        } else if (file.isFile()) {
+            String absolutePath = file.getAbsolutePath();
+            String coverPath = absolutePath.substring(0, absolutePath.lastIndexOf(".")) + "_cover.png";
+            extractCover(absolutePath, new File(coverPath), null);
+        }
+    }
+
+    /**
+     * 截取封面
+     *
+     * @param source file
+     * @param target 目标文件
+     */
     public void extractCover(File source, File target) {
         extractCover(source.getAbsolutePath(), target, null);
     }
 
+    /**
+     * 截取封面
+     *
+     * @param source file or url
+     * @param target 目标文件
+     * @param offset 偏移量（默认 0.01）
+     */
     public void extractCover(String source, File target, String offset) {
         MultimediaObject object = getMediaObject(source);
         if (object == null) {
