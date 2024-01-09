@@ -1,9 +1,7 @@
 package cn.acyou.leo.media;
 
-import cn.acyou.leo.framework.media.dto.VideoInfoExt;
 import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONValue;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -322,7 +320,7 @@ public class VideoFormatTest {
         //### 压缩图片
         //ImageUtil.compressImage(new URL("http://qiniu.acyou.cn/images/12.jpg"), new File("D:\\te\\12.jpg"));
         //ImageUtil.compressImage(new File("D:\\temp\\image\\6.jpg"), new File("D:\\temp\\image\\6_c.jpg"));
-        VideoInfoExt videoInfo = MediaUtil.instance().getVideoInfo("http://qiniu.acyou.cn/DouYin/2.mp4");
+        MediaUtil.VideoInfoExt videoInfo = MediaUtil.instance().getVideoInfo("http://qiniu.acyou.cn/DouYin/2.mp4");
         System.out.println(videoInfo);
     }
 

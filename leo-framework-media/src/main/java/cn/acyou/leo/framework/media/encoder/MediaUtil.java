@@ -1,6 +1,6 @@
 package cn.acyou.leo.framework.media.encoder;
 
-import cn.acyou.leo.framework.media.dto.VideoInfoExt;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,18 +14,21 @@ import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.filters.Filter;
 import ws.schild.jave.filters.FilterChain;
 import ws.schild.jave.filters.FilterGraph;
+import ws.schild.jave.info.AudioInfo;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoInfo;
 import ws.schild.jave.info.VideoSize;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 
 import java.io.File;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -686,4 +689,72 @@ public class MediaUtil {
         videoInfoVo.setFileSizeStr(Util.convertFileSize(length));
         return videoInfoVo;
     }
+
+
+    @Data
+    public class VideoInfoExt implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        /**
+         * 格式
+         */
+        private String format = null;
+
+        /**
+         * 元数据
+         */
+        private Map<String, String> metadata = new HashMap<>();
+
+        /**
+         * 视频时长   13010
+         */
+        private long duration = -1;
+
+        /**
+         * 视频时长   00:00:13.010
+         */
+        private String durationStr = "";
+
+        /**
+         * 音频信息
+         */
+        private AudioInfo audio = null;
+
+        /**
+         * 文件大小：2110870
+         */
+        private long fileSize = 0;
+
+        /**
+         * 文件大小： 2.0 MB
+         */
+        private String fileSizeStr = "";
+
+        /**
+         * 视频信息
+         */
+        private VideoInfo video = null;
+
+        /**
+         * 分辨率  1920x1080
+         */
+        private String resolutionRatio;
+
+        /**
+         * 长宽比  16:9
+         */
+        private String resolution;
+
+        /**
+         * 帧率   29.97
+         */
+        private String frameRate;
+
+        /**
+         * 码率   1M
+         */
+        private String bitRate;
+    }
+
 }
