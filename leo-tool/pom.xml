@@ -76,12 +76,18 @@
             <artifactId>cpdetector</artifactId>
             <version>1.0.10</version>
         </dependency>
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>leo-framework-media</artifactId>
+            <version>1.5.0.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
         <!-- 阿里云ASR语言识别 -->
-<!--        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>3.7.1</version>
-        </dependency>-->
+        <!--        <dependency>
+                    <groupId>com.aliyun</groupId>
+                    <artifactId>aliyun-java-sdk-core</artifactId>
+                    <version>3.7.1</version>
+                </dependency>-->
     </dependencies>
 
 

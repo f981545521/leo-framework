@@ -1,7 +1,11 @@
 package cn.acyou.leo.tool.test.poi;
 
+import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import cn.acyou.leo.framework.util.ExcelUtil;
+import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.RandomUtil;
+import cn.acyou.leo.framework.util.StringUtils;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.context.AnalysisContext;
@@ -10,9 +14,13 @@ import lombok.Data;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
+import ws.schild.jave.info.MultimediaInfo;
+import ws.schild.jave.info.VideoSize;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -34,6 +42,43 @@ public class MainTest1234 {
         // 返回数据
         List<Map<String, Object>> ls = ExcelUtil.importData(sheet);
         System.out.println(ls);
+    }
+
+    @Test
+    public void test32324() throws Exception {
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\temp\\poi2\\0.1.10周二上线版本公共模特及音色.xlsx"));
+        List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheetAt(0));
+        PrintWriter printWriter = FileUtil.getPrintWriter("D:\\temp\\poi2\\0.1.10周二上线版本公共模特及音色_export2.sql", StandardCharsets.UTF_8, false);
+        String name = null;
+        long currentTimeMillis = System.currentTimeMillis();
+        long startId = 200;
+        for (Map<String, Object> objectMap : dataList) {
+            Object nameItem = objectMap.get("名字");
+            if (nameItem != null) {
+                name = nameItem.toString();
+            }
+            if (objectMap.get("模特视频位置") == null || StringUtils.isBlank(objectMap.get("模特视频位置").toString())) {
+                continue;
+            }
+            String format = DateUtil.format(new Date(currentTimeMillis), "yyyy-MM-dd HH:mm:ss");
+            String videoPath = objectMap.get("模特视频位置").toString();
+            //https://anylang.obs.ap-southeast-3.myhuaweicloud.com/anylang-video/resources/robot_public/index/avatar/cn/m1_16_9.mp4
+            String videoUrl = "https://anylang.obs.ap-southeast-3.myhuaweicloud.com/anylang-video/resources/robot_public" + videoPath.replaceAll("\\\\", "/");
+            String coverUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + "_cover.png";
+            MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo(videoUrl);
+            VideoSize realVideoSize = MediaUtil.getRealVideoSize(mediaInfo);
+            String sql = "INSERT INTO ffo.user_video_robot " +
+                    "(id, user_id, robot_name, robot_code, scene_code, cover_url, video_url, duration, vertical, horizontal, train_status, " +
+                    "tts_id, demo_video_make_status, demo_cover_url, demo_video_url, `type`, ext, del_flag, create_time, update_time) " +
+                    "VALUES(" + startId + ", -1, '" + name + "', NULL, NULL, '" + coverUrl + "', '" + videoUrl + "', " + mediaInfo.getDuration() + ", '" + realVideoSize.getHeight() + "', '" + realVideoSize.getWidth() + "', 20, NULL," +
+                    " '20', '" + coverUrl + "', '" + videoUrl + "', 2, NULL, 0, '" + format + "', '" + format + "');\r\n";
+            printWriter.write(sql);
+            startId++;
+            currentTimeMillis = currentTimeMillis - (5 * 60 * 1000);
+        }
+        printWriter.flush();
+        printWriter.close();
+        System.out.println("解析完成");
     }
 
     @Test
