@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.*;
+import cn.acyou.leo.framework.util.component.TencentMapUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
@@ -43,6 +44,9 @@ public class SysCommonController {
     @Autowired(required = false)
     private RedisUtils redisUtils;
 
+    @Autowired(required = false)
+    private TencentMapUtil tencentMapUtil;
+
     @GetMapping(value = "/status")
     @ApiOperation(value = "状态检查")
     @ResponseBody
@@ -79,6 +83,21 @@ public class SysCommonController {
         jsonObject.put("local", IPUtil.getLocalIP());
         jsonObject.put("client", AppContext.getIp());
         return Result.success(jsonObject);
+    }
+
+    @ApiOperation("获取IP属地")
+    @GetMapping("ipAddr")
+    @ResponseBody
+    public Result<JSONObject> ipAddr(String ip) {
+        if (tencentMapUtil == null) {
+            throw new ServiceException("please create key at [https://lbs.qq.com/service/webService/webServiceGuide/webServiceIp]");
+        }
+        if (StringUtils.isBlank(ip)) {
+            String s = HttpUtil.get("http://httpbin.org/ip");
+            ip = JSON.parseObject(s).getString("origin");
+        }
+        final JSONObject ipLocation = tencentMapUtil.getIpLocation(ip);
+        return Result.success(ipLocation);
     }
 
     @GetMapping(value = "/color")

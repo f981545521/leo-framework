@@ -54,6 +54,9 @@ leo:
   xss:
     enabled: true
     excludes: /wx/verifyServer
+  tool:
+    tencent-map-key:
+      key: VGKBZ-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 # knife4j增强模式
 knife4j:
   enable: true
