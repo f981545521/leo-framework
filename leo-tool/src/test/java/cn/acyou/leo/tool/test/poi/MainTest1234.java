@@ -82,6 +82,13 @@ public class MainTest1234 {
     }
 
     @Test
+    public void testRead1() {
+        List<Map<Integer, Object>> objects = EasyExcel.read("D:\\temp\\poi2\\0.1.10周二上线版本公共模特及音色.xlsx")
+                .sheet(0).doReadSync();
+        System.out.println(objects);
+    }
+
+    @Test
     public void test283() throws Exception {
         List<Map<String, Object>> objects = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
