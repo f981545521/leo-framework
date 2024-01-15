@@ -8,8 +8,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -27,6 +29,28 @@ public class ExcelUtil {
     private final static DecimalFormat df = new DecimalFormat("0"); // 格式化number String字符
     private final static SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd"); // 日期格式化
     private final static DecimalFormat df2 = new DecimalFormat("0"); // 格式化数字
+
+    /**
+     * 从Sheet页导入数据 （默认第一个sheet页）
+     *
+     * @param path 文件路径
+     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
+     */
+    public static List<Map<String, Object>> importData(String path) throws Exception {
+        return importData(path, 0);
+    }
+
+    /**
+     * 从Sheet页导入数据
+     *
+     * @param path       文件路径
+     * @param sheetIndex Sheet页
+     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
+     */
+    public static List<Map<String, Object>> importData(String path, int sheetIndex) throws Exception {
+        XSSFWorkbook workbook = new XSSFWorkbook(new File(path));
+        return ExcelUtil.importData(workbook.getSheetAt(sheetIndex));
+    }
 
     /**
      * 从Sheet页导入数据
