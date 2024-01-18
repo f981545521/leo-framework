@@ -83,6 +83,10 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      * The Windows separator character.
      */
     private static final char WINDOWS_SEPARATOR = '\\';
+    /**
+     * 换行符
+     */
+    private static final String LINE_BREAK = "\r\n";
 
     /**
      * 获取临时文件目录
@@ -583,6 +587,40 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      */
     public static BufferedReader newReader(File file, Charset charset) throws FileNotFoundException {
         return new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
+    }
+
+
+    /**
+     * 创建或者追加文件 FileWriter
+     *
+     * @param fileFullPath 文件名称
+     * @return FileWriter
+     */
+    public static FileWriter createOrAppend(String fileFullPath) {
+        File file = new File(fileFullPath);
+        try {
+            if (!file.exists()) {
+                boolean mkdirs = file.getParentFile().mkdirs();
+                boolean newFile = file.createNewFile();
+            }
+            FileWriter fileWriter = new FileWriter(file, true);
+            fileWriter.write("准备写文件与：" + DateUtil.getCurrentDateFormat() + LINE_BREAK);
+            fileWriter.flush();
+            return fileWriter;
+        } catch (Exception e) {
+            throw new RuntimeException("获取文件失败！");
+        }
+    }
+
+    /**
+     * 换行
+     */
+    public static void lineBreak(FileWriter fileWriter) {
+        try {
+            fileWriter.write(LINE_BREAK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws Exception {
