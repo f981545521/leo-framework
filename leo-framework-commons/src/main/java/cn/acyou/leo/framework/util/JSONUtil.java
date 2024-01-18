@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -72,5 +73,40 @@ public class JSONUtil {
         }
         obj.put(key, val);
         return obj.toJSONString();
+    }
+
+
+    /**
+     * 获取JSONP JSON
+     *
+     * @param jsonpStr jsonpStr
+     * @return JSON
+     */
+    public static String getJsonPJsonStr(String jsonpStr) {
+        int startIndex = jsonpStr.indexOf("(");
+        int endIndex = jsonpStr.lastIndexOf(")");
+        return jsonpStr.substring(startIndex + 1, endIndex);
+    }
+
+    /**
+     * 获取JSONP (JSONObject)
+     *
+     * @param jsonpStr jsonpStr
+     * @return JSON
+     */
+    public static JSONObject getJsonPJsonObject(String jsonpStr) {
+        String jsonPJsonStr = getJsonPJsonStr(jsonpStr);
+        return JSON.parseObject(jsonPJsonStr);
+    }
+
+    /**
+     * 获取JSONP (JSONArray)
+     *
+     * @param jsonpStr jsonpStr
+     * @return JSON
+     */
+    public static JSONArray getJsonPJsonArray(String jsonpStr) {
+        String jsonPJsonStr = getJsonPJsonStr(jsonpStr);
+        return JSON.parseArray(jsonPJsonStr);
     }
 }
