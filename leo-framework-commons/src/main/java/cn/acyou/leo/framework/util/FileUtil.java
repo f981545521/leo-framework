@@ -623,6 +623,39 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         }
     }
 
+    public static List<String> fileNameFilterCharacterList = Lists.newArrayList("\\\\",
+            " ",
+            "/",
+            "\\.",
+            ":",
+            "\\*",
+            "\\?",
+            "\\\\\"",
+            ">",
+            "<",
+            "\r\n",
+            "\r",
+            "\n",
+            "\t",
+            "\\|");
+
+    /**
+     * 过滤文件系统不认的字符
+     *
+     * @param str 字符
+     * @return {@link String}
+     */
+    private static String filterFileName(String str) {
+        if (str == null || str.length() == 0) {
+            return str;
+        } else {
+            for (String s : fileNameFilterCharacterList) {
+                str = str.replaceAll(s, "");
+            }
+            return str;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         File file = new File("D:\\ToUpload\\G.E.M.邓紫棋 - A.I.N.Y..mp3");
 
