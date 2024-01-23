@@ -104,4 +104,30 @@ public class ImageUtil {
         imageInfo.setType(type);
         return imageInfo;
     }
+
+    /**
+     * 缩放图片大小
+     *
+     * @param source       源文件
+     * @param target       目标文件
+     * @param targetWidth  目标宽
+     * @param targetHeight 目标高
+     * @throws Exception 异常
+     */
+    public static void resize(File source, File target, int targetWidth, int targetHeight) throws Exception {
+        BufferedImage originalImage = ImageIO.read(source);
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+        BufferedImage targetImage = new BufferedImage(targetWidth, targetHeight, originalImage.getType());
+        Graphics2D graphics2D = targetImage.createGraphics();
+        graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+        graphics2D.dispose();
+        ImageIO.write(targetImage, "png", target);
+    }
+
+    public static void main(String[] args) throws Exception {
+        File source = new File("C:\\Users\\1\\Pictures\\XM1.webp");
+        File target = new File("C:\\Users\\1\\Pictures\\XM1_target2.png");
+        resize(source, target, 240, 240);
+    }
 }
