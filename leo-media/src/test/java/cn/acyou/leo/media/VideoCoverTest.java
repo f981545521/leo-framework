@@ -1,5 +1,6 @@
 package cn.acyou.leo.media;
 
+import cn.acyou.leo.framework.media.encoder.ExecProcess;
 import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import org.junit.jupiter.api.Test;
 
@@ -26,5 +27,16 @@ public class VideoCoverTest {
     @Test
     public void test23453() {
         MediaUtil.instance().extractCoverDir(new File("C:\\Users\\1\\Downloads\\index\\index"));
+    }
+
+    @Test
+    public void test232453() {
+        String path = "C:\\Users\\1\\Downloads\\08cc192584d156c3d5661b3b1bc56450.mp4";
+        MediaUtil.instance(new ExecProcess() {
+            @Override
+            public void progress(long perm) {
+                System.out.println(perm);
+            }
+        }).splitAudioAndVideo(new File(path));
     }
 }

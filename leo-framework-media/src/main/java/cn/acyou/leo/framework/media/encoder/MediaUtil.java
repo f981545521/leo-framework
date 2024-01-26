@@ -664,6 +664,36 @@ public class MediaUtil {
     }
 
     /**
+     * 分离视频与音频
+     * <p>
+     * ffmpeg.exe -i input_video.mp4 output_audio.mp3
+     * ffmpeg.exe -i input_video.mp4 output_video.mp4
+     *
+     * @param i         输入
+     * @param audioPath 输出音频目录
+     * @param videoPath 输出视频目录（无声音）
+     */
+    public void splitAudioAndVideo(String i, String audioPath, String videoPath) {
+        boolean mkdirs1 = new File(audioPath).getParentFile().mkdirs();
+        boolean mkdirs2 = new File(videoPath).getParentFile().mkdirs();
+        log.info("分离视频与音频 params:[i:{}, target:{}|{}] 目标目录：{}", i, audioPath, videoPath, (mkdirs1 && mkdirs2 ? "创建成功" : "无需创建"));
+        exec("-i", i, "-vn", audioPath);
+        exec("-i", i, "-an", videoPath);
+    }
+
+    /**
+     * 分离视频与音频（输出到目录）
+     *
+     * @param videoFile 视频文件地址
+     */
+    public void splitAudioAndVideo(File videoFile) {
+        String i = videoFile.getAbsolutePath();
+        String audioPath = i.substring(0, i.lastIndexOf(".")) + "_audio.mp3";
+        String videoPath = i.substring(0, i.lastIndexOf(".")) + "_video" + i.substring(i.lastIndexOf("."));
+        splitAudioAndVideo(i, audioPath, videoPath);
+    }
+
+    /**
      * 获取视频的补充信息
      *
      * @param i 输入
