@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 防止XSS攻击的过滤器
@@ -60,7 +58,25 @@ public class XssFilter implements Filter {
         XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper((HttpServletRequest) request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
         chain.doFilter(xssRequest, responseWrapper);
-        responseWrapper.copyBodyToResponse();
+        if (xssRequest.isAsyncStarted()) {
+            //DeferredResult Support
+            xssRequest.getAsyncContext().addListener(new AsyncListener() {
+                public void onComplete(AsyncEvent asyncEvent) throws IOException {
+                    responseWrapper.copyBodyToResponse();
+                }
+
+                public void onTimeout(AsyncEvent asyncEvent) {
+                }
+
+                public void onError(AsyncEvent asyncEvent) {
+                }
+
+                public void onStartAsync(AsyncEvent asyncEvent) {
+                }
+            });
+        } else {
+            responseWrapper.copyBodyToResponse();
+        }
     }
 
     private boolean handleExcludeURL(HttpServletRequest request, HttpServletResponse response) {

@@ -37,6 +37,7 @@ leo:
     interface-call-statistics: false
     print-performance-sql: true
     print-to-result: true
+    print-request-info: true
     token-verify: true
     ignore-uri-list:
       - ${server.servlet.context-path}/doc.html

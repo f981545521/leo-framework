@@ -2,6 +2,8 @@ package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
 import cn.acyou.leo.framework.commons.AsyncManager;
+import cn.acyou.leo.framework.commons.ThreadAsyncCall;
+import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +63,7 @@ public class TestController {
     @Autowired
     private ParamConfigService paramConfigService;
 
-    @ApiOperation("测试异步缓存")
+    @ApiOperation(value = "测试异步缓存", nickname = Constant.ALL)
     @GetMapping("test")
     public Result<Void> test() {
         asyncService.printOk();
@@ -298,4 +301,21 @@ public class TestController {
         ExcelUtil.exportExcel(response, objects, "列表");
     }
 
+
+    @ApiOperation(value = "测试异步接口", nickname = Constant.ALL)
+    @GetMapping("testThreadAsyncCall")
+    @ResponseBody
+    public DeferredResult<Result<String>> testThreadAsyncCall() {
+        DeferredResult<Result<String>> deferredResult = new DeferredResult<>(10 * 60 * 1000L);
+        ThreadAsyncCall.run(2000, () -> {
+            int i = RandomUtil.randomRangeNumber(1, 100);
+            log.info("执行 异步方法：{}", i);
+            if (i > 70) {
+                deferredResult.setResult(Result.success(String.valueOf(i)));
+                return "ok";
+            }
+            return null;
+        });
+        return deferredResult;
+    }
 }
