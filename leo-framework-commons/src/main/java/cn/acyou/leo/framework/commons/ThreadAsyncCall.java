@@ -17,42 +17,44 @@ public class ThreadAsyncCall {
     private static final DelayQueue<DelayTask> QUEUE = new DelayQueue<>();
 
     static {
-        log.info("thread async call 初始化");
-        Thread thread = new Thread(() -> {
-            try {
-                while (true) {
-                    if (QUEUE.size() != 0) {
-                        DelayTask task = QUEUE.poll(10, TimeUnit.MINUTES);
-                        try {
-                            if (task != null) {
-                                Map<String, String> contextMap = task.getContextMap();
-                                MDC.setContextMap(contextMap);
-                                Supplier<Object> supplier = task.getSupplier();
-                                Object res = supplier.get();
-                                if (res == null) {
-                                    //调用结果为空
-                                    run(task.getSleep(), task.getSupplier());
+        synchronized (ThreadAsyncCall.class) {
+            log.info("thread async call 初始化");
+            Thread thread = new Thread(() -> {
+                try {
+                    while (true) {
+                        if (QUEUE.size() != 0) {
+                            DelayTask task = QUEUE.poll(10, TimeUnit.MINUTES);
+                            try {
+                                if (task != null) {
+                                    Map<String, String> contextMap = task.getContextMap();
+                                    MDC.setContextMap(contextMap);
+                                    Supplier<Object> supplier = task.getSupplier();
+                                    Object res = supplier.get();
+                                    if (res == null) {
+                                        //调用结果为空
+                                        run(task.getSleep(), task.getSupplier());
+                                    }
                                 }
+                            } catch (Throwable e) {
+                                log.error("thread async call function run error.");
+                                e.printStackTrace();
+                            } finally {
+                                MDC.clear();
                             }
-                        } catch (Throwable e) {
-                            log.error("thread async call function run error.");
-                            e.printStackTrace();
-                        } finally {
-                            MDC.clear();
+                        } else {
+                            Thread.sleep(500);
                         }
-                    } else {
-                        Thread.sleep(500);
                     }
+                } catch (Throwable e) {
+                    log.error("thread async call system error.");
+                    e.printStackTrace();
                 }
-            } catch (Throwable e) {
-                log.error("thread async call system error.");
-                e.printStackTrace();
-            }
-        });
-        thread.setDaemon(true);
-        thread.setName("ThreadAsyncCall");
-        thread.start();
-        log.info("thread async call 初始化完成");
+            });
+            thread.setDaemon(true);
+            thread.setName("ThreadAsyncCall");
+            thread.start();
+            log.info("thread async call 初始化完成");
+        }
     }
 
     public static void run(Supplier<Object> supplier) {

@@ -307,7 +307,21 @@ public class TestController {
     @ResponseBody
     public DeferredResult<Result<String>> testThreadAsyncCall() {
         DeferredResult<Result<String>> deferredResult = new DeferredResult<>(10 * 60 * 1000L);
-        ThreadAsyncCall.run(2000, () -> {
+        deferredResult.onTimeout(() -> {
+            deferredResult.setResult(Result.success("请求超时"));
+        });
+        deferredResult.onError((k) -> {
+            deferredResult.setResult(Result.success("请求出错"));
+        });
+        deferredResult.onCompletion(() -> {
+            //新的线程执行
+            log.info("执行完成");
+        });
+/*        deferredResult.setResultHandler((result) -> {
+            log.info("执行setResultHandler");
+        });*/
+
+        AsyncManager.deferredRun(2000, () -> {
             int i = RandomUtil.randomRangeNumber(1, 100);
             log.info("执行 异步方法：{}", i);
             if (i > 70) {

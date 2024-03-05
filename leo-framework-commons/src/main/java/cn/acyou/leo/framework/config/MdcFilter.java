@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.config;
 
+import cn.acyou.leo.framework.util.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,7 +21,11 @@ public class MdcFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            MDC.put("leoTraceNo", UUID.randomUUID().toString().replaceAll("-", ""));
+            String leoTraceNo = request.getHeader("leoTraceNo");
+            if (StringUtils.isBlank(leoTraceNo)) {
+                leoTraceNo = UUID.randomUUID().toString().replaceAll("-", "");
+            }
+            MDC.put("leoTraceNo", leoTraceNo);
             filterChain.doFilter(request, response);
         } finally {
             MDC.clear();

@@ -10,6 +10,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * 异步任务管理器
@@ -142,6 +143,26 @@ public class AsyncManager {
      */
     public static void scheduleWithFixedDelay(Runnable task, Date startTime, long delay) {
         scheduledExecutor.scheduleWithFixedDelay(task, startTime, delay);
+    }
+
+
+    /**
+     * 异步运行 DeferredResult
+     *
+     * @param supplier 任务
+     */
+    public static void deferredRun(Supplier<Object> supplier) {
+        ThreadAsyncCall.run(supplier);
+    }
+
+    /**
+     * 异步运行 DeferredResult
+     *
+     * @param interval 间隔
+     * @param supplier 任务
+     */
+    public static void deferredRun(long interval, Supplier<Object> supplier) {
+        ThreadAsyncCall.run(interval, supplier);
     }
 
     /**
