@@ -73,7 +73,9 @@ public class ExcelUtil {
             Map<String, Object> m = new LinkedHashMap<>();
             // 遍历所有的列
             for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
-                m.put(title[y], getCellValue(row.getCell(y)));
+                if (y < title.length) {
+                    m.put(title[y], getCellValue(row.getCell(y)));
+                }
             }
             ls.add(m);
         }
