@@ -42,6 +42,7 @@ public class MainTest1234V2 {
             if (objectMap.get("模特名称") == null || StringUtils.isBlank(objectMap.get("模特视频位置").toString())) {
                 continue;
             }
+            String ttsId = "221";
             String format = DateUtil.format(new Date(currentTimeMillis), "yyyy-MM-dd HH:mm:ss");
             String videoPath = objectMap.get("模特视频位置").toString();
             //https://anylang.obs.ap-southeast-3.myhuaweicloud.com/anylang-video/resources/robot_public/20240305/1.mp4
@@ -51,9 +52,10 @@ public class MainTest1234V2 {
             VideoSize realVideoSize = MediaUtil.getRealVideoSize(mediaInfo);
             String sql = "INSERT INTO `ffo-toc`.user_video_robot " +
                     "(id, user_id, robot_name, robot_code, scene_code, cover_url, video_url, duration, vertical, horizontal, train_status, " +
-                    "tts_id, demo_video_make_status, demo_cover_url, demo_video_url, `type`, ext, del_flag, create_time, update_time) " +
-                    "VALUES(" + startId + ", -1, '" + name + "', NULL, NULL, '" + coverUrl + "', '" + videoUrl + "', " + mediaInfo.getDuration() + ", '" + realVideoSize.getHeight() + "', '" + realVideoSize.getWidth() + "', 20, NULL," +
-                    " '20', '" + coverUrl + "', '" + videoUrl + "', 2, NULL, 0, '" + format + "', '" + format + "');\r\n";
+                    "tts_id, demo_video_make_status, demo_cover_url, demo_video_url, `type` ,silent_video_url, ext, del_flag, create_time, update_time) " +
+                    "VALUES(" + startId + ", -1, '" + name + "', NULL, NULL, '" + coverUrl + "', '" + videoUrl + "', " + mediaInfo.getDuration() + ", '" + realVideoSize.getHeight() + "', '" + realVideoSize.getWidth() +
+                    "', 20, '" + ttsId + "'," +
+                    " '20', '" + coverUrl + "', '" + videoUrl + "', 2, '" + videoUrl + "', NULL, 0, '" + format + "', '" + format + "');\r\n";
             printWriter.write(sql);
             startId++;
             currentTimeMillis = currentTimeMillis - (5 * 60 * 1000);
