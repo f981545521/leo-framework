@@ -328,6 +328,10 @@ public class TestController {
                 deferredResult.setResult(Result.success(String.valueOf(i)));
                 return "ok";
             }
+            //超时时退出循环
+            if (deferredResult.isSetOrExpired()) {
+                return "ok";
+            }
             return null;
         });
         return deferredResult;
