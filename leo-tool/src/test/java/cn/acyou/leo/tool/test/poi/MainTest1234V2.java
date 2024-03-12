@@ -1,5 +1,7 @@
 package cn.acyou.leo.tool.test.poi;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import cn.acyou.leo.framework.util.ExcelUtil;
 import cn.acyou.leo.framework.util.FileUtil;
@@ -7,19 +9,38 @@ import cn.acyou.leo.framework.util.StringUtils;
 import cn.hutool.core.date.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
+import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoSize;
+import ws.schild.jave.process.ProcessWrapper;
+import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author youfang
  * @version [1.0.0, 2022/8/17 17:35]
  **/
 public class MainTest1234V2 {
+
+    @Test
+    public void coverDi2r() {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        loggerContext.getLogger(DefaultFFMPEGLocator.class).setLevel(Level.ERROR);
+        loggerContext.getLogger(MultimediaObject.class).setLevel(Level.ERROR);
+        loggerContext.getLogger(ProcessWrapper.class).setLevel(Level.ERROR);
+        File file = new File("C:\\Users\\1\\Downloads\\正确的");
+        for (File listFile : file.listFiles()) {
+            System.out.println(listFile.getAbsolutePath() + "时长：" + MediaUtil.instance().getMediaInfo(listFile.getAbsolutePath()).getDuration());
+        }
+    }
+
 
     @Test
     public void coverDir() {
