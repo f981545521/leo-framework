@@ -306,25 +306,11 @@ public class TestController {
     @GetMapping("testThreadAsyncCall")
     @ResponseBody
     public DeferredResult<Result<String>> testThreadAsyncCall() {
-        DeferredResult<Result<String>> deferredResult = new DeferredResult<>(10 * 60 * 1000L);
-        deferredResult.onTimeout(() -> {
-            deferredResult.setResult(Result.success("请求超时"));
-        });
-        deferredResult.onError((k) -> {
-            deferredResult.setResult(Result.success("请求出错"));
-        });
-        deferredResult.onCompletion(() -> {
-            //新的线程执行
-            log.info("执行完成");
-        });
-/*        deferredResult.setResultHandler((result) -> {
-            log.info("执行setResultHandler");
-        });*/
-
-        AsyncManager.deferredRun(2000, () -> {
+        DeferredResult<Result<String>> deferredResult = AsyncManager.newDeferredResult(1 * 60 * 1000L);
+        AsyncManager.deferredRun(5000, () -> {
             int i = RandomUtil.randomRangeNumber(1, 100);
             log.info("执行 异步方法：{}", i);
-            if (i > 70) {
+            if (i > 99) {
                 deferredResult.setResult(Result.success(String.valueOf(i)));
                 return "ok";
             }

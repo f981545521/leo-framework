@@ -1,9 +1,11 @@
 package cn.acyou.leo.framework.commons;
 
+import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.SpringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.Date;
 import java.util.concurrent.Callable;
@@ -145,6 +147,26 @@ public class AsyncManager {
         scheduledExecutor.scheduleWithFixedDelay(task, startTime, delay);
     }
 
+    /**
+     * 创建DeferredResult
+     *
+     * @param timeoutValue 超时时间
+     * @return {@link DeferredResult}<{@link T}>
+     */
+    public static <T> DeferredResult<Result<T>> newDeferredResult(Long timeoutValue) {
+        DeferredResult<Result<T>> deferredResult = new DeferredResult<>(timeoutValue);
+        deferredResult.onTimeout(() -> {
+            deferredResult.setResult(Result.error("请求超时"));
+        });
+        deferredResult.onError((k) -> {
+            deferredResult.setResult(Result.error("请求出错"));
+        });
+        //在任务完成（异常）的时候，由新的线程执行
+        //deferredResult.onCompletion(() -> {
+        //    log.info("执行完成");
+        //});
+        return deferredResult;
+    }
 
     /**
      * 异步运行 DeferredResult
