@@ -738,6 +738,57 @@ public final class DateUtil {
         }
         return "";
     }
+
+    /**
+     * 根据月份获取中文星期名称
+     *
+     * @param date 日期
+     * @return 中文月份名称
+     */
+    public static String weekdayZh(Date date) {
+        DateTime dateTime = new DateTime(date);
+        return DateUtil.getWeekdayZh(dateTime.dayOfWeek().get());
+    }
+
+    /**
+     * 根据月份获取英文星期名称
+     *
+     * @param date 日期
+     * @return 英文月份名称
+     */
+    public static String weekdayEn(Date date) {
+        DateTime dateTime = new DateTime(date);
+        return DateUtil.getWeekdayEn(dateTime.dayOfWeek().get());
+    }
+
+    /**
+     * 根据月份获取中文星期名称
+     *
+     * @param week 月份 1~7
+     * @return 中文月份名称
+     */
+    private static String getWeekdayZh(int week) {
+        String[] allWeeks = new String[]{"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
+        if (0 < week && week < 13) {
+            return allWeeks[week - 1];
+        }
+        return "";
+    }
+
+    /**
+     * 根据月份获取英文星期名称
+     *
+     * @param week 月份 1~7
+     * @return 英文月份名称
+     */
+    private static String getWeekdayEn(int week) {
+        String[] allWeeks = new String[]{"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
+        if (0 < week && week < 13) {
+            return allWeeks[week - 1];
+        }
+        return "";
+    }
+
     /**
      * 根据月份获取中文月份名称
      *
