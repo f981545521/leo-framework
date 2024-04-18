@@ -129,7 +129,24 @@ public class ExcelUtil {
             row = sheet.createRow(i + 1);
             for (int j = 0; j < tableHeaders.length; j++) {
                 HSSFCell cell = row.createCell(j);
-                cell.setCellValue(rowMap.get(tableHeaders[j]).toString());
+                final Object o = rowMap.get(tableHeaders[j]);
+                if (o instanceof Number) {
+                    cell.setCellValue(new Double(o.toString()));
+                } else if(o instanceof Boolean){
+                    cell.setCellValue(Boolean.parseBoolean(o.toString()));
+                } else if(o instanceof Date){
+                    cell.setCellValue((Date) o);
+                } else {
+                    //字符串
+                    final String cellValueStr = o.toString();
+                    //cell.setCellFormula("SUM(A2:C2)"); 设置函数 如："FUN=SUM(C2:INDEX(C:C,ROW()-1))"
+                    if (cellValueStr.startsWith("FUN=")) {
+                        cell.setCellFormula(cellValueStr.substring(4));
+                    }else {
+                        cell.setCellValue(cellValueStr);
+                    }
+                }
+
                 cell.setCellStyle(styles.get("data2"));
             }
         }

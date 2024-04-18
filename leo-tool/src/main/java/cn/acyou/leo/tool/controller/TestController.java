@@ -298,6 +298,11 @@ public class TestController {
             data.put("age", RandomUtil.randomAge());
             objects.add(data);
         }
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("id", "/'");
+        data.put("name", "11.00");
+        data.put("age", "FUN=SUM(C2:INDEX(C:C,ROW()-1))");
+        objects.add(data);
         ExcelUtil.exportExcel(response, objects, "列表");
     }
 
