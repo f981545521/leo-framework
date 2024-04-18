@@ -197,6 +197,9 @@ public class ExcelUtil {
 
 
     /**
+     * IndexedColors 颜色对照表
+     * https://blog.csdn.net/shanghaojiabohetang/article/details/51837242
+     *
      * 创建表格样式
      *
      * @param wb 工作薄对象
