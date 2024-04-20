@@ -82,8 +82,8 @@ ijpay:
   paypal:
     configMap:
       DEFAULT:
-        clientId: 1
-        secret: 1-1-1
+        clientId: ARypnpw_4vlR3KJHDMehCHnfiDwgB9UgKaTzS9lXjOyBE9HlrP5dHDhHQikuJUvjUgBX_2G6_oe3x8kT
+        secret: EAa_p9DIJrZRMrqXP-YY9UPxpy1MpDrjGhTHBQ9wTqpDMSwoXUIwjyz3f2Pb6jz3fyuhqSlJW-TXOn53
         sandBox: true
         domain: https://pay.acyou.cn/pay-api/
       CONFIG2:

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="smart-button-container">
+    <div style="text-align: center;">
+        <div id="paypal-button-container"></div>
+    </div>
+</div>
+</body>
+
+<script src="https://www.paypal.com/sdk/js?client-id=ARypnpw_4vlR3KJHDMehCHnfiDwgB9UgKaTzS9lXjOyBE9HlrP5dHDhHQikuJUvjUgBX_2G6_oe3x8kT&enable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
+<script>
+    function initPayPalButton() {
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                color: 'gold',
+                layout: 'vertical',
+                label: 'paypal',
+
+            },
+            createOrder: function(data, actions) {
+                var orderNum = "54321667";
+                //1. 调用下单接口获取订单号
+                return actions.order.create({
+                    purchase_units: [{"amount": {"currency_code": "USD", "value": 2.99},"description":"购买洗发水", "custom_id": orderNum}]
+                });
+            },
+
+            onApprove: function(data, actions) {
+                console.log('Capture result', data, JSON.stringify(data, null, 2));
+                var dataId = data.orderID;
+                //2. 调用捕获订单接口
+            },
+            onError: function(err) {
+                console.log(err);
+            }
+        }).render('#paypal-button-container');
+    }
+    initPayPalButton();
+</script>
+</html>

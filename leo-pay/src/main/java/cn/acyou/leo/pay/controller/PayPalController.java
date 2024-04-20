@@ -1,5 +1,6 @@
 package cn.acyou.leo.pay.controller;
 
+import cn.acyou.leo.framework.util.StringUtils;
 import cn.acyou.leo.pay.config.PayPalBean;
 import cn.acyou.leo.pay.config.PayPalConfig;
 import cn.hutool.json.JSONArray;
@@ -81,7 +82,8 @@ public class PayPalController {
     @GetMapping(value = "/createOrder")
     @ResponseBody
     @ApiOperation("创建订单")
-    public void createOrder(HttpServletResponse response) {
+    public void createOrder(HttpServletResponse response, @RequestParam(value = "price", required = false) String price,
+                            @RequestParam(value = "customId", required = false) String customId) {
         log.info("PayPal支付 调用createOrder");
         try {
             PayPalApiConfig config = getConfig();
@@ -94,10 +96,12 @@ public class PayPalController {
 
             Map<String, Object> amount = new HashMap<>();
             amount.put("currency_code", "USD");
-            amount.put("value", "100.00");
+            amount.put("value", StringUtils.defaultString(price, "0.01"));
 
             Map<String, Object> itemMap = new HashMap<>();
             itemMap.put("amount", amount);
+            itemMap.put("description", "购买订单:" + customId);
+            itemMap.put("custom_id", customId);
 
             list.add(itemMap);
 
@@ -112,7 +116,7 @@ public class PayPalController {
             dataMap.put("application_context", applicationContext);
 
             String data = JSONUtil.toJsonStr(dataMap);
-            log.info(data);
+            log.info("PayPal创建订单" + data);
             IJPayHttpResponse resData = PayPalApi.createOrder(config, data);
             log.info(resData.toString());
             if (resData.getStatus() == 201) {

@@ -1,0 +1,30 @@
+###
+### 测试配置
+GET http://localhost:8075/leo-pay/payPal/test
+
+### 获取AccessToken
+GET http://localhost:8075/leo-pay/payPal/getAccessToken
+
+### 创建订单
+GET http://localhost:8075/leo-pay/payPal/createOrder?price=0.01&customId=54321001
+### 修改已创建的订单信息（暂不使用）
+# GET http://localhost:8075/leo-pay/payPal/updateOrder?id=5V778224DR830151T
+### 查询订单信息
+GET http://localhost:8075/leo-pay/payPal/queryOrder?id=0X250741GJ328192B
+
+### 捕获订单（完成交易）
+GET http://localhost:8075/leo-pay/payPal/captureOrder?id=0X250741GJ328192B
+### 查询确认订单
+GET http://localhost:8075/leo-pay/payPal/captureQuery?captureId=5X864409DX914645E
+
+### 确认订单
+GET http://localhost:8075/leo-pay/payPal/refund?id=3W920471PM425130C
+### 确认订单
+GET http://localhost:8075/leo-pay/payPal/refundQuery?id=74420472CR956491W
+
+
+
+
+
+
+
