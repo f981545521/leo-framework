@@ -123,6 +123,12 @@ public class TranslateUtil {
         String s = HttpUtil.get(TRANS_API_HOST, params);
         log.info("有道翻译 结果 q:{} res:{}", q, s);
         JSONObject jsonObject = JSON.parseObject(s);
+        //速度限制
+        String errorCode = jsonObject.getString("errorCode");
+        if (errorCode != null && errorCode.endsWith("411")) {
+            WorkUtil.trySleep(1000);
+            return youdaoTranslate(q, from, to);
+        }
         return jsonObject.getJSONArray("translation").getString(0);
     }
 

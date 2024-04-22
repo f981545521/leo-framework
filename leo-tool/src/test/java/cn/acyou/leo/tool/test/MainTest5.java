@@ -1,8 +1,10 @@
 package cn.acyou.leo.tool.test;
 
-import cn.acyou.leo.framework.util.Calculator;
+import cn.acyou.leo.framework.prop.TranslateProperty;
 import cn.acyou.leo.framework.util.FileUtil;
+import cn.acyou.leo.framework.util.LoggerUtil;
 import cn.acyou.leo.framework.util.PinYinHelper;
+import cn.acyou.leo.framework.util.component.TranslateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -64,6 +66,47 @@ public class MainTest5 {
         }
         System.out.println(contentList.size());
         System.out.println(jsonArray.toJSONString());
+    }
+
+    @Test
+    public void test234(){
+        LoggerUtil.setLevel("cn.acyou.leo.framework.util.component.TranslateUtil", "OFF");
+
+        TranslateProperty translateProperty = new TranslateProperty();
+        translateProperty.setYoudaoAppKey("501062f86ee03660");
+        translateProperty.setYoudaoAppSecret("aKk1aZgheXsoQlhux129J7LHIG5PUuGN");
+        translateProperty.setBaiduAppId("20190808000324958");
+        translateProperty.setBaiduSecurityKey("2i7Z8KQQitJVt1mzn1fI");
+        TranslateUtil translateUtil = new TranslateUtil(translateProperty);
+        //有道翻译
+        System.out.println(translateUtil.youdaoTranslate("你在哪里", "zh", "en"));
+        System.out.println(translateUtil.youdaoTranslate("吃饭了吗", "zh", "en"));
+        System.out.println(translateUtil.youdaoTranslate("明天有什么计划吗？", "zh", "en"));
+        //百度翻译
+        System.out.println(translateUtil.baiduTranslate("你在哪里", "zh", "en"));
+        System.out.println(translateUtil.baiduTranslate("吃饭了吗", "zh", "en"));
+        System.out.println(translateUtil.baiduTranslate("明天有什么计划吗？", "zh", "en"));
+        //百度获取语种
+        System.out.println(translateUtil.baiduLanguage("你在哪里"));
+        System.out.println(translateUtil.baiduLanguage("where are you"));
+
+        String text = "推荐\n" +
+                "抖音爆款\n" +
+                "超级主播\n" +
+                "情绪主播\n" +
+                "配音热门\n" +
+                "影视解说\n" +
+                "客服助手\n" +
+                "情感语录";
+        String[] split = text.split("\n");
+        for (String s : split) {
+            String string_en = translateUtil.youdaoTranslate(s, "zh", "en");
+            String string_jp = translateUtil.youdaoTranslate(s, "zh", "ja");
+            String sql = "UPDATE `tts-market`.tts_label_order " +
+                    "\tSET ext='{\"label_name_zh\":\""+s+"\",\"label_name_en\":\""+string_en+"\",\"label_name_jp\":\""+string_jp+"\"}' " +
+                    "\tWHERE label_type = 'df_category' and label_name='"+s+"';";
+            System.out.println(sql);
+        }
     }
 
 
