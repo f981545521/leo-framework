@@ -2,6 +2,8 @@ package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.mapper.ExecuteMapper;
 import cn.acyou.leo.framework.model.IdReq;
+import cn.acyou.leo.framework.util.ExcelUtil;
+import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.StringUtils;
 import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
@@ -13,9 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author youfang
@@ -80,6 +86,14 @@ public class ApplicationTests {
         idItem = executeMapper.executeQuerySql(StringUtils.formatTemplate("select * from student where id = {id}", maxId));
         System.out.println("根据ID查询：" + idItem);
 
+    }
+
+    @Test
+    public void test12342Export() throws Exception{
+        List<LinkedHashMap<String, Object>> linkedHashMaps = executeMapper.executeQuerySql("select * from student");
+        File file = FileUtil.newFile("D:\\poi\\112344544.xlsx");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        ExcelUtil.exportExcel(fileOutputStream, new ArrayList<>(linkedHashMaps), "列表");
     }
 
 
