@@ -27,9 +27,38 @@ public class TranslateUtil {
     private static final String TRANS_API_HOST = "https://openapi.youdao.com/api";
     // 百度翻译开放接口
     private static final String BAIDU_TRANS_API_HOST = "http://api.fanyi.baidu.com/api/trans/vip/translate";
+    // 百度语种识别开放接口
+    private static final String BAIDU_LANGUAGE_API_HOST = "https://fanyi-api.baidu.com/api/trans/vip/language";
 
     public TranslateUtil(TranslateProperty translateProperty) {
         this.translateProperty = translateProperty;
+    }
+
+
+    /**
+     * 【百度翻译】https://api.fanyi.baidu.com/product/113
+     *
+     * @param q    待翻译文本
+     * @return 翻译文本
+     */
+    public String baiduLanguage(String q) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("q", q);
+        params.put("appid", translateProperty.getBaiduAppId());
+        String salt = String.valueOf(System.currentTimeMillis());
+        params.put("salt", salt);
+        String src = translateProperty.getBaiduAppId() + q + salt + translateProperty.getBaiduSecurityKey();
+        params.put("sign", Md5Util.md5(src));
+        String res = HttpUtil.get(BAIDU_LANGUAGE_API_HOST, params);
+        log.info("百度翻译(语种识别) 结果 q:{} res:{}", q, res);
+        JSONObject jsonObject = JSON.parseObject(res);
+        //速度限制：{"error_code":"54003","error_msg":"Invalid Access Limit"}
+        String error_code = jsonObject.getString("error_code");
+        if ("54003".equals(error_code)) {
+            WorkUtil.trySleep(1000);
+            return baiduLanguage(q);
+        }
+        return jsonObject.getJSONObject("data").getString("src");
     }
 
     /**
