@@ -38,9 +38,10 @@ public class FrameworkToolConfig {
     public TencentMapUtil tencentMapUtil(TencentMapProperty tencentMapProperty) {
         return new TencentMapUtil(tencentMapProperty);
     }
+
     @Bean
     @ConditionalOnProperty({"leo.tool.translate"})
-    public TranslateUtil tencentMapUtil(TranslateProperty translateProperty) {
+    public TranslateUtil translateUtil(TranslateProperty translateProperty) {
         return new TranslateUtil(translateProperty);
     }
 }
