@@ -1,0 +1,44 @@
+###
+
+
+#@# 文档  https://open-dev.dingtalk.com/fe/ai#/app/85a9d73b-8de4-4dc6-bbef-6a39d7a3fc71/permission
+
+
+### 获取accessToken
+POST https://api.dingtalk.com/v1.0/oauth2/accessToken
+Content-Type: application/json
+
+{
+  "appKey":"dingd6llff5pwh6ypdfd",
+  "appSecret":"*"
+}
+
+### 查询管理员列表
+GET https://oapi.dingtalk.com/topapi/user/listadmin?access_token=5cf5797f300e31a9944ece3c6e2c427a
+
+### 获取用户UNIONId
+POST https://oapi.dingtalk.com/topapi/v2/user/get?access_token=5cf5797f300e31a9944ece3c6e2c427a
+Content-Type: application/json
+
+{
+	"userid":"02220605374625784959"
+}
+
+### 创建sheet
+POST https://api.dingtalk.com/v1.0/doc/workbooks/YvenvKxa090VqoyZ/sheets?operatorId=mgGtf63wNxrkWpiPJRXreVgiEiE
+x-acs-dingtalk-access-token: 5cf5797f300e31a9944ece3c6e2c427a
+Content-Type: application/json
+
+{
+  "name":"API表格"
+}
+
+### 获取所有工作表
+GET https://api.dingtalk.com/v1.0/doc/workbooks/YvenvKxa090VqoyZ/sheets?operatorId=mgGtf63wNxrkWpiPJRXreVgiEiE
+x-acs-dingtalk-access-token: 5cf5797f300e31a9944ece3c6e2c427a
+Content-Type: application/json
+
+### 获取工作表
+GET https://api.dingtalk.com/v1.0/doc/workbooks/YvenvKxa090VqoyZ/sheets/kgqie6hm?operatorId=mgGtf63wNxrkWpiPJRXreVgiEiE
+x-acs-dingtalk-access-token: 5cf5797f300e31a9944ece3c6e2c427a
+Content-Type: application/json
