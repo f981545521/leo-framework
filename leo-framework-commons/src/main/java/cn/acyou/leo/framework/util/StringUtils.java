@@ -54,6 +54,28 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 格式化模板
      * <pre>
+     * String templateStr= "{姓名}今年{岁}啦！";
+     * System.out.println(formatTemplate(templateStr, "王二小", "3"));//王二小今年3啦！
+     * </pre>
+     *
+     * @param templateStr 模板字符串
+     * @param params   参数列表
+     * @return 格式化后内容
+     */
+    public static String formatTemplate(String templateStr, String... params) {
+        List<String> matchStr = RegexUtil.getMatchStr(templateStr, "\\{(.+?)\\}");
+        Map<String, String> paramsMap = new HashMap<>();
+        for (int i = 0; i < matchStr.size(); i++) {
+            String varStr = matchStr.get(i);
+            paramsMap.put(varStr.substring(1, varStr.length() - 1), params[i]);
+        }
+        return formatTemplate(templateStr, paramsMap);
+    }
+
+
+    /**
+     * 格式化模板
+     * <pre>
      *         String templateStr= "{姓名}今年{岁}啦！";
      *         Map<String, String> paramMap = new HashMap<>();
      *         paramMap.put("姓名", "王二小");
