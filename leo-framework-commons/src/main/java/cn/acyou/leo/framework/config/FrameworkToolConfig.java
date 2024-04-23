@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Configuration;
  * @version [1.0.0, 2022/8/26 14:04]
  **/
 @Configuration
-@EnableConfigurationProperties({BaiDuShortLinkProperty.class, DingTalkProperty.class, TencentMapProperty.class, GaodeMapProperty.class, TranslateProperty.class})
+@EnableConfigurationProperties({BaiDuShortLinkProperty.class, DingTalkProperty.class,
+        TencentMapProperty.class, GaodeMapProperty.class, OpenApiProperty.class, TranslateProperty.class})
 public class FrameworkToolConfig {
 
     @Bean
@@ -43,5 +44,11 @@ public class FrameworkToolConfig {
     @ConditionalOnProperty({"leo.tool.translate"})
     public TranslateUtil translateUtil(TranslateProperty translateProperty) {
         return new TranslateUtil(translateProperty);
+    }
+
+    @Bean
+    @ConditionalOnProperty({"leo.tool.openapi"})
+    public OpenApiUtil openApiUtil(OpenApiProperty openApiProperty) {
+        return new OpenApiUtil(openApiProperty);
     }
 }

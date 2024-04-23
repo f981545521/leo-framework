@@ -1,11 +1,13 @@
 package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.prop.GaodeMapProperty;
+import cn.acyou.leo.framework.prop.OpenApiProperty;
 import cn.acyou.leo.framework.prop.TranslateProperty;
 import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.LoggerUtil;
 import cn.acyou.leo.framework.util.PinYinHelper;
 import cn.acyou.leo.framework.util.component.GaodeMapUtil;
+import cn.acyou.leo.framework.util.component.OpenApiUtil;
 import cn.acyou.leo.framework.util.component.TranslateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -142,6 +144,24 @@ public class MainTest5 {
             System.out.println("ok");
         }
         System.out.println("ok");
+    }
+
+    @Test
+    public void  testrs234(){
+        OpenApiProperty openApiProperty = new OpenApiProperty();
+        openApiProperty.setQweatherKey("caf54ef232");
+        OpenApiUtil openApiUtil = new OpenApiUtil(openApiProperty);
+        JSONObject jsonObject = openApiUtil.lookup("南京");
+        String location_id = jsonObject.getJSONArray("location").getJSONObject(0).getString("id");
+        JSONObject jsonObject1 = openApiUtil.weatherNow(location_id);
+        JSONObject jsonObject2 = openApiUtil.weather3d(location_id);
+        JSONObject jsonObject3 = openApiUtil.weather7d(location_id);
+        System.out.println(jsonObject);
+        System.out.println(jsonObject1);
+        System.out.println(jsonObject2);
+        System.out.println(jsonObject3);
+        System.out.println("ok");
+
     }
 
 
