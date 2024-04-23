@@ -1,9 +1,11 @@
 package cn.acyou.leo.tool.test;
 
+import cn.acyou.leo.framework.prop.GaodeMapProperty;
 import cn.acyou.leo.framework.prop.TranslateProperty;
 import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.LoggerUtil;
 import cn.acyou.leo.framework.util.PinYinHelper;
+import cn.acyou.leo.framework.util.component.GaodeMapUtil;
 import cn.acyou.leo.framework.util.component.TranslateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -107,6 +109,39 @@ public class MainTest5 {
                     "\tWHERE label_type = 'df_category' and label_name='"+s+"';";
             System.out.println(sql);
         }
+    }
+
+
+    @Test
+    public void test23445(){
+        GaodeMapProperty gaodeMapProperty = new GaodeMapProperty();
+        gaodeMapProperty.setKey("220da8558e8e5***");
+        GaodeMapUtil gaodeMapUtil = new GaodeMapUtil(gaodeMapProperty);
+        JSONObject ipLocation = gaodeMapUtil.getIpLocation(null);
+        //{"province":"江苏省","city":"南京市","adcode":"320100","infocode":"10000","rectangle":"118.4253323,31.80452471;119.050169,32.39401346","status":"1","info":"OK"}
+        System.out.println(ipLocation);
+        String province = ipLocation.getString("province");
+        String city = ipLocation.getString("city");
+        String adcode = ipLocation.getString("adcode");
+        JSONObject weatherInfoLive = gaodeMapUtil.weatherInfoLive(adcode);
+        JSONObject weatherInfoForecasts = gaodeMapUtil.weatherInfoForecasts(adcode);
+        if ("1".equals(weatherInfoLive.getString("status"))) {
+            JSONObject lives = weatherInfoLive.getJSONArray("lives").getJSONObject(0);
+            //天气现象（汉字描述）
+            String weather = lives.getString("weather");
+            //实时气温，单位：摄氏度
+            String temperature = lives.getString("temperature");
+            //风向描述
+            String winddirection = lives.getString("winddirection");
+            //风力级别，单位：级
+            String windpower = lives.getString("windpower");
+            //空气湿度
+            String humidity = lives.getString("humidity");
+            //数据发布的时间
+            String reporttime = lives.getString("reporttime");
+            System.out.println("ok");
+        }
+        System.out.println("ok");
     }
 
 

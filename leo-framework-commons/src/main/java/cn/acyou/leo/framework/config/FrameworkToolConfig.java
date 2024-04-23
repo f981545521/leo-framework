@@ -1,13 +1,7 @@
 package cn.acyou.leo.framework.config;
 
-import cn.acyou.leo.framework.prop.BaiDuShortLinkProperty;
-import cn.acyou.leo.framework.prop.DingTalkProperty;
-import cn.acyou.leo.framework.prop.TencentMapProperty;
-import cn.acyou.leo.framework.prop.TranslateProperty;
-import cn.acyou.leo.framework.util.component.BaiDuShortLinkUtil;
-import cn.acyou.leo.framework.util.component.DingTalkUtil;
-import cn.acyou.leo.framework.util.component.TencentMapUtil;
-import cn.acyou.leo.framework.util.component.TranslateUtil;
+import cn.acyou.leo.framework.prop.*;
+import cn.acyou.leo.framework.util.component.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @version [1.0.0, 2022/8/26 14:04]
  **/
 @Configuration
-@EnableConfigurationProperties({BaiDuShortLinkProperty.class, DingTalkProperty.class, TencentMapProperty.class, TranslateProperty.class})
+@EnableConfigurationProperties({BaiDuShortLinkProperty.class, DingTalkProperty.class, TencentMapProperty.class, GaodeMapProperty.class, TranslateProperty.class})
 public class FrameworkToolConfig {
 
     @Bean
@@ -37,6 +31,12 @@ public class FrameworkToolConfig {
     @ConditionalOnProperty({"leo.tool.tencent-map-key.key"})
     public TencentMapUtil tencentMapUtil(TencentMapProperty tencentMapProperty) {
         return new TencentMapUtil(tencentMapProperty);
+    }
+
+    @Bean
+    @ConditionalOnProperty({"leo.tool.gaode-map-key.key"})
+    public GaodeMapUtil gaodeMapUtil(GaodeMapProperty gaodeMapProperty) {
+        return new GaodeMapUtil(gaodeMapProperty);
     }
 
     @Bean
