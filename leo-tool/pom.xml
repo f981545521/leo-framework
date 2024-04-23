@@ -88,6 +88,12 @@
                     <artifactId>aliyun-java-sdk-core</artifactId>
                     <version>3.7.1</version>
                 </dependency>-->
+        <!-- 阿里云机器翻译 https://help.aliyun.com/zh/machine-translation/developer-reference/api-alimt-2018-10-12-translategeneral?spm=a2c4g.11186623.0.0.26e71ef81hqsMa -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibabacloud-alimt20181012</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 
