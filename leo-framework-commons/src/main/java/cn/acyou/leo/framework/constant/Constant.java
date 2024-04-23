@@ -93,5 +93,29 @@ public class Constant {
             return EnumTool.newInstance(SysRole.class);
         }
     }
+
+    /**
+     * 秒为单位的常见时间
+     */
+    public static class Seconds {
+        /** 1分钟 = 60秒 */
+        public static final long minutes_1 = 60;
+        /** 5分钟 = 300秒 */
+        public static final long minutes_5 = 300;
+        /** 10分钟 = 600秒 */
+        public static final long minutes_10 = 600;
+        /** 20分钟 = 1200秒 */
+        public static final long minutes_20 = 1200;
+        /** 30分钟 = 1800秒 */
+        public static final long minutes_30 = 1800;
+        /** 1小时 = 3600秒 */
+        public static final long hours_1 = 3600;
+        /** 2小时 = 7200秒 */
+        public static final long hours_2 = 7200;
+        /** 12小时 = 43200秒 */
+        public static final long hours_12 = 43200;
+        /** 24小时 = 86400秒 */
+        public static final long hours_24 = 86400;
+    }
 }
 
