@@ -33,7 +33,7 @@ public class MainTest92 {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("数据");
-
+        //sheet.setDefaultColumnWidth(15);
         ExcelUtil.createBuilder(workbook, sheet)
                 .createRow(0, (short) 400)   //标题行（一级） 行高400
                 .createData("0-0-0-3(整体数据)[247,176,127||true]")
