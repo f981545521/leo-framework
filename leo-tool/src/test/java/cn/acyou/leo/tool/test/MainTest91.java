@@ -16,36 +16,36 @@ public class MainTest91 {
     public static void main(String[] args) throws Exception {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("数据");
-
-
+        //标题行（一级）
         XSSFRow row0 = sheet.createRow(0);
         //设置行高
         row0.setHeight((short) 400);
         XSSFCell row0cell = row0.createCell(0);
         row0cell.setCellValue("整体数据");
         row0cell.setCellStyle(ExcelUtil.createStyle(workbook, new java.awt.Color(247, 176, 127), null, true));
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 3));
+        ExcelUtil.mergedRegion(sheet, new CellRangeAddress(0, 0, 0, 3));
 
         row0cell = row0.createCell(4);
         row0cell.setCellValue("当日数据");
         row0cell.setCellStyle(ExcelUtil.createStyle(workbook, new java.awt.Color(197, 224, 179), null, true));
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 4, 17));
+        ExcelUtil.mergedRegion(sheet, new CellRangeAddress(0, 0, 4, 17));
 
         row0cell = row0.createCell(18);
         row0cell.setCellValue("1. 视频翻译");
         row0cell.setCellStyle(ExcelUtil.createStyle(workbook, new java.awt.Color(178, 199, 230), null, true));
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 18, 19));
+        ExcelUtil.mergedRegion(sheet, new CellRangeAddress(0, 0, 18, 19));
 
         row0cell = row0.createCell(20);
         row0cell.setCellValue("2. 视频克隆");
         row0cell.setCellStyle(ExcelUtil.createStyle(workbook, new java.awt.Color(178, 199, 230), null, true));
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 20, 21));
+        ExcelUtil.mergedRegion(sheet, new CellRangeAddress(0, 0, 20, 21));
 
         row0cell = row0.createCell(22);
         row0cell.setCellValue("2. 模特视频");
         row0cell.setCellStyle(ExcelUtil.createStyle(workbook, new java.awt.Color(178, 199, 230), null, true));
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 22, 23));
+        ExcelUtil.mergedRegion(sheet, new CellRangeAddress(0, 0, 22, 23));
 
+        //标题行（二级）
         XSSFRow row1 = sheet.createRow(1);
         //设置行高
         row1.setHeight((short) 600);
@@ -124,6 +124,7 @@ public class MainTest91 {
         row1cell.setCellValue("消耗积分");
         row1cell.setCellStyle(ExcelUtil.createStyle(workbook, new java.awt.Color(178, 199, 230), null, true));
 
+        //数据行
         for (int i = 2; i < 10; i++) {
             XSSFRow row2 = sheet.createRow(i);
             for (int j = 0; j < 24; j++) {
@@ -132,7 +133,7 @@ public class MainTest91 {
                 cell.setCellStyle(ExcelUtil.createStyle(workbook, null, null, false));
             }
         }
-
+        //统计行
         int lastRowNum = sheet.getLastRowNum();
         XSSFRow summationRow = sheet.createRow(lastRowNum + 1);
         XSSFCell cell = summationRow.createCell(0);

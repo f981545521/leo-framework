@@ -6,6 +6,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -373,4 +374,31 @@ public class ExcelUtil {
         return cellStyle;
     }
 
+    /**
+     * 合并单元格 使用第一个单元格的样式
+     * @param sheet 工作簿
+     * @param cellAddresses 单元格范围
+     */
+    public static void mergedRegion(XSSFSheet sheet, CellRangeAddress cellAddresses) {
+        //合并单元格 会使用第一个单元格的文字
+        sheet.addMergedRegion(cellAddresses);
+        int firstRow = cellAddresses.getFirstRow();
+        int lastRow = cellAddresses.getLastRow();
+        int firstColumn = cellAddresses.getFirstColumn();
+        int lastColumn = cellAddresses.getLastColumn();
+        XSSFCellStyle cellStyle = sheet.getRow(firstRow).getCell(firstColumn).getCellStyle();
+        for (int i = firstRow; i < lastRow + 1; i++) {
+            for (int j = firstColumn; j < lastColumn + 1; j++) {
+                XSSFRow row = sheet.getRow(i);
+                if (row == null) {
+                    row = sheet.createRow(i);
+                }
+                XSSFCell cell = row.getCell(j);
+                if (cell == null) {
+                    cell = row.createCell(j);
+                }
+                cell.setCellStyle(cellStyle);
+            }
+        }
+    }
 }
