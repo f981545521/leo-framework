@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -381,11 +382,15 @@ public class ExcelUtil {
      */
     public static void mergedRegion(XSSFSheet sheet, CellRangeAddress cellAddresses) {
         //合并单元格 会使用第一个单元格的文字
-        sheet.addMergedRegion(cellAddresses);
         int firstRow = cellAddresses.getFirstRow();
         int lastRow = cellAddresses.getLastRow();
         int firstColumn = cellAddresses.getFirstColumn();
         int lastColumn = cellAddresses.getLastColumn();
+        if (firstRow == lastRow && firstColumn == lastColumn) {
+            //无需合并
+        }else {
+            sheet.addMergedRegion(cellAddresses);
+        }
         XSSFCellStyle cellStyle = sheet.getRow(firstRow).getCell(firstColumn).getCellStyle();
         for (int i = firstRow; i < lastRow + 1; i++) {
             for (int j = firstColumn; j < lastColumn + 1; j++) {
@@ -400,5 +405,79 @@ public class ExcelUtil {
                 cell.setCellStyle(cellStyle);
             }
         }
+    }
+
+    /**
+     * 创建标题与执行合并单元格
+     * <pre>
+     *  ExcelUtil.createHeaderBuilder(workbook, sheet, row0)
+     *    .createHeader("0-0-0-3(整体数据)[247,176,127||true]")
+     *    .createHeader("0-0-4-17(当日数据)[197,224,179||true]")
+     *    .createHeader("0-0-18-19(1. 视频翻译)[178,199,230||true]")
+     *    .createHeader("0-0-20-21(1. 视频克隆)[178,199,230||true]")
+     *    .createHeader("0-0-22-23(1. 模特视频)[178,199,230||true]")
+     *    .createHeader("");
+     * </pre>
+     * @param workbook  表格
+     * @param sheet     工作簿
+     * @param str       字符
+     */
+    private static void createDataByStr(XSSFWorkbook workbook, XSSFSheet sheet, String str) {
+        String part1 = str.substring(0, str.indexOf("("));
+        String[] part1Array = part1.split("-");
+        String index0 = part1Array[0];
+        String index1 = part1Array[1];
+        String index2 = part1Array[2];
+        String index3 = part1Array[3];
+        String part2 = str.substring(str.indexOf("(") + 1, str.lastIndexOf(")"));
+        String part3 = str.substring(str.indexOf("[") + 1, str.indexOf("]"));
+        String[] part3Array = part3.split("\\|");
+        String part3Index0 = part3Array[0];
+        String part3Index1 = part3Array[1];
+        String part3Index2 = part3Array[2];
+        java.awt.Color bgColor = null;
+        java.awt.Color fontColor = null;
+        if (part3Index0 != null && !"".equals(part3Index0.trim())) {
+            String[] split = part3Index0.split(",");
+            bgColor = new java.awt.Color(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+        }
+        if (part3Index1 != null && !"".equals(part3Index1.trim())) {
+            String[] split = part3Index1.split(",");
+            fontColor = new java.awt.Color(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+        }
+        XSSFRow rowindex0 = sheet.getRow(Integer.parseInt(index0));
+        if (rowindex0 == null) {
+            rowindex0 = sheet.createRow(Integer.parseInt(index0));
+        }
+        XSSFCell row0cell = rowindex0.createCell(Integer.parseInt(index2));
+        row0cell.setCellValue(part2);
+        row0cell.setCellStyle(ExcelUtil.createStyle(workbook, bgColor , fontColor, Boolean.valueOf(part3Index2)));
+        ExcelUtil.mergedRegion(sheet, new CellRangeAddress(Integer.parseInt(index0), Integer.parseInt(index1), Integer.parseInt(index2), Integer.parseInt(index3)));
+    }
+
+    public static HeaderCreate createBuilder(XSSFWorkbook workbook, XSSFSheet sheet){
+        return new HeaderCreate(workbook, sheet);
+    }
+
+    @AllArgsConstructor
+    public static class HeaderCreate{
+        private XSSFWorkbook workbook;
+        private XSSFSheet sheet;
+
+        public HeaderCreate createData(String str){
+            if (str != null && !str.trim().equals("")) {
+                ExcelUtil.createDataByStr(workbook, sheet, str);
+            }
+            return this;
+        }
+
+        public HeaderCreate createRow(int rowNum, Short height){
+            XSSFRow row = sheet.createRow(rowNum);
+            if (height != null) {
+                row.setHeight(height);
+            }
+            return this;
+        }
+
     }
 }
