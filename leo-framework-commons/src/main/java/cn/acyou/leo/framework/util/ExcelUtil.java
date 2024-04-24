@@ -304,7 +304,7 @@ public class ExcelUtil {
      * @param workbook workbook
      * @return {@link XSSFCellStyle}
      */
-    private static XSSFCellStyle createStyle(XSSFWorkbook workbook) {
+    public static XSSFCellStyle createStyle(XSSFWorkbook workbook) {
         return createStyle(workbook, null, null, false);
     }
 
@@ -315,7 +315,7 @@ public class ExcelUtil {
      * @param bgColor  背景色 默认无
      * @return {@link XSSFCellStyle}
      */
-    private static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor) {
+    public static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor) {
         return createStyle(workbook, bgColor, null, false);
     }
 
@@ -327,7 +327,7 @@ public class ExcelUtil {
      * @param fontColor 字体色 默认无
      * @return {@link XSSFCellStyle}
      */
-    private static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor, java.awt.Color fontColor) {
+    public static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor, java.awt.Color fontColor) {
         return createStyle(workbook, bgColor, fontColor, false);
     }
 
@@ -340,7 +340,7 @@ public class ExcelUtil {
      * @param fontBlod  字体加粗 默认false
      * @return {@link XSSFCellStyle}
      */
-    private static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor, java.awt.Color fontColor, Boolean fontBlod) {
+    public static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor, java.awt.Color fontColor, Boolean fontBlod) {
         XSSFCellStyle cellStyle = workbook.createCellStyle();
         if (bgColor != null) {
             //单元格背景色
