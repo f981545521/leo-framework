@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author youfang
@@ -130,26 +131,7 @@ public class ExcelUtil {
             for (int j = 0; j < tableHeaders.length; j++) {
                 HSSFCell cell = row.createCell(j);
                 final Object o = rowMap.get(tableHeaders[j]);
-                if (o != null) {
-                    if (o instanceof Number) {
-                        cell.setCellValue(new Double(o.toString()));
-                    } else if (o instanceof Boolean) {
-                        cell.setCellValue(Boolean.parseBoolean(o.toString()));
-                    } else if (o instanceof Date) {
-                        cell.setCellValue(DateUtil.getDateFormat((Date) o));
-                    } else {
-                        //字符串
-                        final String cellValueStr = o.toString();
-                        //cell.setCellFormula("SUM(A2:C2)"); 设置函数 如："FUN=SUM(C2:INDEX(C:C,ROW()-1))"
-                        if (cellValueStr.startsWith("FUN=")) {
-                            cell.setCellFormula(cellValueStr.substring(4));
-                        } else {
-                            cell.setCellValue(cellValueStr);
-                        }
-                    }
-                } else {
-                    cell.setCellValue("");
-                }
+                writeCell(cell, o);
                 cell.setCellStyle(styles.get("data2"));
             }
         }
@@ -479,5 +461,43 @@ public class ExcelUtil {
             return this;
         }
 
+        public HeaderCreate writeData(int startRow, List<Map<String, Object>> dataList){
+            // 写入数据
+            for (int i = 0; i < dataList.size(); i++) {
+                Map<String, Object> rowMap = dataList.get(i);
+                XSSFRow row = sheet.createRow(i + startRow);
+                AtomicInteger index = new AtomicInteger();
+                rowMap.forEach((k,o)->{
+                    XSSFCell cell = row.createCell(index.get());
+                    writeCell(cell, o);
+                    cell.setCellStyle(ExcelUtil.createStyle(workbook, null, null, false));
+                    index.getAndIncrement();
+                });
+            }
+            return this;
+        }
+    }
+
+    private static void writeCell(CellBase cell, Object o){
+        if (o != null) {
+            if (o instanceof Number) {
+                cell.setCellValue(new Double(o.toString()));
+            } else if (o instanceof Boolean) {
+                cell.setCellValue(Boolean.parseBoolean(o.toString()));
+            } else if (o instanceof Date) {
+                cell.setCellValue(DateUtil.getDateFormat((Date) o));
+            } else {
+                //字符串
+                final String cellValueStr = o.toString();
+                //cell.setCellFormula("SUM(A2:C2)"); 设置函数 如："FUN=SUM(C2:INDEX(C:C,ROW()-1))"
+                if (cellValueStr.startsWith("FUN=")) {
+                    cell.setCellFormula(cellValueStr.substring(4));
+                } else {
+                    cell.setCellValue(cellValueStr);
+                }
+            }
+        } else {
+            cell.setCellValue("");
+        }
     }
 }

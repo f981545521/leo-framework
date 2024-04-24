@@ -8,6 +8,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author youfang
@@ -16,6 +20,17 @@ import java.io.FileOutputStream;
 public class MainTest92 {
 
     public static void main(String[] args) throws Exception {
+
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            Map<String, Object> dataRow = new LinkedHashMap<>();
+            for (int j = 0; j < 24; j++) {
+                dataRow.put("index"+ j, 5);
+            }
+            dataList.add(dataRow);
+        }
+
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("数据");
 
@@ -26,9 +41,7 @@ public class MainTest92 {
                 .createData("0-0-18-19(1. 视频翻译)[178,199,230||true]")
                 .createData("0-0-20-21(1. 视频克隆)[178,199,230||true]")
                 .createData("0-0-22-23(1. 模特视频)[178,199,230||true]")
-                .createData("");
 
-        ExcelUtil.createBuilder(workbook, sheet)
                 .createRow(1, (short) 600)   //标题行（二级） 行高600
                 .createData("1-1-0-0(日期)[247,176,127||true]")
                 .createData("1-1-1-1(星期)[247,176,127||true]")
@@ -54,17 +67,17 @@ public class MainTest92 {
                 .createData("1-1-21-21(消耗积分)[178,199,230||true]")
                 .createData("1-1-22-22(合成条数)[178,199,230||true]")
                 .createData("1-1-23-23(消耗积分)[178,199,230||true]")
-                .createData("");
 
+                .writeData(2, dataList);
         //数据行
-        for (int i = 2; i < 10; i++) {
-            XSSFRow row2 = sheet.createRow(i);
-            for (int j = 0; j < 24; j++) {
-                XSSFCell cell = row2.createCell(j);
-                cell.setCellValue((double) 5);
-                cell.setCellStyle(ExcelUtil.createStyle(workbook, null, null, false));
-            }
-        }
+        //for (int i = 2; i < 10; i++) {
+        //    XSSFRow row2 = sheet.createRow(i);
+        //    for (int j = 0; j < 24; j++) {
+        //        XSSFCell cell = row2.createCell(j);
+        //        cell.setCellValue((double) 5);
+        //        cell.setCellStyle(ExcelUtil.createStyle(workbook, null, null, false));
+        //    }
+        //}
         //统计行
         int lastRowNum = sheet.getLastRowNum();
         XSSFRow summationRow = sheet.createRow(lastRowNum + 1);
@@ -87,7 +100,8 @@ public class MainTest92 {
                 cellData.setCellFormula("COUNT(" + letter + "3:" + letter + (lastRowNum + 1) + ")");
             }
             else {
-                cellData.setCellFormula("SUM(" + letter + "3:" + letter + (lastRowNum + 1) + ")");
+                //cellData.setCellFormula("SUM(" + letter + "3:" + letter + (lastRowNum + 1) + ")");
+                cellData.setCellFormula("SUM(" + letter + "3:INDEX(" + letter + ":" + letter + ",ROW()-1))");
             }
             cellData.setCellStyle(ExcelUtil.createStyle(workbook, null, new java.awt.Color(224, 62, 62), true));
         }
