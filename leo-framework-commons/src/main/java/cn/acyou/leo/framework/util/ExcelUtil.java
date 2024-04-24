@@ -6,9 +6,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -133,7 +131,7 @@ public class ExcelUtil {
                 if (o != null) {
                     if (o instanceof Number) {
                         cell.setCellValue(new Double(o.toString()));
-                    } else if(o instanceof Boolean){
+                    } else if (o instanceof Boolean) {
                         cell.setCellValue(Boolean.parseBoolean(o.toString()));
                     } else if (o instanceof Date) {
                         cell.setCellValue(DateUtil.getDateFormat((Date) o));
@@ -143,11 +141,11 @@ public class ExcelUtil {
                         //cell.setCellFormula("SUM(A2:C2)"); 设置函数 如："FUN=SUM(C2:INDEX(C:C,ROW()-1))"
                         if (cellValueStr.startsWith("FUN=")) {
                             cell.setCellFormula(cellValueStr.substring(4));
-                        }else {
+                        } else {
                             cell.setCellValue(cellValueStr);
                         }
                     }
-                }else {
+                } else {
                     cell.setCellValue("");
                 }
                 cell.setCellStyle(styles.get("data2"));
@@ -202,7 +200,7 @@ public class ExcelUtil {
     /**
      * IndexedColors 颜色对照表
      * https://blog.csdn.net/shanghaojiabohetang/article/details/51837242
-     *
+     * <p>
      * 创建表格样式
      *
      * @param wb 工作薄对象
@@ -268,4 +266,111 @@ public class ExcelUtil {
 
         return styles;
     }
+
+    /**
+     * 数字到字母转换 从0开始
+     * 0=>A
+     * 1=>B
+     * 2=>C
+     * 3=>D
+     * 4=>E
+     * 5=>F
+     * 6=>G
+     * 7=>H
+     * 8=>I
+     * 9=>J
+     * ...
+     *
+     * @param number 数字
+     * @return {@link String}
+     */
+    public static String convertToLetter(int number) {
+        if (number < 0) {
+            return null;
+        }
+        number++;
+        StringBuilder sb = new StringBuilder();
+        while (number > 0) {
+            int mod = (number - 1) % 26;
+            sb.insert(0, (char) (mod + 65));
+            number = (number - mod) / 26;
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 创建单元格样式
+     *
+     * @param workbook workbook
+     * @return {@link XSSFCellStyle}
+     */
+    private static XSSFCellStyle createStyle(XSSFWorkbook workbook) {
+        return createStyle(workbook, null, null, false);
+    }
+
+    /**
+     * 创建单元格样式
+     *
+     * @param workbook workbook
+     * @param bgColor  背景色 默认无
+     * @return {@link XSSFCellStyle}
+     */
+    private static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor) {
+        return createStyle(workbook, bgColor, null, false);
+    }
+
+    /**
+     * 创建单元格样式
+     *
+     * @param workbook  workbook
+     * @param bgColor   背景色 默认无
+     * @param fontColor 字体色 默认无
+     * @return {@link XSSFCellStyle}
+     */
+    private static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor, java.awt.Color fontColor) {
+        return createStyle(workbook, bgColor, fontColor, false);
+    }
+
+    /**
+     * 创建单元格样式
+     *
+     * @param workbook  workbook
+     * @param bgColor   背景色 默认无
+     * @param fontColor 字体色 默认无
+     * @param fontBlod  字体加粗 默认false
+     * @return {@link XSSFCellStyle}
+     */
+    private static XSSFCellStyle createStyle(XSSFWorkbook workbook, java.awt.Color bgColor, java.awt.Color fontColor, Boolean fontBlod) {
+        XSSFCellStyle cellStyle = workbook.createCellStyle();
+        if (bgColor != null) {
+            //单元格背景色
+            cellStyle.setFillForegroundColor(new XSSFColor(bgColor, new DefaultIndexedColorMap()));
+            //单元格背景色 填充效果
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        }
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        //文本显示
+        cellStyle.setWrapText(true);
+        //设置边框
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        XSSFFont font = workbook.createFont();
+        font.setFontName("Arial");
+        font.setFontHeightInPoints((short) 8);
+        //字体加粗
+        font.setBold(false);
+        font.setColor(IndexedColors.BLACK.getIndex());
+        if (fontBlod != null) {
+            font.setBold(fontBlod);
+        }
+        if (fontColor != null) {
+            font.setColor(new XSSFColor(fontColor, new DefaultIndexedColorMap()));
+        }
+        cellStyle.setFont(font);
+        return cellStyle;
+    }
+
 }
