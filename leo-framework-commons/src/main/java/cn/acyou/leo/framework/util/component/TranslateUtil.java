@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.util.SHAUtil;
 import cn.acyou.leo.framework.util.WorkUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -147,5 +148,39 @@ public class TranslateUtil {
             result = startStr + len + endStr;
         }
         return result;
+    }
+
+    public String baidu_langdetect(String query) {
+        String s = HttpUtil.get("https://fanyi.baidu.com/langdetect?query=" + query);
+        return JSON.parseObject(s).getString("lan");
+    }
+
+    public JSONArray baidu_sug(String kw) {
+        String s = HttpUtil.get("https://fanyi.baidu.com/sug?kw=" + kw);
+        return JSON.parseObject(s).getJSONArray("data");
+    }
+
+    public String baidu_translate(String query, String from, String to) {
+        String res = cn.hutool.http.HttpUtil.createPost("https://fanyi.baidu.com/ait/text/translate")
+                .body("{\n" +
+                        "  \"query\": \""+query+"\",\n" +
+                        "  \"from\": \""+from+"\",\n" +
+                        "  \"to\": \""+to+"\",\n" +
+                        "  \"reference\": \"\",\n" +
+                        "  \"corpusIds\": [],\n" +
+                        "  \"qcSettings\": [],\n" +
+                        "  \"needPhonetic\": false,\n" +
+                        "  \"domain\": \"common\",\n" +
+                        "  \"milliTimestamp\": "+System.currentTimeMillis()+"\n" +
+                        "}")
+                .execute().body();
+        String[] split = res.split("\n");
+        for (String s : split) {
+            if (s.contains("翻译中")) {
+                JSONObject jsonObject = JSON.parseObject(s.substring(6));
+                return jsonObject.getJSONObject("data").getJSONArray("list").getJSONObject(0).getString("dst");
+            }
+        }
+        return "";
     }
 }

@@ -115,6 +115,15 @@ public class MainTest5 extends MainTestBase {
         }
     }
 
+    @Test
+    public void test2346(){
+        TranslateUtil translateUtil = new TranslateUtil(null);
+        String res = translateUtil.baidu_langdetect("can i help you?");
+        System.out.println(res);
+        res = translateUtil.baidu_translate("can i help you?", "en", "zh");
+        System.out.println(res);
+    }
+
 
     @Test
     public void test23445(){
