@@ -58,6 +58,8 @@ leo:
   tool:
     tencent-map-key:
       key: VGKBZ-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+  extend-properties-path: 'D:\workspace\work\private_account.properties'
+  #extend-properties-path: 'http://qiniu.acyou.cn/***/private_account1.properties'
 # knife4j增强模式
 knife4j:
   enable: true
