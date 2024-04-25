@@ -1,5 +1,6 @@
 package cn.acyou.leo.tool.dto.dict;
 
+import cn.acyou.leo.framework.model.Internationalized;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.Date;
  * @version [1.0.0, 2020/7/16]
  **/
 @Data
-public class DictVo implements Serializable {
+public class DictVo extends Internationalized {
     private Long id;
     /**
      * 字典名称

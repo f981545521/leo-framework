@@ -1,5 +1,6 @@
 package cn.acyou.leo.tool.entity;
 
+import cn.acyou.leo.framework.model.Internationalized;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,7 +24,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_dict")
 @ApiModel(value = "Dict对象", description = "数据字典表")
-public class Dict implements Serializable {
+public class Dict extends Internationalized {
 
     private static final long serialVersionUID = 1L;
 

@@ -12,6 +12,8 @@ public enum ClientLanguage {
     CHINESE("zh", 0),
     //英文
     ENGLISH("en", 1),
+    //日语
+    JAPANESE("jp", 2),
     ;
     private final String name;
 

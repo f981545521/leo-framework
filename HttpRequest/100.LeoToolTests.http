@@ -55,6 +55,19 @@ content-Type: application/json
 ###
 POST {{api_url}}/leo-tool/dict/allType
 content-Type: application/json
+Language: jp
+###
+POST {{api_url}}/leo-tool/dict/tree
+content-Type: application/json
+Language: jp
+
+{"name": "职称"}
+###
+POST {{api_url}}/leo-tool/dict/get?id=2667
+content-Type: application/json
+Language: jp
+
+{"name": "职称"}
 
 ###
 POST {{api_url}}/leo-tool/dict/page
