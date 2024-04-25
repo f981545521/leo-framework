@@ -3,6 +3,8 @@ package cn.acyou.leo.tool.test;
 import cn.acyou.leo.framework.prop.GaodeMapProperty;
 import cn.acyou.leo.framework.prop.OpenApiProperty;
 import cn.acyou.leo.framework.prop.TranslateProperty;
+import cn.acyou.leo.framework.test.MainTestBase;
+import cn.acyou.leo.framework.test.TestUtils;
 import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.LoggerUtil;
 import cn.acyou.leo.framework.util.PinYinHelper;
@@ -22,7 +24,7 @@ import java.util.List;
  * @author youfang
  * @version [1.0.0, 2023/8/8 10:20]
  **/
-public class MainTest5 {
+public class MainTest5 extends MainTestBase {
 
     @Test
     public void test123() {
@@ -77,10 +79,10 @@ public class MainTest5 {
         LoggerUtil.setLevel("cn.acyou.leo.framework.util.component.TranslateUtil", "OFF");
 
         TranslateProperty translateProperty = new TranslateProperty();
-        translateProperty.setYoudaoAppKey("501062f86ee03660");
-        translateProperty.setYoudaoAppSecret("aKk1aZgheXsoQlhux129J7LHIG5PUuGN");
-        translateProperty.setBaiduAppId("20190808000324958");
-        translateProperty.setBaiduSecurityKey("2i7Z8KQQitJVt1mzn1fI");
+        translateProperty.setYoudaoAppKey(TestUtils.getPropertyRequired("youdaoAppKey"));
+        translateProperty.setYoudaoAppSecret(TestUtils.getPropertyRequired("youdaoAppSecret"));
+        translateProperty.setBaiduAppId(TestUtils.getPropertyRequired("baiduAppId"));
+        translateProperty.setBaiduSecurityKey(TestUtils.getPropertyRequired("baiduSecurityKey"));
         TranslateUtil translateUtil = new TranslateUtil(translateProperty);
         //有道翻译
         System.out.println(translateUtil.youdaoTranslate("你在哪里", "zh", "en"));
@@ -117,7 +119,7 @@ public class MainTest5 {
     @Test
     public void test23445(){
         GaodeMapProperty gaodeMapProperty = new GaodeMapProperty();
-        gaodeMapProperty.setKey("220da8558e8e5***");
+        gaodeMapProperty.setKey(TestUtils.getPropertyRequired("gaodemap_key"));
         GaodeMapUtil gaodeMapUtil = new GaodeMapUtil(gaodeMapProperty);
         JSONObject ipLocation = gaodeMapUtil.getIpLocation(null);
         //{"province":"江苏省","city":"南京市","adcode":"320100","infocode":"10000","rectangle":"118.4253323,31.80452471;119.050169,32.39401346","status":"1","info":"OK"}
@@ -149,7 +151,7 @@ public class MainTest5 {
     @Test
     public void  testrs234(){
         OpenApiProperty openApiProperty = new OpenApiProperty();
-        openApiProperty.setQweatherKey("caf54ef232");
+        openApiProperty.setQweatherKey(TestUtils.getPropertyRequired("hefeng_key"));
         OpenApiUtil openApiUtil = new OpenApiUtil(openApiProperty);
         JSONObject jsonObject = openApiUtil.lookup("南京");
         String location_id = jsonObject.getJSONArray("location").getJSONObject(0).getString("id");
