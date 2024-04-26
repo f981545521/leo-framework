@@ -529,4 +529,47 @@ public class ExcelUtil {
         anchor.setCol2(cellBase.getColumnIndex() + 1);
         drawing.createPicture(anchor, i1);
     }
+
+    public static XSSFWorkbook workbook(File file) {
+        XSSFWorkbook workbook;
+        if (file.exists()) {
+            File fileNew = new File(file.getAbsolutePath().replace(".xlsx", "_back.xlsx"));
+            FileUtil.rename(file, fileNew.getAbsolutePath(), true);
+            try {
+                workbook = new XSSFWorkbook(fileNew);
+            } catch (Exception e) {
+                workbook = new XSSFWorkbook();
+            }
+        } else {
+            workbook = new XSSFWorkbook();
+        }
+        return workbook;
+    }
+
+
+    public static XSSFSheet getOrCreateSheet(XSSFWorkbook workbook, String sheetName) {
+        XSSFSheet sheet = workbook.getSheet(sheetName);
+        if (sheet == null) {
+            sheet = workbook.createSheet(sheetName);
+        }
+        return sheet;
+    }
+
+    public static XSSFRow getOrCreateRow(XSSFSheet sheet, int rownum) {
+        XSSFRow row = sheet.getRow(rownum);
+        if (row == null) {
+            row = sheet.createRow(rownum);
+        }
+        return row;
+    }
+
+
+    public static XSSFCell getOrCreateCell(XSSFRow row, int cellnum) {
+        XSSFCell cell = row.getCell(cellnum);
+        if (cell == null) {
+            cell = row.createCell(cellnum);
+        }
+        return cell;
+    }
+
 }

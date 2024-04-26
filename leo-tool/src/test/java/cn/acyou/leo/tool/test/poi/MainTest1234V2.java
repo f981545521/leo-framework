@@ -6,7 +6,11 @@ import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import cn.acyou.leo.framework.util.ExcelUtil;
 import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.StringUtils;
+import cn.acyou.leo.framework.util.WorkUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
@@ -113,6 +117,94 @@ public class MainTest1234V2 {
         printWriter.flush();
         printWriter.close();
         System.out.println("解析完成");
+    }
+
+
+    @Test
+    public void test1234(){
+        String s =
+                "264\n" +
+                "265\n" +
+                "266\n" +
+                "267\n" +
+                "268\n" +
+                "269\n" +
+                "270\n" +
+                "271\n" +
+                "272\n" +
+                "273\n" +
+                "274\n" +
+                "275\n" +
+                "276\n" +
+                "277\n" +
+                "278\n" +
+                "279\n" +
+                "280\n" +
+                "281\n" +
+                "282\n" +
+                "283\n" +
+                "284\n" +
+                "285\n" +
+                "286";
+        String[] split = s.split("\n");
+        for (String robotId : split) {
+            String res = HttpUtil.createPost("https://prevshow.guiji.ai/avatar2c/task/saveWork")
+                    .header("token", "2151fe2bf1ee4599908ab537fffdf1fb")
+                    .body("{\n" +
+                            "  \"taskType\": 12,\n" +
+                            "  \"workName\": \"模特创作视频名称\",\n" +
+                            "  \"writeParam\": \"{\\\"text\\\":\\\"I hereby declare that the facial features and body depicted in the uploaded video are my own. The voice in the uploaded audio also belongs to me.\\\"," +
+                            "     \\\"robotId\\\":"+robotId+",\\\"ttsId\\\":221,\\\"audioUrl\\\":\\\"https://digital-public-dev.obs.myhuaweicloud.com/vcm_server/20240426/69xS19eiymfDce9a_ms/4SxcNxtxVqPLMlp7.wav\\\"}\",\n" +
+                            "  \"menuId\": 2,\n" +
+                            "  \"id\": null\n" +
+                            "}").execute().body();
+            JSONObject jsonObject = JSON.parseObject(res);
+            String id = jsonObject.getJSONObject("data").getString("id");
+
+            System.out.println("创建作品：" + res);
+            String token = HttpUtil.createPost("https://prevshow.guiji.ai/avatar2c/task/commitWork?workId=" + id)
+                    .header("token", "2151fe2bf1ee4599908ab537fffdf1fb")
+                    .execute().body();
+
+            System.out.println("发起合成：" + token);
+            WorkUtil.trySleep5000();
+        }
+    }
+
+
+
+    @Test
+    public void test1234V2(){
+        //男
+        String s =
+                "287\n" +
+                        "289\n" +
+                        "290\n" +
+                        "291\n" +
+                        "292";
+        String[] split = s.split("\n");
+        for (String robotId : split) {
+            String res = HttpUtil.createPost("https://prevshow.guiji.ai/avatar2c/task/saveWork")
+                    .header("token", "2151fe2bf1ee4599908ab537fffdf1fb")
+                    .body("{\n" +
+                            "  \"taskType\": 12,\n" +
+                            "  \"workName\": \"模特创作视频名称\",\n" +
+                            "  \"writeParam\": \"{\\\"text\\\":\\\"I hereby declare that the facial features and body depicted in the uploaded video are my own. The voice in the uploaded audio also belongs to me.\\\"," +
+                            "     \\\"robotId\\\":"+robotId+",\\\"ttsId\\\":220,\\\"audioUrl\\\":\\\"https://digital-public-dev.obs.myhuaweicloud.com/vcm_server/20240426/17UwfY9ee4R5dcCT_ms/psJD4JQTIwbfcRvH.wav\\\"}\",\n" +
+                            "  \"menuId\": 2,\n" +
+                            "  \"id\": null\n" +
+                            "}").execute().body();
+            JSONObject jsonObject = JSON.parseObject(res);
+            String id = jsonObject.getJSONObject("data").getString("id");
+
+            System.out.println("创建作品：" + res);
+            String token = HttpUtil.createPost("https://prevshow.guiji.ai/avatar2c/task/commitWork?workId=" + id)
+                    .header("token", "2151fe2bf1ee4599908ab537fffdf1fb")
+                    .execute().body();
+
+            System.out.println("发起合成：" + token);
+            WorkUtil.trySleep5000();
+        }
     }
 
 }
