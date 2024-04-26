@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.FileCopyUtils;
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.function.Consumer;
 
 /**
  * 文件操作工具
@@ -992,4 +994,24 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
     }
 
 
+    /**
+     * 遍历目录中的所有文件<br>
+     * 如果提供file为文件，直接返回过滤结果
+     *
+     * @param file     文件或目录，文件直接处理
+     * @param consumer 处理器 处理目录或者文件
+     * @since 3.2.0
+     */
+    public static void listFiles(File file, Consumer<File> consumer) {
+        if (file.isDirectory()) {
+            final File[] subFiles = file.listFiles();
+            if (ArrayUtil.isNotEmpty(subFiles)) {
+                for (File tmp : subFiles) {
+                    consumer.accept(tmp);
+                }
+            }
+        } else {
+            consumer.accept(file);
+        }
+    }
 }
