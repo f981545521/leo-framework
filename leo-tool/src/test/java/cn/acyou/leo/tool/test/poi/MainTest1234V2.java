@@ -44,30 +44,30 @@ public class MainTest1234V2 {
 
     @Test
     public void coverDir() {
-        MediaUtil.instance().extractCoverDir(new File("C:\\Users\\1\\Downloads\\6.High-definition enhancement（已处理首尾相连）"));
+        MediaUtil.instance().extractCoverDir(new File("C:\\Users\\1\\Downloads\\cn上架外模\\cn上架外模"));
     }
 
     @Test
     public void test32324() throws Exception {
-        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\temp\\poi3\\模特列表.xlsx"));
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\temp\\poi4\\模特列表11.xlsx"));
         List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheetAt(0));
-        PrintWriter printWriter = FileUtil.getPrintWriter("D:\\temp\\poi3\\模特列表_export2.sql", StandardCharsets.UTF_8, false);
+        PrintWriter printWriter = FileUtil.getPrintWriter("D:\\temp\\poi4\\模特列表_export2.sql", StandardCharsets.UTF_8, false);
         String name = null;
         long currentTimeMillis = System.currentTimeMillis();
-        long startId = 240;
+        long startId = 260;
         for (Map<String, Object> objectMap : dataList) {
             Object nameItem = objectMap.get("模特名称");
+            Object ttsName = objectMap.get("搭配TTS");
             if (nameItem != null) {
                 name = nameItem.toString();
             }
             if (objectMap.get("模特名称") == null || StringUtils.isBlank(objectMap.get("模特视频位置").toString())) {
                 continue;
             }
-            String ttsId = "221";
             String format = DateUtil.format(new Date(currentTimeMillis), "yyyy-MM-dd HH:mm:ss");
-            String videoPath = objectMap.get("模特视频位置").toString();
+            String videoPath = objectMap.get("模特视频位置").toString() + ".mp4";
             //https://anylang.obs.ap-southeast-3.myhuaweicloud.com/anylang-video/resources/robot_public/20240305/1.mp4
-            String videoUrl = "https://digital-public.obs.cn-east-3.myhuaweicloud.com/anylang/anylang-video/resources/robot_public/20240305/" + videoPath.replaceAll("\\\\", "/");
+            String videoUrl = "https://digital-public.obs.cn-east-3.myhuaweicloud.com/anylang/anylang-video/resources/robot_public/20240426/" + videoPath.replaceAll("\\\\", "/");
             String coverUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + "_cover.png";
             MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo(videoUrl);
             VideoSize realVideoSize = MediaUtil.getRealVideoSize(mediaInfo);
@@ -75,7 +75,7 @@ public class MainTest1234V2 {
                     "(id, user_id, robot_name, robot_code, scene_code, cover_url, video_url, duration, vertical, horizontal, train_status, " +
                     "tts_id, demo_video_make_status, demo_cover_url, demo_video_url, `type` ,silent_video_url, ext, del_flag, create_time, update_time) " +
                     "VALUES(" + startId + ", -1, '" + name + "', NULL, NULL, '" + coverUrl + "', '" + videoUrl + "', " + mediaInfo.getDuration() + ", '" + realVideoSize.getHeight() + "', '" + realVideoSize.getWidth() +
-                    "', 20, '" + ttsId + "'," +
+                    "', 20, (" + ("select id from `ffo-toc`.user_video_tts uvt where type = 2 and speaker = '"+ttsName+"'") + ")," +
                     " '20', '" + coverUrl + "', '" + videoUrl + "', 2, '" + videoUrl + "', NULL, 0, '" + format + "', '" + format + "');\r\n";
             printWriter.write(sql);
             startId++;

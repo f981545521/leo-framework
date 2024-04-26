@@ -2,6 +2,7 @@ package cn.acyou.leo.framework.util;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -11,9 +12,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -478,7 +477,7 @@ public class ExcelUtil {
         }
     }
 
-    private static void writeCell(CellBase cell, Object o){
+    public static void writeCell(CellBase cell, Object o){
         if (o != null) {
             if (o instanceof Number) {
                 cell.setCellValue(new Double(o.toString()));
@@ -492,6 +491,13 @@ public class ExcelUtil {
                 //cell.setCellFormula("SUM(A2:C2)"); 设置函数 如："FUN=SUM(C2:INDEX(C:C,ROW()-1))"
                 if (cellValueStr.startsWith("FUN=")) {
                     cell.setCellFormula(cellValueStr.substring(4));
+                } else if(cellValueStr.startsWith("IMG=")){
+                    //设置图片
+                    try {
+                        writePicture(cell, cellValueStr.substring(4));
+                    } catch (Exception e) {
+                        cell.setCellValue(cellValueStr);
+                    }
                 } else {
                     cell.setCellValue(cellValueStr);
                 }
@@ -499,5 +505,28 @@ public class ExcelUtil {
         } else {
             cell.setCellValue("");
         }
+    }
+
+    public static void writePicture(CellBase cellBase, String path) throws Exception{
+        Sheet sheet = cellBase.getSheet();
+        Workbook workbook = sheet.getWorkbook();
+        InputStream inputStream;
+        if (path.startsWith("http")) {
+            inputStream = HttpUtil.openStream(path);
+        }else {
+            inputStream = new FileInputStream(path);
+        }
+        byte[] bytes = IOUtils.toByteArray(inputStream);
+        int i1 = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_JPEG);
+        inputStream.close();
+        // 在单元格中插入图片
+        CreationHelper helper = workbook.getCreationHelper();
+        Drawing drawing = sheet.createDrawingPatriarch();
+        ClientAnchor anchor = helper.createClientAnchor();
+        anchor.setRow1(cellBase.getRowIndex());
+        anchor.setCol1(cellBase.getColumnIndex());
+        anchor.setRow2(cellBase.getRowIndex() + 1);
+        anchor.setCol2(cellBase.getColumnIndex() + 1);
+        drawing.createPicture(anchor, i1);
     }
 }
