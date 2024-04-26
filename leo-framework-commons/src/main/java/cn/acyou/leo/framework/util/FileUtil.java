@@ -11,6 +11,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -995,6 +996,33 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
 
 
     /**
+     * 获取所有文件（文件夹优先）
+     * @param file 文件or目录
+     * @return {@link List}<{@link File}>
+     */
+    public static List<File> listFiles(File file){
+        List<File> dirList = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File file1 : files) {
+                    if (file1.isDirectory()) {
+                        dirList.add(file1);
+                    }
+                    if (file1.isFile()) {
+                        fileList.add(file1);
+                    }
+                }
+            }
+        }else if (file.isFile()) {
+            fileList.add(file);
+        }
+        dirList.addAll(fileList);
+        return dirList;
+    }
+
+    /**
      * 遍历目录中的所有文件<br>
      * 如果提供file为文件，直接返回过滤结果
      *
@@ -1007,6 +1035,27 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
             final File[] subFiles = file.listFiles();
             if (ArrayUtil.isNotEmpty(subFiles)) {
                 for (File tmp : subFiles) {
+                    consumer.accept(tmp);
+                }
+            }
+        } else {
+            consumer.accept(file);
+        }
+    }
+
+    /**
+     * 遍历目录中的所有文件（文件夹优先）<br>
+     * 如果提供file为文件，直接返回过滤结果
+     *
+     * @param file     文件或目录，文件直接处理
+     * @param consumer 处理器 处理目录或者文件
+     * @since 3.2.0
+     */
+    public static void listFilesV2(File file, Consumer<File> consumer) {
+        if (file.isDirectory()) {
+            List<File> fileList = listFiles(file);
+            if (ArrayUtil.isNotEmpty(fileList)) {
+                for (File tmp : fileList) {
                     consumer.accept(tmp);
                 }
             }
