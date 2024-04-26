@@ -10,8 +10,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Lists;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -25,16 +27,21 @@ public class MainTest201 {
 
     public static void main(String[] args) {
         TestUtils.loadExtendProperties();
-        File path = new File("D:\\TranslateVideos");
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", idGenerator.getAndAdd(1));
-        jsonObject.put("parentId", 0);
-        jsonObject.put("name", path.getAbsolutePath());
-        jsonObject.put("isFolder", true);
-        jsonObject.put("open", true);
-        jsonArray.add(jsonObject);
+        //File path = new File("D:\\TranslateVideos");
+        //File path = new File("E:\\");
+        List<String> pathList= Lists.newArrayList("E:\\");
+        for (String pathStr : pathList) {
+            File path = new File(pathStr);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", idGenerator.getAndAdd(1));
+            jsonObject.put("parentId", 0);
+            jsonObject.put("name", path.getAbsolutePath());
+            jsonObject.put("isFolder", true);
+            jsonObject.put("open", true);
+            jsonArray.add(jsonObject);
+            copyIndexName(path, jsonObject);
+        }
 
-        copyIndexName(path, jsonObject);
 
         System.out.println("+++++++++++++  解析文件成功  +++++++++++++");
         String content = "window.ztreeConfig = '" + UrlUtil.encode( JSON.toJSONString(jsonArray)) + "'";
