@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>浏览器</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="http://dev.acyou.cn/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="http://dev.acyou.cn/ztree/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="http://dev.acyou.cn/ztree/js/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="./config.js"></script>
+    <SCRIPT type="text/javascript">
+        var zTree;
+
+        var setting = {
+            view: {
+                dblClickExpand: false,
+                showLine: true,
+                selectedMulti: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "parentId",
+                    rootPId: ""
+                }
+            },
+            callback: {
+                beforeClick: function (treeId, treeNode) {
+                    var zTree = $.fn.zTree.getZTreeObj("tree");
+                    if (treeNode.isParent) {
+                        zTree.expandNode(treeNode);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        };
+
+        var zNodes = JSON.parse(decodeURIComponent(window.ztreeConfig));
+
+        $(document).ready(function () {
+            var t = $("#tree");
+            t = $.fn.zTree.init(t, setting, zNodes);
+            var zTree = $.fn.zTree.getZTreeObj("tree");
+            zTree.expandAll(true);
+        });
+
+    </SCRIPT>
+</head>
+
+<body>
+<div id="container">
+    <div>
+        <ul id="tree" class="ztree"></ul>
+    </div>
+</div>
+</body>
+</html>

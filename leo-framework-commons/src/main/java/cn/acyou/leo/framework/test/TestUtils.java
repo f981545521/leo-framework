@@ -14,14 +14,19 @@ public class TestUtils {
 
     public static String DEFAULT_PATH = "D:\\workspace\\work\\private_account.properties";
 
-    public static void loadExtendProperties() throws Exception {
+    public static void loadExtendProperties() {
         loadExtendProperties(DEFAULT_PATH);
     }
 
-    public static void loadExtendProperties(String path) throws Exception {
-        Properties properties = System.getProperties();
-        properties.load(new FileSystemResource(path).getInputStream());
-        System.setProperties(properties);
+    public static void loadExtendProperties(String path) {
+        try {
+            Properties properties = System.getProperties();
+            properties.load(new FileSystemResource(path).getInputStream());
+            System.setProperties(properties);
+        }catch (Exception e) {
+            //ignore
+        }
+
     }
 
 
