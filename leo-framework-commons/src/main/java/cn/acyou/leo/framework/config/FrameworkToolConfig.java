@@ -13,7 +13,9 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 @EnableConfigurationProperties({BaiDuShortLinkProperty.class, DingTalkProperty.class,
-        TencentMapProperty.class, GaodeMapProperty.class, OpenApiProperty.class, TranslateProperty.class})
+        TencentMapProperty.class, GaodeMapProperty.class, OpenApiProperty.class, TranslateProperty.class,
+        LeoFullProperty.class
+})
 public class FrameworkToolConfig {
 
     @Bean
