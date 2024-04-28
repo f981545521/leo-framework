@@ -11,22 +11,23 @@ import java.util.function.Consumer;
  * @version [1.0.0, 2024/4/28 15:42]
  **/
 @Slf4j
-public class BatRunnerUtil {
+public class SystemRunnerUtil {
     public static void main(String[] args) {
-        String batFilePath = "D:\\workspace\\work\\auto-commit.bat";
-        execCommand(batFilePath, System.out::println);
+        execCommand("ipconfig", System.out::println);
+        //String batFilePath = "D:\\workspace\\work\\auto-commit.bat";
+        //execCommand(batFilePath, System.out::println);
         //exec(batFilePath, System.out::println);
     }
 
     public static void execCommand(String command, Consumer<String> produce) {
         try {
             Process process = Runtime.getRuntime().exec(command);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 produce.accept(line);
             }
-            int exitCode = process.waitFor();// 等待批处理脚本执行完成
+            int exitCode = process.waitFor();
             log.info("脚本 [{}] 执行结束：{}", command, exitCode);
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,12 +38,12 @@ public class BatRunnerUtil {
         try {
             ProcessBuilder pb = new ProcessBuilder(runFilePath);
             Process process = pb.start();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 produce.accept(line);
             }
-            int exitCode = process.waitFor();// 等待批处理脚本执行完成
+            int exitCode = process.waitFor();
             log.info("脚本 [{}] 执行结束：{}", runFilePath, exitCode);
         } catch (Exception e) {
             e.printStackTrace();
