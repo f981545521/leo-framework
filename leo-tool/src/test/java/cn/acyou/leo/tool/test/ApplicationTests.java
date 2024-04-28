@@ -20,7 +20,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -86,6 +85,13 @@ public class ApplicationTests {
         idItem = executeMapper.executeQuerySql(StringUtils.formatTemplate("select * from student where id = {id}", maxId));
         System.out.println("根据ID查询：" + idItem);
 
+    }
+
+    @Test
+    public void test12342V2() {
+        List<LinkedHashMap<String, Object>> linkedHashMaps = executeMapper.executeQuerySql("SHOW COLUMNS FROM student");
+        List<String> fields = linkedHashMaps.stream().map(x -> x.get("Field").toString()).collect(Collectors.toList());
+        System.out.println("查询表字段列表：" + fields);
     }
 
     @Test
