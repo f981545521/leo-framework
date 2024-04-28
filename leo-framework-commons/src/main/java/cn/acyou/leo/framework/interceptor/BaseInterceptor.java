@@ -11,7 +11,7 @@ import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.model.Result;
-import cn.acyou.leo.framework.prop.LeoProperty;
+import cn.acyou.leo.framework.prop.LeoDebugProperty;
 import cn.acyou.leo.framework.service.UserTokenService;
 import cn.acyou.leo.framework.util.CacheUtil;
 import cn.acyou.leo.framework.util.IPUtil;
@@ -58,7 +58,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
     @Autowired
     private RedisUtils redisUtils;
     @Autowired
-    private LeoProperty leoProperty;
+    private LeoDebugProperty leoProperty;
     @Autowired(required = false)
     private UserTokenService userTokenService;
 

@@ -1,6 +1,6 @@
 package cn.acyou.leo.framework.commons;
 
-import cn.acyou.leo.framework.prop.LeoProperty;
+import cn.acyou.leo.framework.prop.LeoDebugProperty;
 import cn.acyou.leo.framework.service.UserTokenService;
 import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.SpringHelper;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationCheckRunner implements ApplicationRunner {
     @Autowired
-    private LeoProperty leoProperty;
+    private LeoDebugProperty leoProperty;
     @Autowired(required = false)
     private LoggingSystem loggingSystem;
     @Autowired

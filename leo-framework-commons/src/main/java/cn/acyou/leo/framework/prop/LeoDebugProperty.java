@@ -12,7 +12,7 @@ import java.util.List;
  **/
 @Data
 @ConfigurationProperties(prefix = "leo.debug")
-public class LeoProperty {
+public class LeoDebugProperty {
 
     /**
      * 打印异常到Result中

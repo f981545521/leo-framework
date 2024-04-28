@@ -4,7 +4,7 @@ import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.exception.*;
 import cn.acyou.leo.framework.model.Result;
-import cn.acyou.leo.framework.prop.LeoProperty;
+import cn.acyou.leo.framework.prop.LeoDebugProperty;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -49,11 +49,11 @@ import java.util.regex.Pattern;
  **/
 @Slf4j
 @ControllerAdvice
-@EnableConfigurationProperties(value = LeoProperty.class)
+@EnableConfigurationProperties(value = LeoDebugProperty.class)
 public class GlobalExceptionHandler {
 
     @Autowired
-    private LeoProperty leoProperty;
+    private LeoDebugProperty leoProperty;
 
     /**
      * SQL语法错误
