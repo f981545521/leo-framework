@@ -14,9 +14,23 @@ import java.util.function.Consumer;
 public class BatRunnerUtil {
     public static void main(String[] args) {
         String batFilePath = "D:\\workspace\\work\\auto-commit.bat";
-        exec(batFilePath, s ->{
-            System.out.println(s);
-        });
+        execCommand(batFilePath, System.out::println);
+        //exec(batFilePath, System.out::println);
+    }
+
+    public static void execCommand(String command, Consumer<String> produce) {
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                produce.accept(line);
+            }
+            int exitCode = process.waitFor();// 等待批处理脚本执行完成
+            log.info("脚本 [{}] 执行结束：{}", command, exitCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void exec(String runFilePath, Consumer<String> produce) {
