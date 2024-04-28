@@ -42,6 +42,24 @@ public interface ExecuteMapper {
     String executeIndividualQuerySql(@Param("sql") String sql);
 
     /**
+     * 查询表是否包含列
+     * 存在为1/不存在为0
+     *
+     * @param tableName 表
+     * @param columnName 列
+     * @return 查询结果 会返回一个值
+     */
+    @Select("select count(1) as isExist from (\n" +
+            "select\n" +
+            "\tCOLUMN_NAME\n" +
+            "from\n" +
+            "\tINFORMATION_SCHEMA.COLUMNS\n" +
+            "where\n" +
+            "   TABLE_NAME = '${tableName}' and COLUMN_NAME = '${columnName}'\n" +
+            ") as t")
+    int columnIsExist(@Param("tableName") String tableName, @Param("columnName") String columnName);
+
+    /**
      * 执行insert语句
      *
      * @param sql sql语句

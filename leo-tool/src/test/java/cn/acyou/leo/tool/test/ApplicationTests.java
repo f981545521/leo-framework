@@ -92,6 +92,10 @@ public class ApplicationTests {
         List<LinkedHashMap<String, Object>> linkedHashMaps = executeMapper.executeQuerySql("SHOW COLUMNS FROM student");
         List<String> fields = linkedHashMaps.stream().map(x -> x.get("Field").toString()).collect(Collectors.toList());
         System.out.println("查询表字段列表：" + fields);
+        System.out.println(executeMapper.columnIsExist("student", "name"));
+        System.out.println(executeMapper.columnIsExist("student", "age"));
+        System.out.println(executeMapper.columnIsExist("student", "name1"));
+        System.out.println(executeMapper.columnIsExist("student", "age1"));
     }
 
     @Test
