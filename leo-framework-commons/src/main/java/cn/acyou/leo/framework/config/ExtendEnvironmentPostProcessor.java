@@ -50,17 +50,20 @@ public class ExtendEnvironmentPostProcessor implements EnvironmentPostProcessor 
                 }
             }
             //外部文件扩展
-            String propertyPath = environment.getProperty("leo.extend-properties-path");
-            if (StringUtils.isNotBlank(propertyPath)) {
-                Properties properties = new Properties();
-                if (propertyPath.startsWith("http")) {
-                    properties = PropertiesLoaderUtils.loadProperties(new FileUrlResource(new URL(propertyPath)));
-                } else {
-                    properties = PropertiesLoaderUtils.loadProperties(new FileSystemResource(propertyPath));
+            String propertyPaths = environment.getProperty("leo.extend-properties-paths");
+            if (StringUtils.isNotBlank(propertyPaths)) {
+                String[] split = propertyPaths.split(",");
+                for (String propertyPath : split) {
+                    Properties properties = new Properties();
+                    if (propertyPath.startsWith("http")) {
+                        properties = PropertiesLoaderUtils.loadProperties(new FileUrlResource(new URL(propertyPath)));
+                    } else {
+                        properties = PropertiesLoaderUtils.loadProperties(new FileSystemResource(propertyPath));
+                    }
+                    propertySources.addFirst(new PropertiesPropertySource("extendConfig", properties));
+                    log.info("扩展配置 加载成功！ 路径：[" + propertyPath + "]");
                 }
-                propertySources.addFirst(new PropertiesPropertySource("extendConfig", properties));
             }
-            log.info("扩展配置 加载成功！ 路径：[" + propertyPath + "]");
         } catch (Exception e) {
             log.error("扩展配置 加载失败！ 原因：" + e.getClass().getName() + "[" + e.getMessage() + "]");
         }
