@@ -15,11 +15,13 @@ public class BatRunnerUtil {
             String batFilePath = "D:\\workspace\\work\\auto-commit.bat";
             ProcessBuilder pb = new ProcessBuilder(batFilePath);
             Process process = pb.start();
-            process.waitFor(); // 等待批处理脚本执行完成
-            InputStream inputStream = process.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            System.out.println(bufferedReader.readLine());
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }
+            int exitCode = process.waitFor();// 等待批处理脚本执行完成
+            System.out.println("执行结束：" + exitCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
