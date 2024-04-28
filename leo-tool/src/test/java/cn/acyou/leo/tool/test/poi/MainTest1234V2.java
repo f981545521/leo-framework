@@ -123,29 +123,7 @@ public class MainTest1234V2 {
     @Test
     public void test1234(){
         String s =
-                "264\n" +
-                "265\n" +
-                "266\n" +
-                "267\n" +
-                "268\n" +
-                "269\n" +
-                "270\n" +
-                "271\n" +
-                "272\n" +
-                "273\n" +
-                "274\n" +
-                "275\n" +
-                "276\n" +
-                "277\n" +
-                "278\n" +
-                "279\n" +
-                "280\n" +
-                "281\n" +
-                "282\n" +
-                "283\n" +
-                "284\n" +
-                "285\n" +
-                "286";
+                "287";
         String[] split = s.split("\n");
         for (String robotId : split) {
             String res = HttpUtil.createPost("https://prevshow.guiji.ai/avatar2c/task/saveWork")
