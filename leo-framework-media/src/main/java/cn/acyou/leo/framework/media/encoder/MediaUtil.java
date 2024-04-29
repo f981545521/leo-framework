@@ -33,6 +33,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * FFMPEG视频处理
+ *
+ * 添加水印
+ * PS D:\temp\videos> ffmpeg.exe -i video1.mp4 -vf "drawtext=fontsize=100:fontfile=C\\:/Windows/fonts/consola.ttf:text='hello world':x=20:y=20:fontcolor=green:box=1:boxcolor=yellow" out.mp4
+ *
+ *
  * @author youfang
  * @version [1.0.0, 2022/3/23 14:14]
  **/
