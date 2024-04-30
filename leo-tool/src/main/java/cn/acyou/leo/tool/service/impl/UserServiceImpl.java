@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService, UserTokenService {
 
     @Override
     public LoginUser getLoginUserByUserId(Long userId) {
+        if (userId == null) {
+            return null;
+        }
         User user = dbUserList.stream().filter(x -> x.getUserId().equals(userId)).findFirst().orElse(null);
         if (user == null) {
             throw new ServiceException("用户不存在！");

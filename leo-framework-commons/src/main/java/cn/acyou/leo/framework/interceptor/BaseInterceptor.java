@@ -126,13 +126,13 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
 
         //启用Token校验
         if (leoProperty.isTokenVerify() && !isMatcherPath(request.getRequestURI())) {
-            String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
             //强校验 存在权限注解
             if (methodInfoBean.getRequiresLogin() != null || methodInfoBean.getRequiresRoles() != null || methodInfoBean.getRequiresPermissions() != null) {
                 if (!StringUtils.hasText(token)) {
                     falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
                     return false;
                 }
+                String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
                 if (!StringUtils.hasText(userId)) {
                     String loginAtOtherWhere = redisUtils.get(RedisKeyConstant.USER_LOGIN_AT_OTHER_WHERE + token);
                     if (StringUtils.hasText(loginAtOtherWhere)) {
@@ -143,9 +143,12 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                     return false;
                 }
             }
-            if (StringUtils.hasText(userId)) {
-                LoginUser loginUser = userTokenService.getLoginUserByUserId(Long.valueOf(userId));
-                AppContext.setLoginUser(loginUser);
+            if (StringUtils.hasText(token)) {
+                String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
+                if (StringUtils.hasText(userId)) {
+                    LoginUser loginUser = userTokenService.getLoginUserByUserId(Long.valueOf(userId));
+                    AppContext.setLoginUser(loginUser);
+                }
             }
         }
 
