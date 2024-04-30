@@ -8,8 +8,8 @@ import org.springframework.util.PatternMatchUtils;
  **/
 public class MainTest401 {
     public static void main(String[] args) {
-        System.out.println(PatternMatchUtils.simpleMatch("*.*.*","user.api.save"));
-        System.out.println(PatternMatchUtils.simpleMatch("user.api.*","user.api.save"));
-        System.out.println(PatternMatchUtils.simpleMatch("user.api1.*","user.api.save"));
+        System.out.println(PatternMatchUtils.simpleMatch("*:*:*","user:api:save"));
+        System.out.println(PatternMatchUtils.simpleMatch("user:api:*","user:api:save"));
+        System.out.println(PatternMatchUtils.simpleMatch("user:api1:*","user:api:save"));
     }
 }

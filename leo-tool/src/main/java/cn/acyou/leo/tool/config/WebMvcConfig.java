@@ -66,7 +66,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         user.setBirthday(LocalDate.now());
         user.setPassword("10001");
         user.setStatus(Constant.ENABLE);
-        user.setPerms("tool.test.*");
+        user.setPerms("tool:test:*");
         user.setCreateUser(1L);
         user.setCreateTime(new Date());
         user.setUpdateUser(1L);
