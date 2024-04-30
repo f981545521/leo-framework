@@ -1,6 +1,9 @@
 package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.annotation.AccessLimit;
+import cn.acyou.leo.framework.annotation.authz.RequiresLogin;
+import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
+import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.commons.ThreadAsyncCall;
 import cn.acyou.leo.framework.constant.Constant;
@@ -62,6 +65,27 @@ public class TestController {
     private RedisUtils redisUtils;
     @Autowired
     private ParamConfigService paramConfigService;
+
+    @ApiOperation(value = "测试权限 - 登录")
+    @GetMapping("perm1")
+    @RequiresLogin
+    public Result<Void> perm1() {
+        return Result.success();
+    }
+
+    @ApiOperation(value = "测试权限 - 包含角色ADMIN")
+    @GetMapping("perm2")
+    @RequiresRoles("ADMIN")
+    public Result<Void> perm2() {
+        return Result.success();
+    }
+
+    @ApiOperation(value = "测试权限 -包含权限test.perm3")
+    @GetMapping("perm3")
+    @RequiresPermissions("tool.test.perm3")
+    public Result<Void> perm3() {
+        return Result.success();
+    }
 
     @ApiOperation(value = "测试异步缓存", nickname = Constant.ALL)
     @GetMapping("test")

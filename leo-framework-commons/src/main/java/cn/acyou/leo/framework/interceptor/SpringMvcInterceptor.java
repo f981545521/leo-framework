@@ -12,6 +12,6 @@ public class SpringMvcInterceptor extends BaseInterceptor {
 
     @Override
     protected String getToken(HttpServletRequest request) {
-        return request.getHeader(Constant.TOKEN_NAME);
+        return request.getHeader(Constant.HeaderEnum.TOKEN_NAME);
     }
 }

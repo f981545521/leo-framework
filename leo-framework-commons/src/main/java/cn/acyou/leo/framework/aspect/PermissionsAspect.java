@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.aspect;
 
 import cn.acyou.leo.framework.annotation.authz.Logical;
+import cn.acyou.leo.framework.annotation.authz.RequiresLogin;
 import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
 import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.base.LoginUser;
@@ -22,7 +23,7 @@ import java.util.Set;
  *
  * 权限校验切面
  *
- * use support {@link RequiresRoles} & {@link RequiresPermissions}
+ * use support {@link RequiresLogin} & {@link RequiresRoles} & {@link RequiresPermissions}
  *
  * @author fangyou
  * @version [1.0.0, 2021-09-27 15:28]
@@ -32,11 +33,19 @@ import java.util.Set;
 @Component
 public class PermissionsAspect {
 
-    @Around("@annotation(cn.acyou.leo.framework.annotation.authz.RequiresRoles) || @annotation(cn.acyou.leo.framework.annotation.authz.RequiresPermissions)")
+    @Around("@annotation(cn.acyou.leo.framework.annotation.authz.RequiresLogin) || @annotation(cn.acyou.leo.framework.annotation.authz.RequiresRoles) || @annotation(cn.acyou.leo.framework.annotation.authz.RequiresPermissions)")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        RequiresLogin requiresLogin = methodSignature.getMethod().getAnnotation(RequiresLogin.class);
         RequiresRoles requiresRoles = methodSignature.getMethod().getAnnotation(RequiresRoles.class);
         RequiresPermissions requiresPermissions = methodSignature.getMethod().getAnnotation(RequiresPermissions.class);
+        //登录
+        if (requiresLogin != null) {
+            LoginUser loginUser = AppContext.getLoginUser();
+            if (loginUser == null) {
+                throw new ServiceException(CommonErrorEnum.E_UNAUTHENTICATED);
+            }
+        }
         //角色
         if (requiresRoles != null) {
             LoginUser loginUser = AppContext.getLoginUser();

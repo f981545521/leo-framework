@@ -12,6 +12,6 @@ public class AttachmentInterceptor extends BaseInterceptor {
 
     @Override
     protected String getToken(HttpServletRequest request) {
-        return request.getParameter(Constant.TOKEN_NAME);
+        return request.getParameter(Constant.HeaderEnum.TOKEN_NAME);
     }
 }

@@ -75,7 +75,17 @@ public class Constant {
     /**
      * 请求头header名称
      */
-    public static final String TOKEN_NAME = "Authentication";
+    public static class HeaderEnum {
+        /**
+         * token
+         */
+        public static final String TOKEN_NAME = "token";
+        /**
+         * 语言
+         */
+        public static final String LANGUAGE_NAME = "language";
+    }
+
     /**
      * 幂等序列参数
      */

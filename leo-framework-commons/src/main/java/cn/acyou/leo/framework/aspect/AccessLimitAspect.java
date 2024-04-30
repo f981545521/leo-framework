@@ -56,7 +56,7 @@ public class AccessLimitAspect {
         assert requestAttributes != null;
         HttpServletRequest request = requestAttributes.getRequest();
         String path = request.getServletPath();
-        String token = request.getHeader(Constant.TOKEN_NAME);
+        String token = request.getHeader(Constant.HeaderEnum.TOKEN_NAME);
         StringBuilder keyBuffer = new StringBuilder(path);
         if (StringUtils.hasText(token)) {
             keyBuffer.append(token);

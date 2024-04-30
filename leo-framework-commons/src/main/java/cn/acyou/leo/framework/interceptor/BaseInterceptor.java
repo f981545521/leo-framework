@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.interceptor;
 
+import cn.acyou.leo.framework.annotation.authz.RequiresLogin;
 import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
 import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.base.ClientLanguage;
@@ -120,17 +121,18 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
         AppContext.setIp(remoteIp);
         AppContext.setActionUrl(requestURI);
         AppContext.setClientType(SourceUtil.getClientTypeByUserAgent(request));
-        String language = request.getHeader("Language");
+        String language = request.getHeader(Constant.HeaderEnum.LANGUAGE_NAME);
         AppContext.setClientLanguage(ClientLanguage.getLanguage(language));
 
-        //启用Token校验 并且 存在注解 RequiresRoles || RequiresPermissions
-        if (methodInfoBean.getRequiresRoles() != null || methodInfoBean.getRequiresPermissions() != null) {
-            if (leoProperty.isTokenVerify() && !isMatcherPath(request.getRequestURI())) {
+        //启用Token校验
+        if (leoProperty.isTokenVerify() && !isMatcherPath(request.getRequestURI())) {
+            String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
+            //强校验 存在权限注解
+            if (methodInfoBean.getRequiresLogin() != null || methodInfoBean.getRequiresRoles() != null || methodInfoBean.getRequiresPermissions() != null) {
                 if (!StringUtils.hasText(token)) {
                     falseResult(response, CommonErrorEnum.E_UNAUTHENTICATED);
                     return false;
                 }
-                String userId = redisUtils.get(RedisKeyConstant.USER_LOGIN_TOKEN + token);
                 if (!StringUtils.hasText(userId)) {
                     String loginAtOtherWhere = redisUtils.get(RedisKeyConstant.USER_LOGIN_AT_OTHER_WHERE + token);
                     if (StringUtils.hasText(loginAtOtherWhere)) {
@@ -140,6 +142,8 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                     }
                     return false;
                 }
+            }
+            if (StringUtils.hasText(userId)) {
                 LoginUser loginUser = userTokenService.getLoginUserByUserId(Long.valueOf(userId));
                 AppContext.setLoginUser(loginUser);
             }
@@ -238,10 +242,12 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             return CacheUtil.getAndCache("BASE_INTERCEPTOR.METHOD_DEBUG." + methodInfo, 0L, (k) -> {
                 Method method = handlerMethod.getMethod();
                 ApiOperation annotation = method.getAnnotation(ApiOperation.class);
+                RequiresLogin requiresLogin = method.getAnnotation(RequiresLogin.class);
                 RequiresRoles requiresRoles = method.getAnnotation(RequiresRoles.class);
                 RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
                 AppContext.MethodInfoBean info = new AppContext.MethodInfoBean();
                 info.setApiOperation(annotation);
+                info.setRequiresLogin(requiresLogin);
                 info.setRequiresRoles(requiresRoles);
                 info.setRequiresPermissions(requiresPermissions);
                 info.setMethodInfo(methodInfo);

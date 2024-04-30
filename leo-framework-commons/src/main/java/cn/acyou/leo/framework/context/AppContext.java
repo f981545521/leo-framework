@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.context;
 
+import cn.acyou.leo.framework.annotation.authz.RequiresLogin;
 import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
 import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.base.ClientLanguage;
@@ -260,6 +261,7 @@ public class AppContext {
         private boolean printRequestBody = true;
         private boolean printResponseBody = false;
         private ApiOperation apiOperation;
+        private RequiresLogin requiresLogin;
         private RequiresRoles requiresRoles;
         private RequiresPermissions requiresPermissions;
     }
