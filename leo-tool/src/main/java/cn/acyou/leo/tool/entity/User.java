@@ -59,6 +59,9 @@ public class User implements Serializable {
     @ApiModelProperty(value = "状态 0禁用 1正常")
     private Integer status;
 
+    @ApiModelProperty(value = "权限列表")
+    private String perms;
+
     @ApiModelProperty(value = "创建人")
     private Long createUser;
 

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,10 +25,10 @@ public class LoginUser implements Serializable {
     private String	userName;
 
     @ApiModelProperty("用户拥有的角色")
-    private Set<String> roleCodes;
+    private Set<String> roleCodes = new HashSet<>();
 
     @ApiModelProperty("用户拥有的权限")
-    private Set<String> permsList;
+    private Set<String> permsList = new HashSet<>();
 
     @ApiModelProperty("所属组织")
     private OrganizationVo organization;

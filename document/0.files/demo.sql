@@ -41,6 +41,7 @@ CREATE TABLE `sys_user`  (
                              `birthday` date NULL DEFAULT NULL COMMENT '生日',
                              `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '密码',
                              `status` int(11) NOT NULL DEFAULT 1 COMMENT '状态 0禁用 1正常',
+                             `perms` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户权限',
                              `create_user` bigint(20) NOT NULL COMMENT '创建人',
                              `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间,默认当前时间',
                              `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
@@ -51,6 +52,6 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (100, 1, '小王2', '100000@qq.com', 1, '18205166207', NULL, NULL, '123456', 1, 1, '2021-09-24 20:58:02', NULL, NULL);
-INSERT INTO `sys_user` VALUES (101, NULL, '小王2', '100000@qq.com', 1, NULL, NULL, NULL, '123456', 1, 1, '2021-12-03 00:43:53', NULL, NULL);
-INSERT INTO `sys_user` VALUES (102, NULL, '小王2', '100000@qq.com', 1, NULL, NULL, NULL, '123456', 1, 1, '2021-12-03 00:44:13', NULL, NULL);
+INSERT INTO `sys_user` VALUES (100, 1,    '小王2', '100000@qq.com', 1, '18205166207', NULL, NULL, '123456', 1, '*.*.*', 1, '2021-09-24 20:58:02', NULL, NULL);
+INSERT INTO `sys_user` VALUES (101, NULL, '小王2', '100000@qq.com', 1, NULL, NULL, NULL,          '123456', 1, '*.*.*', 1, '2021-12-03 00:43:53', NULL, NULL);
+INSERT INTO `sys_user` VALUES (102, NULL, '小王2', '100000@qq.com', 1, NULL, NULL, NULL,          '123456', 1, '*.*.*', 1, '2021-12-03 00:44:13', NULL, NULL);

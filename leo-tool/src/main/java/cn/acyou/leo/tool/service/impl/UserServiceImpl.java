@@ -58,7 +58,15 @@ public class UserServiceImpl implements UserService, UserTokenService {
         loginUser.setToken(token);
         loginUser.setUserId(user.getUserId());
         loginUser.setUserName(user.getUserName());
-        loginUser.setRoleCodes(Sets.newHashSet(String.valueOf(user.getRoleId())));
+        if (user.getRoleId().equals(Constant.CONS_LONG_1)) {
+            loginUser.setRoleCodes(Sets.newHashSet("ADMIN"));
+        }
+        if (user.getRoleId().equals(Constant.CONS_LONG_2)) {
+            loginUser.setRoleCodes(Sets.newHashSet("USER"));
+        }
+        if (user.getPerms() != null) {
+            loginUser.setPermsList(Sets.newHashSet(user.getPerms().split(",")));
+        }
         return loginUser;
     }
 
