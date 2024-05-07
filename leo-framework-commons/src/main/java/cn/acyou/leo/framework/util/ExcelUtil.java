@@ -109,31 +109,46 @@ public class ExcelUtil {
      * @throws IOException
      */
     public static void exportExcel(OutputStream out, List<Map<String, Object>> dataList, String sheetName) throws IOException {
+        Map<String, List<Map<String, Object>>> dataMap = new LinkedHashMap<>();
+        dataMap.put(sheetName, dataList);
+        exportExcelMultiSheet(out, dataMap);
+    }
+
+    /**
+     * 导出数据到Excel (多sheet页)
+     *
+     * @param out       输出流
+     * @param dataMap  sheet名称 + 数据
+     * @throws IOException
+     */
+    public static void exportExcelMultiSheet(OutputStream out, Map<String, List<Map<String, Object>>> dataMap) throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet(sheetName);
-        sheet.setDefaultRowHeightInPoints((short) 20);
-        Map<String, CellStyle> styles = createStyles(workbook);
-        HSSFRow row = sheet.createRow(0);
-        Map<String, Object> map = dataList.get(0);
-        String[] tableHeaders = map.keySet().toArray(new String[0]);
-        // 创建表头
-        for (int i = 0; i < tableHeaders.length; i++) {
-            sheet.setColumnWidth(i, 20 * 256);
-            HSSFCell cell = row.createCell(i);
-            cell.setCellValue(tableHeaders[i]);
-            cell.setCellStyle(styles.get("header"));
-        }
-        // 写入数据
-        for (int i = 0; i < dataList.size(); i++) {
-            Map<String, Object> rowMap = dataList.get(i);
-            row = sheet.createRow(i + 1);
-            for (int j = 0; j < tableHeaders.length; j++) {
-                HSSFCell cell = row.createCell(j);
-                final Object o = rowMap.get(tableHeaders[j]);
-                writeCell(cell, o);
-                cell.setCellStyle(styles.get("data2"));
+        dataMap.forEach((sheetName, dataList)->{
+            HSSFSheet sheet = workbook.createSheet(sheetName);
+            sheet.setDefaultRowHeightInPoints((short) 20);
+            Map<String, CellStyle> styles = createStyles(workbook);
+            HSSFRow row = sheet.createRow(0);
+            Map<String, Object> map = dataList.get(0);
+            String[] tableHeaders = map.keySet().toArray(new String[0]);
+            // 创建表头
+            for (int i = 0; i < tableHeaders.length; i++) {
+                sheet.setColumnWidth(i, 20 * 256);
+                HSSFCell cell = row.createCell(i);
+                cell.setCellValue(tableHeaders[i]);
+                cell.setCellStyle(styles.get("header"));
             }
-        }
+            // 写入数据
+            for (int i = 0; i < dataList.size(); i++) {
+                Map<String, Object> rowMap = dataList.get(i);
+                row = sheet.createRow(i + 1);
+                for (int j = 0; j < tableHeaders.length; j++) {
+                    HSSFCell cell = row.createCell(j);
+                    final Object o = rowMap.get(tableHeaders[j]);
+                    writeCell(cell, o);
+                    cell.setCellStyle(styles.get("data2"));
+                }
+            }
+        });
         workbook.write(out);
         out.flush();
         out.close();

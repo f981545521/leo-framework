@@ -69,6 +69,10 @@ public class MainTest92 {
                 .createData("1-1-23-23(消耗积分)[178,199,230||true]")
 
                 .writeData(2, dataList);
+
+        XSSFSheet sheet2 = workbook.createSheet("数据2");
+        ExcelUtil.createBuilder(workbook, sheet2)
+                .writeData(0, dataList);
         //数据行
         //for (int i = 2; i < 10; i++) {
         //    XSSFRow row2 = sheet.createRow(i);
@@ -106,7 +110,7 @@ public class MainTest92 {
             cellData.setCellStyle(ExcelUtil.createStyle(workbook, null, new java.awt.Color(224, 62, 62), true));
         }
 
-        File file = new File("D:\\temp\\统计数据V1_" + System.currentTimeMillis() + ".xlsx");
+        File file = new File("D:\\temp\\统计数据V3_" + System.currentTimeMillis() + ".xlsx");
         workbook.write(new FileOutputStream(file));
         workbook.close();
     }
