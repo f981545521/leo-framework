@@ -18,11 +18,13 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  #  thymeleaf:
-  #    enabled: true
-  #    encoding: UTF-8
-  #    prefix: classpath:/templates/
-  #    suffix: .html
+  thymeleaf:
+    cache: false
+    enabled: true
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML #LEGACYHTML5
   servlet:
     multipart:
       max-file-size: 50MB #由Servlet限制文件大小
@@ -102,3 +104,16 @@ retrofit:
   global-call-timeout-ms: 0
   global-connect-timeout-ms: 60000
   global-write-timeout-ms: 60000
+
+captcha:
+  expire:
+    default: 10000
+    # 文字点选验证码 过期时间设置大一点
+    WORD_IMAGE_CLICK: 60000
+  cache:
+    enabled: true
+    cache-size: 20
+  secondary:
+    enabled: false
+  # 不初始化默认的资源文件
+  init-default-resource: false
