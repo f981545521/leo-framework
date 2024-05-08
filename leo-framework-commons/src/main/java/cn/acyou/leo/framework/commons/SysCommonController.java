@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -98,6 +97,33 @@ public class SysCommonController {
         }
         final JSONObject ipLocation = tencentMapUtil.getIpLocation(ip);
         return Result.success(ipLocation);
+    }
+
+    @ApiOperation("获取IP属地V2")
+    @GetMapping("ipAddrV2")
+    @ResponseBody
+    public Result<JSONObject> ipAddrV2(String ip) {
+        return WorkUtil.doRetryWork(3, () -> {
+            JSONObject res = new JSONObject(true);
+            String s;
+            if (StringUtils.isNotBlank(ip)) {
+                s = HttpUtil.get("https://qifu.baidu.com/ip/geo/v1/district?ip=" + ip);
+            } else {
+                s = HttpUtil.get("https://qifu.baidu.com/ip/local/geo/v1/district");
+            }
+            JSONObject ipLocation = JSON.parseObject(s);
+            res.put("ip", ip);
+            res.put("continent", ipLocation.getJSONObject("data").getString("continent"));
+            res.put("country", ipLocation.getJSONObject("data").getString("country"));
+            res.put("prov", ipLocation.getJSONObject("data").getString("prov"));
+            res.put("city", ipLocation.getJSONObject("data").getString("city"));
+            res.put("district", ipLocation.getJSONObject("data").getString("district"));
+            res.put("owner", ipLocation.getJSONObject("data").getString("owner"));
+            res.put("zipcode", ipLocation.getJSONObject("data").getString("zipcode"));
+            res.put("lat", ipLocation.getJSONObject("data").getString("lat"));
+            res.put("lng", ipLocation.getJSONObject("data").getString("lng"));
+            return Result.success(res);
+        });
     }
 
     @GetMapping(value = "/color")
