@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.mapper.ExecuteMapper;
 import cn.acyou.leo.framework.model.IdReq;
+import cn.acyou.leo.framework.util.EnvironmentHelper;
 import cn.acyou.leo.framework.util.ExcelUtil;
 import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.StringUtils;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +40,12 @@ public class ApplicationTests {
     private AreaService areaService;
     @Autowired
     private ExecuteMapper executeMapper;
+
+    @Test
+    public void testEnvironmentHelper(){
+        String[] activeProfiles = EnvironmentHelper.getActiveProfiles();
+        System.out.println(Arrays.toString(activeProfiles));
+    }
 
     @Test
     public void testExecuteMapper(){

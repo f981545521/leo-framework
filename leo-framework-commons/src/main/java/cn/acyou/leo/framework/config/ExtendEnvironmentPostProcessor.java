@@ -44,6 +44,9 @@ public class ExtendEnvironmentPostProcessor implements EnvironmentPostProcessor 
                         for (File listFile : files) {
                             Properties properties = PropertiesLoaderUtils.loadProperties(new ClassPathResource("extendProperties" + File.separator + listFile.getName()));
                             propertySources.addFirst(new PropertiesPropertySource("extendConfig_" + listFile.getName(), properties));
+                            Properties propertiesSys = System.getProperties();
+                            propertiesSys.load(new ClassPathResource("extendProperties" + File.separator + listFile.getName()).getInputStream());
+                            System.setProperties(propertiesSys);
                             log.info("扩展配置 加载成功！ 路径：[" + listFile.getPath() + "]");
                         }
                     }
@@ -54,13 +57,17 @@ public class ExtendEnvironmentPostProcessor implements EnvironmentPostProcessor 
             if (StringUtils.isNotBlank(propertyPaths)) {
                 String[] split = propertyPaths.split(",");
                 for (String propertyPath : split) {
-                    Properties properties = new Properties();
+                    Properties properties;
+                    Properties propertiesSys = System.getProperties();
                     if (propertyPath.startsWith("http")) {
                         properties = PropertiesLoaderUtils.loadProperties(new FileUrlResource(new URL(propertyPath)));
+                        propertiesSys.load(new FileUrlResource(new URL(propertyPath)).getInputStream());
                     } else {
                         properties = PropertiesLoaderUtils.loadProperties(new FileSystemResource(propertyPath));
+                        propertiesSys.load(new FileSystemResource(propertyPath).getInputStream());
                     }
                     propertySources.addFirst(new PropertiesPropertySource("extendConfig", properties));
+                    System.setProperties(propertiesSys);
                     log.info("扩展配置 加载成功！ 路径：[" + propertyPath + "]");
                 }
             }
