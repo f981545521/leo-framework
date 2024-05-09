@@ -1,5 +1,8 @@
 package cn.acyou.leo.framework.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,4 +29,32 @@ public class MapUtils {
     public static boolean isNotEmpty(final Map<?,?> map) {
         return !isEmpty(map);
     }
+
+    public static MapListBuild createMapList() {
+        return new MapListBuild<>(new HashMap<>());
+    }
+
+    public static <K, V> MapListBuild createMapList(Map<K, List<V>> map) {
+        return new MapListBuild<>(map);
+    }
+
+    public static class MapListBuild<K, V> {
+        private final Map<K, List<V>> map;
+
+        public MapListBuild(Map<K, List<V>> map) {
+            this.map = map;
+        }
+
+        public MapListBuild putValue(K k, V v){
+            if (map.containsKey(k)) {
+                map.get(k).add(v);
+            }else {
+                List<V> vList = new ArrayList<>();
+                vList.add(v);
+                map.put(k, vList);
+            }
+            return this;
+        }
+    }
+
 }
