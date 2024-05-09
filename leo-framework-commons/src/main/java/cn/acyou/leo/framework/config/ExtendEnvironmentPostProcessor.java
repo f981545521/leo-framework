@@ -32,8 +32,8 @@ public class ExtendEnvironmentPostProcessor implements EnvironmentPostProcessor 
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+        MutablePropertySources propertySources = environment.getPropertySources();
         try {
-            MutablePropertySources propertySources = environment.getPropertySources();
             //项目resources扩展
             ClassPathResource extendProperties = new ClassPathResource("extendProperties");
             if (extendProperties.exists()) {
@@ -52,11 +52,15 @@ public class ExtendEnvironmentPostProcessor implements EnvironmentPostProcessor 
                     }
                 }
             }
-            //外部文件扩展
-            String propertyPaths = environment.getProperty("leo.extend-properties-paths");
-            if (StringUtils.isNotBlank(propertyPaths)) {
-                String[] split = propertyPaths.split(",");
-                for (String propertyPath : split) {
+        } catch (Exception e) {
+            log.error("扩展配置 加载失败！ 原因：" + e.getClass().getName() + "[" + e.getMessage() + "]");
+        }
+        //外部文件扩展
+        String propertyPaths = environment.getProperty("leo.extend-properties-paths");
+        if (StringUtils.isNotBlank(propertyPaths)) {
+            String[] split = propertyPaths.split(",");
+            for (String propertyPath : split) {
+                try {
                     Properties properties;
                     Properties propertiesSys = System.getProperties();
                     if (propertyPath.startsWith("http")) {
@@ -69,11 +73,13 @@ public class ExtendEnvironmentPostProcessor implements EnvironmentPostProcessor 
                     propertySources.addFirst(new PropertiesPropertySource("extendConfig", properties));
                     System.setProperties(propertiesSys);
                     log.info("扩展配置 加载成功！ 路径：[" + propertyPath + "]");
+                } catch (Exception e) {
+                    log.error("扩展配置 加载失败！ 原因：" + e.getClass().getName() + "[" + e.getMessage() + "]");
                 }
             }
-        } catch (Exception e) {
-            log.error("扩展配置 加载失败！ 原因：" + e.getClass().getName() + "[" + e.getMessage() + "]");
         }
+
+
     }
 }
 
