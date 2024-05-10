@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.util;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 身份证地区对应关系
@@ -3372,5 +3373,19 @@ public class IdCardUtil {
         return AREA_CODE.get(areaCode);
     }
 
-
+    /**
+     * 根据名称查找城市code
+     *
+     * @param name 名称 省/市/区
+     * @return {@link String}
+     */
+    public static String getAreaCode(String name) {
+        AtomicReference<String> areaCode = new AtomicReference<>("");
+        AREA_CODE.forEach((k,v)->{
+            if (v.contains(name)) {
+                areaCode.set(k + "");
+            }
+        });
+        return areaCode.get();
+    }
 }
