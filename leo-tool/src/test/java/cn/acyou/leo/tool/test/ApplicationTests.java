@@ -2,10 +2,8 @@ package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.mapper.ExecuteMapper;
 import cn.acyou.leo.framework.model.IdReq;
-import cn.acyou.leo.framework.util.EnvironmentHelper;
-import cn.acyou.leo.framework.util.ExcelUtil;
-import cn.acyou.leo.framework.util.FileUtil;
-import cn.acyou.leo.framework.util.StringUtils;
+import cn.acyou.leo.framework.util.*;
+import cn.acyou.leo.framework.util.component.EmailUtil;
 import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.mapper.AreaMapper;
@@ -45,6 +43,13 @@ public class ApplicationTests {
     public void testEnvironmentHelper(){
         String[] activeProfiles = EnvironmentHelper.getActiveProfiles();
         System.out.println(Arrays.toString(activeProfiles));
+    }
+
+    @Test
+    public void testEmail(){
+        EmailUtil emailUtil = SpringHelper.getBean(EmailUtil.class);
+        emailUtil.sendEmail("youfang@acyou.cn", "Test1", "1");
+
     }
 
     @Test

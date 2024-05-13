@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties({BaiDuShortLinkProperty.class, DingTalkProperty.class,
         TencentMapProperty.class, GaodeMapProperty.class, OpenApiProperty.class, TranslateProperty.class,
+        EmailProperty.class,
         LeoFullProperty.class
 })
 public class FrameworkToolConfig {
@@ -52,5 +53,11 @@ public class FrameworkToolConfig {
     @ConditionalOnProperty({"leo.tool.openapi"})
     public OpenApiUtil openApiUtil(OpenApiProperty openApiProperty) {
         return new OpenApiUtil(openApiProperty);
+    }
+
+    @Bean
+    @ConditionalOnProperty({"leo.tool.email.username"})
+    public EmailUtil emailUtil(EmailProperty emailProperty) {
+        return new EmailUtil(emailProperty);
     }
 }

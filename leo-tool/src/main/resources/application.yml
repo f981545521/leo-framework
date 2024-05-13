@@ -60,6 +60,12 @@ leo:
   tool:
     tencent-map-key:
       key: VGKBZ-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+    email:
+      username: iblog_admin@126.com
+      password: WSZYRBCHSILMSVUW
+      smtp-auth: true
+      smtp-host: smtp.126.com
+      smtp-port: 25
   extend-properties-paths: 'D:\workspace\work\private_account.properties'
   #extend-properties-paths: 'http://qiniu.acyou.cn/***/private_account1.properties'
 # knife4j增强模式
