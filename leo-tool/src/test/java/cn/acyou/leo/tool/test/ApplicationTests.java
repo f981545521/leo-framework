@@ -118,11 +118,16 @@ public class ApplicationTests {
     }
 
     @Test
+    public void testExecuteMapper3(){
+        int res = executeMapper.executeDDLSql("alter table t_dict_v1 rename t_dict");
+        System.out.println(res);
+    }
+
+    @Test
     public void testExecuteMapper2(){
         List<LinkedHashMap<String, Object>> linkedHashMaps = executeMapper.executeQuerySql("show create table student");
         System.out.println(linkedHashMaps);
     }
-
 
     @Test
     public void testExecuteMapper(){
