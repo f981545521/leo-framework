@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @EnableLeoFramework
 @SpringBootApplication(scanBasePackages = "cn.acyou.leo")
-@MapperScan({"cn.acyou.leo.tool.mapper", "cn.acyou.leo.framework.mapper"})
+@MapperScan({"cn.acyou.leo.tool.mapper"})
 public class LeoToolApplication {
 
     public static void main(String[] args) {

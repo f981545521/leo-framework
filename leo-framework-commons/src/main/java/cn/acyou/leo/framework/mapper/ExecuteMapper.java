@@ -8,15 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * 注意使用的时候请使用多包扫描
- * <p>
- * ## @MapperScan({"cn.acyou.leo.tool.mapper", "cn.acyou.leo.framework.mapper"})
- * <p>
+ * 直接执行SQL
  *
- * <b>注意使用的时候请使用多包扫描:</b>
- * <pre>
- * &#064;MapperScan({"cn.acyou.leo.tool.mapper", "cn.acyou.leo.framework.mapper"})
- * </pre>
+ * 已由Framework扫描   {@link cn.acyou.leo.framework.auto.LeoFrameworkConfiguration}
  * @author youfang
  * @version [1.0.0, 2024/4/22 10:35]
  **/

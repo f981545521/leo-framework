@@ -118,6 +118,13 @@ public class ApplicationTests {
     }
 
     @Test
+    public void testExecuteMapper2(){
+        List<LinkedHashMap<String, Object>> linkedHashMaps = executeMapper.executeQuerySql("show create table student");
+        System.out.println(linkedHashMaps);
+    }
+
+
+    @Test
     public void testExecuteMapper(){
         executeMapper.executeDDLSql("CREATE TABLE `student_auto` (\n" +
                 "  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',\n" +
