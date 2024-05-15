@@ -28,6 +28,9 @@ public class EmailUtil {
         props.put("mail.smtp.auth", emailProperty.getSmtpAuth());
         props.put("mail.smtp.host", emailProperty.getSmtpHost());
         props.put("mail.smtp.port", emailProperty.getSmtpPort());
+        if (username.endsWith("@qq.com")) {
+            props.put("mail.smtp.ssl.enable", "true");
+        }
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {

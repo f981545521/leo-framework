@@ -34,6 +34,19 @@ spring:
   #mvc:
   #  async:
   #    request-timeout: 20000 # 设置请求超时时间为20000ms即20s
+  mail:
+    # host如果是qq就写qq，163就写163
+    host: smtp.126.com
+    port: 25
+    username: iblog_admin@126.com
+    # 这个密码就是smtp授权码
+    password: WSZYRBCHSILMSVUW
+    # 开启加密验证（这个只有qq有）
+    properties:
+      mail:
+        smtp:
+          auth: true
+
 leo:
   debug:
     interface-call-statistics: false

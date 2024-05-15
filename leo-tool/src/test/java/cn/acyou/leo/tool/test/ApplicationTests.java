@@ -4,6 +4,7 @@ import cn.acyou.leo.framework.mapper.ExecuteMapper;
 import cn.acyou.leo.framework.model.IdReq;
 import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.component.EmailUtil;
+import cn.acyou.leo.framework.util.component.EmailUtil2;
 import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.mapper.AreaMapper;
@@ -13,7 +14,10 @@ import cn.acyou.leo.tool.service.DictService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
+import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -48,8 +52,69 @@ public class ApplicationTests {
     @Test
     public void testEmail(){
         EmailUtil emailUtil = SpringHelper.getBean(EmailUtil.class);
-        emailUtil.sendEmail("youfang@acyou.cn", "Test1", "1");
+        emailUtil.sendEmail("youfang@acyou.cn", "Test2", "2");
+    }
 
+    @Test
+    public void testEmail2() throws Exception{
+        JavaMailSender mailSender = SpringHelper.getBean(JavaMailSender.class);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+        helper.setFrom("iblog_admin@126.com");
+        helper.setTo("youfang@acyou.cn");
+        helper.setSubject("Test4");
+        helper.addAttachment("Picture.txt", new File("D:\\Program Files\\账号.txt"));
+
+        StringBuffer content = new StringBuffer();
+        content.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        content.append("<body>");
+
+        content.append("<h3> 运营日报-用户维度 </h3>\n");
+        content.append("<table  border=\"1\" cellspacing=\"0\" cellpadding=\"0\" style='width: 100%;    text-align: center;'>\n");
+        StringBuffer buffer = new StringBuffer();
+        appendTh(buffer, "ID");
+        appendTh(buffer, "姓名");
+        appendTh(buffer, "年龄");
+        appendTr(content, buffer.toString());
+        buffer = new StringBuffer();
+        appendTd(buffer, "1");
+        appendTd(buffer, "张飞");
+        appendTd(buffer, "32");
+        appendTr(content, buffer.toString());
+        buffer = new StringBuffer();
+        appendTd(buffer, "2");
+        appendTd(buffer, "关羽");
+        appendTd(buffer, "35");
+        appendTr(content, buffer.toString());
+        content.append("</table>");
+
+        content.append("</body>");
+        //helper.setText("3");
+        helper.setText(content.toString(), true);
+        mailSender.send(mimeMessage);
+    }
+
+    @Test
+    public void testEmail3(){
+        EmailUtil2.send("youfang@acyou.cn", "Test1", "1");
+    }
+
+    private void appendTr(StringBuffer content, String data) {
+        content.append("<tr>\n");
+        content.append(data);
+        content.append("</tr>\n");
+    }
+
+    private void appendTh(StringBuffer content, String data) {
+        content.append("<th style='background: darkgray;'>\n");
+        content.append(data);
+        content.append("</th>\n");
+    }
+
+    private void appendTd(StringBuffer content, String data) {
+        content.append("<td>\n");
+        content.append(data);
+        content.append("</td>\n");
     }
 
     @Test
