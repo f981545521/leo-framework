@@ -169,4 +169,18 @@ public class WorkUtil {
         }
         throw new ServiceException(CommonErrorEnum.NO_WAIT_RESULT_ERROR);
     }
+
+    /**
+     * 吞并异常来执行 异常时返回NULL
+     * @param callTask 有返回值
+     * @return {@link T}
+     */
+    public static <T> T swallowException(CallTask<T> callTask) {
+        try {
+            return callTask.run();
+        }catch (Exception e) {
+            printFirstStack(e);
+            return null;
+        }
+    }
 }

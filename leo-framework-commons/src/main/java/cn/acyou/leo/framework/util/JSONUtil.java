@@ -6,12 +6,61 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Map;
+
 /**
  * @author youfang
  * @version [1.0.0, 2023/2/27 15:40]
  **/
 @Slf4j
 public class JSONUtil {
+
+    /**
+     * 覆盖 合并两个JSON属性
+     *
+     * @return {@link JSONObject}
+     */
+    public static JSONObject merge(String sourceStr, String targetStr) {
+        return WorkUtil.swallowException(() -> {
+            JSONObject source = JSON.parseObject(sourceStr);
+            JSONObject target = JSON.parseObject(targetStr);
+            return merge(source, target, true);
+        });
+    }
+
+    /**
+     * 覆盖 合并两个JSON属性
+     *
+     * @param source 源
+     * @param target 目标
+     * @return {@link JSONObject}
+     */
+    public static JSONObject merge(JSONObject source, JSONObject target) {
+        return merge(source, target, true);
+    }
+
+    /**
+     * 合并两个JSON属性
+     *
+     * @param source 源
+     * @param target 目标
+     * @param cover 覆盖
+     * @return {@link JSONObject}
+     */
+    public static JSONObject merge(JSONObject source, JSONObject target, boolean cover) {
+        if (cover) {
+            source.putAll(target);
+        } else {
+            Map<String, Object> innerMap_source = source.getInnerMap();
+            Map<String, Object> innerMap_target = target.getInnerMap();
+            innerMap_target.forEach((x, v) -> {
+                if (!innerMap_source.containsKey(x)) {
+                    source.put(x, v);
+                }
+            });
+        }
+        return source;
+    }
 
     /**
      * 从JSON字符串 根据键获取值
