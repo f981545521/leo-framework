@@ -47,7 +47,10 @@ public class ApplicationCheckRunner implements ApplicationRunner {
         String jvmName = environment.getProperty("java.vm.name");
         String jvmVersion = environment.getProperty("java.version");
         String osName = environment.getProperty("os.name");
-        String activeProfile = environment.getActiveProfiles()[0];
+        String activeProfile = "无";
+        if (environment.getActiveProfiles().length > 0) {
+            activeProfile = environment.getActiveProfiles()[0];
+        }
         log.info("当前运行环境:[{}] ### 当前操作系统：[{}] {}[{}]", activeProfile, osName, jvmName, jvmVersion);
     }
 }
