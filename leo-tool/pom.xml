@@ -27,10 +27,12 @@
             <artifactId>leo-framework-commons</artifactId>
             <version>1.5.0.RELEASE</version>
         </dependency>
+        <!-- 使用单元测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
+        <!-- 使用Redis -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
@@ -43,10 +45,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
         </dependency>
         <!-- MybatisPlus 代码生成器 开始 -->
         <dependency>
