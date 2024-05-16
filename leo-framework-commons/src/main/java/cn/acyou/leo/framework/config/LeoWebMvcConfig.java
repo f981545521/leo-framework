@@ -1,4 +1,4 @@
-package cn.acyou.leo.v1.conf;
+package cn.acyou.leo.framework.config;
 
 import cn.acyou.leo.framework.interceptor.SpringMvcInterceptor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Configuration
 @Slf4j
-public class WebMvcConfig implements WebMvcConfigurer {
+public class LeoWebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
