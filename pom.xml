@@ -63,6 +63,7 @@
         <module>leo-pay</module>
         <module>leo-tool</module>
         <module>leo-v1</module>
+        <module>leo-v2</module>
     </modules>
 
     <dependencyManagement>

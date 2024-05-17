@@ -1,7 +1,7 @@
 server:
-  port: 8077
+  port: 8078
   servlet:
-    context-path: '/leo-v1'
+    context-path: '/leo-v2'
   tomcat:
     max-http-form-post-size: -1 #Tomcat不限制文件大小
   compression:
@@ -12,9 +12,9 @@ server:
     min-response-size: 1024
 spring:
   profiles:
-    active:
+    active: dev
   application:
-    name: leo-v1
+    name: leo-v2
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -61,11 +61,11 @@ leo:
       - ${server.servlet.context-path}/webjars/**
   api:
     enable: true
-    title: Leo v1 接口文档
+    title: Leo v2 接口文档
     description: \# 接口调试页面。✍
     termsOfServiceUrl: http://www.acyou.cn/
     version: 1.0
-    basePackage: cn.acyou.leo.v1.controller
+    basePackage: cn.acyou.leo.v2.controller
     contact: youfang
   xss:
     enabled: true

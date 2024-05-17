@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 @ComponentScan("cn.acyou.leo.framework")
-@MapperScan(basePackages = "cn.acyou.leo.framework.mapper")
 public class LeoFrameworkConfiguration {
 
 }

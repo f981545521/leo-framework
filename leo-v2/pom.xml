@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>leo-v1</artifactId>
+    <artifactId>leo-v2</artifactId>
     <version>1.0.0.RELEASE</version>
-    <name>leo-v1</name>
-    <description>leo-framework 构建的微服务(基础版本)</description>
+    <name>leo-v2</name>
+    <description>leo-framework 构建的微服务(基础版本_Redis_Mysql)</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -21,11 +21,38 @@
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
     </properties>
 
+
     <dependencies>
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-commons</artifactId>
             <version>1.5.0.RELEASE</version>
+        </dependency>
+        <!-- 使用单元测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <!-- 使用Redis -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!-- 使用MySQL -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <!-- MybatisPlus 代码生成器 开始 -->
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>leo-framework-generator</artifactId>
+            <version>1.5.0.RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
