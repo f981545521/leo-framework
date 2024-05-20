@@ -33,4 +33,9 @@ public class LoggerUtil {
         Logger logger = (Logger) LoggerFactory.getLogger(referenceName);
         logger.setLevel(newLevel);
     }
+
+    public static void disableMediaUtilLogger() {
+        LoggerUtil.setLevel("cn.acyou.leo.framework.media.encoder", "OFF");
+        LoggerUtil.setLevel("ws.schild.jave", "OFF");
+    }
 }

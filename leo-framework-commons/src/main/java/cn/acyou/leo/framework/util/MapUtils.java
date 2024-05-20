@@ -138,5 +138,17 @@ public class MapUtils extends MapUtil{
         return map;
     }
 
+    /**
+     * 为Map<K, List<V>> 初始化
+     */
+    public static <K, V> Map<K, List<V>> initList(Map<K, List<V>> map, K... keys){
+        if (keys != null && keys.length > 0) {
+            for (K key : keys) {
+                map.put(key, new ArrayList<>());
+            }
+        }
+        return map;
+    }
+
 
 }
