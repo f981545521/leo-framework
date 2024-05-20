@@ -4,6 +4,7 @@ import cn.acyou.leo.framework.base.ColorVo;
 
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author youfang
@@ -344,20 +345,32 @@ public class RandomUtil {
      * @return {@link List}<{@link Integer}>
      */
     public static List<Integer> randomNumbersInRange(int start, int end, int numbers) {
-        List<Integer> objects = new ArrayList<>();
+        return randomNumbersInRange_Long(start, end, numbers).stream().map(Long::intValue).collect(Collectors.toList());
+    }
+
+    /**
+     * 从范围获取指定数量的随机数
+     *
+     * @param start 范围开始（包含）
+     * @param end 范围结束（包含）
+     * @param numbers 数量
+     * @return {@link List}<{@link Integer}>
+     */
+    public static List<Long> randomNumbersInRange_Long(long start, long end, int numbers) {
+        List<Long> objects = new ArrayList<>();
         if (numbers > 0) {
             if (start == end) {
                 objects.add(start);
             }
             if (start < end) {
-                int total = (end + 1) - start;
+                long total = (end + 1) - start;
                 if (total <= numbers) {
-                    for (int i = start; i <= end; i++) {
+                    for (long i = start; i <= end; i++) {
                         objects.add(i);
                     }
                 }else {
                     while (objects.size() < numbers) {
-                        int i = (int) (Math.random() * (end - start + 1) + start);
+                        long i = (long) (Math.random() * (end - start + 1) + start);
                         if (!objects.contains(i)) {
                             objects.add(i);
                         }
