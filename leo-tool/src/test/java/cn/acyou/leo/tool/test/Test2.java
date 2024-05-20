@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.util.DateUtil;
+import cn.acyou.leo.framework.util.RandomUtil;
 import cn.hutool.core.thread.ConcurrencyTester;
 import cn.hutool.http.HttpUtil;
 import org.junit.jupiter.api.Test;
@@ -38,5 +39,15 @@ public class Test2 {
         //01天06小时37分钟
         Date add2 = DateUtil.add(new Date(), 0, 0, 1, 6, 37, 0);
         System.out.println(DateUtil.getDateFormat(add2));
+    }
+
+    @Test
+    public void  test234(){
+        System.out.println(RandomUtil.randomNumbersInRange(0, 0, 1));
+        System.out.println(RandomUtil.randomNumbersInRange(10, 5, 1));
+        System.out.println(RandomUtil.randomNumbersInRange(0, 0, 5));
+        System.out.println(RandomUtil.randomNumbersInRange(1, 10, 10));
+        System.out.println(RandomUtil.randomNumbersInRange(1, 10, 5));
+        System.out.println(RandomUtil.randomNumbersInRange(1, 10, 9));
     }
 }
