@@ -481,4 +481,14 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return false;
     }
+
+    public static String escapeSql(String text) {
+        if (StringUtils.isNotBlank(text)) {
+            return text.replace("'", "\\'")
+                    .replace("\r", "\\r")
+                    .replace("\n", "\\n")
+                    ;
+        }
+        return text;
+    }
 }
