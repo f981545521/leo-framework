@@ -8,6 +8,7 @@ import cn.acyou.leo.framework.test.TestUtils;
 import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.LoggerUtil;
 import cn.acyou.leo.framework.util.PinYinHelper;
+import cn.acyou.leo.framework.util.RandomUtil;
 import cn.acyou.leo.framework.util.component.GaodeMapUtil;
 import cn.acyou.leo.framework.util.component.OpenApiUtil;
 import cn.acyou.leo.framework.util.component.TranslateUtil;
@@ -173,6 +174,15 @@ public class MainTest5 extends MainTestBase {
         System.out.println(jsonObject3);
         System.out.println("ok");
 
+    }
+    @Test
+    public void  testrs2343(){
+        OpenApiUtil openApiUtil = new OpenApiUtil(null);
+        for (int i = 0; i < 20; i++) {
+            String s = RandomUtil.randomTelephone();
+            JSONObject phoneArea = openApiUtil.getPhoneArea(s);
+            System.out.println(phoneArea);
+        }
     }
 
 

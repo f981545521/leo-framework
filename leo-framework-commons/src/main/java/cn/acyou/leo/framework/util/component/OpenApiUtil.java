@@ -5,6 +5,10 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -62,6 +66,27 @@ public class OpenApiUtil {
         String url = String.format("https://devapi.qweather.com/v7/weather/7d?key=%s&location=%s", openApiProperty.getQweatherKey(), location);
         final String s = HttpUtil.get(url);
         return JSON.parseObject(s);
+    }
+
+    /**
+     * 查询手机归属地
+     *
+     * {"手机号码":"18779657999","归属地":"江西省吉安市","邮编":"343000","电话区号":"0796","行政区划代码":"360800","运营商":"中国移动"}
+     *
+     * @param phone 手机号
+     * @return {@link JSONObject}
+     */
+    public JSONObject getPhoneArea(String phone){
+        String s = HttpUtil.get("https://www.haoshudi.com/"+phone+".htm");
+        Document document = Jsoup.parse(s);
+        Elements tables = document.select("table tr");
+        JSONObject res = new JSONObject();
+        for (Element table : tables) {
+            String k = table.select("td").get(0).text();
+            String v = table.select("td").get(1).text().split(" ")[0];
+            res.put(k, v);
+        }
+        return res;
     }
 
 
