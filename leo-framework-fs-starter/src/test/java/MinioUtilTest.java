@@ -1,9 +1,11 @@
 import cn.acyou.leo.framework.minio.MinIoUtil;
 import io.minio.BucketExistsArgs;
+import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
+import io.minio.Result;
 import io.minio.messages.Bucket;
+import io.minio.messages.Item;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -12,19 +14,31 @@ import java.util.List;
  **/
 public class MinioUtilTest {
     public static void main(String[] args) throws Exception {
+        String endpoint = "http://localhost:9000";
         MinioClient minioClient = MinioClient.builder()
-                .endpoint("http://192.168.4.65:9000")
+                .endpoint(endpoint)
                 .credentials("minioadmin", "minioadmin")
                 .build();
         MinIoUtil minIoUtil = new MinIoUtil(minioClient);
         //查询Bucket列表
-        List<Bucket> buckets = minioClient.listBuckets();
+        List<Bucket> buckets = minIoUtil.listBuckets();
         System.out.println(buckets);
         //bucket是否存在
-        boolean dev2 = minioClient.bucketExists(BucketExistsArgs.builder().bucket("dev2").build());
-        System.out.println(dev2);
-        //
-        File file = new File("C:\\Users\\1\\Pictures\\appStart.png");
-        minIoUtil.putObject("dev2", "/images/appStart.png", file);
+        boolean dev = minioClient.bucketExists(BucketExistsArgs.builder().bucket("dev").build());
+        System.out.println(dev);
+        if (!dev) {
+            minIoUtil.makeBucket("dev");
+        }
+        //File file = new File("C:\\Users\\1\\Pictures\\6.jpg");
+        //minIoUtil.putObject("dev", "/images1/6.jpg", file);
+        String path = "/images/6.jpg";
+        minIoUtil.putObjectHttp("dev", path, "http://qiniu.acyou.cn/images/6.jpg");
+        System.out.println("访问地址:" + endpoint + "/dev" + path);
+        Iterable<Result<Item>> results = minioClient.listObjects( ListObjectsArgs.builder()
+                .bucket("dev")
+                .maxKeys(100)
+                .includeVersions(true)
+                .build());
+        System.out.println(results);
     }
 }

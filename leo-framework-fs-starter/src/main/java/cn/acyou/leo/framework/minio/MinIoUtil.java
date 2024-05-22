@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 /**
@@ -102,4 +104,12 @@ public class MinIoUtil {
         return minioClient;
     }
 
+    public void putObjectHttp(String bucket, String path, String url) throws Exception {
+        URLConnection connection = new URL(url).openConnection();
+        minioClient.putObject(PutObjectArgs.builder()
+                .bucket(bucket)
+                .object(path)
+                .stream(connection.getInputStream(), connection.getContentLengthLong(), -1)
+                .build());
+    }
 }
