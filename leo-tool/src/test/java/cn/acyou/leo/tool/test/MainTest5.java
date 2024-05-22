@@ -177,7 +177,7 @@ public class MainTest5 extends MainTestBase {
     }
     @Test
     public void  testrs2343(){
-        OpenApiUtil openApiUtil = new OpenApiUtil(null);
+        OpenApiUtil openApiUtil = new OpenApiUtil();
         for (int i = 0; i < 20; i++) {
             String s = RandomUtil.randomTelephone();
             JSONObject phoneArea = openApiUtil.getPhoneArea(s);

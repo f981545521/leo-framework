@@ -20,7 +20,15 @@ public class OpenApiUtil {
 
     private OpenApiProperty openApiProperty;
 
+    public OpenApiUtil() {
+
+    }
+
     public OpenApiUtil(OpenApiProperty openApiProperty) {
+        this.openApiProperty = openApiProperty;
+    }
+
+    public void setOpenApiProperty(OpenApiProperty openApiProperty) {
         this.openApiProperty = openApiProperty;
     }
 
