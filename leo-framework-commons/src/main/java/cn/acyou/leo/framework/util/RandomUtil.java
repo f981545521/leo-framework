@@ -342,8 +342,27 @@ public class RandomUtil {
     /**
      * 从范围获取指定数量的随机数
      *
+     * @param list    集合随机
+     * @param numbers 数量
+     * @return {@link List}<{@link Integer}>
+     */
+    public static <E> List<E> randomNumbersInRange(List<E> list, int numbers) {
+        if (numbers < list.size()) {
+            List<Integer> indexs = randomNumbersInRange(0, list.size() - 1, numbers);
+            List<E> res = new ArrayList<>();
+            for (Integer index : indexs) {
+                res.add(list.get(index));
+            }
+            return res;
+        }
+        return list;
+    }
+
+    /**
+     * 从范围获取指定数量的随机数
+     *
      * @param start 范围开始（包含）
-     * @param end 范围结束（包含）
+     * @param end 范围结束（包含） 注意list的size-1
      * @param numbers 数量
      * @return {@link List}<{@link Integer}>
      */
