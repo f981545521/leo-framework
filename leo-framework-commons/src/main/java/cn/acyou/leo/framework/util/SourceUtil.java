@@ -35,7 +35,8 @@ public class SourceUtil {
         if (UserAgentUtil.isPcWeb(request)){
             return ClientType.WEB_MANAGER;
         }
-        throw new ServiceException("不支持的设备类型，请检查！");
+        return ClientType.UNKNOWN;
+        //throw new ServiceException("不支持的设备类型，请检查！");
     }
 
     /**
