@@ -8,8 +8,12 @@ import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.component.TencentMapUtil;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.http.Method;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +28,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -182,6 +187,55 @@ public class SysCommonController {
                 }
             }
         }
+    }
+
+    @PostMapping("curl_request")
+    @ApiOperation("接口测试请求")
+    @ResponseBody
+    public Result<?> curlRequest(@RequestBody(required = false) JSONObject param) {
+        log.info("接口测试请求 {}", param);
+        String httpType = param.getString("httpType");
+        String httpHost = param.getString("httpHost");
+        JSONArray httpHeaders = param.getJSONArray("httpHeaders");
+        String httpBody = param.getString("httpBody");
+
+        HttpRequest request = HttpUtil.createRequest(Method.valueOf(httpType), httpHost);
+        request.setFollowRedirects(true);
+        request.setConnectionTimeout(60000);
+        if (httpHeaders != null) {
+            for (int i = 0; i < httpHeaders.size(); i++) {
+                JSONObject headerItem = httpHeaders.getJSONObject(i);
+                String key = headerItem.getString("key");
+                String value = headerItem.getString("value");
+                if (StringUtils.isNotBlank(key)) {
+                    request.header(key, value);
+                }
+            }
+        }
+        if (StringUtils.isNotBlank(httpBody)) {
+            request.body(httpBody);
+        }
+        HttpResponse response = request.execute();
+        Map<String, Object> res = new LinkedHashMap<>();
+        Map<String, Object> requestHeadersMap = new LinkedHashMap<>();
+        Map<String, Object> responseHeadersMap = new LinkedHashMap<>();
+        request.headers().forEach((k,v)->{
+            if (StringUtils.isNotBlank(k)) {
+                requestHeadersMap.put(k, v.get(0));
+            }
+        });
+        response.headers().forEach((k,v)->{
+            if (StringUtils.isNotBlank(k)) {
+                responseHeadersMap.put(k, v.get(0));
+            }
+        });
+        res.put("requestHeaders", requestHeadersMap);
+        res.put("responseHeaders", responseHeadersMap);
+        res.put("responseBody", "");
+        if (response.header("Content-Type").contains("json")) {
+            res.put("responseBody", response.body());
+        }
+        return Result.success(res);
     }
 
     @GetMapping(value = "/error")

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html class="os-windows screen-desktop-wide device-desktop">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0,user-scalable=yes,maximum-scale=1.0">
+    <title>☺模拟HTTP请求工具☺</title>
+    <link rel="stylesheet" type="text/css" href="./test_files/global.min.css">
+    <style>
+        .hideItem{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container t-small-margin">
+        <h1 class="font-18 v-big-margin no-padding-v">模拟HTTP请求工具</h1>
+        <div class="http-box">
+            <div class="http-head">
+                <div class="input-group" id="httpHead">
+                    <span class="input-group-addon">网址</span>
+                    <div id="httpHeadUrlBox">
+                        <div id="httpUrlHistory" style="display: none;">
+                            <div id="httpClearHistory">
+                                <p>本地请求历史记录</p>
+                                <button type="button" class="btn">删除全部</button>
+                            </div>
+                            <ul id="httpHistoryBox">
+                                <li data-index="0">
+                                    <p>prevshow.guiji.ai/meta-lite-api/biz-api/user/robot/list</p>
+                                    <button class="btn history-cancel" type="button">删除</button>
+                                </li>
+                                <li data-index="1">
+                                    <p>localhost:8060/meta-lite-api/biz-api/user/robot/list</p>
+                                    <button class="btn history-cancel" type="button">删除</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control" placeholder="http://....  请输入可以访问的网址" id="httpHost">
+                    </div>
+                    <span class="input-group-addon fix-border fix-padding"></span>
+                    <select class="form-control" id="httpType">
+                        <option value="POST">POST</option>
+                        <option value="GET">GET</option>
+                        <option value="DELETE">DELETE</option>
+                        <option value="PUT">PUT</option>
+                        <option value="TRACE">TRACE</option>
+                        <option value="HEAD">HEAD</option>
+                        <option value="OPTIONS">OPTIONS</option>
+                    </select>
+                    <span class="input-group-addon fix-border fix-padding"></span>
+                    <select class="form-control" id="httpCode">
+                        <option value="utf-8">UTF-8</option>
+                        <option value="gbk">GBK</option>
+                        <option value="gb2312">GB2312</option>
+                        <option value="gb18030">GB18030</option>
+                    </select>
+                    <span class="input-group-btn">
+                      <button id="httpRequest" class="btn btn-primary" data-loading-text="正在请求..."
+                              type="button">模拟请求</button>
+                    </span>
+                </div>
+                <div class="http-switch" style="display: none">
+                    <div class="switch text-left">
+                        <input type="checkbox" data-id="httpOptionBox" class="http-option-switch" checked=""
+                               data-index="0">
+                        <label>参数设置</label>
+                    </div>
+                    <div class="switch text-left">
+                        <input type="checkbox" data-id="httpHeaderBox" class="http-option-switch" checked=""
+                               data-index="1">
+                        <label>Header</label>
+                    </div>
+                    <div class="switch text-left">
+                        <input type="checkbox" data-id="httpCookieBox" class="http-option-switch" data-index="2">
+                        <label>Cookie设置</label>
+                    </div>
+                    <div class="switch text-left">
+                        <input type="checkbox" data-id="httpProxyBox" class="http-option-switch" data-index="3">
+                        <label>代理设置</label>
+                    </div>
+                </div>
+                <div class="http-option" id="httpOptionBox">
+                    <ul class="nav nav-tabs">
+                        <li data-index="1"><a data-target="#tab2Content1" data-toggle="tab">参数设置</a></li>
+                        <li data-index="2"><a data-target="#tab2Content2" data-toggle="tab">批量参数添加</a></li>
+                        <li class="active" data-index="3"><a data-target="#tab2Content3" data-toggle="tab">JSON参数设置</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade" id="tab2Content1">
+
+                            <div class="http-option-item">
+                                <input type="text" value="" class="form-control" placeholder="请输入参数key">
+                                <input type="text" value="" class="form-control" placeholder="请输入参数value，可为空">
+                                <button type="button" class="btn http-option-cancel">删除</button>
+                            </div>
+
+                            <div id="addOptionsBox">
+
+                            </div>
+                            <button type="button" class="btn btn-primary r-small-margin" id="httpAddOption">添加一行
+                            </button>
+                            <button type="button" class="btn btn-success r-small-margin hideItem" id="httpAddOptions">批量添加
+                            </button>
+                            <button type="button" class="btn display-none" id="httpRemoveOptions">全部删除</button>
+                        </div>
+                        <div class="tab-pane fade" id="tab2Content2">
+                                <textarea rows="5"
+                                          placeholder="批量参数添加，如：id=2003&amp;name=张飞"
+                                          id="httpGetOption"></textarea>
+                        </div>
+                        <div class="tab-pane fade  active in" id="tab2Content3">
+                                <textarea rows="5"
+                                          placeholder="JSON 参数添加，如：{&quot;name&quot;:&quot;张飞&quot;,&quot;id&quot;:&quot;2003&quot;}"
+                                          id="httpJsonOption"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="http-option" id="httpHeaderBox">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a
+                                data-target="#tab3Content1" data-toggle="tab">Header/请求头 设置</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="tab3Content1">
+                            <div class="http-option-item">
+                                <input type="text" class="form-control tab3Content1Key" value="Content-Type" readonly="">
+                                <select class="form-control tab3Content1Value" id="httpContentType">
+                                    <option value="application/x-www-form-urlencoded;charset=utf-8">
+                                        application/x-www-form-urlencoded;charset=utf-8
+                                    </option>
+                                    <option value="application/json;charset=utf-8">application/json;charset=utf-8
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="http-option-item">
+                                <input type="text" value="token" class="form-control tab3Content1Key" placeholder="请输入参数Header key">
+                                <input type="text" value="" class="form-control tab3Content1Value" placeholder="请输入参数Header，可为空">
+                                <input type="checkbox" id="addHeadersBox4" class="tab3Content1Checked" checked="" data-index="0"
+                                       style="width: auto;">
+                                <button type="button" class="btn http-option-cancel">删除</button>
+                            </div>
+
+                            <div id="addHeadersBox">
+
+                            </div>
+                            <button type="button" class="btn btn-primary r-small-margin" id="httpAddHeader">添加一行
+                            </button>
+                            <button type="button" class="btn btn-success r-small-margin hideItem" id="httpAddHeaders">批量添加
+                            </button>
+                            <button type="button" class="btn display-none" id="httpRemoveHeaders">全部删除</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="http-option display-none" id="httpCookieBox">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a
+                                data-target="#tab5Content1" data-toggle="tab">Cookie设置</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="tab5Content1">
+                            <textarea rows="5" placeholder="添加Cookie，非必填" id="httpCookie"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="http-option display-none" id="httpProxyBox">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a
+                                data-target="#tab4Content1" data-toggle="tab">IP代理设置</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="tab4Content1">
+                            <div class="http-option-item no-margin-b">
+                                <input type="text" class="form-control" placeholder="请输入代理" id="httpProxy">
+                                <input type="text" class="form-control" placeholder="请输入代理端口" id="httpProxyPort">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="http-option">
+                    <ul class="nav nav-tabs"  id="responseArea">
+                        <li class="active" data-index="1"><a
+                                data-target="#tab6Content1" data-toggle="tab">Header <span
+                                class="font-12 text-info-a"> 请求头/返回头</span></a></li>
+                        <li style="display: none" data-index="2"><a
+                                data-target="#tab6Content2" data-toggle="tab">Response Text <span
+                                class="font-12 text-info-a"> 返回值</span></a></li>
+                        <li data-index="3"><a
+                                data-target="#tab6Content3" data-toggle="tab">Response Text <span
+                                class="font-12 text-info-a"> 原始返回值</span></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="tab6Content1">
+                            <textarea style="text-wrap: nowrap;" rows="10" class="r-big-margin" id="getHeader" placeholder="Request Header （请求头）"></textarea>
+                            <textarea style="text-wrap: nowrap;" rows="10" id="sendHeader" placeholder="Request Header （返回头）"></textarea>
+                        </div>
+                        <div class="tab-pane fade" id="tab6Content2">
+                            <textarea rows="10" id="responseText" placeholder="Response Text （返回值）"></textarea>
+                        </div>
+                        <div class="tab-pane fade" id="tab6Content3">
+                            <textarea rows="10" id="responseText2" placeholder="Response Text （原始返回值）"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+
+<!--使用CDN-->
+<script type="text/javascript" src="http://dev.acyou.cn/resources/js/jquery-3.7.1.min.js"></script>
+<script>
+    (function () {
+
+        var currentParamStr = localStorage.getItem("currentParam");
+        if (currentParamStr) {
+            var currentParam = JSON.parse(currentParamStr);
+            var httpType = currentParam.httpType;
+            var httpHost = currentParam.httpHost;
+            var httpBody = currentParam.httpBody;
+            var httpHeaders = currentParam.httpHeaders;
+            if (httpType) {
+                $("#httpType").val(httpType);
+            }
+            if (httpHost) {
+                $("#httpHost").val(httpHost);
+            }
+            if (httpBody) {
+                $("#httpJsonOption").val(httpBody);
+            }
+            if (httpHeaders) {
+                $("#tab3Content1 .http-option-item").remove();
+                for (let i = 0; i < httpHeaders.length; i++) {
+                    var httpHeader = httpHeaders[i];
+                    var template = '                 <div class="http-option-item">\n' +
+                        '                                <input type="text" value="'+httpHeader["key"]+'" class="form-control tab3Content1Key" placeholder="请输入参数Header key">\n' +
+                        '                                <input type="text" value="'+httpHeader["value"]+'" class="form-control tab3Content1Value" placeholder="请输入参数Header，可为空">\n' +
+                        '                                <input type="checkbox" id="addHeadersBox4" checked="'+httpHeader["checked"]+'" data-index="0"\n' +
+                        '                                       style="width: auto;">\n' +
+                        '                                <button type="button" class="btn http-option-cancel">删除</button>\n' +
+                        '                            </div>';
+                    $("#tab3Content1").append(template)
+                }
+            }
+        }
+
+        $("#httpOptionBox").on("click", "li", function (e) {
+            var $this = $(this);
+            var c = $this.siblings("li");
+            c.each(function () {
+                $(this).removeClass("active")
+            });
+            $this.addClass("active");
+            var index = $this.data("index");
+            $("#tab2Content1").removeClass("active");
+            $("#tab2Content1").removeClass("in");
+            $("#tab2Content2").removeClass("active");
+            $("#tab2Content2").removeClass("in");
+            $("#tab2Content3").removeClass("active");
+            $("#tab2Content3").removeClass("in");
+            $("#tab2Content" + index).addClass("active");
+            $("#tab2Content" + index).addClass("in");
+        })
+        $("#responseArea").on("click", "li", function (e) {
+
+            var $this = $(this);
+            var c = $this.siblings("li");
+            c.each(function () {
+                $(this).removeClass("active")
+            });
+            $this.addClass("active");
+            var index = $this.data("index");
+            $("#tab6Content1").removeClass("active");
+            $("#tab6Content1").removeClass("in");
+            $("#tab6Content2").removeClass("active");
+            $("#tab6Content2").removeClass("in");
+            $("#tab6Content3").removeClass("active");
+            $("#tab6Content3").removeClass("in");
+            $("#tab6Content" + index).addClass("active");
+            $("#tab6Content" + index).addClass("in");
+        })
+
+        $("#httpAddOption").click(function (){
+            var template = '                  <div class="http-option-item">\n' +
+                '                                <input type="text" value="" class="form-control" placeholder="请输入参数key">\n' +
+                '                                <input type="text" value="" class="form-control" placeholder="请输入参数value，可为空">\n' +
+                '                                <button type="button" class="btn http-option-cancel">删除</button>\n' +
+                '                            </div>';
+            $("#addOptionsBox").before(template);
+
+        });
+
+        $("#tab2Content1").on("click", ".http-option-cancel", function (e) {
+            $(this).parent().remove()
+        })
+
+        $("#httpAddHeader").click(function (){
+            var template = '                 <div class="http-option-item">\n' +
+                '                                <input type="text" value="" class="form-control tab3Content1Key" placeholder="请输入参数Header key">\n' +
+                '                                <input type="text" value="" class="form-control tab3Content1Value" placeholder="请输入参数Header，可为空">\n' +
+                '                                <input type="checkbox" id="addHeadersBox4" checked="" data-index="0"\n' +
+                '                                       style="width: auto;">\n' +
+                '                                <button type="button" class="btn http-option-cancel">删除</button>\n' +
+                '                            </div>';
+            $("#addHeadersBox").before(template);
+        });
+
+        $("#tab3Content1").on("click", ".http-option-cancel", function (e) {
+            $(this).parent().remove()
+        })
+
+        $("#httpRequest").click(function () {
+            var httpHost = $("#httpHost").val();
+            var httpType = $("#httpType").val();
+            var httpBody = $("#httpJsonOption").val();
+            var httpHeaders = [];
+            $("#tab3Content1 .http-option-item").each((t,v)=>{
+                var headerKey = $(v).find(".tab3Content1Key").val();
+                var headerValue = $(v).find(".tab3Content1Value").val();
+                var headerChecked = $(v).find(".tab3Content1Checked").val();
+                var httpHeadersParam = {};
+                httpHeadersParam.key = headerKey;
+                httpHeadersParam.value = headerValue;
+                httpHeadersParam.checked = headerChecked;
+                httpHeaders.push(httpHeadersParam);
+            })
+
+            var jsonParam = {};
+            jsonParam.httpType = httpType;
+            jsonParam.httpHost = httpHost;
+            jsonParam.httpBody = httpBody;
+            jsonParam.httpHeaders = httpHeaders;
+
+            localStorage.setItem("currentParam", JSON.stringify(jsonParam));
+
+            $.ajax({
+                cache: true,
+                type: "post",
+                contentType: "application/json;charset=UTF-8",//"application/json;charset=UTF-8" 必须 后台需要根据这个确定使用jsonhttpmessageconvert
+                dataType: "json",
+                url: "sys/common/curl_request",
+                data: JSON.stringify(jsonParam),
+                async: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    console.log(res)
+                    if (res.code === 0) {
+                        var requestHeadersStr = "";
+                        for (var key in res.data.requestHeaders) {
+                            if (res.data.requestHeaders.hasOwnProperty(key)) {
+                                requestHeadersStr = requestHeadersStr + key + ":\t\t" + res.data.requestHeaders[key] + "\r\n"
+                            }
+                        }
+                        $("#getHeader").val(requestHeadersStr);
+                        var responseHeadersStr = "";
+                        for (var key in res.data.responseHeaders) {
+                            if (res.data.responseHeaders.hasOwnProperty(key)) {
+                                responseHeadersStr = responseHeadersStr + key + ":\t\t" + res.data.responseHeaders[key] + "\r\n"
+                            }
+                        }
+                        $("#getHeader").val(requestHeadersStr);
+                        $("#sendHeader").val(responseHeadersStr);
+                        $("#responseText2").val(res.data.responseBody);
+                    }
+                },
+                error: function (res) {
+                    console.error(res)
+                }
+            });
+        });
+    })();
+</script>
+
+</html>
