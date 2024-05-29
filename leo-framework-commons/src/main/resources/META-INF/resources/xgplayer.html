@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name=viewport
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
+    <meta name="referrer" content="no-referrer">
+    <title>xgplayer</title>
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: auto;
+            overflow: hidden;
+        }
+    </style>
+    <!--
+        播放器文档：
+        https://h5player.bytedance.com/generate/
+    -->
+</head>
+<body>
+<div id="mse"></div>
+<link rel="stylesheet" href="https://unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.css"/>
+<script charset="utf-8" src="https://unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.js"></script>
+<script charset="utf-8" src="https://unpkg.byted-static.com/xgplayer-hls/3.0.10/dist/index.min.js"></script>
+<script>
+    const config = {
+        "id": "mse",
+        "url": "https://v.cdnlz18.com/20240525/12894_cd48fcdd/index.m3u8",
+        "playsinline": true,
+        "poster": " https://www.xgitv.com/player/static/bg.jpg",
+        "plugins": [],
+        "volume": 1,
+        "autoplay": false,
+        "fluid": false,
+        "defaultPlaybackRate": 1,
+        "playbackRate": [
+            1,
+            1.5,
+            2,
+            2.5,
+            3
+        ],
+        "screenShot": true,
+        "videoAttributes": {
+            "crossOrigin": "anonymous"
+        },
+        "pip": true,
+        "keyShortcut": "on",
+        "playbackRate" :3,
+        "keyboard": {
+
+        }
+    }
+    config.plugins.push(HlsPlayer)
+    let player = new Player(config)
+
+</script>
+</body>
+
+</html>
