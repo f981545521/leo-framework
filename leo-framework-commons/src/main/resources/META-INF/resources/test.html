@@ -243,7 +243,7 @@
                         '                                       style="width: auto;">\n' +
                         '                                <button type="button" class="btn http-option-cancel">删除</button>\n' +
                         '                            </div>';
-                    $("#tab3Content1").append(template)
+                    $("#httpAddHeader").before(template)
                 }
             }
         }
@@ -306,7 +306,7 @@
                 '                                       style="width: auto;">\n' +
                 '                                <button type="button" class="btn http-option-cancel">删除</button>\n' +
                 '                            </div>';
-            $("#addHeadersBox").before(template);
+            $("#httpAddHeader").before(template);
         });
 
         $("#tab3Content1").on("click", ".http-option-cancel", function (e) {
