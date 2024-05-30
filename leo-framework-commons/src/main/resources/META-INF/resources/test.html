@@ -32,7 +32,7 @@
         <div class="http-box">
             <div class="http-head">
                 <div class="input-group" id="httpHead">
-                    <span class="input-group-addon">网址</span>
+                    <span class="input-group-addon showModel">网址</span>
                     <div id="httpHeadUrlBox">
                         <div id="httpUrlHistoryV1" style="display: none;">
                             <div id="httpClearHistory">
@@ -223,7 +223,7 @@
     </div>
 
 
-    <div class="modal fade in" id="confirmAreaModal" aria-hidden="false" style="display: block;">
+    <div class="modal fade in" id="confirmAreaModal" aria-hidden="false" style="display: none;">
         <div class="modal-dialog modal-sm" style="top: 208px;width: 800px">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
@@ -239,7 +239,6 @@
                                 <span class="requestHistory-remove">🗑️</span>
                             </div>
                         </li>
-
                         <li data-index="2">
                             <div>
                                 1. prevshow.guiji.ai/meta-lite-api/biz-api/user/robot/list
@@ -249,7 +248,7 @@
                     </ul>
                 </div>
                 <div class="modal-footer" style="border-top:0">
-                    <button type="button" class="btn">删除全部</button>
+                    <button type="button" class="btn delete-all-history">删除全部</button>
                     <button type="button" class="btn btn-default cancle closeModel">关闭</button>
                 </div>
             </div>
@@ -264,6 +263,7 @@
     (function () {
 
         var currentParamStr = localStorage.getItem("currentParam");
+        var historyParam = localStorage.getItem("historyParam");
         if (currentParamStr) {
             var currentParam = JSON.parse(currentParamStr);
             var httpType = currentParam.httpType;
@@ -383,6 +383,14 @@
             jsonParam.httpHeaders = httpHeaders;
 
             localStorage.setItem("currentParam", JSON.stringify(jsonParam));
+            var item = localStorage.getItem("historyParam");
+            if (!item) {
+                item = "[]";
+            }
+
+            var historyParam =  JSON.parse(item);
+            historyParam.unshift(jsonParam);
+            localStorage.setItem("historyParam", JSON.stringify(historyParam))
 
             $.ajax({
                 cache: true,
@@ -426,8 +434,42 @@
             $("#confirmAreaModal").attr("style", "display: none;")
         })
 
+        $('.delete-all-history').click(function (){
+            var item = localStorage.getItem("historyParam");
+            if (item) {
+                localStorage.setItem("historyParam", JSON.stringify([]))
+            }
+        })
+
         $("#requestHistory").on("click", ".requestHistory-remove", function (){
             $(this).parents("li").remove();
+            var index = $(this).parents("li").data("index");
+            console.log("delete" + index)
+            var item = localStorage.getItem("historyParam");
+            if (item) {
+                var historyParam =  JSON.parse(item);
+                delete historyParam[index];
+                localStorage.setItem("historyParam", JSON.stringify(historyParam))
+            }
+        })
+
+        $('.showModel').click(function (){
+            $("#confirmAreaModal").attr("style", "display: block;")
+            $("#requestHistory li").remove();
+            var item = localStorage.getItem("historyParam");
+            if (item) {
+                var historyParam =  JSON.parse(item);
+                for (let i = 0; i < historyParam.length; i++) {
+                    var template = "                        <li data-index=\""+i+"\">\n" +
+                        "                            <div>\n" +
+                        "                                "+i+". "+historyParam[i].httpHost+"\n" +
+                        "                                <span class=\"requestHistory-remove\">🗑️</span>\n" +
+                        "                            </div>\n" +
+                        "                        </li>";
+                    $("#requestHistory").append(template)
+                }
+            }
+
         })
     })();
 </script>
