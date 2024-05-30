@@ -9,6 +9,21 @@
         .hideItem{
             display: none;
         }
+        #requestHistory {
+            line-height: 40px;
+        }
+        #requestHistory li {
+            padding: 5px 15px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer
+        }
+        #requestHistory li:hover {
+            background-color: #f6f6f6
+        }
+        .requestHistory-remove {
+            float: inline-end;
+        }
+
     </style>
 </head>
 <body>
@@ -19,12 +34,12 @@
                 <div class="input-group" id="httpHead">
                     <span class="input-group-addon">网址</span>
                     <div id="httpHeadUrlBox">
-                        <div id="httpUrlHistory" style="display: none;">
+                        <div id="httpUrlHistoryV1" style="display: none;">
                             <div id="httpClearHistory">
                                 <p>本地请求历史记录</p>
                                 <button type="button" class="btn">删除全部</button>
                             </div>
-                            <ul id="httpHistoryBox">
+                            <ul id="httpHistoryBoxV1">
                                 <li data-index="0">
                                     <p>prevshow.guiji.ai/meta-lite-api/biz-api/user/robot/list</p>
                                     <button class="btn history-cancel" type="button">删除</button>
@@ -81,8 +96,8 @@
                 </div>
                 <div class="http-option" id="httpOptionBox">
                     <ul class="nav nav-tabs">
-                        <li data-index="1"><a data-target="#tab2Content1" data-toggle="tab">参数设置</a></li>
-                        <li data-index="2"><a data-target="#tab2Content2" data-toggle="tab">批量参数添加</a></li>
+                        <li style="display: none" data-index="1"><a data-target="#tab2Content1" data-toggle="tab">参数设置</a></li>
+                        <li style="display: none" data-index="2"><a data-target="#tab2Content2" data-toggle="tab">批量参数添加</a></li>
                         <li class="active" data-index="3"><a data-target="#tab2Content3" data-toggle="tab">JSON参数设置</a></li>
                     </ul>
                     <div class="tab-content">
@@ -205,8 +220,40 @@
                 </div>
             </div>
         </div>
+    </div>
 
 
+    <div class="modal fade in" id="confirmAreaModal" aria-hidden="false" style="display: block;">
+        <div class="modal-dialog modal-sm" style="top: 208px;width: 800px">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close closeModel" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+                    <h4 class="modal-title" style="font-weight:normal">本地请求历史记录</h4>
+
+                </div>
+                <div class="modal-body" style="max-height: initial; height: 400px;overflow: auto;">
+                    <ul id="requestHistory">
+                        <li data-index="0">
+                            <div>
+                                1. prevshow.guiji.ai/meta-lite-api/biz-api/user/robot/list
+                                <span class="requestHistory-remove">🗑️</span>
+                            </div>
+                        </li>
+
+                        <li data-index="2">
+                            <div>
+                                1. prevshow.guiji.ai/meta-lite-api/biz-api/user/robot/list
+                                <span class="requestHistory-remove">🗑️</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer" style="border-top:0">
+                    <button type="button" class="btn">删除全部</button>
+                    <button type="button" class="btn btn-default cancle closeModel">关闭</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
@@ -374,6 +421,14 @@
                 }
             });
         });
+
+        $('.closeModel').click(function (){
+            $("#confirmAreaModal").attr("style", "display: none;")
+        })
+
+        $("#requestHistory").on("click", ".requestHistory-remove", function (){
+            $(this).parents("li").remove();
+        })
     })();
 </script>
 
