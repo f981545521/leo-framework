@@ -21,15 +21,40 @@
 </head>
 <body>
 <div id="mse"></div>
-<link rel="stylesheet" href="https://unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.css"/>
-<script charset="utf-8" src="https://unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.js"></script>
-<script charset="utf-8" src="https://unpkg.byted-static.com/xgplayer-hls/3.0.10/dist/index.min.js"></script>
+
 <script>
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2]);
+        }
+        return null;
+    }
+    var rate = getQueryString("rate");
+    console.log(rate)
+    if (rate) {
+        window.playRate = rate;
+    }else {
+        window.playRate = 3;
+    }
+</script>
+<link rel="stylesheet" href="http://dev.acyou.cn/xgplayer/index.min.css"/>
+<script charset="utf-8" src="http://dev.acyou.cn/xgplayer/index_3x.min.js"></script>
+<script charset="utf-8" src="http://dev.acyou.cn/xgplayer/hls_index.min.js"></script>
+<script>
+
+    var playUrl = getQueryString("url");
+    if (playUrl) {
+        window.playUrl = playUrl;
+    }else {
+        window.playUrl = "https://v.cdnlz18.com/20240525/12894_cd48fcdd/index.m3u8";
+    }
     const config = {
         "id": "mse",
-        "url": "https://v.cdnlz18.com/20240525/12894_cd48fcdd/index.m3u8",
+        "url": window.playUrl,
         "playsinline": true,
-        "poster": " https://www.xgitv.com/player/static/bg.jpg",
+        "poster": " http://dev.acyou.cn/xgplayer/bg.jpg",
         "plugins": [],
         "volume": 1,
         "autoplay": false,
@@ -42,19 +67,16 @@
             2.5,
             3
         ],
-        "screenShot": true,
         "videoAttributes": {
             "crossOrigin": "anonymous"
         },
         "pip": true,
         "keyShortcut": "on",
-        "playbackRate" :3,
-        "keyboard": {
-
-        }
     }
     config.plugins.push(HlsPlayer)
-    let player = new Player(config)
+    const player = new Player(config)
+
+
 
 </script>
 </body>
