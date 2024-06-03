@@ -152,7 +152,7 @@
                             <div class="http-option-item">
                                 <input type="text" value="token" class="form-control tab3Content1Key" placeholder="请输入参数Header key">
                                 <input type="text" value="" class="form-control tab3Content1Value" placeholder="请输入参数Header，可为空">
-                                <input type="checkbox" id="addHeadersBox4" class="tab3Content1Checked" checked="" data-index="0"
+                                <input type="checkbox" class="tab3Content1Checked" checked="" data-index="0"
                                        style="width: auto;">
                                 <button type="button" class="btn http-option-cancel">删除</button>
                             </div>
@@ -266,6 +266,10 @@
         var historyParam = localStorage.getItem("historyParam");
         if (currentParamStr) {
             var currentParam = JSON.parse(currentParamStr);
+            showFallback(currentParam);
+        }
+
+        function showFallback(currentParam){
             var httpType = currentParam.httpType;
             var httpHost = currentParam.httpHost;
             var httpBody = currentParam.httpBody;
@@ -283,10 +287,20 @@
                 $("#tab3Content1 .http-option-item").remove();
                 for (let i = 0; i < httpHeaders.length; i++) {
                     var httpHeader = httpHeaders[i];
+                    var k = httpHeader["key"];
+                    var c = httpHeader["checked"];
+                    var disable = "";
+                    var checked = "";
+                    if (k && k.toLowerCase() === "content-type") {
+                        disable = "disabled";
+                    }
+                    if (c) {
+                        checked = "checked";
+                    }
                     var template = '                 <div class="http-option-item">\n' +
-                        '                                <input type="text" value="'+httpHeader["key"]+'" class="form-control tab3Content1Key" placeholder="请输入参数Header key">\n' +
+                        '                                <input type="text" value="'+httpHeader["key"]+'" class="form-control tab3Content1Key" '+disable+' placeholder="请输入参数Header key">\n' +
                         '                                <input type="text" value="'+httpHeader["value"]+'" class="form-control tab3Content1Value" placeholder="请输入参数Header，可为空">\n' +
-                        '                                <input type="checkbox" id="addHeadersBox4" checked="'+httpHeader["checked"]+'" data-index="0"\n' +
+                        '                                <input type="checkbox" class="tab3Content1Checked" '+checked+' data-index="0"\n' +
                         '                                       style="width: auto;">\n' +
                         '                                <button type="button" class="btn http-option-cancel">删除</button>\n' +
                         '                            </div>';
@@ -349,7 +363,7 @@
             var template = '                 <div class="http-option-item">\n' +
                 '                                <input type="text" value="" class="form-control tab3Content1Key" placeholder="请输入参数Header key">\n' +
                 '                                <input type="text" value="" class="form-control tab3Content1Value" placeholder="请输入参数Header，可为空">\n' +
-                '                                <input type="checkbox" id="addHeadersBox4" checked="" data-index="0"\n' +
+                '                                <input type="checkbox" class="tab3Content1Checked" checked="" data-index="0"\n' +
                 '                                       style="width: auto;">\n' +
                 '                                <button type="button" class="btn http-option-cancel">删除</button>\n' +
                 '                            </div>';
@@ -368,7 +382,7 @@
             $("#tab3Content1 .http-option-item").each((t,v)=>{
                 var headerKey = $(v).find(".tab3Content1Key").val();
                 var headerValue = $(v).find(".tab3Content1Value").val();
-                var headerChecked = $(v).find(".tab3Content1Checked").val();
+                var headerChecked = $(v).find(".tab3Content1Checked")[0].checked;
                 var httpHeadersParam = {};
                 httpHeadersParam.key = headerKey;
                 httpHeadersParam.value = headerValue;
@@ -392,6 +406,13 @@
             historyParam.unshift(jsonParam);
             localStorage.setItem("historyParam", JSON.stringify(historyParam))
 
+            if (jsonParam.httpHeaders) {
+                for (let i = 0; i < jsonParam.httpHeaders.length; i++) {
+                    if (!jsonParam.httpHeaders[i].checked) {
+                        jsonParam.httpHeaders.splice(i, 1);
+                    }
+                }
+            }
             $.ajax({
                 cache: true,
                 type: "post",
@@ -439,17 +460,28 @@
             if (item) {
                 localStorage.setItem("historyParam", JSON.stringify([]))
             }
+            $('.closeModel').click();
         })
 
-        $("#requestHistory").on("click", ".requestHistory-remove", function (){
+        $("#requestHistory").on("click", ".requestHistory-remove", function (e){
+            e.stopPropagation();
             $(this).parents("li").remove();
             var index = $(this).parents("li").data("index");
-            console.log("delete" + index)
             var item = localStorage.getItem("historyParam");
             if (item) {
                 var historyParam =  JSON.parse(item);
-                delete historyParam[index];
+                historyParam.splice(index, 1);
                 localStorage.setItem("historyParam", JSON.stringify(historyParam))
+            }
+        })
+        $("#requestHistory").on("click", "li", function (){
+            var index = $(this).data("index");
+            var item = localStorage.getItem("historyParam");
+            if (item) {
+                var historyParam =  JSON.parse(item);
+                var t =  historyParam[index];
+                showFallback(t);
+                $('.closeModel').click();
             }
         })
 
