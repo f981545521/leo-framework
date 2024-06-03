@@ -29,7 +29,7 @@
 </head>
 <body>
     <div class="container t-small-margin">
-        <h1 class="font-18 v-big-margin no-padding-v">模拟HTTP请求工具</h1>
+        <h1 class="font-18 v-big-margin no-padding-v">🌐模拟HTTP请求工具</h1>
         <div class="http-box">
             <div class="http-head">
                 <div class="input-group" id="httpHead">
@@ -504,6 +504,12 @@
             }
 
         })
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" || event.key === "Esc" || event.keyCode === 27) {
+                $('.closeModel').click();
+            }
+        });
     })();
 </script>
 
