@@ -13,15 +13,15 @@ import java.net.InetAddress;
 public class NetworkUtil {
 
     /**
-     * IP 可达
+     * 可访问的
      *
-     * @param ip 知识产权
+     * @param ipOrHost IP / HOST
      * @return boolean
      */
-    public static boolean isReachable(String ip){
+    public static boolean isReachable(String ipOrHost){
         int timeOut = 1000;
         try {
-            return InetAddress.getByName(ip).isReachable(timeOut);
+            return InetAddress.getByName(ipOrHost).isReachable(timeOut);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             return false;
