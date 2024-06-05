@@ -963,6 +963,15 @@ public final class DateUtil {
     }
 
     /**
+     * 判断日期是否为当日指定时间之后
+     */
+    public static boolean afterTodayTime(String timeStr) {
+        Date date = new Date();
+        Date when = parseTime(date, timeStr);
+        return date.after(when);
+    }
+
+    /**
      * 判断日期是否为当日指定时间之前
      * <pre>
      *     //current time is 09:27:01
@@ -980,6 +989,16 @@ public final class DateUtil {
         Date when = parseTime(date, timeStr);
         return date.before(when);
     }
+
+    /**
+     * 判断日期是否为当日指定时间之前
+     */
+    public static boolean beforeTodayTime(String timeStr) {
+        Date date = new Date();
+        Date when = parseTime(date, timeStr);
+        return date.before(when);
+    }
+
 
     /**
      * 范围内每个月的第一天集合
