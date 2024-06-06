@@ -666,14 +666,19 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      *
      * @param parentDir 父文件夹
      * @param fileName 文件名 包含后缀
+     * @param extName 后缀
      * @return {@link String}
      */
-    public static File createFile(String parentDir, String fileName) {
+    public static File createFile(String parentDir, String fileName, String extName) {
         File parF = new File(parentDir);
         if (parF.exists()) {
             parF.mkdirs();
         }
-        return new File(parentDir, fFN(fileName));
+        fileName = fFN(fileName);
+        if (StringUtils.isNotBlank(extName)) {
+            fileName = fileName + "." + extName;
+        }
+        return new File(parentDir, fileName);
     }
 
     /**
