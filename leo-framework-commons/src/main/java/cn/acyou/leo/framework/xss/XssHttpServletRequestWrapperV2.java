@@ -20,9 +20,7 @@ import java.nio.charset.StandardCharsets;
  * @author ruoyi
  */
 public class XssHttpServletRequestWrapperV2 extends HttpServletRequestWrapper {
-    /**
-     * @param request
-     */
+
     public XssHttpServletRequestWrapperV2(HttpServletRequest request) {
         super(request);
     }
@@ -51,13 +49,13 @@ public class XssHttpServletRequestWrapperV2 extends HttpServletRequestWrapper {
 
         // 为空，直接返回
         String json = StreamUtils.copyToString(super.getInputStream(), StandardCharsets.UTF_8);
-        if (StringUtils.isEmpty(json)) {
+        if (!StringUtils.hasText(json)) {
             return super.getInputStream();
         }
 
         // xss过滤
         json = EscapeUtil.clean(json).trim();
-        byte[] jsonBytes = json.getBytes("utf-8");
+        byte[] jsonBytes = json.getBytes(StandardCharsets.UTF_8);
         final ByteArrayInputStream bis = new ByteArrayInputStream(jsonBytes);
         return new ServletInputStream() {
             @Override
@@ -71,7 +69,7 @@ public class XssHttpServletRequestWrapperV2 extends HttpServletRequestWrapper {
             }
 
             @Override
-            public int available() throws IOException {
+            public int available() {
                 return jsonBytes.length;
             }
 
@@ -80,7 +78,7 @@ public class XssHttpServletRequestWrapperV2 extends HttpServletRequestWrapper {
             }
 
             @Override
-            public int read() throws IOException {
+            public int read() {
                 return bis.read();
             }
         };
