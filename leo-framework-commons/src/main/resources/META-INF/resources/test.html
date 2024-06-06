@@ -383,7 +383,10 @@
             $("#tab3Content1 .http-option-item").each((t,v)=>{
                 var headerKey = $(v).find(".tab3Content1Key").val();
                 var headerValue = $(v).find(".tab3Content1Value").val();
-                var headerChecked = $(v).find(".tab3Content1Checked")[0].checked;
+                var headerChecked = false;
+                if ($(v).find(".tab3Content1Checked")) {
+                    headerChecked = $(v).find(".tab3Content1Checked")[0].checked;
+                }
                 var httpHeadersParam = {};
                 httpHeadersParam.key = headerKey;
                 httpHeadersParam.value = headerValue;

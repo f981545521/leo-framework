@@ -200,7 +200,7 @@ public class SysCommonController {
         String httpBody = param.getString("httpBody");
 
         HttpRequest request = HttpUtil.createRequest(Method.valueOf(httpType), httpHost);
-        request.setFollowRedirects(true);
+        request.setFollowRedirects(false);
         request.setConnectionTimeout(60000);
         if (httpHeaders != null) {
             for (int i = 0; i < httpHeaders.size(); i++) {
