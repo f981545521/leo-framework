@@ -662,12 +662,27 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
     }
 
     /**
+     * 创建文件
+     *
+     * @param parentDir 父文件夹
+     * @param fileName 文件名 包含后缀
+     * @return {@link String}
+     */
+    public static File createFile(String parentDir, String fileName) {
+        File parF = new File(parentDir);
+        if (parF.exists()) {
+            parF.mkdirs();
+        }
+        return new File(parentDir, fFN(fileName));
+    }
+
+    /**
      * 过滤文件系统不认的字符
      *
      * @param str 字符
      * @return {@link String}
      */
-    public static String fN(String str) {
+    public static String fFN(String str) {
         return filterFileName(str);
     }
 
