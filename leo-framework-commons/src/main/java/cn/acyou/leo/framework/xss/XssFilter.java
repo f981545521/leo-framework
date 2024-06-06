@@ -55,7 +55,7 @@ public class XssFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper((HttpServletRequest) request);
+        XssHttpServletRequestWrapperV2 xssRequest = new XssHttpServletRequestWrapperV2((HttpServletRequest) request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
         chain.doFilter(xssRequest, responseWrapper);
         if (xssRequest.isAsyncStarted()) {
