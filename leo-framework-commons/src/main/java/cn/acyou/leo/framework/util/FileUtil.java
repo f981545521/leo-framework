@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 文件操作工具
@@ -648,7 +650,7 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      * @param str 字符
      * @return {@link String}
      */
-    private static String filterFileName(String str) {
+    public static String filterFileName(String str) {
         if (str == null || str.length() == 0) {
             return str;
         } else {
@@ -657,6 +659,16 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
             }
             return str;
         }
+    }
+
+    /**
+     * 过滤文件系统不认的字符
+     *
+     * @param str 字符
+     * @return {@link String}
+     */
+    public static String fN(String str) {
+        return filterFileName(str);
     }
 
     public static void main(String[] args) throws Exception {
@@ -1063,4 +1075,6 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
             consumer.accept(file);
         }
     }
+
+
 }
