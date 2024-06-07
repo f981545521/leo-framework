@@ -566,6 +566,18 @@ public class UrlUtil {
         return false;
     }
 
+    /**
+     * 移除URL上的?以及后面的参数
+     * @param url https://.....
+     * @return {@link String}
+     */
+    public static String removeQuery(String url){
+        if (StringUtils.isNotBlank(url) && url.contains("?")) {
+            return url.substring(0, url.indexOf("?"));
+        }
+        return url;
+    }
+
     public static void main(String[] args) {
 
     }
