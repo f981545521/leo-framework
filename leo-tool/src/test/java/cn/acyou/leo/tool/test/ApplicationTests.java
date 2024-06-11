@@ -1,5 +1,7 @@
 package cn.acyou.leo.tool.test;
 
+import cn.acyou.leo.framework.base.CommonTable;
+import cn.acyou.leo.framework.mapper.CommonTableMapper;
 import cn.acyou.leo.framework.mapper.ExecuteMapper;
 import cn.acyou.leo.framework.model.IdReq;
 import cn.acyou.leo.framework.util.*;
@@ -20,10 +22,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +41,8 @@ public class ApplicationTests {
     private AreaService areaService;
     @Autowired
     private ExecuteMapper executeMapper;
+    @Autowired
+    private CommonTableMapper commonTableMapper;
 
     @Test
     public void testEnvironmentHelper(){
@@ -192,6 +193,43 @@ public class ApplicationTests {
     public void test12342V3() {
         System.out.println(executeMapper.tableIsExist("student"));
         System.out.println(executeMapper.tableIsExist("student_222"));
+    }
+    @Test
+    public void test12342V4() {
+        commonTableMapper.createTable("student_555");
+        System.out.println("ok");
+    }
+
+    @Test
+    public void test23342(){
+        String tableName = "t_daily_hot_10";
+        commonTableMapper.createTable(tableName);
+
+        CommonTable commonTable = new CommonTable();
+        commonTable.setAbbr("1");
+        commonTable.setName("1");
+        commonTable.setCode(UUID.randomUUID().toString());
+        commonTable.setContent("@");
+        commonTable.setText("1");
+        commonTable.setType(0);
+        commonTable.setCreateTime(new Date());
+        commonTable.setUpdateTime(new Date());
+        commonTableMapper.insertIgnoreSelective(tableName, commonTable);
+
+        List<CommonTable> commonTables = new ArrayList<>();
+        CommonTable commonTable1 = BeanCopyUtil.copy(commonTable, CommonTable.class);
+        commonTable1.setCode(UUID.randomUUID().toString());
+        commonTables.add(commonTable1);
+        CommonTable commonTable2 = BeanCopyUtil.copy(commonTable, CommonTable.class);
+        commonTable2.setCode(UUID.randomUUID().toString());
+        commonTables.add(commonTable2);
+        commonTableMapper.insertList(tableName, commonTables);
+
+        List<Long> collect = commonTables.stream().map(CommonTable::getId).collect(Collectors.toList());
+        List<CommonTable> commonTableList = commonTableMapper.selectByPrimaryKeyList(tableName, collect);
+        System.out.println(commonTableList);
+        commonTableMapper.deleteByPrimaryKeyList(tableName, collect);
+        System.out.println(commonTable.getId());
     }
 
     @Test
