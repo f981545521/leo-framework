@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 /**
  * XSS过滤处理
@@ -22,12 +23,14 @@ import java.nio.charset.StandardCharsets;
  */
 public class XssHttpServletRequestWrapperV3 extends HttpServletRequestWrapper {
     private byte[] requestBody;
+    private Map<String, String[]> parameterMap;
     private Charset charSet;
 
     public XssHttpServletRequestWrapperV3(HttpServletRequest request) {
         super(request);
         //缓存请求body
         try {
+            parameterMap = request.getParameterMap();
             if (request.getContentType() != null && request.getContentType().contains("application/json")) {
                 String requestBodyStr = getRequestPostStr(request);
                 if (StringUtils.hasText(requestBodyStr)) {
@@ -55,7 +58,7 @@ public class XssHttpServletRequestWrapperV3 extends HttpServletRequestWrapper {
 
     @Override
     public String[] getParameterValues(String name) {
-        String[] values = super.getParameterValues(name);
+        String[] values = parameterMap.get(name);
         if (values != null) {
             int length = values.length;
             String[] escapesValues = new String[length];
