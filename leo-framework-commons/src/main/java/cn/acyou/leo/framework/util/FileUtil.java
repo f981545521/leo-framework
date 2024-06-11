@@ -1097,4 +1097,21 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
     }
 
 
+    /**
+     * 处理目录中的所有文件
+     *
+     * @param file     目录
+     * @param consumer 处理器 迭代处理所有文件
+     * @since 3.2.0
+     */
+    public static void loopFile(File file, Consumer<File> consumer) {
+        FileUtil.listFilesV2(file, f -> {
+            if (f.isDirectory()) {
+                loopFile(f, consumer);
+            } else {
+                consumer.accept(f);
+            }
+        });
+    }
+
 }
