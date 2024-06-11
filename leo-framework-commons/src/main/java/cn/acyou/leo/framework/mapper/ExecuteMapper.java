@@ -54,6 +54,16 @@ public interface ExecuteMapper {
     int columnIsExist(@Param("tableName") String tableName, @Param("columnName") String columnName);
 
     /**
+     * 查询表是否包含列
+     * 存在为1/不存在为0
+     *
+     * @param tableName 表
+     * @return 查询结果 会返回一个值
+     */
+    @Select("SELECT COUNT(1) as isExist FROM information_schema.tables WHERE table_schema=database() AND table_name='${tableName}'")
+    int tableIsExist(@Param("tableName") String tableName);
+
+    /**
      * 执行insert语句
      *
      * @param sql sql语句

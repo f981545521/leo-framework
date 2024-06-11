@@ -189,6 +189,12 @@ public class ApplicationTests {
     }
 
     @Test
+    public void test12342V3() {
+        System.out.println(executeMapper.tableIsExist("student"));
+        System.out.println(executeMapper.tableIsExist("student_222"));
+    }
+
+    @Test
     public void test12342Export() throws Exception{
         List<LinkedHashMap<String, Object>> linkedHashMaps = executeMapper.executeQuerySql("select * from student");
         File file = FileUtil.newFile("D:\\poi\\112344544.xlsx");
