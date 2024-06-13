@@ -335,6 +335,34 @@ if (typeof jQuery === 'undefined') {
     console.log("已加载JQuery")
 
     //—————————————————————————JQuery Ajax ———————————————————————————————————————————————————————————————————————————
+
+    /**
+     * ajax get
+     * @param ajaxurl 提交路径
+     * @param successcallback 成功回调
+     * @param errorcallback 失败回调
+     */
+    $.ajaxGet = function ajaxGet( ajaxurl, successcallback, errorcallback) {
+        $.ajax({
+            cache: true,
+            type: "get",
+            dataType: "json",
+            url: ajaxurl,
+            data: {},
+            async: true,
+            success: function (data) {
+                if ($.isFunction(successcallback)) {
+                    successcallback.call(this, data);
+                }
+            },
+            error: function (data) {
+                if ($.isFunction(errorcallback)) {
+                    errorcallback.call(this, data);
+                }
+            }
+        });
+    }
+
     /**
      * ajax post提交
      * @param ajaxdata 提交数据
@@ -342,7 +370,7 @@ if (typeof jQuery === 'undefined') {
      * @param successcallback 成功回调
      * @param errorcallback 失败回调
      */
-    function ajaxPost(ajaxdata, ajaxurl, successcallback, errorcallback) {
+    $.ajaxPost = function ajaxPost(ajaxdata, ajaxurl, successcallback, errorcallback) {
         $.ajax({
             cache: true,
             type: "post",
@@ -404,7 +432,7 @@ if (typeof jQuery === 'undefined') {
         $.ajax({
             cache: true,
             type: "post",
-            contentType: "application/json",//"application/json;charset=UTF-8"
+            contentType: "application/json;charset=UTF-8",
             dataType: "json",
             url: ajaxurl,
             data: ajaxdata,
