@@ -26,14 +26,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -231,9 +225,11 @@ public class DownloadUtil {
         List<CompletableFuture<?>> futureList = new ArrayList<>();
         WorkUtil.watch(() -> {
             log.info("多线程下载任务执行开始 -> 任务数：{} 线程数：{}", sourceUrls.size(), executor.getCorePoolSize());
+            Deque<String> sourceUrlDeque = new ArrayDeque<>(sourceUrls);
             AtomicInteger downloadedCount = new AtomicInteger();
             final long[] lastTimeMillis = {System.currentTimeMillis()};
-            for (String sourceUrl : sourceUrls) {
+            while (sourceUrlDeque.size() > 0) {
+                String sourceUrl = sourceUrlDeque.pollFirst();
                 CompletableFuture<?> completableFuture = CompletableFuture
                         .runAsync(() -> {
                             try {
