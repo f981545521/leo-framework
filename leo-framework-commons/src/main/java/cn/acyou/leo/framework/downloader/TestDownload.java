@@ -1,4 +1,4 @@
-package cn.acyou.leo.tool.test;
+package cn.acyou.leo.framework.downloader;
 
 import ch.qos.logback.classic.Level;
 import cn.acyou.leo.framework.downloader.utils.RestTemplateBuilder;
@@ -31,7 +31,7 @@ import java.util.UUID;
  * @version [1.0.0, 2024/6/17 14:08]
  **/
 @Slf4j
-public class TestDownload {
+class TestDownload {
     public static String url = "http://qiniu.acyou.cn/video/20240617142317%40%E6%95%99%E4%BD%A0%E6%80%8E%E4%B9%88%E6%B7%B7%E7%A4%BE%E4%BC%9A03%E4%B8%AD%E5%9B%BD%E6%9C%80%E7%9C%9F%E5%AE%9E%E7%9A%84%E7%A4%BE%E4%BA%A4%E5%85%B3%E7%B3%BB.mp4";
 
     @Test
