@@ -4186,7 +4186,7 @@ class Hotkey {
             this.art.volume += constructor.VOLUME_STEP;
         });
         this.add(39, ()=>{
-            this.art.forward = constructor.SEEK_STEP;
+            //this.art.forward = constructor.SEEK_STEP;
         });
         this.add(40, ()=>{
             this.art.volume -= constructor.VOLUME_STEP;
