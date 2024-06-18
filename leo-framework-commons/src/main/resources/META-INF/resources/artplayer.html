@@ -1,0 +1,159 @@
+<html>
+<head>
+    <title>ArtPlayer Demo</title>
+    <meta name="referrer" content="never">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta http-equiv="Access-Control-Allow-Credentials" content="*"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+    <link rel="dns-prefetch" href="//yanxuan.nosdn.127.net" />
+    <link rel="preconnect" href="//yanxuan.nosdn.127.net" crossorigin>
+
+    <meta charset="UTF-8"/>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            overflow: hidden
+        }
+
+        .favnow {
+            width: 100%;
+            height: 100%;
+            background: #000
+        }
+
+        .art-notice, .art-control-fullscreenWeb {
+            display: none !important
+        }
+    </style>
+</head>
+<body>
+<div class="favnow"></div>
+
+
+<script src="artplayer.js"></script>
+
+<script>
+    var options = {
+        container: '.favnow',
+        url: 'http://qiniu.acyou.cn/video/20240617142317%40%E6%95%99%E4%BD%A0%E6%80%8E%E4%B9%88%E6%B7%B7%E7%A4%BE%E4%BC%9A03%E4%B8%AD%E5%9B%BD%E6%9C%80%E7%9C%9F%E5%AE%9E%E7%9A%84%E7%A4%BE%E4%BA%A4%E5%85%B3%E7%B3%BB.mp4',
+        volume: 1,//播放器的默认音量
+        isLive: false,//使用直播模式，会隐藏进度条和播放时间
+        muted: false, //是否默认静音
+        autoplay: false,//是否自动播放
+        autoSize: false,
+        pip: true,
+        screenshot: true,
+        setting: true,
+        loop: false,
+        playbackRate: true,
+        playbackRateList: [.5, 1, 1.5, 2, 2.5, 3],
+        fullscreen: true,
+        fullscreenWeb: true,
+        subtitleOffset: true,
+        miniProgressBar: true,
+        mutex: true,
+        hotkey: true,
+        backdrop: true,
+        playsInline: true,
+        autoPlayback: true,
+        airplay: true,
+        theme: '#23ade5',
+        cssVar: {},
+        fastForward: true,
+        plugins: []
+    };
+
+    options.controls = getPlaybackRateListControls(options.playbackRateList)
+
+    function getPlaybackRateListControls(playbackRateList){
+        return [
+            {
+                name: 'speed',
+                position: 'right',
+                html: '1x',
+                index: 1,
+                selector:  playbackRateList.map(r => ({
+                    default: 1 === r,
+                    html: `${r}x`
+                })),
+                onSelect: function (item, $dom) {
+                    art.playbackRate = item.html.substr(0, item.html.length - 1);
+                    return '' + item.html;
+                },
+                style: {
+                    marginRight: '20px',
+                }
+            },
+        ]
+    }
+
+    const art = new Artplayer(options);
+
+
+
+    const longPressDuration = 500;
+    var beforeTime = new Date().getTime();
+    var keyStatus = 0;
+    var before_playbackRate = 0;
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 39) {
+            if (keyStatus === 1) {
+                //console.log("长按触发");
+                if (before_playbackRate === 0) {
+                    before_playbackRate = art.playbackRate;
+                }
+                art.playbackRate = 3;
+            } else {
+                keyStatus = 1;
+                beforeTime = new Date().getTime();
+            }
+        }
+
+    });
+
+    document.addEventListener('keyup', function (event) {
+        if (event.keyCode === 39) {
+            var now = new Date().getTime();
+            if ((now - beforeTime) < longPressDuration) {
+                //console.log("短按弹起", event)
+                art.forward = 5;
+            }else {
+                //console.log("长按弹起", event)
+                art.playbackRate = before_playbackRate;
+                before_playbackRate = 0;
+            }
+            keyStatus = 0;
+        }
+    });
+
+
+
+    //art.on('video:ratechange', () => {
+    //    console.info('video:ratechange');
+    //});
+
+    //art.on('hotkey', (event) => {
+    //    if (event.keyCode === 39) {
+    //        var now = new Date().getTime();
+    //        if ((now - beforeTime) < longPressDuration) {
+    //            console.log("长按")
+    //        }else {
+    //            console.info('hotkey', event, '时间',new Date().getTime());
+    //        }
+    //        beforeTime = now;
+    //    }
+    //});
+
+    //art.on('ready', () => {
+    //    console.info(art.playbackRate);
+    //    art.playbackRate = 2;
+    //    console.info(art.playbackRate);
+    //});
+</script>
+</body>
+</html>
