@@ -1236,7 +1236,14 @@ class Template {
             <div class="art-poster"></div>
             <div class="art-subtitle"></div>
             <div class="art-danmuku"></div>
-            <div class="art-layers"></div>
+            <div class="art-layers">
+            <div class="art-layer art-layer-notice-apeed" data-index="1" style="display: none;">
+                  <div class="notice-speed" style="">
+                    <i class="speed-icon" style=""></i>
+                    倍速播放中
+                  </div>
+                </div>
+            </div>
             <div class="art-mask">
               <div class="art-state"></div>
             </div>
