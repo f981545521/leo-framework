@@ -2882,6 +2882,27 @@ class Control extends (0, _componentDefault.default) {
             position: "right",
             index: 70
         }));
+
+        if (option.playbackRateList) {
+            this.add({
+                name: 'speed',
+                position: 'right',
+                html: '1x',
+                index: 1,
+                selector:  option.playbackRateList.map(r => ({
+                    default: 1 === r,
+                    html: `${r}x`
+                })),
+                onSelect: function (item, $dom) {
+                    art.playbackRate = item.html.substr(0, item.html.length - 1);
+                    return '' + item.html;
+                },
+                //style: {
+                //    marginRight: '20px',
+                //}
+            });
+        }
+
         for(let index = 0; index < option.controls.length; index++)this.add(option.controls[index]);
     }
     add(getOption) {
@@ -2969,6 +2990,9 @@ class Component {
             "left",
             "right"
         ].includes(option.position)) this.addSelector(option, $ref, events);
+
+
+
         this[name] = $ref;
         this.cache.set(name, {
             $ref,

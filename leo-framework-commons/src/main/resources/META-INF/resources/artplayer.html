@@ -60,7 +60,6 @@
 
 
 <script src="index.js"></script>
-<!--<script src="artplayer.js"></script>-->
 
 <script>
     var options = {
@@ -92,31 +91,6 @@
         fastForward: true,
         plugins: []
     };
-
-    options.controls = getPlaybackRateListControls(options.playbackRateList)
-
-    function getPlaybackRateListControls(playbackRateList){
-        return [
-            {
-                name: 'speed',
-                position: 'right',
-                html: '1x',
-                index: 1,
-                selector:  playbackRateList.map(r => ({
-                    default: 1 === r,
-                    html: `${r}x`
-                })),
-                onSelect: function (item, $dom) {
-                    art.playbackRate = item.html.substr(0, item.html.length - 1);
-                    return '' + item.html;
-                },
-                style: {
-                    marginRight: '20px',
-                }
-            },
-        ]
-    }
-
     const art = new Artplayer(options);
 
 
