@@ -5421,4 +5421,4 @@ function lock(art) {
 
 },{"../utils":"euhMG","@parcel/transformer-js/src/esmodule-helpers.js":"6SDkN"}]},["gEVO5"], "gEVO5", "parcelRequireb749")
 
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=artplayer.js.map
