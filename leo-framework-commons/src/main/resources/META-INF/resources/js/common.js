@@ -17,7 +17,7 @@ window.leoUtil = {
      * 从路径中获取 资源参数
      * @returns {*} result
      */
-    getQueryStringFormtPath: function getQueryStringFormtPath() {
+    getQueryStringFromPath: function getQueryStringFromPath() {
         var pathName = window.location.pathname;
         var index = window.location.pathname.lastIndexOf("/") + 1;
         var value = pathName.substr(index);
