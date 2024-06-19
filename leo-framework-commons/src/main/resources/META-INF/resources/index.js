@@ -197,6 +197,7 @@ class Artplayer extends (0, _emitterDefault.default) {
         super();
         this.id = ++id;
         const mergeOption = _utils.mergeDeep(Artplayer.option, option);
+        Artplayer.PLAYBACK_RATE = mergeOption.playbackRateList;
         mergeOption.container = option.container;
         this.option = (0, _optionValidatorDefault.default)(mergeOption, (0, _schemeDefault.default));
         this.isLock = false;
