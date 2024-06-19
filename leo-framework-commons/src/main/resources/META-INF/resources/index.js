@@ -197,6 +197,11 @@ class Artplayer extends (0, _emitterDefault.default) {
         super();
         this.id = ++id;
         const mergeOption = _utils.mergeDeep(Artplayer.option, option);
+        if (mergeOption.type === 'm3u8') {
+            mergeOption.customType = {
+                m3u8: Artplayer.playM3u8
+            }
+        }
         Artplayer.PLAYBACK_RATE = mergeOption.playbackRateList;
         mergeOption.container = option.container;
         this.option = (0, _optionValidatorDefault.default)(mergeOption, (0, _schemeDefault.default));
@@ -393,6 +398,21 @@ Artplayer.FLIP = [
 Artplayer.FULLSCREEN_WEB_IN_BODY = false;
 Artplayer.LOG_VERSION = true;
 Artplayer.USE_RAF = false;
+
+Artplayer.playM3u8 = function playM3u8(video, url, art) {
+    if (Hls.isSupported()) {
+        if (art.hls) art.hls.destroy();
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        art.hls = hls;
+        art.on('destroy', () => hls.destroy());
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+    } else {
+        art.notice.show = 'Unsupported playback format: m3u8';
+    }
+}
 if (_utils.isBrowser) {
     window["Artplayer"] = Artplayer;
     _utils.setStyleText("artplayer-style", (0, _indexLessDefault.default));
