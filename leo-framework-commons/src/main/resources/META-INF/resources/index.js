@@ -4256,17 +4256,53 @@ class Hotkey {
         this.add(40, ()=>{
             this.art.volume -= constructor.VOLUME_STEP;
         });
+        const longPressDuration = 500;
+        var beforeTime = new Date().getTime();
+        var keyStatus = 0;
+        var before_playbackRate = 0;
         proxy(window, "keydown", (event)=>{
             if (this.art.isFocus) {
                 const tag = document.activeElement.tagName.toUpperCase();
                 const editable = document.activeElement.getAttribute("contenteditable");
                 if (tag !== "INPUT" && tag !== "TEXTAREA" && editable !== "" && editable !== "true" && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
-                    const events = this.keys[event.keyCode];
-                    if (events) {
-                        event.preventDefault();
-                        for(let index = 0; index < events.length; index++)events[index].call(this.art, event);
-                        this.art.emit("hotkey", event);
+                    if (event.keyCode === 39) {
+                        if (keyStatus === 1) {
+                            //console.log("长按触发");
+                            if (before_playbackRate === 0) {
+                                before_playbackRate = art.playbackRate;
+                            }else {
+                                art.playbackRate = 3;
+                                document.querySelector('.art-layer-notice-apeed').setAttribute('style','display:flex')
+                            }
+                        } else {
+                            keyStatus = 1;
+                            beforeTime = new Date().getTime();
+                        }
+                    }else {
+                        const events = this.keys[event.keyCode];
+                        if (events) {
+                            event.preventDefault();
+                            for(let index = 0; index < events.length; index++)events[index].call(this.art, event);
+                            this.art.emit("hotkey", event);
+                        }
                     }
+                }
+            }
+        });
+        proxy(window, "keyup", (event)=>{
+            if (this.art.isFocus) {
+                if (event.keyCode === 39) {
+                    var now = new Date().getTime();
+                    if ((now - beforeTime) < longPressDuration) {
+                        //console.log("短按弹起", event)
+                        art.forward = constructor.SEEK_STEP;
+                    }else {
+                        //console.log("长按弹起", event)
+                        art.playbackRate = before_playbackRate;
+                        document.querySelector('.art-layer-notice-apeed').setAttribute('style','display:none')
+                        before_playbackRate = 0;
+                    }
+                    keyStatus = 0;
                 }
             }
         });
