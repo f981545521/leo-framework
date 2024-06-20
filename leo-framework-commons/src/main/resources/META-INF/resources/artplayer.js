@@ -306,6 +306,7 @@ class Artplayer extends (0, _emitterDefault.default) {
             autoPlayback: false,
             autoOrientation: false,
             airplay: false,
+            speed: true,
             layers: [],
             contextmenu: [],
             controls: [],
@@ -1091,6 +1092,7 @@ exports.default = {
     autoPlayback: b,
     autoOrientation: b,
     airplay: b,
+    speed: b,
     plugins: [
         f
     ],
@@ -2805,6 +2807,8 @@ var _component = require("../utils/component");
 var _componentDefault = parcelHelpers.interopDefault(_component);
 var _fullscreen = require("./fullscreen");
 var _fullscreenDefault = parcelHelpers.interopDefault(_fullscreen);
+var _speed = require("./speed");
+var _speedDefault = parcelHelpers.interopDefault(_speed);
 var _fullscreenWeb = require("./fullscreenWeb");
 var _fullscreenWebDefault = parcelHelpers.interopDefault(_fullscreenWeb);
 var _pip = require("./pip");
@@ -2918,26 +2922,11 @@ class Control extends (0, _componentDefault.default) {
             position: "right",
             index: 70
         }));
-
-        if (option.playbackRateList) {
-            this.add({
-                name: 'speed',
-                position: 'right',
-                html: '1x',
-                index: 1,
-                selector:  option.playbackRateList.map(r => ({
-                    default: 1 === r,
-                    html: `${r}x`
-                })),
-                onSelect: function (item, $dom) {
-                    art.playbackRate = item.html.substr(0, item.html.length - 1);
-                    return '' + item.html;
-                },
-                //style: {
-                //    marginRight: '20px',
-                //}
-            });
-        }
+        if (option.speed) this.add((0, _speedDefault.default)({
+            name: "speed",
+            position: "right",
+            index: 1
+        }));
 
         for(let index = 0; index < option.controls.length; index++)this.add(option.controls[index]);
     }
@@ -2963,7 +2952,7 @@ class Control extends (0, _componentDefault.default) {
 }
 exports.default = Control;
 
-},{"../utils":"euhMG","../utils/component":"1UWqI","./fullscreen":"d7VBA","./fullscreenWeb":"iE4ux","./pip":"03ERY","./playAndPause":"2tuF0","./progress":"afGEi","./time":"e6eX5","./volume":"ezhk3","./setting":"3Vg4s","./thumbnails":"8AAYm","./screenshot":"lcqMk","./airplay":"4dMTc","@parcel/transformer-js/src/esmodule-helpers.js":"6SDkN"}],"1UWqI":[function(require,module,exports) {
+},{"../utils":"euhMG","../utils/component":"1UWqI","./fullscreen":"d7VBA","./speed":"d7VBS","./fullscreenWeb":"iE4ux","./pip":"03ERY","./playAndPause":"2tuF0","./progress":"afGEi","./time":"e6eX5","./volume":"ezhk3","./setting":"3Vg4s","./thumbnails":"8AAYm","./screenshot":"lcqMk","./airplay":"4dMTc","@parcel/transformer-js/src/esmodule-helpers.js":"6SDkN"}],"1UWqI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _dom = require("./dom");
@@ -3121,6 +3110,50 @@ function fullscreen(option) {
                         (0, _utils.setStyle)($fullscreenOn, "display", "inline-flex");
                         (0, _utils.setStyle)($fullscreenOff, "display", "none");
                     }
+                });
+            }
+        });
+}
+
+},{"../utils":"euhMG","@parcel/transformer-js/src/esmodule-helpers.js":"6SDkN"}],"d7VBS":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>speed);
+var _utils = require("../utils");
+function speed(option) {
+    return (art)=>({
+            ...option,
+            //tooltip: "倍速",
+            name: 'speed',
+            position: 'right',
+            html: '1x',
+            index: 1,
+            selector:  Artplayer.PLAYBACK_RATE.map(r => ({
+                default: 1 === r,
+                html: `${r}x`
+            })),
+            onSelect: function (item, $dom) {
+                art.playbackRate = item.html.substr(0, item.html.length - 1);
+                return '' + item.html;
+            },
+            //style: {
+            //    marginRight: '20px',
+            //},
+            mounted: ($panel)=>{
+                art.on("video:ratechange", ()=>{
+                    var r = art.playbackRate;
+                    $panel.querySelector('.art-selector-value').innerHTML = r + 'x';
+                    $panel.querySelectorAll('.art-selector-item').forEach((e,i)=>{
+                        if (e.innerText === (r + 'x')) {
+                            if (!e.classList.contains("art-current")) {
+                                e.classList.add("art-current");
+                            }
+                        }else {
+                            e.classList.remove("art-current");
+                        }
+                    })
+                    const $current = (0, _utils.queryAll)("span", $panel).find((item)=>Number(item.dataset.value) === art.playbackRate);
+                    if ($current) (0, _utils.inverseClass)($current, "art-current");
                 });
             }
         });
