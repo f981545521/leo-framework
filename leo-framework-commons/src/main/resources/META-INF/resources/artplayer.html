@@ -49,27 +49,31 @@
         muted: false, //是否默认静音
         autoplay: false,//是否自动播放
         autoSize: false,
-        pip: true,
-        screenshot: true,
+        autoMini: false,//当播放器滚动到浏览器视口以外时，自动进入 迷你播放 模式
+
         //设置面板，然后自带四个内置项：flip, playbackRate, aspectRatio, subtitleOffset
         setting: true,
-        flip: true,
-        aspectRatio: true,
-        playbackRate: true,
-        subtitleOffset: true,
+        flip: true,//是否显示视频翻转功能，目前只出现在 设置面板 和 右键菜单 里
+        aspectRatio: true,//是否显示视频长宽比功能，会出现在 设置面板 和 右键菜单 里
+        playbackRate: true,//是否显示视频播放速度功能，会出现在 设置面板 和 右键菜单 里
+        subtitleOffset: true,//字幕时间偏移，范围在 [-5s, 5s]，出现在 设置面板 里
 
-        loop: false,
+        loop: false,//是否循环播放
+        screenshot: true,//是否在底部控制栏里显示 视频截图 功能
+        pip: true,//是否在底部控制栏里显示 画中画 的开关按钮
+        fullscreen: true,//是否在底部控制栏里显示播放器 窗口全屏 按钮
+        fullscreenWeb: true,//是否在底部控制栏里显示播放器 网页全屏 按钮
+
         playbackRateList: [.5, 1, 1.5, 2, 2.5, 3],
-        fullscreen: true,
-        fullscreenWeb: true,
-        miniProgressBar: true,
-        mutex: true,
-        hotkey: true,
+        miniProgressBar: true,//迷你进度条，只在播放器失去焦点后且正在播放时出现
+
+        mutex: true,//假如页面里同时存在多个播放器，是否只能让一个播放器播放
+        hotkey: true,//是否使用快捷键
         backdrop: true,
         playsInline: true,
         autoPlayback: true,
         airplay: true,
-        theme: '#23ade5',
+        theme: '#d0ae24',
         cssVar: {},
         fastForward: true,
         plugins: []
