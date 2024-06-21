@@ -1,0 +1,477 @@
+<html>
+<head>
+    <title>ArtPlayer Demo</title>
+    <meta name="referrer" content="never">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta http-equiv="Access-Control-Allow-Credentials" content="*"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+    <link rel="dns-prefetch" href="//yanxuan.nosdn.127.net" />
+    <link rel="preconnect" href="//yanxuan.nosdn.127.net" crossorigin>
+
+    <meta charset="UTF-8"/>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            overflow: hidden
+        }
+
+        .favnow {
+            width: 100%;
+            height: 100%;
+            background: #000
+        }
+
+
+
+        .yxq-listbox {
+            -webkit-transform: scale(1);
+            transform: scale(0);
+            transition: all 0.3s ease-in-out;
+            position: fixed;
+            right: 0;
+            top: 0;
+            z-index: 10001;
+            float: right;
+            height: 100%;
+            margin-left: -336px;
+            width: 336px
+        }
+
+        .yxq-listbox .anthology-wrap {
+            height: 100%;
+            background-color: rgb(0 0 0 / 50%)
+        }
+
+        .yxq-listbox .normal-title-wrap {
+            padding: 15px 20px
+        }
+
+        .yxq-listbox .thesis-wrap {
+            width: 100%;
+            height: 26px;
+            line-height: 26px
+        }
+
+        .yxq-listbox .title-link {
+            display: block;
+            float: left;
+            width: 180px;
+            font-size: 16px;
+            color: hsla(0,0%,100%,0.87)
+        }
+
+        .yxq-listbox .title-info {
+            max-height: 64px;
+            width: 100%;
+            font-size: 12px;
+            line-height: 17px;
+            overflow: auto;
+            margin-top: 10px;
+            text-align: left;
+            color: hsla(0,0%,100%,0.6)
+        }
+
+        .yxq-listbox .scroll-area {
+            padding: 0 20px;
+            font-size: 14px;
+            text-align: left;
+            height: calc(100% - 272px);
+            overflow: auto;
+            position: relative;
+            scrollbar-track-color:#1f1f1f;scrollbar-arrow-color:#1f1f1f;scrollbar-base-color:#1f1f1f;scrollbar-face-color:#979797;scrollbar-3dlight-color: #979797;
+            scrollbar-highlight-color:#979797;scrollbar-shadow-color:#979797}
+
+        .yxq-listbox .anthology-content {
+            margin-top: 15px;
+            width: 100%;
+            font-size: 0
+        }
+
+        .yxq-listbox .box-item {
+            font-size: 14px;
+            background: #45504fc7;
+            width: 48%;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 4px;
+            text-align: center;
+            color: #fff;
+            display: inline-block;
+            box-sizing: border-box;
+            margin: 1%;
+            padding: 0 10px
+        }
+
+        .yxq-listbox .yxq-from-select {
+            z-index: 1;
+            position: absolute;
+            top: 12px;
+            right: 10%
+        }
+
+        .yxq-listbox .yxq-from-select a {
+            color: hsla(0,0%,100%,0.6)
+        }
+
+        .yxq-listbox .yxq-from-select .yxq-list a {
+            display: block;
+            height: 36px;
+            line-height: 36px;
+            white-space: nowrap;
+            text-align: center
+        }
+
+        .yxq-listbox .yxq-from-select .yxq-list {
+            display: none;
+            position: absolute;
+            background: #25252b;
+            border-radius: 4px;
+            padding: 10px 15px;
+            right: 0;
+            top: 18px;
+            text-align: center;
+            box-shadow: 0 2px 10px 0 rgb(0 0 0 / 30%)
+        }
+
+        .yxq-listbox .component-title {
+            position: relative;
+            height: 20px;
+            line-height: 20px;
+            display: block;
+            margin: 12px 0 16px;
+            text-align: left;
+            color: hsla(0,0%,100%,0.6)
+        }
+
+        .yxq-listbox .pic-text-item a {
+            position: relative;
+            display: block;
+            margin-bottom: 12px;
+            overflow: hidden;
+            height: 166px;
+            color: hsla(0,0%,100%,0.6)
+        }
+
+        .yxq-listbox .cover {
+            position: relative;
+            float: left;
+            margin-right: 10px;
+            font-size: 12px;
+            height: 100%;
+            overflow: hidden
+        }
+
+        .yxq-listbox .anthology-title-wrap {
+            position: absolute;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            left: 130px;
+            width: 168px;
+            overflow: hidden
+        }
+
+        .yxq-listbox .anthology-title-wrap .title {
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 18px;
+            font-size: 17px;
+            line-height: 20px;
+            max-height: 58px;
+            overflow: hidden;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            color: hsla(0,0%,100%,0.87);
+            text-align: left
+        }
+
+        .yxq-listbox .anthology-title-wrap .subtitle {
+            overflow: auto;
+            max-height: 66px;
+            font-size: 14px;
+            bottom: 0;
+            width: 168px;
+            line-height: 17px;
+            margin-bottom: 3px;
+            text-align: left
+        }
+
+        .yxq-listbox .bj {
+            height: 166px;
+            width: 122px;
+            border-radius: 7px;
+            background-color: #25252b;
+            object-fit: cover
+        }
+
+        .yxq-listbox .yxq-selset-list {
+            display: none
+        }
+
+        .yxq-stting {
+            -webkit-transform: scale(1) !important;
+            transform: scale(1) !important;
+            font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif
+        }
+
+        .vodlist-of,.yxqplayer-mask {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            display: none
+        }
+
+        .yxq-show {
+            display: block !important
+        }
+
+        .fixed_right_bar {
+            position: fixed;
+            bottom: 33px;
+            right: 1%;
+            z-index: 10001
+        }
+
+        .fixed_right_bar a {
+            font-size: 16px;
+            margin: 10px auto;
+            position: relative;
+            color: #fff
+        }
+
+        .ant-back-top {
+            display: none
+        }
+
+        .video-list-cl {
+            text-align: right;
+            right: 10px;
+            font-size: 16px;
+            position: relative;
+            height: 0px;
+            line-height: 33px;
+            z-index: 99
+        }
+
+        .yxq-this,.scroll-area a:hover {
+            color: #CC6633 !important
+        }
+
+        .yxq-listbox ::-webkit-scrollbar,#danmu-show ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px
+        }
+
+        .yxq-listbox ::-webkit-scrollbar-thumb,#danmu-show ::-webkit-scrollbar-thumb {
+            background-color: #666
+        }
+
+    </style>
+</head>
+<body>
+<div class="favnow"></div>
+
+
+<script src="artplayer.hls.min.js"></script>
+<script src="artplayer.js"></script>
+
+<script>
+
+    var options = {
+        container: '.favnow',
+        //url: 'http://qiniu.acyou.cn/video/20240617142317%40%E6%95%99%E4%BD%A0%E6%80%8E%E4%B9%88%E6%B7%B7%E7%A4%BE%E4%BC%9A03%E4%B8%AD%E5%9B%BD%E6%9C%80%E7%9C%9F%E5%AE%9E%E7%9A%84%E7%A4%BE%E4%BA%A4%E5%85%B3%E7%B3%BB.mp4',
+        url:'https://v.cdnlz18.com/20240525/12894_cd48fcdd/index.m3u8',
+        type: 'm3u8',
+        volume: 1,//播放器的默认音量
+        isLive: false,//使用直播模式，会隐藏进度条和播放时间
+        muted: false, //是否默认静音
+        autoplay: false,//是否自动播放
+        autoSize: false,
+        autoMini: false,//当播放器滚动到浏览器视口以外时，自动进入 迷你播放 模式
+
+        //设置面板，然后自带四个内置项：flip, playbackRate, aspectRatio, subtitleOffset
+        setting: true,
+        flip: true,//是否显示视频翻转功能，目前只出现在 设置面板 和 右键菜单 里
+        aspectRatio: true,//是否显示视频长宽比功能，会出现在 设置面板 和 右键菜单 里
+        playbackRate: true,//是否显示视频播放速度功能，会出现在 设置面板 和 右键菜单 里
+        subtitleOffset: true,//字幕时间偏移，范围在 [-5s, 5s]，出现在 设置面板 里
+
+        loop: false,//是否循环播放
+        screenshot: true,//是否在底部控制栏里显示 视频截图 功能
+        pip: true,//是否在底部控制栏里显示 画中画 的开关按钮
+        fullscreen: true,//是否在底部控制栏里显示播放器 窗口全屏 按钮
+        fullscreenWeb: true,//是否在底部控制栏里显示播放器 网页全屏 按钮
+
+        playbackRateList: [.5, 1, 1.5, 2, 2.5, 3],
+        miniProgressBar: true,//迷你进度条，只在播放器失去焦点后且正在播放时出现
+
+        mutex: true,//假如页面里同时存在多个播放器，是否只能让一个播放器播放
+        hotkey: true,//是否使用快捷键
+        backdrop: true,
+        playsInline: true,
+        autoPlayback: true,
+        airplay: true,
+        theme: '#d0ae24',
+        cssVar: {},
+        fastForward: true,
+        videoTitle: "《我是歌手2024 第一期》",
+        layers: [
+            {
+                name: 'episodes-list',
+                html: `<div class="yxq-listbox yxq-stting"><div class="anthology-wrap"><div class="video-list-cl"><a style="color:#ffffff;cursor:pointer;" onclick="javascript:art.layers['episodes-list'].style.display = 'none';" title="点击关闭">✖</a></div><div class="normal-title-wrap"><div class="pic-text-item"><a><div class="cover"><img class="bj" src="https://m.ykimg.com/0526000066679CF813EB660F98D593B0"></div><div class="anthology-title-wrap"><div class="title">海天雄鹰</div><div class="subtitle" style="max-height: 36px;">2024</div><div class="subtitle" style="max-height: 36px;">评分:</div><div class="subtitle">军旅 剧情</div><div class="subtitle" style="max-height: 36px;">中国</div><div class="subtitle"></div></div></a></div><div class="title-info">随着中国第一艘航母平台开始出海试航，中国海军成立了首支舰载机试飞大队，以谢振宇、余涛为代表的顶尖青年飞行员，在海军功勋飞行员秦大地大队长的带领下，以严谨的科学态度和时不我待的使命意识，攻克了舰载机着舰和起飞技术这一世界性难题。中国航母终于成军，谢振宇和余涛传承了老一辈的“海空雄鹰精神”，率领中国舰载机机群在辽阔海空上展翅翱翔。</div></div><div class="scroll-area" id="listBox"><a class="component-title"><span style="font-size:12px">更新至16集</span></a><div class="yxq-selset-list anthology-content yxq-show" id="listShow"><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjM4MDM0Mzk1Mg==.html')" class="box-item album-title" title=" 第1集">第1集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwMjM5NDUyMA==.html')" class="box-item album-title" title=" 第2集">第2集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwMjM5Mjk5Mg==.html')" class="box-item album-title" title=" 第3集">第3集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwMjM5NDUyNA==.html')" class="box-item album-title" title=" 第4集">第4集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwMzM1NDUyNA==.html')" class="box-item album-title" title=" 第5集">第5集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjM5NjgyMjUzNg==.html')" class="box-item album-title" title=" 第6集">第6集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwMzIzMjk0MA==.html')" class="box-item album-title" title=" 第7集">第7集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwMzIzNjA2NA==.html')" class="box-item album-title" title=" 第8集">第8集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwNDIxNTg2OA==.html')" class="box-item album-title" title=" 第11集">第11集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjM5NzY5OTI0MA==.html')" class="box-item album-title" title=" 第12集">第12集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwNDU5MjkxMg==.html')" class="box-item album-title" title=" 第13集">第13集</a><a style="cursor:pointer;color: #CC6633;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwNDU4ODY0NA==.html')" class="box-item album-title active" title=" 第14集">第14集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwNDU5MjkwOA==.html')" class="box-item album-title" title=" 第15集">第15集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjM5ODE4MTIyMA==.html')" class="box-item album-title" title=" 第16集">第16集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwNTQ2MDQ4OA==.html')" class="box-item album-title" title=" 第17集">第17集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjM5ODg5MDIxNg==.html')" class="box-item album-title" title=" 第18集">第18集</a><a style="cursor:pointer;" onclick="javascript:XMlayEr.VodList.Next('./?url=https://v.youku.com/v_show/id_XNjQwNTY1ODQ5Mg==.html')" class="box-item album-title" title=" 第19集">第19集</a></div></div></div></div>`,
+                style: {
+                    display: "none"
+                },
+                mounted: function ($el) {
+                    console.info(2, $el);
+                },
+            },
+        ],
+        //控制层
+        controls: [
+            {
+                name: 'select-episodes',
+                index: 5,
+                position: 'right',
+                html: '选集',
+                style: {
+
+                },
+                click: function (item, $dom) {
+                    var display = art.layers['episodes-list'].style.display;
+                    if (display && "none" === display) {
+                        art.layers['episodes-list'].style.display = 'block'
+                    }else {
+                        art.layers['episodes-list'].style.display = 'none'
+                    }
+                    return '选集';
+                },
+                mounted: ($control)=>{
+                    //console.info($control);
+                }
+            }
+        ],
+        plugins: [
+            //videoTitlePlugin("《我是歌手2024 第一期》")
+        ]
+    };
+    const art = new Artplayer(options);
+
+
+
+/*    function videoTitlePlugin(title) {
+        return (art) => {
+            art.layers.add(            {
+                name: 'videoTitle',
+                html: `<div class="video-title">${title}</div>`,
+                style: {
+
+                },
+                click: function (...args) {
+                    //console.info('click', args);
+                },
+                mounted: function (...args) {
+                    //console.info('mounted', args);
+                },
+            });
+
+            function show() {
+                art.layers.videoTitle.style.display = 'block';
+            }
+
+            function hide() {
+                art.layers.videoTitle.style.display = 'none';
+            }
+
+            //art.on('play', hide);
+            //art.on('pause', show);
+
+            art.on('control', (state) => {
+                if (state) {
+                    show()
+                }else {
+                    hide()
+                }
+            });
+
+            return {
+                name: 'videoTitlePlugin',
+                show,
+                hide
+            };
+        }
+    }*/
+
+    //const longPressDuration = 500;
+    //var beforeTime = new Date().getTime();
+    //var keyStatus = 0;
+    //var before_playbackRate = 0;
+    //document.addEventListener('keydown', function (event) {
+    //    if (event.keyCode === 39) {
+    //        if (keyStatus === 1) {
+    //            //console.log("长按触发");
+    //            if (before_playbackRate === 0) {
+    //                before_playbackRate = art.playbackRate;
+    //            }
+    //            art.playbackRate = 3;
+    //        } else {
+    //            keyStatus = 1;
+    //            beforeTime = new Date().getTime();
+    //        }
+    //    }
+//
+    //});
+//
+    //document.addEventListener('keyup', function (event) {
+    //    if (event.keyCode === 39) {
+    //        var now = new Date().getTime();
+    //        if ((now - beforeTime) < longPressDuration) {
+    //            //console.log("短按弹起", event)
+    //            art.forward = 5;
+    //        }else {
+    //            //console.log("长按弹起", event)
+    //            art.playbackRate = before_playbackRate;
+    //            before_playbackRate = 0;
+    //        }
+    //        keyStatus = 0;
+    //    }
+    //});
+
+
+
+    //art.on('video:ratechange', () => {
+    //    console.info('video:ratechange');
+    //});
+
+    //art.on('hotkey', (event) => {
+    //    if (event.keyCode === 39) {
+    //        var now = new Date().getTime();
+    //        if ((now - beforeTime) < longPressDuration) {
+    //            console.log("长按")
+    //        }else {
+    //            console.info('hotkey', event, '时间',new Date().getTime());
+    //        }
+    //        beforeTime = now;
+    //    }
+    //});
+
+    //art.on('ready', () => {
+    //    console.info(art.playbackRate);
+    //    art.playbackRate = 2;
+    //    console.info(art.playbackRate);
+    //});
+</script>
+</body>
+</html>
