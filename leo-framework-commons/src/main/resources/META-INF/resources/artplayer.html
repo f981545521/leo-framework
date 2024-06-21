@@ -76,11 +76,60 @@
         theme: '#d0ae24',
         cssVar: {},
         fastForward: true,
-        plugins: []
+        layers: [
+
+        ],
+        videoTitle: "《我是歌手2024 第一期》",
+        plugins: [
+            //videoTitlePlugin("《我是歌手2024 第一期》")
+        ]
     };
     const art = new Artplayer(options);
 
 
+
+/*    function videoTitlePlugin(title) {
+        return (art) => {
+            art.layers.add(            {
+                name: 'videoTitle',
+                html: `<div class="video-title">${title}</div>`,
+                style: {
+
+                },
+                click: function (...args) {
+                    //console.info('click', args);
+                },
+                mounted: function (...args) {
+                    //console.info('mounted', args);
+                },
+            });
+
+            function show() {
+                art.layers.videoTitle.style.display = 'block';
+            }
+
+            function hide() {
+                art.layers.videoTitle.style.display = 'none';
+            }
+
+            //art.on('play', hide);
+            //art.on('pause', show);
+
+            art.on('control', (state) => {
+                if (state) {
+                    show()
+                }else {
+                    hide()
+                }
+            });
+
+            return {
+                name: 'videoTitlePlugin',
+                show,
+                hide
+            };
+        }
+    }*/
 
     //const longPressDuration = 500;
     //var beforeTime = new Date().getTime();
