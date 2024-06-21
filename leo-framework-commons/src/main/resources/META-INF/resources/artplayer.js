@@ -1342,27 +1342,35 @@ class Template {
             <div class="art-info">
               <div class="art-info-panel">
                 <div class="art-info-item">
-                  <div class="art-info-title">Player version:</div>
+                  <div class="art-info-title">播放器版本:</div>
                   <div class="art-info-content">${"5.1.6"}</div>
                 </div>
                 <div class="art-info-item">
-                  <div class="art-info-title">Video url:</div>
+                  <div class="art-info-title">视频地址:</div>
                   <div class="art-info-content" data-video="src"></div>
                 </div>
                 <div class="art-info-item">
-                  <div class="art-info-title">Video volume:</div>
-                  <div class="art-info-content" data-video="volume"></div>
-                </div>
-                <div class="art-info-item">
-                  <div class="art-info-title">Video time:</div>
+                  <div class="art-info-title">当前播放时间:</div>
                   <div class="art-info-content" data-video="currentTime"></div>
                 </div>
                 <div class="art-info-item">
-                  <div class="art-info-title">Video duration:</div>
+                  <div class="art-info-title">视频时长:</div>
                   <div class="art-info-content" data-video="duration"></div>
                 </div>
                 <div class="art-info-item">
-                  <div class="art-info-title">Video resolution:</div>
+                  <div class="art-info-title">播放速度:</div>
+                  <div class="art-info-content" data-video="playbackRate"></div>
+                </div>
+                <div class="art-info-item">
+                  <div class="art-info-title">静音:</div>
+                  <div class="art-info-content" data-video="muted"></div>
+                </div>
+                <div class="art-info-item">
+                  <div class="art-info-title">视频音量:</div>
+                  <div class="art-info-content" data-video="volume"></div>
+                </div>
+                <div class="art-info-item">
+                  <div class="art-info-title">视频分辨率:</div>
                   <div class="art-info-content">
                     <span data-video="videoWidth"></span> x <span data-video="videoHeight"></span>
                   </div>
