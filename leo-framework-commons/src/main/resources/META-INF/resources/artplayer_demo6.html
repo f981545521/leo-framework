@@ -35,7 +35,7 @@
 <script src="artplayer.hls.min.js"></script>
 <script src="artplayer.js"></script>
 <script src="artplayer-plugin-danmuku.js"></script>
-
+<script type="text/javascript" src="http://dev.acyou.cn/resources/js/jquery-3.7.1.min.js"></script>
 <script>
 
     var options = {
@@ -194,6 +194,22 @@
         }
     }
 
+
+    $.ajax({
+        cache: true,
+        type: "get",
+        dataType: "json",
+        //url: "https://search.bfzyapi.com/json-api/?dname=baofeng&key=莲花楼&count=50",
+        url: "https://search.lziapi.com/json-api/?dname=liangzi&key=颜心记&count=50",
+        data: null,
+        async: true,
+        success: function (res) {
+            console.log(res)
+        },
+        error: function (res) {
+            console.error(res)
+        }
+    });
 /*    function videoTitlePlugin(title) {
         return (art) => {
             art.layers.add(            {

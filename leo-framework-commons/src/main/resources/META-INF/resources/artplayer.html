@@ -35,7 +35,7 @@
 <script src="http://dev.acyou.cn/artplayer/artplayer.hls.min.js"></script>
 <script src="http://dev.acyou.cn/artplayer/artplayer.js"></script>
 <script src="http://dev.acyou.cn/artplayer/artplayer-plugin-danmuku.js"></script>
-
+<script type="text/javascript" src="http://dev.acyou.cn/resources/js/jquery-3.7.1.min.js"></script>
 <script>
 
     var playUrl = getQueryString("url");
@@ -123,6 +123,24 @@
         }
         return null;
     }
+
+
+    $.ajax({
+        cache: true,
+        type: "get",
+        dataType: "json",
+        //url: "https://search.bfzyapi.com/json-api/?dname=baofeng&key=%E5%BA%86%E4%BD%99%E5%B9%B4&count=50",
+        url: "https://www.leshizy1.com/index.php/vod/detail/id/51596.html",
+        data: null,
+        async: true,
+        success: function (res) {
+            console.log(res)
+        },
+        error: function (res) {
+            console.error(res)
+        }
+    });
+
 
 /*    function videoTitlePlugin(title) {
         return (art) => {
