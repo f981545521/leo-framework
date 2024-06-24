@@ -1,0 +1,300 @@
+<html>
+<head>
+    <title>ArtPlayer Demo</title>
+    <meta name="referrer" content="never">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+    <link rel="dns-prefetch" href="//yanxuan.nosdn.127.net" />
+    <link rel="preconnect" href="//yanxuan.nosdn.127.net" crossorigin>
+
+    <meta charset="UTF-8"/>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            overflow: hidden
+        }
+
+        .favnow {
+            width: 100%;
+            height: 100%;
+            background: #000
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div class="favnow"></div>
+
+
+<script src="artplayer.hls.min.js"></script>
+<script src="artplayer.js"></script>
+<script src="artplayer-plugin-danmuku.js"></script>
+
+<script>
+
+    var options = {
+        container: '.favnow',
+        //url: 'http://qiniu.acyou.cn/video/20240617142317%40%E6%95%99%E4%BD%A0%E6%80%8E%E4%B9%88%E6%B7%B7%E7%A4%BE%E4%BC%9A03%E4%B8%AD%E5%9B%BD%E6%9C%80%E7%9C%9F%E5%AE%9E%E7%9A%84%E7%A4%BE%E4%BA%A4%E5%85%B3%E7%B3%BB.mp4',
+        url:'https://s6.bfengbf.com/video/lianhualou/第01集/index.m3u8',
+        type: 'm3u8',
+        volume: 1,//播放器的默认音量
+        isLive: false,//使用直播模式，会隐藏进度条和播放时间
+        muted: false, //是否默认静音
+        autoplay: false,//是否自动播放
+        autoSize: false,
+        autoMini: false,//当播放器滚动到浏览器视口以外时，自动进入 迷你播放 模式
+
+        //设置面板，然后自带四个内置项：flip, playbackRate, aspectRatio, subtitleOffset
+        setting: true,
+        flip: true,//是否显示视频翻转功能，目前只出现在 设置面板 和 右键菜单 里
+        aspectRatio: true,//是否显示视频长宽比功能，会出现在 设置面板 和 右键菜单 里
+        playbackRate: true,//是否显示视频播放速度功能，会出现在 设置面板 和 右键菜单 里
+        subtitleOffset: true,//字幕时间偏移，范围在 [-5s, 5s]，出现在 设置面板 里
+
+        loop: false,//是否循环播放
+        screenshot: true,//是否在底部控制栏里显示 视频截图 功能
+        pip: true,//是否在底部控制栏里显示 画中画 的开关按钮
+        fullscreen: true,//是否在底部控制栏里显示播放器 窗口全屏 按钮
+        fullscreenWeb: true,//是否在底部控制栏里显示播放器 网页全屏 按钮
+
+        playbackRateList: [.5, 1, 1.5, 2, 2.5, 3],
+        miniProgressBar: true,//迷你进度条，只在播放器失去焦点后且正在播放时出现
+
+        mutex: true,//假如页面里同时存在多个播放器，是否只能让一个播放器播放
+        hotkey: true,//是否使用快捷键
+        backdrop: true,
+        playsInline: true,
+        autoPlayback: true,
+        airplay: true,
+        theme: '#FF9900',
+        cssVar: {},
+        fastForward: true,
+        layers: [
+
+        ],
+        videoTitle: "《莲花楼 第01集》",
+        plugins: [
+            episodesListPlugin(),
+            //videoTitlePlugin("《我是歌手2024 第一期》")
+            //https://artplayer.org/document/plugin/danmuku.html#%E5%85%A8%E9%83%A8%E9%80%89%E9%A1%B9
+            artplayerPluginDanmuku({
+                speed: 10, // 弹幕持续时间，范围在[1 ~ 10]
+                danmuku: [
+                    {
+                        text: '💥1条弹幕列队来袭~做好准备吧！',
+                        time: 2
+                    },
+                    {
+                        text: '请大家遵守弹幕礼仪，文明发送弹幕！',
+                        time: 2.5
+                    },
+                    {
+                        text: '<div>你好</div>',
+                        time: 5
+                    }
+                ],
+            })
+        ]
+    };
+    const art = new Artplayer(options);
+
+
+    function episodesListPlugin(){
+        return (art) => {
+            art.controls.add(            {
+                name: 'select-episodes',
+                index: 5,
+                position: 'right',
+                html: '选集',
+                style: {
+
+                },
+                click: function (item, $dom) {
+                    var display = art.layers['episodes-list'].style.display;
+                    if (display && "none" === display) {
+                        art.layers['episodes-list'].style.display = 'block'
+                    }else {
+                        art.layers['episodes-list'].style.display = 'none'
+                    }
+                    return '选集';
+                },
+                mounted: ($control)=>{
+                    //console.info($control);
+                }
+            });
+
+            art.layers.add(            {
+                name: 'episodes-list',
+                html: `<div class="yxq-listbox yxq-stting" style="padding: 10px">
+    <div class="anthology-wrap">
+        <div class="video-list-cl"><a style="color:#ffffff;cursor:pointer;"
+                                      onclick="javascript:art.layers['episodes-list'].style.display = 'none'"
+                                      title="点击关闭">✖</a></div>
+        <div class="normal-title-wrap">
+            <div class="pic-text-item"><a>
+                <div class="cover"><img class="bj"
+                                        src="https://pic9.iqiyipic.com/image/20231110/e5/43/a_100517696_m_601_m33_579_772.webp">
+                </div>
+                <div class="anthology-title-wrap">
+                    <div class="title">莲花楼</div>
+                    <div class="subtitle" style="max-height: 36px;"></div>
+                    <div class="subtitle" style="max-height: 36px;"></div>
+                    <div class="subtitle">国产,情,悬疑,武侠,古装,内地,大陆,连续,电视,普通话</div>
+                    <div class="subtitle" style="max-height: 36px;">导演：未知</div>
+                    <div class="subtitle">主演：成毅,曾舜晞,肖顺尧,陈都灵,王鹤润,陈意涵,徐百慧</div>
+                </div>
+            </a></div>
+            <div class="title-info"></div>
+        </div>
+        <div class="scroll-area" id="listBox"><a class="component-title"><span
+                style="font-size:12px">已完结</span></a>
+            <div class="yxq-selset-list anthology-content yxq-show" id="listShow">
+                <a style="cursor:pointer;color: #CC6633;" onclick="javascript:art.plugins['select-episodes'].selectItem()"                  class="box-item album-title active"    title="第01集">第01集</a>
+                <a style="cursor:pointer;"                onclick="javascript:art.plugins['select-episodes'].selectItem()"  class="box-item album-title"    title="第02集">第02集</a>
+                <a style="cursor:pointer;"                onclick="javascript:art.plugins['select-episodes'].selectItem()"  class="box-item album-title"    title="第03集">第03集</a>
+
+            </div>
+        </div>
+    </div>
+</div>`,
+                style: {
+                    display: "none"
+                },
+                mounted: function ($el) {
+                    console.info(2, $el);
+                },
+            },);
+
+
+            function show() {
+                art.layers['episodes-list'].style.display = 'block';
+            }
+
+            function hide() {
+                art.layers['episodes-list'].style.display = 'none';
+            }
+
+            function selectItem(t) {
+                console.info(3, t);
+            }
+
+
+            return {
+                name: 'select-episodes',
+                show,
+                hide,
+                selectItem
+            };
+        }
+    }
+
+/*    function videoTitlePlugin(title) {
+        return (art) => {
+            art.layers.add(            {
+                name: 'videoTitle',
+                html: `<div class="video-title">${title}</div>`,
+                style: {
+
+                },
+                click: function (...args) {
+                    //console.info('click', args);
+                },
+                mounted: function (...args) {
+                    //console.info('mounted', args);
+                },
+            });
+
+            function show() {
+                art.layers.videoTitle.style.display = 'block';
+            }
+
+            function hide() {
+                art.layers.videoTitle.style.display = 'none';
+            }
+
+            //art.on('play', hide);
+            //art.on('pause', show);
+
+            art.on('control', (state) => {
+                if (state) {
+                    show()
+                }else {
+                    hide()
+                }
+            });
+
+            return {
+                name: 'videoTitlePlugin',
+                show,
+                hide
+            };
+        }
+    }*/
+
+    //const longPressDuration = 500;
+    //var beforeTime = new Date().getTime();
+    //var keyStatus = 0;
+    //var before_playbackRate = 0;
+    //document.addEventListener('keydown', function (event) {
+    //    if (event.keyCode === 39) {
+    //        if (keyStatus === 1) {
+    //            //console.log("长按触发");
+    //            if (before_playbackRate === 0) {
+    //                before_playbackRate = art.playbackRate;
+    //            }
+    //            art.playbackRate = 3;
+    //        } else {
+    //            keyStatus = 1;
+    //            beforeTime = new Date().getTime();
+    //        }
+    //    }
+//
+    //});
+//
+    //document.addEventListener('keyup', function (event) {
+    //    if (event.keyCode === 39) {
+    //        var now = new Date().getTime();
+    //        if ((now - beforeTime) < longPressDuration) {
+    //            //console.log("短按弹起", event)
+    //            art.forward = 5;
+    //        }else {
+    //            //console.log("长按弹起", event)
+    //            art.playbackRate = before_playbackRate;
+    //            before_playbackRate = 0;
+    //        }
+    //        keyStatus = 0;
+    //    }
+    //});
+
+
+
+    //art.on('video:ratechange', () => {
+    //    console.info('video:ratechange');
+    //});
+
+    //art.on('hotkey', (event) => {
+    //    if (event.keyCode === 39) {
+    //        var now = new Date().getTime();
+    //        if ((now - beforeTime) < longPressDuration) {
+    //            console.log("长按")
+    //        }else {
+    //            console.info('hotkey', event, '时间',new Date().getTime());
+    //        }
+    //        beforeTime = now;
+    //    }
+    //});
+
+    //art.on('ready', () => {
+    //    console.info(art.playbackRate);
+    //    art.playbackRate = 2;
+    //    console.info(art.playbackRate);
+    //});
+</script>
+</body>
+</html>
