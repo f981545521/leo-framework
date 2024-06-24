@@ -453,6 +453,257 @@ module.exports = ".art-video-player {\n  --art-theme: red;\n  --art-font-color: 
     "            padding: 5px 10px;\n" +
     "            transition: opacity .2s;\n" +
     "            font-size: 13px;\n" +
+    "        }" +
+    "" +
+    "" +
+    "        .yxq-listbox {\n" +
+    "            -webkit-transform: scale(1);\n" +
+    "            transform: scale(0);\n" +
+    "            transition: all 0.3s ease-in-out;\n" +
+    "            position: fixed;\n" +
+    "            right: 0;\n" +
+    "            top: 0;\n" +
+    "            z-index: 10001;\n" +
+    "            float: right;\n" +
+    "            height: 100%;\n" +
+    "            margin-left: -336px;\n" +
+    "            width: 336px\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .anthology-wrap {\n" +
+    "            height: 100%;\n" +
+    "            background-color: rgb(0 0 0 / 50%)\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .normal-title-wrap {\n" +
+    "            padding: 15px 20px\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .thesis-wrap {\n" +
+    "            width: 100%;\n" +
+    "            height: 26px;\n" +
+    "            line-height: 26px\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .title-link {\n" +
+    "            display: block;\n" +
+    "            float: left;\n" +
+    "            width: 180px;\n" +
+    "            font-size: 16px;\n" +
+    "            color: hsla(0,0%,100%,0.87)\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .title-info {\n" +
+    "            max-height: 64px;\n" +
+    "            width: 100%;\n" +
+    "            font-size: 12px;\n" +
+    "            line-height: 17px;\n" +
+    "            overflow: auto;\n" +
+    "            margin-top: 10px;\n" +
+    "            text-align: left;\n" +
+    "            color: hsla(0,0%,100%,0.6)\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .scroll-area {\n" +
+    "            padding: 0 20px;\n" +
+    "            font-size: 14px;\n" +
+    "            text-align: left;\n" +
+    "            height: calc(100% - 272px);\n" +
+    "            overflow: auto;\n" +
+    "            position: relative;\n" +
+    "            scrollbar-track-color:#1f1f1f;scrollbar-arrow-color:#1f1f1f;scrollbar-base-color:#1f1f1f;scrollbar-face-color:#979797;scrollbar-3dlight-color: #979797;\n" +
+    "            scrollbar-highlight-color:#979797;scrollbar-shadow-color:#979797}\n" +
+    "\n" +
+    "        .yxq-listbox .anthology-content {\n" +
+    "            margin-top: 15px;\n" +
+    "            width: 100%;\n" +
+    "            font-size: 0\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .box-item {\n" +
+    "            font-size: 14px;\n" +
+    "            background: #45504fc7;\n" +
+    "            width: 48%;\n" +
+    "            height: 40px;\n" +
+    "            line-height: 40px;\n" +
+    "            border-radius: 4px;\n" +
+    "            text-align: center;\n" +
+    "            color: #fff;\n" +
+    "            display: inline-block;\n" +
+    "            box-sizing: border-box;\n" +
+    "            margin: 1%;\n" +
+    "            padding: 0 10px\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .yxq-from-select {\n" +
+    "            z-index: 1;\n" +
+    "            position: absolute;\n" +
+    "            top: 12px;\n" +
+    "            right: 10%\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .yxq-from-select a {\n" +
+    "            color: hsla(0,0%,100%,0.6)\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .yxq-from-select .yxq-list a {\n" +
+    "            display: block;\n" +
+    "            height: 36px;\n" +
+    "            line-height: 36px;\n" +
+    "            white-space: nowrap;\n" +
+    "            text-align: center\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .yxq-from-select .yxq-list {\n" +
+    "            display: none;\n" +
+    "            position: absolute;\n" +
+    "            background: #25252b;\n" +
+    "            border-radius: 4px;\n" +
+    "            padding: 10px 15px;\n" +
+    "            right: 0;\n" +
+    "            top: 18px;\n" +
+    "            text-align: center;\n" +
+    "            box-shadow: 0 2px 10px 0 rgb(0 0 0 / 30%)\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .component-title {\n" +
+    "            position: relative;\n" +
+    "            height: 20px;\n" +
+    "            line-height: 20px;\n" +
+    "            display: block;\n" +
+    "            margin: 12px 0 16px;\n" +
+    "            text-align: left;\n" +
+    "            color: hsla(0,0%,100%,0.6)\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .pic-text-item a {\n" +
+    "            position: relative;\n" +
+    "            display: block;\n" +
+    "            margin-bottom: 12px;\n" +
+    "            overflow: hidden;\n" +
+    "            height: 166px;\n" +
+    "            color: hsla(0,0%,100%,0.6)\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .cover {\n" +
+    "            position: relative;\n" +
+    "            float: left;\n" +
+    "            margin-right: 10px;\n" +
+    "            font-size: 12px;\n" +
+    "            height: 100%;\n" +
+    "            overflow: hidden\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .anthology-title-wrap {\n" +
+    "            position: absolute;\n" +
+    "            top: 50%;\n" +
+    "            -webkit-transform: translateY(-50%);\n" +
+    "            -ms-transform: translateY(-50%);\n" +
+    "            transform: translateY(-50%);\n" +
+    "            left: 130px;\n" +
+    "            width: 168px;\n" +
+    "            overflow: hidden\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .anthology-title-wrap .title {\n" +
+    "            margin-left: auto;\n" +
+    "            margin-right: auto;\n" +
+    "            margin-bottom: 18px;\n" +
+    "            font-size: 17px;\n" +
+    "            line-height: 20px;\n" +
+    "            max-height: 58px;\n" +
+    "            overflow: hidden;\n" +
+    "            -o-text-overflow: ellipsis;\n" +
+    "            text-overflow: ellipsis;\n" +
+    "            word-break: break-all;\n" +
+    "            display: -webkit-box;\n" +
+    "            -webkit-box-orient: vertical;\n" +
+    "            color: hsla(0,0%,100%,0.87);\n" +
+    "            text-align: left\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .anthology-title-wrap .subtitle {\n" +
+    "            overflow: auto;\n" +
+    "            max-height: 66px;\n" +
+    "            font-size: 14px;\n" +
+    "            bottom: 0;\n" +
+    "            width: 168px;\n" +
+    "            line-height: 17px;\n" +
+    "            margin-bottom: 3px;\n" +
+    "            text-align: left\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .bj {\n" +
+    "            height: 166px;\n" +
+    "            width: 122px;\n" +
+    "            border-radius: 7px;\n" +
+    "            background-color: #25252b;\n" +
+    "            object-fit: cover\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .yxq-selset-list {\n" +
+    "            display: none\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-stting {\n" +
+    "            -webkit-transform: scale(1) !important;\n" +
+    "            transform: scale(1) !important;\n" +
+    "            font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif\n" +
+    "        }\n" +
+    "\n" +
+    "        .vodlist-of,.yxqplayer-mask {\n" +
+    "            position: absolute;\n" +
+    "            top: 0;\n" +
+    "            bottom: 0;\n" +
+    "            left: 0;\n" +
+    "            right: 0;\n" +
+    "            z-index: 1001;\n" +
+    "            display: none\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-show {\n" +
+    "            display: block !important\n" +
+    "        }\n" +
+    "\n" +
+    "        .fixed_right_bar {\n" +
+    "            position: fixed;\n" +
+    "            bottom: 33px;\n" +
+    "            right: 1%;\n" +
+    "            z-index: 10001\n" +
+    "        }\n" +
+    "\n" +
+    "        .fixed_right_bar a {\n" +
+    "            font-size: 16px;\n" +
+    "            margin: 10px auto;\n" +
+    "            position: relative;\n" +
+    "            color: #fff\n" +
+    "        }\n" +
+    "\n" +
+    "        .ant-back-top {\n" +
+    "            display: none\n" +
+    "        }\n" +
+    "\n" +
+    "        .video-list-cl {\n" +
+    "            text-align: right;\n" +
+    "            right: 10px;\n" +
+    "            font-size: 16px;\n" +
+    "            position: relative;\n" +
+    "            height: 0px;\n" +
+    "            line-height: 33px;\n" +
+    "            z-index: 99\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-this,.scroll-area a:hover {\n" +
+    "            color: #CC6633 !important\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox ::-webkit-scrollbar,#danmu-show ::-webkit-scrollbar {\n" +
+    "            width: 5px;\n" +
+    "            height: 5px\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox ::-webkit-scrollbar-thumb,#danmu-show ::-webkit-scrollbar-thumb {\n" +
+    "            background-color: #666\n" +
     "        }";
 
 },{}],"1vNkK":[function(require,module,exports) {
