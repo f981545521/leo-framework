@@ -1,9 +1,7 @@
 <html>
 <head>
-    <title>ArtPlayer Demo</title>
+    <title>ArtPlayer</title>
     <meta name="referrer" content="never">
-    <meta http-equiv="Access-Control-Allow-Origin" content="*">
-    <meta http-equiv="Access-Control-Allow-Credentials" content="*"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
     <link rel="dns-prefetch" href="//yanxuan.nosdn.127.net" />
@@ -34,16 +32,25 @@
 <div class="favnow"></div>
 
 
-<script src="artplayer.hls.min.js"></script>
-<script src="artplayer.js"></script>
-<script src="artplayer-plugin-danmuku.js"></script>
+<script src="http://dev.acyou.cn/artplayer/artplayer.hls.min.js"></script>
+<script src="http://dev.acyou.cn/artplayer/artplayer.js"></script>
+<script src="http://dev.acyou.cn/artplayer/artplayer-plugin-danmuku.js"></script>
 
 <script>
+
+    var playUrl = getQueryString("url");
+    if (playUrl) {
+        window.playUrl = playUrl;
+        window.videoTitle = getQueryString("videoTitle");
+    }else {
+        window.playUrl = "https://super.ffzy-online6.com/20240530/32196_4ff67cc9/2000k/hls/index.m3u8";
+        window.videoTitle = "《庆余年 第二季 第35集》";
+    }
 
     var options = {
         container: '.favnow',
         //url: 'http://qiniu.acyou.cn/video/20240617142317%40%E6%95%99%E4%BD%A0%E6%80%8E%E4%B9%88%E6%B7%B7%E7%A4%BE%E4%BC%9A03%E4%B8%AD%E5%9B%BD%E6%9C%80%E7%9C%9F%E5%AE%9E%E7%9A%84%E7%A4%BE%E4%BA%A4%E5%85%B3%E7%B3%BB.mp4',
-        url:'https://super.ffzy-online6.com/20240530/32196_4ff67cc9/2000k/hls/index.m3u8',
+        url: window.playUrl,
         type: 'm3u8',
         volume: 1,//播放器的默认音量
         isLive: false,//使用直播模式，会隐藏进度条和播放时间
@@ -80,32 +87,42 @@
         layers: [
 
         ],
-        videoTitle: "《庆余年 第二季 第35集》",
+        videoTitle: window.videoTitle,
         plugins: [
             //videoTitlePlugin("《我是歌手2024 第一期》")
             //https://artplayer.org/document/plugin/danmuku.html#%E5%85%A8%E9%83%A8%E9%80%89%E9%A1%B9
-            artplayerPluginDanmuku({
-                speed: 10, // 弹幕持续时间，范围在[1 ~ 10]
-                danmuku: [
-                    {
-                        text: '💥1条弹幕列队来袭~做好准备吧！',
-                        time: 2
-                    },
-                    {
-                        text: '请大家遵守弹幕礼仪，文明发送弹幕！',
-                        time: 2.5
-                    },
-                    {
-                        text: '<div>你好</div>',
-                        time: 5
-                    }
-                ],
-            })
+            //artplayerPluginDanmuku({
+            //    speed: 10, // 弹幕持续时间，范围在[1 ~ 10]
+            //    danmuku: [
+            //        {
+            //            text: '💥1条弹幕列队来袭~做好准备吧！',
+            //            time: 2
+            //        },
+            //        {
+            //            text: '请大家遵守弹幕礼仪，文明发送弹幕！',
+            //            time: 2.5
+            //        },
+            //        {
+            //            text: '<div>你好</div>',
+            //            time: 5
+            //        }
+            //    ],
+            //})
         ]
     };
     const art = new Artplayer(options);
 
 
+
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2]);
+        }
+        return null;
+    }
 
 /*    function videoTitlePlugin(title) {
         return (art) => {
