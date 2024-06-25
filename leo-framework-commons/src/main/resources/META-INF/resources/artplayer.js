@@ -535,6 +535,21 @@ module.exports = ".art-video-player {\n  --art-theme: red;\n  --art-font-color: 
     "            padding: 0 10px\n" +
     "        }\n" +
     "\n" +
+    "        .yxq-listbox .box-item-line {\n" +
+    "            font-size: 14px;\n" +
+    "            background: #45504fc7;\n" +
+    "            width: 96%;\n" +
+    "            height: 40px;\n" +
+    "            line-height: 40px;\n" +
+    "            border-radius: 4px;\n" +
+    "            text-align: center;\n" +
+    "            color: #fff;\n" +
+    "            display: inline-block;\n" +
+    "            box-sizing: border-box;\n" +
+    "            margin: 1%;\n" +
+    "            padding: 0 10px\n" +
+    "        }\n" +
+    "\n" +
     "        .yxq-listbox .yxq-from-select {\n" +
     "            z-index: 1;\n" +
     "            position: absolute;\n" +
@@ -695,6 +710,10 @@ module.exports = ".art-video-player {\n  --art-theme: red;\n  --art-font-color: 
     "\n" +
     "        .yxq-this,.scroll-area a:hover {\n" +
     "            color: #CC6633 !important\n" +
+    "        }\n" +
+    "\n" +
+    "        #listShow .active {\n" +
+    "            color: var(--art-theme) !important\n" +
     "        }\n" +
     "\n" +
     "        .yxq-listbox ::-webkit-scrollbar,#danmu-show ::-webkit-scrollbar {\n" +
@@ -5660,6 +5679,14 @@ function videoTitle(art) {
         art.layers.videoTitle.style.display = 'none';
     }
 
+    function update(t) {
+        option.videoTitle = t;
+        art.layers.update({
+            name: 'videoTitle',
+            html: `<div class="video-title">${option.videoTitle}</div>`,
+        });
+    }
+
     art.on('play', hide);
     art.on('pause', show);
 
@@ -5674,7 +5701,8 @@ function videoTitle(art) {
     return {
         name: "videoTitle",
         show,
-        hide
+        hide,
+        update
     };
 }
 
