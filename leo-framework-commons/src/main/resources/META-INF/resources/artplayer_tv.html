@@ -63,7 +63,7 @@
         volume: 1,//播放器的默认音量
         isLive: false,//使用直播模式，会隐藏进度条和播放时间
         muted: false, //是否默认静音
-        autoplay: false,//是否自动播放
+        autoplay: true,//是否自动播放
         autoSize: false,
         autoMini: false,//当播放器滚动到浏览器视口以外时，自动进入 迷你播放 模式
 
@@ -94,6 +94,28 @@
         fastForward: true,
         layers: [
 
+        ],
+        //控制层
+        controls: [
+            {
+                name: 'next',
+                index: 11,
+                position: 'left',
+                tooltip: "下一集",
+                html: '<i class="art-icon art-icon-next hint--rounded hint--top" aria-label="下一集" style="display: flex;">' +
+                    '<svg t="1719295562442" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6892" width="22" height="22">' +
+                    '<path d="M251.806514 885.86163L510.914627 719.700906l244.70225499-155.899017A54.663326 54.663326 0 0 0 778.113702 530.64868L778.113702 866.127578a39.468106 39.468106 0 0 0 78.936211 0l0-705.097707a39.468106 39.468106 0 0 0-78.936211 0L778.113702 493.548661a55.058007 55.058007 0 0 0-22.49682001-33.35055l-244.70225499-155.899017-259.700135-165.766043c-30.193101-19.734053-65.51705499 8.880324-65.51705501 51.900559L185.69743699 833.56639C186.289458 876.783966 221.613413 905.595683 251.806514 885.86163z" p-id="6893" ></path></svg>' +
+                    '</i>',
+                style: {
+
+                },
+                click: function (item, $dom) {
+                    var t = document.querySelector('#listShow .active');
+                    if (t) {
+                        t.nextSibling.click()
+                    }
+                },
+            }
         ],
         videoTitle: "《莲花楼 第01集》",
         plugins: [

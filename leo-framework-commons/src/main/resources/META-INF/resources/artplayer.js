@@ -5631,6 +5631,13 @@ function autoPlayback(art) {
                     (0, _utils.setStyle)($autoPlayback, "display", "none");
                 }, constructor.AUTO_PLAYBACK_TIMEOUT);
             });
+
+            setTimeout(()=>{
+                $jump.click()
+                art.on('ready', () => {
+                    art.play();
+                });
+            }, 2000)
         }
     });
     return {
