@@ -110,6 +110,23 @@
     };
     const art = new Artplayer(options);
 
+    function hasNext(){
+        //本地播放列表
+        var o = document.querySelector('#searchTvList .active');
+        if (o) {
+            if (o && o.nextSibling) {
+                return true;
+            }
+        }else {
+            //选集播放列表
+            var t = document.querySelector('#listShow .active');
+            if (t && t.nextSibling) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     function searchTv(){
         return (art) => {
@@ -415,7 +432,12 @@
     }
 
     art.on('video:ended', () => {
-        console.info('视频播放结束');
+        if (hasNext()) {
+            art.notice.show = '视频播放结束 3s播放下一集...';
+            setTimeout(()=>{
+                art.controls['next'].click()
+            }, 3000)
+        }
     });
 
     function doQuery(text){
