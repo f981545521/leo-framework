@@ -146,10 +146,15 @@
                                       onclick="javascript:art.layers['searchTv'].style.display = 'none'"
                                       title="点击关闭">✖</a></div>
         <div class="normal-title-wrap">
-        <input type="file" id="file" multiple accept="video/*" onchange="onInputFileChange()">
+        <div>
+            <h3>播放本地文件：</h3>
+            <input type="file" id="file" multiple accept="video/*" onchange="onInputFileChange()">
+        </div>
 <div class="" style="
-    margin-top: 30px;
-"><input class="searchTvInput" type="text" name="k" id="search-input" autocomplete="current-search-input" placeholder="搜索电影、连续剧、综艺纪录、动漫">
+    /*margin-top: 30px;*/
+">
+<h3>搜索资源：</h3>
+<input class="searchTvInput" type="text" name="k" id="search-input" autocomplete="current-search-input" placeholder="搜索电影、连续剧、综艺纪录、动漫">
 <button class="searchTvButton" type="button">搜索</button></div>
         </div>
         <div class="scroll-area" id="listBox">
@@ -388,7 +393,7 @@
     var selectFiles = [];
     function onInputFileChange() {
         selectFiles = document.getElementById('file').files;
-        if (selectFiles) {
+        if (selectFiles && selectFiles.length > 0) {
             var file = selectFiles[0];
             var url = URL.createObjectURL(file);
             art.type = "";
@@ -402,6 +407,8 @@
                 }
                 $("#searchTvList").append("<a style=\"cursor:pointer;\" title='" + f.name + "' data-info=\"" + i + "\" class='box-item-localfile " + classact + "' >" + f.name + "</a>")
             })
+        }else {
+            $("#searchTvList").empty();
         }
     }
 
