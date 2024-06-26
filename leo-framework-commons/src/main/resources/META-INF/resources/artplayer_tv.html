@@ -441,6 +441,26 @@
         }
     });
 
+    document.addEventListener('keyup', function (event) {
+        if ("PageUp" === event.code) {
+            var o = document.querySelector('#searchTvList .active');
+            if (o) {
+                if (o && o.previousSibling) {
+                    o.previousSibling.click()
+                }
+            }else {
+                //选集播放列表
+                var t = document.querySelector('#listShow .active');
+                if (t && t.previousSibling) {
+                    t.previousSibling.click()
+                }
+            }
+        }
+        if ("PageDown" === event.code) {
+            art.controls['next'].click()
+        }
+    });
+
     function doQuery(text){
         $.ajax({
             cache: true,
