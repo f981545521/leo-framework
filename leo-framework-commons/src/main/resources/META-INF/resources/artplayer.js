@@ -683,7 +683,7 @@ module.exports = ".art-video-player {\n  --art-theme: red;\n  --art-font-color: 
     "        .yxq-stting {\n" +
     "            -webkit-transform: scale(1) !important;\n" +
     "            transform: scale(1) !important;\n" +
-    "            background-color: rgb(0 0 0 / 50%)\n" +
+    "            background-color: rgb(0 0 0 / 50%);\n" +
     "            padding: 10px 10px 60px 10px;\n"+
     "            font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif\n" +
     "        }\n" +
