@@ -436,6 +436,12 @@
         if (hasNext()) {
             art.notice.show = '视频播放结束 3s播放下一集...';
             setTimeout(()=>{
+                art.notice.show = '视频播放结束 2s播放下一集...';
+            }, 1000)
+            setTimeout(()=>{
+                art.notice.show = '视频播放结束 1s播放下一集...';
+            }, 2000)
+            setTimeout(()=>{
                 art.controls['next'].click()
             }, 3000)
         }
