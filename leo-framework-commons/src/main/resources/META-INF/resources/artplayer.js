@@ -2128,8 +2128,8 @@ function switchMix(art) {
                 art.currentTime = currentTime;
             });
             art.once("video:canplay", async ()=>{
-                art.playbackRate = playbackRate;
-                art.aspectRatio = aspectRatio;
+                //art.playbackRate = playbackRate;
+                //art.aspectRatio = aspectRatio;
                 if (playing) await art.play();
                 art.notice.show = "";
                 resolve();
@@ -5502,6 +5502,13 @@ class Storage {
             return key ? this.settings[key] : this.settings;
         }
     }
+    getDefault(key, dv) {
+        var v= this.get(key);
+        if (v) {
+            return v;
+        }
+        return dv;
+    }
     set(key, value) {
         try {
             const storage = Object.assign({}, this.get(), {
@@ -5658,7 +5665,16 @@ function autoPlayback(art) {
             storage.set("times", times);
         }
     });
+
+    art.on("video:ratechange", ()=>{
+        storage.set("playbackRate", art.playbackRate);
+    });
+
     art.on("ready", ()=>{
+        const playbackRate = storage.getDefault("playbackRate", 1)
+        if (playbackRate > 0) {
+            art.playbackRate = playbackRate;
+        }
         const times = storage.get("times") || {};
         const currentTime = times[art.option.id || art.option.url];
         if (currentTime && currentTime >= constructor.AUTO_PLAYBACK_MIN) {
