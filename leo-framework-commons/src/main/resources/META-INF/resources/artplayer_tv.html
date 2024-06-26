@@ -353,6 +353,7 @@
             var file = selectFiles[i];
             var url = URL.createObjectURL(file);
             art.type = "";
+            art.plugins['videoTitle'].update(file.name)
             art.switchUrl(url);
             art.play()
         }
@@ -397,6 +398,7 @@
             var file = selectFiles[0];
             var url = URL.createObjectURL(file);
             art.type = "";
+            art.plugins['videoTitle'].update(file.name)
             art.switchUrl(url);
             art.play()
             $("#searchTvList").empty();
