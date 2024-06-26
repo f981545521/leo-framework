@@ -5649,7 +5649,8 @@ function autoPlayback(art) {
     const $jump = (0, _utils.query)(".art-auto-playback-jump", $autoPlayback);
     const $close = (0, _utils.query)(".art-auto-playback-close", $autoPlayback);
     art.on("video:timeupdate", ()=>{
-        if (art.playing) {
+        //播放时长太短不记录！！
+        if (art.playing && art.currentTime > Artplayer.AUTO_PLAYBACK_MIN) {
             const times = storage.get("times") || {};
             const keys = Object.keys(times);
             if (keys.length > constructor.AUTO_PLAYBACK_MAX) delete times[keys[0]];
