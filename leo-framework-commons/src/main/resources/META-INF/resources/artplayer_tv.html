@@ -21,29 +21,6 @@
             height: 100%;
             background: #000
         }
-
-        .searchTvInput {
-            padding: 10px;
-            border-radius: 8px;
-            width: 70%;
-            resize: none;
-            flex: 1;
-            border: 5px red;
-            outline: 0;
-            font-size: 0.875rem;
-            line-height: normal;
-            height: 2rem;
-        }
-
-        .searchTvButton {
-            width: 25%;
-            background-color: #4CAF50;
-            color: white;
-            padding: 0px 0px;
-            border: none;
-            border-radius: 4px;
-            height: 2rem;
-        }
     </style>
 </head>
 <body>
@@ -110,9 +87,16 @@
 
                 },
                 click: function (item, $dom) {
-                    var t = document.querySelector('#listShow .active');
-                    if (t) {
-                        t.nextSibling.click()
+                    //本地播放列表
+                    var o = document.querySelector('#searchTvList .active');
+                    if (o) {
+                        o.nextSibling.click()
+                    }else {
+                        //选集播放列表
+                        var t = document.querySelector('#listShow .active');
+                        if (t) {
+                            t.nextSibling.click()
+                        }
                     }
                 },
             }
@@ -162,7 +146,7 @@
                                       onclick="javascript:art.layers['searchTv'].style.display = 'none'"
                                       title="点击关闭">✖</a></div>
         <div class="normal-title-wrap">
-        <input type="file" id="file" onchange="onInputFileChange()">
+        <input type="file" id="file" multiple accept="video/*" onchange="onInputFileChange()">
 <div class="" style="
     margin-top: 30px;
 "><input class="searchTvInput" type="text" name="k" id="search-input" autocomplete="current-search-input" placeholder="搜索电影、连续剧、综艺纪录、动漫">
@@ -356,6 +340,18 @@
             $("#listShow").append("<a style=\"cursor:pointer;\" data-playUrl='"+split[1]+"' class=\"box-item album-title\"    title=\"第03集\">"+split[0]+"</a>")
         })
     })
+    $("#searchTvList").on("click", ".box-item-localfile", function (e){
+        var i = $(this).data("info");
+        $(this).siblings().removeClass("active")
+        $(this).addClass("active");
+        if (i) {
+            var file = selectFiles[i];
+            var url = URL.createObjectURL(file);
+            art.type = "";
+            art.switchUrl(url);
+            art.play()
+        }
+    })
     //搜剧剧集
     var searchTvList_index = localStorage.getItem("searchTvList_index");
     if (searchTvList_index) {
@@ -389,14 +385,29 @@
             art.play();
         });
     }
-
+    var selectFiles = [];
     function onInputFileChange() {
-        var file = document.getElementById('file').files[0];
-        var url = URL.createObjectURL(file);
-        art.type = "";
-        art.switchUrl(url);
-        art.play()
+        selectFiles = document.getElementById('file').files;
+        if (selectFiles) {
+            var file = selectFiles[0];
+            var url = URL.createObjectURL(file);
+            art.type = "";
+            art.switchUrl(url);
+            art.play()
+            $("#searchTvList").empty();
+            $.each(selectFiles, (i, f) => {
+                var classact = "";
+                if (i === 0) {
+                    classact = "active";
+                }
+                $("#searchTvList").append("<a style=\"cursor:pointer;\" title='" + f.name + "' data-info=\"" + i + "\" class='box-item-localfile " + classact + "' >" + f.name + "</a>")
+            })
+        }
     }
+
+    art.on('video:ended', () => {
+        console.info('视频播放结束');
+    });
 
     function doQuery(text){
         $.ajax({

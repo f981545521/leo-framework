@@ -547,6 +547,27 @@ module.exports = ".art-video-player {\n  --art-theme: red;\n  --art-font-color: 
     "            display: inline-block;\n" +
     "            box-sizing: border-box;\n" +
     "            margin: 1%;\n" +
+    "            white-space: nowrap;\n" +
+    "            overflow: hidden;\n" +
+    "            text-overflow: ellipsis;\n" +
+    "            padding: 0 10px\n" +
+    "        }\n" +
+    "\n" +
+    "        .yxq-listbox .box-item-localfile {\n" +
+    "            font-size: 14px;\n" +
+    "            background: #45504fc7;\n" +
+    "            width: 96%;\n" +
+    "            height: 40px;\n" +
+    "            line-height: 40px;\n" +
+    "            border-radius: 4px;\n" +
+    "            text-align: center;\n" +
+    "            color: #fff;\n" +
+    "            display: inline-block;\n" +
+    "            box-sizing: border-box;\n" +
+    "            margin: 1%;\n" +
+    "            white-space: nowrap;\n" +
+    "            overflow: hidden;\n" +
+    "            text-overflow: ellipsis;\n" +
     "            padding: 0 10px\n" +
     "        }\n" +
     "\n" +
@@ -715,6 +736,33 @@ module.exports = ".art-video-player {\n  --art-theme: red;\n  --art-font-color: 
     "        #listShow .active {\n" +
     "            color: var(--art-theme) !important\n" +
     "        }\n" +
+    "\n" +
+    "        #searchTvList .active {\n" +
+    "            color: var(--art-theme) !important\n" +
+    "        }\n" +
+
+    "        .searchTvInput {\n" +
+    "            padding: 10px;\n" +
+    "            border-radius: 8px;\n" +
+    "            width: 70%;\n" +
+    "            resize: none;\n" +
+    "            flex: 1;\n" +
+    "            border: 5px red;\n" +
+    "            outline: 0;\n" +
+    "            font-size: 0.875rem;\n" +
+    "            line-height: normal;\n" +
+    "            height: 2rem;\n" +
+    "        }"+
+
+    "        .searchTvButton {\n" +
+    "            width: 25%;\n" +
+    "            background-color: var(--art-theme) !important;\n" +
+    "            color: white;\n" +
+    "            padding: 0px 0px;\n" +
+    "            border: none;\n" +
+    "            border-radius: 4px;\n" +
+    "            height: 2rem;\n" +
+    "        }"+
     "\n" +
     "        .yxq-listbox ::-webkit-scrollbar,#danmu-show ::-webkit-scrollbar {\n" +
     "            width: 5px;\n" +
