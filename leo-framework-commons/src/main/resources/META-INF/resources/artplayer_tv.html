@@ -367,7 +367,7 @@
         var i = $(this).data("info");
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
-        if (i) {
+        if (i > -1) {
             var file = selectFiles[i];
             var url = URL.createObjectURL(file);
             art.type = "";
