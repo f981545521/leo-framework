@@ -1806,7 +1806,7 @@ const zhCn = {
     "Fullscreen Not Supported": "\u4E0D\u652F\u6301\u5168\u5C4F",
     "Subtitle Offset": "\u5B57\u5E55\u504F\u79FB",
     "Last Seen": "\u4E0A\u6B21\u770B\u5230",
-    "Jump Play": "\u8DF3\u8F6C\u64AD\u653E",
+    "Jump Play": "\u81ea\u52a8\u8DF3\u8F6C\u64AD\u653E...",
     AirPlay: "\u9694\u7A7A\u64AD\u653E",
     "AirPlay Not Available": "\u9694\u7A7A\u64AD\u653E\u4E0D\u53EF\u7528"
 };
