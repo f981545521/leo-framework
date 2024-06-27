@@ -111,6 +111,31 @@
     };
     const art = new Artplayer(options);
 
+    art.setting.add({
+        name: 'leftSpeed',
+        html: '长按速度',
+        tooltip: '',
+        icon: '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"\n' +
+            '        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n' +
+            '<svg t="1719493775517" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4626"\n' +
+            '     width="48" height="48">\n' +
+            '    <path d="M537.6 348.16c-15.36-15.36-40.96 0-40.96 20.48v66.56L384 348.16c-15.36-15.36-40.96 0-40.96 20.48v291.84c0 20.48 25.6 35.84 40.96 20.48l112.64-87.04v66.56c0 20.48 25.6 35.84 40.96 20.48l184.32-143.36c15.36-10.24 15.36-30.72 0-40.96l-184.32-148.48z"\n' +
+            '          fill="white" p-id="4627"></path>\n' +
+            '    <path d="M768 102.4H256C143.36 102.4 51.2 194.56 51.2 307.2v409.6c0 112.64 92.16 204.8 204.8 204.8h512c112.64 0 204.8-92.16 204.8-204.8V307.2c0-112.64-92.16-204.8-204.8-204.8z m133.12 614.4c0 71.68-61.44 133.12-133.12 133.12H256c-71.68 0-133.12-61.44-133.12-133.12V307.2c0-71.68 61.44-133.12 133.12-133.12h512c71.68 0 133.12 61.44 133.12 133.12v409.6z"\n' +
+            '          fill="white" p-id="4628"></path>\n' +
+            '</svg>',
+        custom: "<input type=\"number\" min='0' max='5' step=\"0.1\" value='"+ art.storage.getDefault("forwardSpeed", 3)+"' id='forwardSpeed' style=\"\n" +
+            "    border-radius: 20px;\n" +
+            "    text-align: center;\n" +
+            "\">",
+    });
+
+    $(document).on("blur", "#forwardSpeed", function (){
+        if ($(this).val()) {
+            art.storage.set("forwardSpeed", $(this).val())
+        }
+    })
+
     function hasNext(){
         //本地播放列表
         var o = document.querySelector('#searchTvList .active');

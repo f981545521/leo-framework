@@ -770,6 +770,9 @@ module.exports = ".art-video-player {\n  --art-theme: red;\n  --art-font-color: 
     "            height: 5px\n" +
     "        }\n" +
     "\n" +
+    "        .art-setting-custom {" +
+    "           width: 80px;\n" +
+    "        }"+
     "        .yxq-listbox ::-webkit-scrollbar-thumb,#danmu-show ::-webkit-scrollbar-thumb {\n" +
     "            background-color: #666\n" +
     "        }";
@@ -4643,7 +4646,7 @@ class Hotkey {
         if (art.option.hotkey && !(0, _utils.isMobile)) this.init();
     }
     init() {
-        const { proxy, constructor } = this.art;
+        const { proxy, storage, constructor } = this.art;
         this.add(27, ()=>{
             if (this.art.fullscreenWeb) this.art.fullscreenWeb = false;
         });
@@ -4677,7 +4680,7 @@ class Hotkey {
                             if (before_playbackRate === 0) {
                                 before_playbackRate = art.playbackRate;
                             }else {
-                                art.playbackRate = 3;
+                                art.playbackRate = storage.getDefault("forwardSpeed", 3);
                                 document.querySelector('.art-layer-notice-apeed').setAttribute('style','display:flex')
                             }
                         } else {
@@ -5131,6 +5134,9 @@ class Setting extends (0, _componentDefault.default) {
             case "range":
                 (0, _utils.append)($icon, (0, _utils.isStringOrNumber)(item.icon) || item.icon instanceof Element ? item.icon : icons.config);
                 break;
+            case "custom":
+                (0, _utils.append)($icon, (0, _utils.isStringOrNumber)(item.icon) || item.icon instanceof Element ? item.icon : icons.config);
+                break;
             case "selector":
                 if (item.selector && item.selector.length) (0, _utils.append)($icon, (0, _utils.isStringOrNumber)(item.icon) || item.icon instanceof Element ? item.icon : icons.config);
                 else (0, _utils.append)($icon, icons.check);
@@ -5228,6 +5234,15 @@ class Setting extends (0, _componentDefault.default) {
                     });
                 }
                 break;
+            case "custom":
+                {
+                    const $state = (0, _utils.createElement)("div");
+                    (0, _utils.addClass)($state, "art-setting-item-right-icon");
+                    const $range = (0, _utils.append)($state, item.custom);
+                    (0, _utils.addClass)($range, "art-setting-custom");
+                    (0, _utils.append)($right, $state);
+                }
+                break;
             case "selector":
                 if (item.selector && item.selector.length) {
                     const $state = (0, _utils.createElement)("div");
@@ -5249,6 +5264,22 @@ class Setting extends (0, _componentDefault.default) {
                 }
                 break;
             case "range":
+                if (item.$range) {
+                    if (item.onRange) {
+                        const event = proxy(item.$range, "change", async (event)=>{
+                            item.tooltip = await item.onRange.call(this.art, item, $item, event);
+                        });
+                        this.events.push(event);
+                    }
+                    if (item.onChange) {
+                        const event = proxy(item.$range, "input", async (event)=>{
+                            item.tooltip = await item.onChange.call(this.art, item, $item, event);
+                        });
+                        this.events.push(event);
+                    }
+                }
+                break;
+            case "custom":
                 if (item.$range) {
                     if (item.onRange) {
                         const event = proxy(item.$range, "change", async (event)=>{
@@ -5327,6 +5358,7 @@ class Setting extends (0, _componentDefault.default) {
                 const item = option[index];
                 if ((0, _utils.has)(item, "switch")) (0, _utils.append)($panel, this.creatItem("switch", item));
                 else if ((0, _utils.has)(item, "range")) (0, _utils.append)($panel, this.creatItem("range", item));
+                else if ((0, _utils.has)(item, "custom")) (0, _utils.append)($panel, this.creatItem("custom", item));
                 else (0, _utils.append)($panel, this.creatItem("selector", item));
             }
             (0, _utils.append)(this.$parent, $panel);
