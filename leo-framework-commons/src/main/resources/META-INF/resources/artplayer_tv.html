@@ -473,6 +473,7 @@
     });
 
     document.addEventListener('keyup', function (event) {
+        event.preventDefault();
         if ("PageUp" === event.code) {
             var o = document.querySelector('#searchTvList .active');
             if (o) {
