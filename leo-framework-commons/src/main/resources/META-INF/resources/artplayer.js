@@ -197,7 +197,7 @@ class Artplayer extends (0, _emitterDefault.default) {
         super();
         this.id = ++id;
         const mergeOption = _utils.mergeDeep(Artplayer.option, option);
-        if (mergeOption.type === 'm3u8') {
+        if (mergeOption.type === 'm3u8' || mergeOption.url.endsWith(".m3u8")) {
             mergeOption.customType = {
                 m3u8: Artplayer.playM3u8
             }
