@@ -2120,17 +2120,18 @@ function switchMix(art) {
     function switchUrl(url, currentTime) {
         return new Promise((resolve, reject)=>{
             if (url === art.url) return;
-            const { playing, aspectRatio, playbackRate } = art;
+            const { playing, aspectRatio,storage } = art;
             art.pause();
             art.url = url;
+            var playbackRate = storage.getDefault("playbackRate", 1);
             art.notice.show = "";
             art.once("video:error", reject);
             art.once("video:loadedmetadata", ()=>{
                 art.currentTime = currentTime;
             });
             art.once("video:canplay", async ()=>{
-                //art.playbackRate = playbackRate;
-                //art.aspectRatio = aspectRatio;
+                art.playbackRate = playbackRate;
+                art.aspectRatio = aspectRatio;
                 if (playing) await art.play();
                 art.notice.show = "";
                 resolve();
@@ -2168,7 +2169,9 @@ function playbackRateMix(art) {
                 if (rate === $video.playbackRate) return;
                 $video.playbackRate = rate;
                 notice.show = `${i18n.get("Rate")}: ${rate === 1.0 ? i18n.get("Normal") : `${rate}x`}`;
-            } else art.playbackRate = 1;
+            } else {
+                art.playbackRate = 1;
+            }
         }
     });
 }
