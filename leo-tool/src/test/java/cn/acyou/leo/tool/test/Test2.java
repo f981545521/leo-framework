@@ -31,7 +31,10 @@ public class Test2 {
         System.out.println();
         while (i < mediaDuration) {
             long startDuration = i;
-            long endDuration = i + 5000;
+            long endDuration = i + 30000;
+            if (startDuration == 0) {
+                startDuration = 100;
+            }
             String s = MediaUtil.formatDuration(startDuration);
             String e = MediaUtil.formatDuration(endDuration);
             i = endDuration;
@@ -39,9 +42,9 @@ public class Test2 {
                 i = mediaDuration;
             }
             System.out.println(s + " --> " + e);
-            String imageF = "E:\\temp111\\" + i + ".png";
+            String imageF = "E:\\temp111\\" + startDuration + ".png";
             MediaUtil.instance().extractFrame(file, e, imageF);
-            System.out.println(imageF);
+            System.out.println(startDuration + ".png#xywh=0,0,128,72");
             System.out.println();
         }
         /**
