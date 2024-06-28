@@ -135,6 +135,7 @@ public class DownloadUtil {
         }
         HttpResponse response = HttpUtil.createGet(url, true)
                 .setProxy(proxy)
+                .setConnectionTimeout(1000 * 60 * 10)
                 .timeout(1000 * 60 * 10)
                 .executeAsync();
         final File file = response.completeFileNameFromHeader(new File(dir, fileName));
@@ -160,8 +161,8 @@ public class DownloadUtil {
         } else {
             connection = downloadUrl.openConnection();
         }
-        connection.setConnectTimeout(60000);
-        connection.setReadTimeout(60000);
+        connection.setConnectTimeout(1000 * 60 * 10);
+        connection.setReadTimeout(1000 * 60 * 10);
         InputStream in = connection.getInputStream();
         File file = new File(dir);
         if (!file.exists()) {
