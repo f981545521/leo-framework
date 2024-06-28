@@ -1,6 +1,8 @@
 package cn.acyou.leo.tool.test;
 
+import cn.acyou.leo.framework.media.encoder.MediaUtil;
 import cn.acyou.leo.framework.util.DateUtil;
+import cn.acyou.leo.framework.util.LoggerUtil;
 import cn.acyou.leo.framework.util.RandomUtil;
 import cn.acyou.leo.framework.util.StringUtils;
 import cn.hutool.core.thread.ConcurrencyTester;
@@ -17,6 +19,47 @@ import java.util.List;
  * @version [1.0.0, 2022/8/5 16:57]
  **/
 public class Test2 {
+
+
+    @Test
+    public void test23345() {
+        LoggerUtil.disableMediaUtilLogger();
+        String file = "E:\\temp111\\rzdf.mp4";
+        long mediaDuration = MediaUtil.instance().getMediaDuration(file);
+        long i = 100;
+        System.out.println("WEBVTT");
+        System.out.println();
+        while (i < mediaDuration) {
+            long startDuration = i;
+            long endDuration = i + 30000;
+            String s = MediaUtil.formatDuration(startDuration);
+            String e = MediaUtil.formatDuration(endDuration);
+            i = endDuration;
+            if (i >= mediaDuration) {
+                i = mediaDuration;
+            }
+            System.out.println(s + " --> " + e);
+            String imageF = "E:\\temp111\\" + startDuration + ".png";
+            MediaUtil.instance().extractFrame(file, s, imageF);
+            System.out.println(startDuration + ".png#xywh=0,0,128,72");
+            System.out.println();
+        }
+        /**
+         * WEBVTT
+         *
+         * 00:00.000 --> 00:05.000
+         * bbb-sprite.jpg#xywh=0,0,128,72
+         *
+         * 00:05.000 --> 00:10.000
+         * bbb-sprite.jpg#xywh=128,0,128,72
+         *
+         * 00:10.000 --> 00:15.000
+         * bbb-sprite.jpg#xywh=256,0,128,72
+         */
+
+
+    }
+
     @Test
     public void test1() {
         ConcurrencyTester ct = new ConcurrencyTester(5);
@@ -44,7 +87,7 @@ public class Test2 {
     }
 
     @Test
-    public void  test234(){
+    public void test234() {
         System.out.println(RandomUtil.randomNumbersInRange(0, 0, 1));
         System.out.println(RandomUtil.randomNumbersInRange(10, 5, 1));
         System.out.println(RandomUtil.randomNumbersInRange(0, 0, 5));
@@ -54,7 +97,7 @@ public class Test2 {
     }
 
     @Test
-    public void test34535(){
+    public void test34535() {
         System.out.println(StringUtils.toChineseMoney(new BigDecimal("2134.23")));
         System.out.println(StringUtils.toChineseMoney(new BigDecimal("12134.23")));
         System.out.println(StringUtils.toChineseMoney(new BigDecimal("122134.23")));
