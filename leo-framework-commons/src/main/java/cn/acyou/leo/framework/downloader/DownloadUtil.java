@@ -135,8 +135,11 @@ public class DownloadUtil {
         }
         HttpResponse response = HttpUtil.createGet(url, true)
                 .setProxy(proxy)
-                .setConnectionTimeout(1000 * 60 * 10)
-                .timeout(1000 * 60 * 10)
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36e")
+                .header("Referer", UrlUtil.getProtocolHost(url))
+                .setReadTimeout(1000 * 60 * 60)
+                .setConnectionTimeout(1000 * 60 * 60)
+                .timeout(1000 * 60 * 60)
                 .executeAsync();
         final File file = response.completeFileNameFromHeader(new File(dir, fileName));
         response.writeBody(file);
