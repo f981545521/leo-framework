@@ -26,15 +26,12 @@ public class Test2 {
         LoggerUtil.disableMediaUtilLogger();
         String file = "E:\\temp111\\rzdf.mp4";
         long mediaDuration = MediaUtil.instance().getMediaDuration(file);
-        long i = 0;
+        long i = 100;
         System.out.println("WEBVTT");
         System.out.println();
         while (i < mediaDuration) {
             long startDuration = i;
             long endDuration = i + 30000;
-            if (startDuration == 0) {
-                startDuration = 100;
-            }
             String s = MediaUtil.formatDuration(startDuration);
             String e = MediaUtil.formatDuration(endDuration);
             i = endDuration;
@@ -43,7 +40,7 @@ public class Test2 {
             }
             System.out.println(s + " --> " + e);
             String imageF = "E:\\temp111\\" + startDuration + ".png";
-            MediaUtil.instance().extractFrame(file, e, imageF);
+            MediaUtil.instance().extractFrame(file, s, imageF);
             System.out.println(startDuration + ".png#xywh=0,0,128,72");
             System.out.println();
         }
