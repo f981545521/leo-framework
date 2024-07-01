@@ -3640,7 +3640,9 @@ function getPosFromEvent(art, event) {
 function timeToSeconds(timeString) {
     const regex1 = /(\d{2}):(\d{2})/;
     const regex2 = /(\d{2}):(\d{2}):(\d{2})/;
-    if (timeString.match(regex1)) {
+    if (timeString.match(regex2)) {
+
+    }else  if (timeString.match(regex1)) {
         timeString = "00:" + timeString;
     }
     const [, hours, minutes, seconds] = timeString.match(regex2);
