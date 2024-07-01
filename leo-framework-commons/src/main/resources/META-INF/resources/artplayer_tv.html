@@ -36,7 +36,8 @@
     var options = {
         container: '.favnow',
         //url: 'http://qiniu.acyou.cn/video/20240617142317%40%E6%95%99%E4%BD%A0%E6%80%8E%E4%B9%88%E6%B7%B7%E7%A4%BE%E4%BC%9A03%E4%B8%AD%E5%9B%BD%E6%9C%80%E7%9C%9F%E5%AE%9E%E7%9A%84%E7%A4%BE%E4%BA%A4%E5%85%B3%E7%B3%BB.mp4',
-        url:'http://dev.acyou.cn/videos/rzdf.mp4',
+        url: 'http://dev.acyou.cn/videos/rzdf.mp4',
+        //url: 'https://v.cdnlz3.com/20240627/24228_3480ea63/2000k/hls/mixed.m3u8',
         //type: 'm3u8',
         volume: 1,//播放器的默认音量
         isLive: false,//使用直播模式，会隐藏进度条和播放时间
@@ -70,9 +71,7 @@
         theme: '#FF9900',
         cssVar: {},
         fastForward: true,
-        layers: [
-
-        ],
+        layers: [],
         //控制层
         controls: [
             {
@@ -84,15 +83,13 @@
                     '<svg t="1719295562442" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6892" width="22" height="22">' +
                     '<path d="M251.806514 885.86163L510.914627 719.700906l244.70225499-155.899017A54.663326 54.663326 0 0 0 778.113702 530.64868L778.113702 866.127578a39.468106 39.468106 0 0 0 78.936211 0l0-705.097707a39.468106 39.468106 0 0 0-78.936211 0L778.113702 493.548661a55.058007 55.058007 0 0 0-22.49682001-33.35055l-244.70225499-155.899017-259.700135-165.766043c-30.193101-19.734053-65.51705499 8.880324-65.51705501 51.900559L185.69743699 833.56639C186.289458 876.783966 221.613413 905.595683 251.806514 885.86163z" p-id="6893" ></path></svg>' +
                     '</i>',
-                style: {
-
-                },
+                style: {},
                 click: function (item, $dom) {
                     //本地播放列表
                     var o = document.querySelector('#searchTvList .active');
                     if (o) {
                         o.nextSibling.click()
-                    }else {
+                    } else {
                         //选集播放列表
                         var t = document.querySelector('#listShow .active');
                         if (t) {
@@ -124,26 +121,26 @@
             '    <path d="M768 102.4H256C143.36 102.4 51.2 194.56 51.2 307.2v409.6c0 112.64 92.16 204.8 204.8 204.8h512c112.64 0 204.8-92.16 204.8-204.8V307.2c0-112.64-92.16-204.8-204.8-204.8z m133.12 614.4c0 71.68-61.44 133.12-133.12 133.12H256c-71.68 0-133.12-61.44-133.12-133.12V307.2c0-71.68 61.44-133.12 133.12-133.12h512c71.68 0 133.12 61.44 133.12 133.12v409.6z"\n' +
             '          fill="white" p-id="4628"></path>\n' +
             '</svg>',
-        custom: "<input type=\"number\" min='0' max='5' step=\"0.1\" value='"+ art.storage.getDefault("forwardSpeed", 3)+"' id='forwardSpeed' style=\"\n" +
+        custom: "<input type=\"number\" min='0' max='5' step=\"0.1\" value='" + art.storage.getDefault("forwardSpeed", 3) + "' id='forwardSpeed' style=\"\n" +
             "    border-radius: 20px;\n" +
             "    text-align: center;\n" +
             "\">",
     });
 
-    $(document).on("blur", "#forwardSpeed", function (){
+    $(document).on("blur", "#forwardSpeed", function () {
         if ($(this).val()) {
             art.storage.set("forwardSpeed", $(this).val())
         }
     })
 
-    function hasNext(){
+    function hasNext() {
         //本地播放列表
         var o = document.querySelector('#searchTvList .active');
         if (o) {
             if (o && o.nextSibling) {
                 return true;
             }
-        }else {
+        } else {
             //选集播放列表
             var t = document.querySelector('#listShow .active');
             if (t && t.nextSibling) {
@@ -154,34 +151,31 @@
     }
 
 
-    function searchTv(){
+    function searchTv() {
         return (art) => {
-            art.controls.add(            {
+            art.controls.add({
                 name: 'searchTv',
                 index: 4,
                 position: 'right',
                 html: '搜剧',
-                style: {
-
-                },
+                style: {},
                 click: function (item, $dom) {
                     var display = art.layers['searchTv'].style.display;
                     if (display && "none" === display) {
                         art.layers['searchTv'].style.display = 'block'
                         art.layers['episodes-list'].style.display = 'none'
-                    }else {
+                    } else {
                         art.layers['searchTv'].style.display = 'none'
                     }
                     return '搜剧';
                 },
-                mounted: ($control)=>{
+                mounted: ($control) => {
                     //console.info($control);
                 }
             });
 
 
-
-            art.layers.add(            {
+            art.layers.add({
                 name: 'searchTv',
                 html: `<div class="yxq-listbox yxq-stting" style="padding: 10px">
     <div class="anthology-wrap">
@@ -213,9 +207,9 @@
                     display: "none"
                 },
                 mounted: function ($el) {
-                    const {  proxy, icons, i18n } = art;
+                    const {proxy, icons, i18n} = art;
                     var searchTvButton = $el.querySelector(".searchTvButton");
-                    proxy(searchTvButton, "click", ()=>{
+                    proxy(searchTvButton, "click", () => {
                         var searchTvList = $el.querySelector("#searchTvList");
                         var searchTvInput = $el.querySelector(".searchTvInput");
                         if (searchTvInput.value) {
@@ -226,20 +220,20 @@
                                 dataType: "json",
                                 timeout: 600000,
                                 //url: "https://search.bfzyapi.com/json-api/?dname=baofeng&key="+searchTvInput.value+"&count=50",
-                                url: "https://search.lziapi.com/json-api/?dname=liangzi&key="+searchTvInput.value+"&count=50",
+                                url: "https://search.lziapi.com/json-api/?dname=liangzi&key=" + searchTvInput.value + "&count=50",
                                 data: null,
                                 async: true,
                                 success: function (res) {
                                     console.log(res)
                                     $(searchTvList).empty();
                                     localStorage.setItem("searchTvList", JSON.stringify(res.posts))
-                                    res.posts.forEach((x,i)=>{
+                                    res.posts.forEach((x, i) => {
                                         var x1 = x.vod_name;
                                         var x2 = x.type_name;
                                         var x3 = x.vod_pic;
                                         var x4 = x.vod_play_url;
                                         var x5 = x.vod_play_url.split("#").length;
-                                        $(searchTvList).append("<a style=\"cursor:pointer;\"  class=\"box-item-line\" data-info=\""+x+"\" data-vod_pic=\""+x3+"\" data-urls=\""+x4+"\">"+x1+"("+x2+")" + x5 +"</a>")
+                                        $(searchTvList).append("<a style=\"cursor:pointer;\"  class=\"box-item-line\" data-info=\"" + x + "\" data-vod_pic=\"" + x3 + "\" data-urls=\"" + x4 + "\">" + x1 + "(" + x2 + ")" + x5 + "</a>")
                                     })
                                     $(searchTvButton).text("搜索");
                                 },
@@ -273,34 +267,31 @@
     }
 
 
-    function episodesListPlugin(){
+    function episodesListPlugin() {
         return (art) => {
-            art.controls.add(            {
+            art.controls.add({
                 name: 'select-episodes',
                 index: 5,
                 position: 'right',
                 html: '选集',
-                style: {
-
-                },
+                style: {},
                 click: function (item, $dom) {
                     var display = art.layers['episodes-list'].style.display;
                     if (display && "none" === display) {
                         art.layers['episodes-list'].style.display = 'block'
                         art.layers['searchTv'].style.display = 'none'
-                    }else {
+                    } else {
                         art.layers['episodes-list'].style.display = 'none'
                     }
                     return '选集';
                 },
-                mounted: ($control)=>{
+                mounted: ($control) => {
                     //console.info($control);
                 }
             });
 
 
-
-            art.layers.add(            {
+            art.layers.add({
                 name: 'episodes-list',
                 html: `<div id="episodesListDiv" class="yxq-listbox yxq-stting">
     <div class="anthology-wrap">
@@ -358,18 +349,18 @@
         }
     }
 
-    $("#listShow").on("click", ".box-item", function (){
+    $("#listShow").on("click", ".box-item", function () {
         $("#listShow .active").removeClass("active")
         var index = $(this).parent().children().index($(this));
         localStorage.setItem("searchTvList_play_index", index)
         var playUrl = $(this).data("playurl");
         $(this).addClass("active")
-        art.plugins['videoTitle'].update("《"+ $("#episodesListDiv .title").text()+"》" + $(this).text())
+        art.plugins['videoTitle'].update("《" + $("#episodesListDiv .title").text() + "》" + $(this).text())
         art.switchUrl(playUrl);
         art.play()
     })
 
-    $("#searchTvList").on("click", ".box-item-line", function (e){
+    $("#searchTvList").on("click", ".box-item-line", function (e) {
         var index = $(this).parent().children().index($(this));
         art.layers['searchTv'].style.display = 'none'
         art.layers['episodes-list'].style.display = 'block'
@@ -383,12 +374,12 @@
         $("#episodesListDiv .vod_pic").attr('src', s['vod_pic'])
         var playUrls = s['vod_play_url'].split("#")
         $("#listShow").empty();
-        playUrls.forEach((x)=>{
+        playUrls.forEach((x) => {
             var split = x.split("$");
-            $("#listShow").append("<a style=\"cursor:pointer;\" data-playUrl='"+split[1]+"' class=\"box-item album-title\"    title=\"第03集\">"+split[0]+"</a>")
+            $("#listShow").append("<a style=\"cursor:pointer;\" data-playUrl='" + split[1] + "' class=\"box-item album-title\"    title=\"第03集\">" + split[0] + "</a>")
         })
     })
-    $("#searchTvList").on("click", ".box-item-localfile", function (e){
+    $("#searchTvList").on("click", ".box-item-localfile", function (e) {
         var i = $(this).data("info");
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
@@ -417,9 +408,9 @@
         $("#episodesListDiv .vod_pic").attr('src', s['vod_pic'])
         var playUrls = s['vod_play_url'].split("#")
         $("#listShow").empty();
-        playUrls.forEach((x)=>{
+        playUrls.forEach((x) => {
             var split = x.split("$");
-            $("#listShow").append("<a style=\"cursor:pointer;\" data-playUrl='"+split[1]+"' class=\"box-item album-title\"    title=\"第03集\">"+split[0]+"</a>")
+            $("#listShow").append("<a style=\"cursor:pointer;\" data-playUrl='" + split[1] + "' class=\"box-item album-title\"    title=\"第03集\">" + split[0] + "</a>")
         })
     }
     //剧集观看
@@ -428,13 +419,14 @@
         var t = $("#listShow").children()[searchTvList_play_index];
         var playUrl = $(t).data("playurl");
         $(t).addClass("active")
-        art.plugins['videoTitle'].update("《"+ $("#episodesListDiv .title").text()+"》" + $(t).text())
+        art.plugins['videoTitle'].update("《" + $("#episodesListDiv .title").text() + "》" + $(t).text())
         art.switchUrl(playUrl);
         art.on('ready', () => {
             art.play();
         });
     }
     var selectFiles = [];
+
     function onInputFileChange() {
         selectFiles = document.getElementById('file').files;
         if (selectFiles && selectFiles.length > 0) {
@@ -452,7 +444,7 @@
                 }
                 $("#searchTvList").append("<a style=\"cursor:pointer;\" title='" + f.name + "' data-info=\"" + i + "\" class='box-item-localfile " + classact + "' >" + f.name + "</a>")
             })
-        }else {
+        } else {
             $("#searchTvList").empty();
         }
     }
@@ -460,13 +452,13 @@
     art.on('video:ended', () => {
         if (hasNext()) {
             art.notice.show = '视频播放结束 3s播放下一集...';
-            setTimeout(()=>{
+            setTimeout(() => {
                 art.notice.show = '视频播放结束 2s播放下一集...';
             }, 1000)
-            setTimeout(()=>{
+            setTimeout(() => {
                 art.notice.show = '视频播放结束 1s播放下一集...';
             }, 2000)
-            setTimeout(()=>{
+            setTimeout(() => {
                 art.controls['next'].click()
             }, 3000)
         }
@@ -480,7 +472,7 @@
                 if (o && o.previousSibling) {
                     o.previousSibling.click()
                 }
-            }else {
+            } else {
                 //选集播放列表
                 var t = document.querySelector('#listShow .active');
                 if (t && t.previousSibling) {
@@ -493,13 +485,13 @@
         }
     });
 
-    function doQuery(text){
+    function doQuery(text) {
         $.ajax({
             cache: true,
             type: "get",
             dataType: "json",
             //url: "https://search.bfzyapi.com/json-api/?dname=baofeng&key=莲花楼&count=50",
-            url: "https://search.lziapi.com/json-api/?dname=liangzi&key="+text+"&count=50",
+            url: "https://search.lziapi.com/json-api/?dname=liangzi&key=" + text + "&count=50",
             data: null,
             async: true,
             success: function (res) {
@@ -511,48 +503,48 @@
         });
     }
 
-/*    function videoTitlePlugin(title) {
-        return (art) => {
-            art.layers.add(            {
-                name: 'videoTitle',
-                html: `<div class="video-title">${title}</div>`,
-                style: {
+    /*    function videoTitlePlugin(title) {
+            return (art) => {
+                art.layers.add(            {
+                    name: 'videoTitle',
+                    html: `<div class="video-title">${title}</div>`,
+                    style: {
 
-                },
-                click: function (...args) {
-                    //console.info('click', args);
-                },
-                mounted: function (...args) {
-                    //console.info('mounted', args);
-                },
-            });
+                    },
+                    click: function (...args) {
+                        //console.info('click', args);
+                    },
+                    mounted: function (...args) {
+                        //console.info('mounted', args);
+                    },
+                });
 
-            function show() {
-                art.layers.videoTitle.style.display = 'block';
-            }
-
-            function hide() {
-                art.layers.videoTitle.style.display = 'none';
-            }
-
-            //art.on('play', hide);
-            //art.on('pause', show);
-
-            art.on('control', (state) => {
-                if (state) {
-                    show()
-                }else {
-                    hide()
+                function show() {
+                    art.layers.videoTitle.style.display = 'block';
                 }
-            });
 
-            return {
-                name: 'videoTitlePlugin',
-                show,
-                hide
-            };
-        }
-    }*/
+                function hide() {
+                    art.layers.videoTitle.style.display = 'none';
+                }
+
+                //art.on('play', hide);
+                //art.on('pause', show);
+
+                art.on('control', (state) => {
+                    if (state) {
+                        show()
+                    }else {
+                        hide()
+                    }
+                });
+
+                return {
+                    name: 'videoTitlePlugin',
+                    show,
+                    hide
+                };
+            }
+        }*/
 
     //const longPressDuration = 500;
     //var beforeTime = new Date().getTime();
@@ -571,9 +563,9 @@
     //            beforeTime = new Date().getTime();
     //        }
     //    }
-//
+    //
     //});
-//
+    //
     //document.addEventListener('keyup', function (event) {
     //    if (event.keyCode === 39) {
     //        var now = new Date().getTime();
@@ -588,7 +580,6 @@
     //        keyStatus = 0;
     //    }
     //});
-
 
 
     //art.on('video:ratechange', () => {

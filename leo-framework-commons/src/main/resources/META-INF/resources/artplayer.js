@@ -198,7 +198,8 @@ class Artplayer extends (0, _emitterDefault.default) {
         this.id = ++id;
         const mergeOption = _utils.mergeDeep(Artplayer.option, option);
         mergeOption.customType = {
-            m3u8: Artplayer.playM3u8
+            m3u8: Artplayer.playM3u8,
+            m3u8_cut: Artplayer.playM3u8Cut
         }
         Artplayer.PLAYBACK_RATE = mergeOption.playbackRateList;
         mergeOption.container = option.container;
@@ -406,6 +407,19 @@ Artplayer.playM3u8 = function playM3u8(video, url, art) {
         hls.attachMedia(video);
         art.hls = hls;
         art.on('destroy', () => hls.destroy());
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+    } else {
+        art.notice.show = 'Unsupported playback format: m3u8';
+    }
+}
+Artplayer.playM3u8Cut = function playM3u8Cut(video, url, art) {
+    if (Hls.isSupported()) {
+        const hlsCut = new Hls();
+        hlsCut.loadSource(url);
+        hlsCut.attachMedia(video);
+        art.hlsCut = hlsCut;
+        art.on('destroy', () => hlsCut.destroy());
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = url;
     } else {
@@ -1599,6 +1613,9 @@ class Template {
             <video class="art-video">
               <track default kind="metadata" src=""></track>
             </video>
+            <video class="art-video-cut" id="art-video-cut" crossorigin="Anonymous" style="display: none;" autoplay="false" muted="true">
+              <track default kind="metadata" src=""></track>
+            </video>
             <div class="art-poster"></div>
             <div class="art-subtitle"></div>
             <div class="art-danmuku"></div>
@@ -1710,6 +1727,7 @@ class Template {
         if (!option.useSSR) this.$container.innerHTML = Template.html;
         this.$player = this.query(".art-video-player");
         this.$video = this.query(".art-video");
+        this.$videoCut = this.query(".art-video-cut");
         this.$track = this.query("track");
         this.$poster = this.query(".art-poster");
         this.$subtitle = this.query(".art-subtitle");
@@ -1931,7 +1949,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>urlMix);
 var _utils = require("../utils");
 function urlMix(art) {
-    const { option, template: { $video } } = art;
+    const { option, template: { $video, $videoCut } } = art;
     (0, _utils.def)(art, "url", {
         get () {
             return $video.src;
@@ -1941,13 +1959,16 @@ function urlMix(art) {
                 const oldUrl = art.url;
                 const typeName = option.type || (0, _utils.getExt)(newUrl);
                 const typeCallback = option.customType[typeName];
+                const typeCallbackCut = option.customType[typeName + "_cut"];
                 if (typeName && typeCallback) {
                     await (0, _utils.sleep)();
                     art.loading.show = true;
                     typeCallback.call(art, $video, newUrl, art);
+                    typeCallbackCut.call(art, $videoCut, newUrl, art);
                 } else {
                     URL.revokeObjectURL(oldUrl);
                     $video.src = newUrl;
+                    $videoCut.src = newUrl;
                 }
                 if (oldUrl !== art.url) {
                     art.option.url = newUrl;
@@ -3613,6 +3634,17 @@ function getPosFromEvent(art, event) {
         percentage
     };
 }
+
+function timeToSeconds(timeString) {
+    const regex1 = /(\d{2}):(\d{2})/;
+    const regex2 = /(\d{2}):(\d{2}):(\d{2})/;
+    if (timeString.match(regex1)) {
+        timeString = "00:" + timeString;
+    }
+    const [, hours, minutes, seconds] = timeString.match(regex2);
+    return Number(hours) * 3600 + Number(minutes) * 60 + Number(seconds);
+}
+
 function setCurrentTime(art, event) {
     if (art.isRotate) {
         const percentage = event.touches[0].clientY / art.height;
@@ -3639,6 +3671,14 @@ function progress(options) {
                     <div class="art-progress-indicator"></div>
                     <div class="art-progress-tip"></div>
                 </div>
+                <div class="art-control art-control-thumbnails" data-index="20" style="
+                            width: 160px;
+                            height: 90px;
+                            left: 275px;
+                            display: none;
+                        ">
+                    <img id="thumbnail_container" class="sharkplayer-bar-cut-img" src="">
+                </div>
             `,
             mounted: ($control)=>{
                 let tipTimer = null;
@@ -3649,6 +3689,7 @@ function progress(options) {
                 const $highlight = (0, _utils.query)(".art-progress-highlight", $control);
                 const $indicator = (0, _utils.query)(".art-progress-indicator", $control);
                 const $tip = (0, _utils.query)(".art-progress-tip", $control);
+                const $thumbnails = (0, _utils.query)(".art-control-thumbnails", $control);
                 if (icons.indicator) (0, _utils.append)($indicator, icons.indicator);
                 else (0, _utils.setStyle)($indicator, "backgroundColor", "var(--art-theme)");
                 function showHighlight(event) {
@@ -3668,6 +3709,31 @@ function progress(options) {
                     else if (width > $control.clientWidth - tipWidth / 2) (0, _utils.setStyle)($tip, "left", `${$control.clientWidth - tipWidth}px`);
                     else (0, _utils.setStyle)($tip, "left", `${width - tipWidth / 2}px`);
                 }
+
+                function generateThumbnail(event, touch) {
+                    const { width, time } = touch || getPosFromEvent(art, event);
+                    var video = document.getElementById("art-video-cut");
+                    video.currentTime = timeToSeconds(time);
+                    var canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth/2;
+                    canvas.height = video.videoHeight/2;
+                    var context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    var dataURL = canvas.toDataURL();
+
+                    const tipWidth = $tip.clientWidth;
+                    if (width <= tipWidth / 2) {
+                        (0, _utils.setStyle)($thumbnails, "left", 0);
+                    }
+                    else if (width > $control.clientWidth - tipWidth / 2) {
+                        (0, _utils.setStyle)($thumbnails, "left", `${($control.clientWidth - tipWidth)-105}px`);
+                    }
+                    else {
+                        (0, _utils.setStyle)($thumbnails, "left", `${(width - tipWidth / 2)-60}px`);
+                    }
+                    $thumbnails.querySelector('img').setAttribute('src', dataURL);
+                }
+
                 function updateHighlight() {
                     $highlight.innerText = "";
                     for(let index = 0; index < option.highlight.length; index++){
@@ -3687,15 +3753,21 @@ function progress(options) {
                     }
                     if (isMobileDroging) {
                         (0, _utils.setStyle)($tip, "display", "flex");
+                        (0, _utils.setStyle)($thumbnails, "display", "flex");
                         const width = $control.clientWidth * percentage;
                         const time = (0, _utils.secondToTime)(percentage * art.duration);
                         showTime(event, {
                             width,
                             time
                         });
+                        generateThumbnail(event, {
+                            width,
+                            time
+                        });
                         clearTimeout(tipTimer);
                         tipTimer = setTimeout(()=>{
                             (0, _utils.setStyle)($tip, "display", "none");
+                            (0, _utils.setStyle)($thumbnails, "display", "none");
                         }, 500);
                     }
                 }
@@ -3722,11 +3794,17 @@ function progress(options) {
                         const { percentage } = getPosFromEvent(art, event);
                         art.emit("setBar", "hover", percentage, event);
                         (0, _utils.setStyle)($tip, "display", "flex");
-                        if ((0, _utils.includeFromEvent)(event, $highlight)) showHighlight(event);
-                        else showTime(event);
+                        (0, _utils.setStyle)($thumbnails, "display", "flex");
+                        if ((0, _utils.includeFromEvent)(event, $highlight)) {
+                            showHighlight(event);
+                        } else {
+                            showTime(event);
+                            generateThumbnail(event)
+                        }
                     });
                     proxy($control, "mouseleave", (event)=>{
                         (0, _utils.setStyle)($tip, "display", "none");
+                        (0, _utils.setStyle)($thumbnails, "display", "none");
                         art.emit("setBar", "hover", 0, event);
                     });
                     proxy($control, "mousedown", (event)=>{
