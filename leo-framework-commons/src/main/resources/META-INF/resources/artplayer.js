@@ -197,9 +197,11 @@ class Artplayer extends (0, _emitterDefault.default) {
         super();
         this.id = ++id;
         const mergeOption = _utils.mergeDeep(Artplayer.option, option);
-        mergeOption.customType = {
-            m3u8: Artplayer.playM3u8,
-            m3u8_cut: Artplayer.playM3u8Cut
+        if (mergeOption.url.endsWith("m3u8")) {
+            mergeOption.customType = {
+                m3u8: Artplayer.playM3u8,
+                m3u8_cut: Artplayer.playM3u8Cut
+            }
         }
         Artplayer.PLAYBACK_RATE = mergeOption.playbackRateList;
         mergeOption.container = option.container;
@@ -3675,6 +3677,9 @@ function progress(options) {
                             width: 160px;
                             height: 90px;
                             left: 275px;
+                            text-align: center;
+                            justify-content: center;
+                            background: rgb(0 0 0 / 0%);
                             display: none;
                         ">
                     <img id="thumbnail_container" class="sharkplayer-bar-cut-img" src="">
@@ -3711,6 +3716,7 @@ function progress(options) {
                 }
 
                 function generateThumbnail(event, touch) {
+                    $thumbnails.querySelector('img').setAttribute('src', "");
                     const { width, time } = touch || getPosFromEvent(art, event);
                     var video = document.getElementById("art-video-cut");
                     video.currentTime = timeToSeconds(time);
