@@ -3692,6 +3692,7 @@ function progress(options) {
                             text-align: center;
                             justify-content: center;
                             background: rgb(0 0 0 / 0%);
+                            border: 1px solid rgb(100 100 100 / 50%);
                             display: none;
                         ">
                     <img id="thumbnail_container" class="sharkplayer-bar-cut-img" src="">
@@ -3733,7 +3734,7 @@ function progress(options) {
                     var video = document.getElementById("art-video-cut");
                     const {second, time, width, percentage } = getPosFromEvent(art, event);
                     if (video.duration && time !== current_cuttime) {
-                        $thumbnails.querySelector('img').setAttribute('src', "http://dev.acyou.cn/resources/loading.gif");
+                        $thumbnails.querySelector('img').setAttribute('src', "");
                         current_cuttime = time;
                         video.currentTime = timeToSeconds(time);
 
