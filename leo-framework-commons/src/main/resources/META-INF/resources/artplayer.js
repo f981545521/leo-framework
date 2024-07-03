@@ -2152,6 +2152,9 @@ function switchMix(art) {
                     m3u8_cut: Artplayer.playM3u8Cut
                 }
             }
+            if (url.startWith("https://")) {
+                url = url.replaceAll("https://", "http://")
+            }
             art.url = url;
             var playbackRate = storage.getDefault("playbackRate", 1);
             art.notice.show = "";
