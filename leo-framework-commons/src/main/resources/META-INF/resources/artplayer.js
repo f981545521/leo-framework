@@ -1615,7 +1615,7 @@ class Template {
             <video class="art-video">
               <track default kind="metadata" src=""></track>
             </video>
-            <video class="art-video-cut" id="art-video-cut" crossorigin="Anonymous" style="display: none;" autoplay="false" muted="true">
+            <video class="art-video-cut" id="art-video-cut" crossorigin="Anonymous" style="width: 0px;" muted="true">
               <track default kind="metadata" src=""></track>
             </video>
             <div class="art-poster"></div>
@@ -3656,11 +3656,15 @@ function setCurrentTime(art, event) {
         art.emit("setBar", "played", percentage, event);
         art.seek = second;
     } else {
-        const { second, percentage } = getPosFromEvent(art, event);
+        const {                             second,
+            time,
+            width,
+            percentage } = getPosFromEvent(art, event);
         art.emit("setBar", "played", percentage, event);
-        art.seek = second;
+        art.seek = timeToSeconds(time);
     }
 }
+
 function progress(options) {
     return (art)=>{
         const { icons, option, proxy } = art;
@@ -3685,11 +3689,13 @@ function progress(options) {
                             display: none;
                         ">
                     <img id="thumbnail_container" class="sharkplayer-bar-cut-img" src="">
+                    <!--<div class="red-dot">🚂🚂🚂</div>-->
                 </div>
             `,
             mounted: ($control)=>{
                 let tipTimer = null;
                 let isDroging = false;
+                let current_cuttime = "";
                 const $hover = (0, _utils.query)(".art-progress-hover", $control);
                 const $loaded = (0, _utils.query)(".art-progress-loaded", $control);
                 const $played = (0, _utils.query)(".art-progress-played", $control);
@@ -3718,28 +3724,45 @@ function progress(options) {
                 }
 
                 function generateThumbnail(event, touch) {
-                    $thumbnails.querySelector('img').setAttribute('src', "");
-                    const { width, time } = touch || getPosFromEvent(art, event);
                     var video = document.getElementById("art-video-cut");
-                    video.currentTime = timeToSeconds(time);
-                    var canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth/2;
-                    canvas.height = video.videoHeight/2;
-                    var context = canvas.getContext('2d');
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    var dataURL = canvas.toDataURL();
+                    const {second, time, width, percentage } = getPosFromEvent(art, event);
+                    if (video.duration && time !== current_cuttime) {
+                        $thumbnails.querySelector('img').setAttribute('src', "http://dev.acyou.cn/resources/loading.gif");
+                        current_cuttime = time;
+                        video.currentTime = timeToSeconds(time);
 
-                    const tipWidth = $tip.clientWidth;
-                    if (width <= tipWidth / 2) {
-                        (0, _utils.setStyle)($thumbnails, "left", 0);
+                        const tipWidth = $tip.clientWidth;
+                        if (width <= tipWidth / 2) {
+                            (0, _utils.setStyle)($thumbnails, "left", 0);
+                        }
+                        else if (width > $control.clientWidth - tipWidth / 2) {
+                            (0, _utils.setStyle)($thumbnails, "left", `${($control.clientWidth - tipWidth)-105}px`);
+                        }
+                        else {
+                            (0, _utils.setStyle)($thumbnails, "left", `${(width - tipWidth / 2)-60}px`);
+                        }
+
+                        takeVideoSnapshot(video, function(snapshot) {
+                            $thumbnails.querySelector('img').setAttribute('src', snapshot);
+                            current_cuttime = "";
+                        });
                     }
-                    else if (width > $control.clientWidth - tipWidth / 2) {
-                        (0, _utils.setStyle)($thumbnails, "left", `${($control.clientWidth - tipWidth)-105}px`);
+                }
+
+                function takeVideoSnapshot(videoElement, callback) {
+                    if (videoElement.readyState >= 2) { // 确保视频已加载足够的数据
+                        var canvas = document.createElement('canvas');
+                        canvas.width = videoElement.videoWidth/10;
+                        canvas.height = videoElement.videoHeight/10;
+                        var ctx = canvas.getContext('2d');
+                        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                        callback(canvas.toDataURL('image/png'));
+                    } else {
+                        // 如果视频未准备好，则稍后重试
+                        setTimeout(function() {
+                            takeVideoSnapshot(videoElement, callback);
+                        }, 100);
                     }
-                    else {
-                        (0, _utils.setStyle)($thumbnails, "left", `${(width - tipWidth / 2)-60}px`);
-                    }
-                    $thumbnails.querySelector('img').setAttribute('src', dataURL);
                 }
 
                 function updateHighlight() {
