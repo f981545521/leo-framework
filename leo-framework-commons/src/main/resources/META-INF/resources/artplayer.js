@@ -2146,6 +2146,12 @@ function switchMix(art) {
             if (url === art.url) return;
             const { playing, aspectRatio,storage } = art;
             art.pause();
+            if (url.endsWith("m3u8")) {
+                art.option.customType = {
+                    m3u8: Artplayer.playM3u8,
+                    m3u8_cut: Artplayer.playM3u8Cut
+                }
+            }
             art.url = url;
             var playbackRate = storage.getDefault("playbackRate", 1);
             art.notice.show = "";
