@@ -2152,7 +2152,7 @@ function switchMix(art) {
                     m3u8_cut: Artplayer.playM3u8Cut
                 }
             }
-            if (url.startWith("https://")) {
+            if (url.startsWith("https://")) {
                 url = url.replaceAll("https://", "http://")
             }
             art.url = url;
