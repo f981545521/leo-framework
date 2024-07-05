@@ -4346,7 +4346,7 @@ class Info extends (0, _componentDefault.default) {
         }
 
         function renderFps(fps) {
-            console.log("画面帧率：", fps);
+            //console.log("画面帧率：", fps);
             $playerFrameRate[0].innerText = fps + " fps";
         }
 
