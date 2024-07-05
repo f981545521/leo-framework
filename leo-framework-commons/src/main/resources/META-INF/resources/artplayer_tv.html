@@ -609,6 +609,62 @@
     //    art.playbackRate = 2;
     //    console.info(art.playbackRate);
     //});
+
+
+    /**
+     * https://bi.cool/bi/63jgqKX
+     * @type {number}
+     */
+    //let last = Date.now(), ticks = 0, timer = null;
+    //function rafLoop() {
+    //    ticks += 1;
+    //    if (ticks >= 30) {
+    //        const now = Date.now();
+    //        const diff = now - last
+    //        const fps = Math.round(1000 / (diff / ticks));
+    //        last = now
+    //        ticks = 0
+    //        renderFps(fps);
+    //    }
+    //    timer = requestAnimationFrame(rafLoop);
+    //}
+//
+    //function renderFps(fps) {
+    //    console.log("画面帧率：", fps);
+    //}
+//
+    //function startLoop(){
+    //    rafLoop();
+    //}
+//
+    //function stopLoop(){
+    //    cancelAnimationFrame(timer)
+    //}
+
+
+
+    // 更新网速的函数
+    var video = $("video")[0];
+    function updateLoadingSpeed() {
+        if (video.readyState > 0) {
+            var playedRanges = video.played;//返回表示音频/视频已播放部分的 TimeRanges 对象
+            if (video.buffered) {// 返回表示音频/视频已缓冲部分的 TimeRanges 对象
+                for (let i = 0; i < video.buffered.length; i++) {
+                    var bufferedStart = video.buffered.start(i); // 获取已缓冲的结束时间
+                    var bufferedEnd = video.buffered.end(i); // 获取已缓冲的结束时间
+                    console.log("网络状态", video.networkState, "缓存片段(", i, ")", "[", bufferedStart, "~", bufferedEnd, "]")
+                }
+            }
+            //var bufferedEnd = video.buffered.end(0); // 获取已缓冲的结束时间
+            //var currentTime = video.currentTime; // 获取当前播放时间
+            //var loadingSpeed = (bufferedEnd - currentTime) * 1000; // 计算网速（字节/秒）
+            //console.log('Loading Speed: ' + (loadingSpeed).toFixed(2) + ' byte/sec')
+        }
+    }
+
+    function startNetWorkSpeed() {
+        setInterval(updateLoadingSpeed, 1000);
+    }
 </script>
 </body>
 </html>
