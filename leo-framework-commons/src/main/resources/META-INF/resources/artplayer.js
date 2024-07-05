@@ -1685,6 +1685,10 @@ class Template {
                   <div class="art-info-content">${"5.1.6"}</div>
                 </div>
                 <div class="art-info-item">
+                  <div class="art-info-title">播放器帧率:</div>
+                  <div class="art-info-content" id="playerFrameRate"></div>
+                </div>
+                <div class="art-info-item">
                   <div class="art-info-title">视频地址:</div>
                   <div class="art-info-content" data-video="src"></div>
                 </div>
@@ -4259,6 +4263,7 @@ function info(option) {
             html: art.i18n.get("Video Info"),
             click: (contextmenu)=>{
                 art.info.show = true;
+                art.info.startLoop();
                 contextmenu.show = false;
             }
         });
@@ -4305,9 +4310,11 @@ class Info extends (0, _componentDefault.default) {
         const { proxy, constructor, template: { $infoPanel, $infoClose, $video } } = this.art;
         proxy($infoClose, "click", ()=>{
             this.show = false;
+            this.stopLoop();
         });
         let timer = null;
         const $types = (0, _utils.queryAll)("[data-video]", $infoPanel) || [];
+        const $playerFrameRate = (0, _utils.queryAll)("#playerFrameRate", $infoPanel) || [];
         this.art.on("destroy", ()=>clearTimeout(timer));
         function loop() {
             for(let index = 0; index < $types.length; index++){
@@ -4319,6 +4326,37 @@ class Info extends (0, _componentDefault.default) {
             timer = setTimeout(loop, constructor.INFO_LOOP_TIME);
         }
         loop();
+
+        /**
+         * https://bi.cool/bi/63jgqKX
+         * @type {number}
+         */
+        let last = Date.now(), ticks = 0, frameRateTimer = null;
+        function rafLoop() {
+            ticks += 1;
+            if (ticks >= 30) {
+                const now = Date.now();
+                const diff = now - last
+                const fps = Math.round(1000 / (diff / ticks));
+                last = now
+                ticks = 0
+                renderFps(fps);
+            }
+            frameRateTimer = requestAnimationFrame(rafLoop);
+        }
+
+        function renderFps(fps) {
+            console.log("画面帧率：", fps);
+            $playerFrameRate[0].innerText = fps + " fps";
+        }
+
+        this.startLoop = function startLoop(){
+            rafLoop();
+        }
+
+        this.stopLoop = function stopLoop(){
+            cancelAnimationFrame(frameRateTimer)
+        }
     }
 }
 exports.default = Info;
