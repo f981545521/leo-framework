@@ -197,7 +197,7 @@ class Artplayer extends (0, _emitterDefault.default) {
         super();
         this.id = ++id;
         const mergeOption = _utils.mergeDeep(Artplayer.option, option);
-        if (mergeOption.url.endsWith("m3u8")) {
+        if (mergeOption.url && mergeOption.url.endsWith("m3u8")) {
             mergeOption.customType = {
                 m3u8: Artplayer.playM3u8,
                 m3u8_cut: Artplayer.playM3u8Cut
@@ -2150,7 +2150,7 @@ function switchMix(art) {
             if (url === art.url) return;
             const { playing, aspectRatio,storage } = art;
             art.pause();
-            if (url.endsWith("m3u8")) {
+            if (url && url.endsWith("m3u8")) {
                 art.option.customType = {
                     m3u8: Artplayer.playM3u8,
                     m3u8_cut: Artplayer.playM3u8Cut
@@ -5865,11 +5865,20 @@ function autoPlayback(art) {
         }
         const times = storage.get("times") || {};
         const currentTime = times[art.option.id || art.option.url];
+        let isPlayEnd = false;
+        if ((currentTime + 1) > video.duration) {
+            isPlayEnd = true;
+        }
         if (currentTime && currentTime >= constructor.AUTO_PLAYBACK_MIN) {
             (0, _utils.append)($close, icons.close);
             (0, _utils.setStyle)($autoPlayback, "display", "flex");
-            $last.innerText = `${i18n.get("Last Seen")} ${(0, _utils.secondToTime)(currentTime)}`;
-            $jump.innerText = i18n.get("Jump Play");
+            if (isPlayEnd) {
+                $last.innerText = `播放结束`;
+                art.pause();
+            }else {
+                $last.innerText = `${i18n.get("Last Seen")} ${(0, _utils.secondToTime)(currentTime)}`;
+                $jump.innerText = i18n.get("Jump Play");
+            }
             proxy($close, "click", ()=>{
                 (0, _utils.setStyle)($autoPlayback, "display", "none");
             });
@@ -5885,12 +5894,14 @@ function autoPlayback(art) {
                 }, constructor.AUTO_PLAYBACK_TIMEOUT);
             });
 
-            setTimeout(()=>{
-                $jump.click()
-                art.on('ready', () => {
-                    art.play();
-                });
-            }, 2000)
+            if (!isPlayEnd) {
+                setTimeout(()=>{
+                    $jump.click()
+                    art.on('ready', () => {
+                        art.play();
+                    });
+                }, 2000)
+            }
         }
     });
     return {
