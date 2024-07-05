@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>如何使用 JavaScript 获取当前页面帧率 FPS</title>
+
+    <style>
+        body {
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<p>当前FPS：<span id="fps"></span></p>
+
+
+<!-- 测试动画 -->
+<div class=demo>
+    <canvas id=canvas width=300 height=150></canvas>
+    <div style=font-size:14px;color:#777>
+        （放个测试动画，使帧率产生波动方便查看效果，点击下方按钮可调节当前动画性能开销）
+    </div>
+    <div>
+        <button onclick=updatePointCount(500)>连接点 +500</button>
+        <button onclick=updatePointCount(-500)>连接点 -500</button>
+    </div>
+    <script>
+        var c = document.getElementById("canvas"),
+            ctx = c.getContext("2d"),
+            points = [],
+            pointCount = 500,
+            point = function (t, i, o, n) {
+                this.x = t, this.y = i, this.vx = o || 1, this.vy = n || 1
+            };
+
+        function updatePointCount(t) {
+            (pointCount += t) < 0 && (pointCount = 0), init()
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, c.width, c.height);
+            for (var t = 0, i = points.length; t < i; t++) points[t].update();
+            window.requestAnimationFrame(loop)
+        }
+
+        function init() {
+            points = [];
+            for (var t = 0; t < pointCount; t++) addPoint()
+        }
+
+        function addPoint() {
+            var t = [Math.floor(Math.random() * c.width), Math.floor(Math.random() * c.height)],
+                i = new point(t[0], t[1], Math.floor(2 * Math.random() - 1), Math.floor(2 * Math.random() - 1));
+            points.push(i)
+        }
+
+        function iToX(t, i) {
+            return t % (4 * i) / 4
+        }
+
+        function iToY(t, i) {
+            return Math.floor(t / (4 * i))
+        }
+
+        function coordsToI(t, i, o) {
+            return 4 * (mask.width * i + t)
+        }
+
+        point.prototype.update = function () {
+            ctx.beginPath(), ctx.fillStyle = "#95a5a6", ctx.arc(this.x, this.y, 1, 0, 2 * Math.PI), ctx.fill(), ctx.closePath(), (this.x + this.vx >= c.width || this.x + this.vx < 0) && (this.vx *= -1, this.x += 2 * this.vx), (this.y + this.vy >= c.height || this.y + this.vy < 0) && (this.vy *= -1, this.y += 2 * this.vy);
+            for (var t = 0, i = points.length; t < i; t++)
+                if (points[t] !== this) {
+                    var o = Math.sqrt(Math.pow(this.x - points[t].x, 2) + Math.pow(this.y - points[t].y, 2));
+                    o < 5 && (ctx.lineWidth = .2, ctx.beginPath(), ctx.moveTo(this.x, this.y), ctx.lineTo(points[t].x, points[t].y), ctx.stroke()), o < 20 && (ctx.lineWidth = .1, ctx.beginPath(), ctx.moveTo(this.x, this.y), ctx.lineTo(points[t].x, points[t].y), ctx.stroke())
+                }
+            this.x += this.vx, this.y += this.vy
+        }, loop(), init()
+
+
+        let last = Date.now();
+        let ticks = 0;
+
+        //循环调用 requestAnimationFrame
+        function rafLoop(timestamp) {
+            ticks += 1;
+            //每30帧统计一次帧率
+            if (ticks >= 30) {
+                const now = Date.now();
+                const diff = now - last
+                const fps = Math.round(1000 / (diff / ticks));
+                last = now
+                ticks = 0
+                renderFps(fps);// 刷新帧率数值
+            }
+            requestAnimationFrame(rafLoop);
+        }
+
+        let fpsEl = document.getElementById('fps');
+
+        //显示帧率数值到界面上
+        function renderFps(fps) {
+            fpsEl.textContent = fps;
+        }
+
+        //开始执行
+        rafLoop();
+    </script>
+</div>
+</body>
+</html>
