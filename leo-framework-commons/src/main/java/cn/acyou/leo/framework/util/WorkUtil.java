@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.util;
 
+import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.util.function.CallTask;
@@ -139,6 +140,56 @@ public class WorkUtil {
                 trySleep(2000);
             }
         }
+    }
+
+    /**
+     * 重试工作
+     *
+     * @param times 次
+     * @param task  任务
+     */
+    public static void doRetryWorkGradually(int times, Task task) {
+        doRetryWorkGradually(1, times, task);
+    }
+    /**
+     * 重试工作
+     *
+     * @param times 次
+     * @param task  任务
+     */
+    private static void doRetryWorkGradually(int currentTimes, int times, Task task) {
+        AsyncManager.schedule(()->{
+            if (currentTimes <= times) {
+                try {
+                    task.run();
+                } catch (Exception e) {
+                    log.error("doRetryWorkGradually 执行任务出错", e);
+                    doRetryWorkGradually(currentTimes + 1, times, task);
+                }
+            }
+        }, getGraduallyRule(currentTimes), TimeUnit.SECONDS);
+    }
+
+    private static int getGraduallyRule(int currentTimes){
+        if (currentTimes <= 1) {
+            return 1;
+        }
+        if (currentTimes == 2) {
+            return 15;
+        }
+        if (currentTimes == 3) {
+            return 15;
+        }
+        if (currentTimes == 4) {
+            return 30;
+        }
+        if (currentTimes == 5) {
+            return 3*60;
+        }
+        if (currentTimes == 6) {
+            return 10*60;
+        }
+        return 10*60;
     }
 
     public static void watch(Task task) {

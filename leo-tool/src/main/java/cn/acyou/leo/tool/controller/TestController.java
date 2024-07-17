@@ -351,4 +351,13 @@ public class TestController {
         });
         return deferredResult;
     }
+
+    @ApiOperation("测试方法")
+    @GetMapping("testDoRetryWorkGradually")
+    public Result<Void> testDoRetryWorkGradually() {
+        WorkUtil.doRetryWorkGradually(10, ()->{
+            int i = 10/0;
+        });
+        return Result.success();
+    }
 }
