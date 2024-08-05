@@ -13,6 +13,8 @@ import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DictService;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -179,6 +181,14 @@ public class ApplicationTests {
     }
 
     @Test
+    public void test345(){
+        List<LinkedHashMap<String, Object>> linkedHashMaps = executeMapper.executeQuerySql("select * from student");
+        LinkedHashMap<String, Object> stringObjectLinkedHashMap = linkedHashMaps.get(0);
+        stringObjectLinkedHashMap.put("序号", 1);
+        System.out.println("ok");
+    }
+
+    @Test
     public void test12342V2() {
         List<LinkedHashMap<String, Object>> linkedHashMaps = executeMapper.executeQuerySql("SHOW COLUMNS FROM student");
         List<String> fields = linkedHashMaps.stream().map(x -> x.get("Field").toString()).collect(Collectors.toList());
@@ -238,6 +248,48 @@ public class ApplicationTests {
         File file = FileUtil.newFile("D:\\poi\\112344544.xlsx");
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         ExcelUtil.exportExcel(fileOutputStream, new ArrayList<>(linkedHashMaps), "列表");
+    }
+    @Test
+    public void test123424Export() throws Exception{
+        File file = FileUtil.newFile("D:\\poi\\1123445443_1.xlsx");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        Map<String, List<Map<String, Object>>> dataMap = new LinkedHashMap<>();
+        List<Map<String, Object>> data1 = new ArrayList<>();
+        Map<String, Object> datamap = new LinkedHashMap<>();
+        datamap.put("序号", "1");
+        datamap.put("姓名", "1");
+        datamap.put("年龄", "1");
+        data1.add(datamap);
+        dataMap.put("首页1", data1);
+
+        List<Map<String, Object>> data2 = new ArrayList<>();
+        Map<String, Object> datamap2 = new LinkedHashMap<>();
+        datamap2.put("序号", "1");
+        datamap2.put("姓名", "1");
+        datamap2.put("年龄", "1");
+        data2.add(datamap2);
+        dataMap.put("首页2", data2);
+        //ExcelUtil.exportExcelMultiSheet(fileOutputStream, dataMap);
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("首页1");
+        ExcelUtil.createBuilder(workbook, sheet)
+                .createRow(0, (short) 400)   //标题行（一级） 行高400
+                .createData("0-0-0-0(序号)[247,176,127||true]")
+                .createData("0-0-1-1(姓名)[247,176,127||true]")
+                .createData("0-0-2-2(年龄)[247,176,127||true]")
+                .writeData(1, data1);
+
+        XSSFSheet sheet2 = workbook.createSheet("首页2");
+        ExcelUtil.createBuilder(workbook, sheet2)
+                .createRow(0, (short) 400)   //标题行（一级） 行高400
+                .createData("0-0-0-0(序号)[247,176,127||true]")
+                .createData("0-0-1-1(姓名)[247,176,127||true]")
+                .createData("0-0-2-2(年龄)[247,176,127||true]")
+                .writeData(1, data2);
+
+        workbook.write(new FileOutputStream(file));
+
     }
 
 
