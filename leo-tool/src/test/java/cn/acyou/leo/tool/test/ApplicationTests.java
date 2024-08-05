@@ -251,7 +251,7 @@ public class ApplicationTests {
     }
     @Test
     public void test123424Export() throws Exception{
-        File file = FileUtil.newFile("D:\\poi\\1123445443_1.xlsx");
+        File file = FileUtil.newFile("D:\\poi\\1123445443_3.xlsx");
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         Map<String, List<Map<String, Object>>> dataMap = new LinkedHashMap<>();
         List<Map<String, Object>> data1 = new ArrayList<>();
@@ -272,20 +272,18 @@ public class ApplicationTests {
         //ExcelUtil.exportExcelMultiSheet(fileOutputStream, dataMap);
 
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("首页1");
-        ExcelUtil.createBuilder(workbook, sheet)
+        ExcelUtil.createBuilder(workbook, "首页1")
                 .createRow(0, (short) 400)   //标题行（一级） 行高400
-                .createData("0-0-0-0(序号)[247,176,127||true]")
-                .createData("0-0-1-1(姓名)[247,176,127||true]")
-                .createData("0-0-2-2(年龄)[247,176,127||true]")
+                .createData("0-0-0-0(序号)[247,176,127||false]")
+                .createData("0-0-1-1(姓名)[247,176,127||false]")
+                .createData("0-0-2-2(年龄)[247,176,127||false]")
                 .writeData(1, data1);
 
-        XSSFSheet sheet2 = workbook.createSheet("首页2");
-        ExcelUtil.createBuilder(workbook, sheet2)
+        ExcelUtil.createBuilder(workbook, "首页2")
                 .createRow(0, (short) 400)   //标题行（一级） 行高400
-                .createData("0-0-0-0(序号)[247,176,127||true]")
-                .createData("0-0-1-1(姓名)[247,176,127||true]")
-                .createData("0-0-2-2(年龄)[247,176,127||true]")
+                .createData("0-0-0-0(序号)[247,176,127||false]")
+                .createData("0-0-1-1(姓名)[247,176,127||false]")
+                .createData("0-0-2-2(年龄)[247,176,127||false]")
                 .writeData(1, data2);
 
         workbook.write(new FileOutputStream(file));

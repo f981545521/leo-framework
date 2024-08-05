@@ -462,6 +462,10 @@ public class ExcelUtil {
         ExcelUtil.mergedRegion(sheet, new CellRangeAddress(Integer.parseInt(index0), Integer.parseInt(index1), Integer.parseInt(index2), Integer.parseInt(index3)));
     }
 
+    public static HeaderCreate createBuilder(XSSFWorkbook workbook, String sheetName){
+        return new HeaderCreate(workbook, workbook.createSheet(sheetName));
+    }
+
     public static HeaderCreate createBuilder(XSSFWorkbook workbook, XSSFSheet sheet){
         return new HeaderCreate(workbook, sheet);
     }
