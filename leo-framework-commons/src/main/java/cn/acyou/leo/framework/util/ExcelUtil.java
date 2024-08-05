@@ -93,11 +93,21 @@ public class ExcelUtil {
      * @throws IOException
      */
     public static void exportExcel(HttpServletResponse response, List<Map<String, Object>> dataList, String sheetName) throws IOException {
+        setResponseExcel(response, sheetName);
+        exportExcel(response.getOutputStream(), dataList, sheetName);
+    }
+
+    /**
+     * 设置下载Excel响应头
+     * @param response 响应
+     * @param fileName 文件名
+     * @throws IOException
+     */
+    public static void setResponseExcel(HttpServletResponse response, String fileName) throws IOException{
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
-        String headerStr = "attachment;filename=" + sheetName + ".xlsx";
+        String headerStr = "attachment;filename=" + fileName + ".xlsx";
         response.setHeader("Content-Disposition", new String(headerStr.getBytes("GBK"), StandardCharsets.ISO_8859_1));
-        exportExcel(response.getOutputStream(), dataList, sheetName);
     }
 
     /**
@@ -193,7 +203,6 @@ public class ExcelUtil {
         }
         return value;
     }
-
 
     /**
      * IndexedColors 颜色对照表
