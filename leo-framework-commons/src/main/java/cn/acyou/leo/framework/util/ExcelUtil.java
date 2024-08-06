@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -542,7 +543,7 @@ public class ExcelUtil {
         Workbook workbook = sheet.getWorkbook();
         InputStream inputStream;
         if (path.startsWith("http")) {
-            inputStream = HttpUtil.openStream(path);
+            inputStream = new URL(path).openStream();
         }else {
             inputStream = new FileInputStream(path);
         }
