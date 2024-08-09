@@ -13,7 +13,8 @@ import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DictService;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,30 @@ public class ApplicationTests {
     private ExecuteMapper executeMapper;
     @Autowired
     private CommonTableMapper commonTableMapper;
+
+    @Test
+    public void test3445(){
+        Map<String, Object> param = new HashMap<>();
+        param.put("name", "讲师");
+        param.put("sort", "10");
+        dictService.removeByMap(param);//DELETE FROM t_dict WHERE name = '讲师' AND sort = '10'
+    }
+
+    @Test
+    public void test3443(){
+        LambdaQueryChainWrapper<Dict> lambdaQuery = dictService.lambdaQuery();
+        lambdaQuery.eq(Dict::getName, "讲师");
+        lambdaQuery.gt(Dict::getSort, 10);
+        dictService.remove(lambdaQuery.getWrapper());//DELETE FROM t_dict WHERE (name = '讲师' AND sort > 10)
+    }
+
+    @Test
+    public void test3447(){
+        LambdaQueryWrapper<Dict> lambdaQuery = new LambdaQueryWrapper<>();
+        lambdaQuery.eq(Dict::getName, "讲师");
+        lambdaQuery.gt(Dict::getSort, 10);
+        dictService.remove(lambdaQuery);//DELETE FROM t_dict WHERE (name = '讲师' AND sort > 10)
+    }
 
     @Test
     public void testEnvironmentHelper(){
