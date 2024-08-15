@@ -815,6 +815,23 @@ public final class DateUtil {
     /**
      * 现在的时间在指定的时间范围内
      * <pre>
+     *      DateUtil.nowInRange("2024-08-15 00:00:00", "2024-08-16 23:59:59") == 当前时间是不是在这个范围内
+     * </pre>
+     *
+     * @param dateStart 时间开始  in format "yyyy-MM-dd HH:mm:ss"
+     * @param dateEnd   时间结束  in format "yyyy-MM-dd HH:mm:ss"
+     * @return boolean 如果时间格式不正确直接返回false
+     */
+    public static boolean nowInRange(String dateStart, String dateEnd){
+        Date nowDate = new Date();
+        Date startDate = parseSpecificDateTime(dateStart);
+        Date endDate = parseSpecificDateTime(dateEnd);
+        return nowDate.after(startDate) && nowDate.before(endDate);
+    }
+
+    /**
+     * 现在的时间在指定的时间范围内
+     * <pre>
      *      DateUtil.nowInTimeRange("08:00:00", "17:00:00") == 当前时间是不是在这个范围内
      * </pre>
      *
@@ -1206,10 +1223,7 @@ public final class DateUtil {
 
 
     public static void main(String[] args) {
-        System.out.println(beforeTime(new Date(), "12:00:00"));
-        System.out.println(beforeTime(new Date(), "09:00:00"));
-        System.out.println(afterTime(new Date(), "12:00:00"));
-        System.out.println(afterTime(new Date(), "09:00:00"));
+        System.out.println(nowInRange("2024-08-15 00:00:00", "2024-08-16 23:59:59"));
     }
 
 }
