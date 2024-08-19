@@ -1,3 +1,25 @@
+
+drop table if exists data_analysis;
+CREATE TABLE `data_analysis` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(32) NOT NULL COMMENT 'code',
+  `day_time` date DEFAULT NULL COMMENT '统计日期',
+  `content` text COLLATE utf8mb4_bin COMMENT '数据JSON',
+  `content_new` text COLLATE utf8mb4_bin COMMENT '数据JSON(新用户)',
+  `field1` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '扩展字段1',
+  `field2` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '扩展字段2',
+  `field3` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '扩展字段3',
+  `platform` varchar(50) DEFAULT 'guixiu' COMMENT '平台 (H5)/(APP)' ,
+  `ext` text COLLATE utf8mb4_bin COMMENT '扩展参数JSON',
+  `del_flag` int DEFAULT '0' COMMENT '删除标识 0.有效 1.无效',
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `remark` text COLLATE utf8mb4_bin COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_day_time` (`day_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='数据统计';
+
+
 CREATE TABLE `t_param_config`
 (
     `id`          bigint                                                 NOT NULL AUTO_INCREMENT COMMENT '参数主键(PK)',

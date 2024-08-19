@@ -8,10 +8,12 @@ import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.component.EmailUtil;
 import cn.acyou.leo.framework.util.component.EmailUtil2;
 import cn.acyou.leo.tool.entity.Area;
+import cn.acyou.leo.tool.entity.DataAnalysis;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.service.AreaService;
+import cn.acyou.leo.tool.service.DataAnalysisService;
 import cn.acyou.leo.tool.service.DictService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -46,6 +48,14 @@ public class ApplicationTests {
     private ExecuteMapper executeMapper;
     @Autowired
     private CommonTableMapper commonTableMapper;
+    @Autowired
+    private DataAnalysisService dataAnalysisService;
+
+    @Test
+    public void test34453(){
+        List<DataAnalysis> list = dataAnalysisService.lambdaQuery().list();
+        System.out.println(list);
+    }
 
     @Test
     public void test3445(){
