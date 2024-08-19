@@ -1222,7 +1222,29 @@ public final class DateUtil {
     }
 
 
+    public static Date dayMaxDate(String dateStr) {
+        return parseDate(dayMax(dateStr), FORMAT_DATE_TIME);
+    }
+
+    public static Date dayMinDate(String dateStr) {
+        return parseDate(dayMin(dateStr), FORMAT_DATE_TIME);
+    }
+
+
+    public static String dayMax(String dateStr) {
+        return dateStr + DATE_DAY_MAX_TIME;
+    }
+
+    public static String dayMin(String dateStr) {
+        return dateStr + DATE_DAY_MIN_TIME;
+    }
+
+
     public static void main(String[] args) {
+        System.out.println(dayMin("2024-08-15"));
+        System.out.println(dayMax("2024-08-15"));
+        System.out.println(dayMinDate("2024-08-15"));
+        System.out.println(dayMaxDate("2024-08-15"));
         System.out.println(nowInRange("2024-08-15 00:00:00", "2024-08-16 23:59:59"));
     }
 
