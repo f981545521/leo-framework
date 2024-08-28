@@ -140,7 +140,15 @@ public class ExcelUtil {
             if (dataList != null && dataList.size() > 0) {
                 Map<String, CellStyle> styles = createStyles(workbook);
                 HSSFRow row = sheet.createRow(0);
-                Map<String, Object> map = dataList.get(0);
+                //dataList属性不一致时 方案： 2. 取最多的一个
+                int index = 0, size = 0;
+                for (int i = 0; i < dataList.size(); i++) {
+                    if (size < dataList.get(i).size()) {
+                        index = i;
+                        size = dataList.get(i).size();
+                    }
+                }
+                Map<String, Object> map = dataList.get(index);
                 String[] tableHeaders = map.keySet().toArray(new String[0]);
                 // 创建表头
                 for (int i = 0; i < tableHeaders.length; i++) {
