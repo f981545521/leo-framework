@@ -10,6 +10,7 @@ import cn.acyou.leo.framework.util.component.EmailUtil2;
 import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.DataAnalysis;
 import cn.acyou.leo.tool.entity.Dict;
+import cn.acyou.leo.tool.feign.HttpbinClient;
 import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.service.AreaService;
@@ -50,6 +51,16 @@ public class ApplicationTests {
     private CommonTableMapper commonTableMapper;
     @Autowired
     private DataAnalysisService dataAnalysisService;
+    @Autowired
+    private HttpbinClient httpbinClient;
+
+    @Test
+    public void test3344(){
+        String ip = httpbinClient.ip();
+        System.out.println(ip);
+        String ip2 = httpbinClient.ip2();
+        System.out.println(ip2);
+    }
 
     @Test
     public void test34453(){
