@@ -48,6 +48,8 @@ spring:
           auth: true
 
 leo:
+  xxl-job:
+    enable: false
   debug:
     interface-call-statistics: false
     print-performance-sql: true
