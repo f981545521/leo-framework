@@ -16,6 +16,7 @@ SpringCloud项目
 5. 使用`RocketMQ`消息队列
 6. 使用`Spring Cloud Sleuth` + `ZipKin` 的链路追踪
 7. 使用`ElasticSearch`全文搜索
+8. `Xxl-Job`分布式定时任务
 
 #### 微服务：
 1. SpringBoot+SpringMvc+Mybatis(MybatisPlus)
@@ -192,7 +193,7 @@ D:\developer\cloud\zipkin>java -jar zipkin-server-2.23.2-exec.jar
 ```
 
 ### 可选
-3. 启动Dubbo Admin（可选）
+#### 7. 启动Dubbo Admin（可选）
 ```
 java -jar dubbo-admin-0.3.0-SNAPSHOT.jar
 
@@ -207,6 +208,9 @@ admin.registry.address=nacos://127.0.0.1:8848?group=DEFAULT_GROUP&namespace=publ
 admin.config-center=nacos://127.0.0.1:8848?group=dubbo&username=nacos&password=nacos
 admin.metadata-report.address=nacos://127.0.0.1:8848?group=dubbo&username=nacos&password=nacos
 ```
+
+#### 8. 使用xxl-job
+[xxl-job集成](document/8.xxl-job/XXL-JOB.md)
 
 ## 测试
 ```
