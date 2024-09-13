@@ -26,7 +26,7 @@
     </appender>
 
     <!-- 分环境日志等级：开发、测试 -->
-    <springProfile name="dev,test,pre,test001,beta,netapp">
+    <springProfile name="dev,test,pre,test001,beta,netapp,sharding-databases-tables,sharding-tables">
         <root>
             <level value="debug"/>
             <appender-ref ref="console"/>

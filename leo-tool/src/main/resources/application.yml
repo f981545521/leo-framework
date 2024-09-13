@@ -13,6 +13,7 @@ server:
 spring:
   profiles:
     active: dev
+    # active: sharding-databases-tables
   application:
     name: leo-tool
   jackson:

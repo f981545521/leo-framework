@@ -1,0 +1,39 @@
+spring:
+  shardingsphere:
+    datasource:
+      names: ds
+      ds:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password: root123
+    sharding:
+      tables:
+        t_order:
+          actual-data-nodes: ds.t_order_$->{0..1} # 分表： t_order_0 跟 t_order_1
+          table-strategy:
+            inline:
+              sharding-column: order_id # 按照order_id%2分别入t_order_0/t_order_1表
+              algorithm-expression: t_order_$->{order_id % 2}
+          # 主键生成策略（如果是自动生成的，在插入数据的sql中就不要传id，null也不行，直接插入字段中就不要有主键的字段）
+          key-generator:
+            column: order_id # order_id自动生成
+            type: SNOWFLAKE
+            props:
+              worker:
+                id: 1
+      # binding-tables: t_order # 绑定表 不配置也没找出啥问题
+      # broadcast-tables: t_address # 广播表
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0

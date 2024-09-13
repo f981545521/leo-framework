@@ -398,6 +398,10 @@ GET http://localhost:8075/leo-pay/student/page?sequence=6973a95941b14d3fa9766f88
 
 > 思考： 为什么要使用`shiro`、`Spring Security`？？？我一个切面就能搞定的事情。ி
 
+### 五、分库分表
+- [ShardingJDBC使用](document/9.分库分表/ShardingJDBC使用.md)
+- [ShardingJDBC集成测试](document/9.分库分表/ShardingJDBC测试.md)
+
 ## 项目使用定制化配置
 
 ### application 配置
