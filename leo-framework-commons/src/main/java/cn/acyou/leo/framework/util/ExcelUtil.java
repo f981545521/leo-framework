@@ -60,16 +60,26 @@ public class ExcelUtil {
      * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
      */
     public static List<Map<String, Object>> importData(XSSFSheet sheet) {
+        return importData(sheet, 0);
+    }
+
+    /**
+     * 从Sheet页导入数据
+     *
+     * @param sheet Sheet页
+     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
+     */
+    public static List<Map<String, Object>> importData(XSSFSheet sheet, int headRow) {
         // 返回数据
         List<Map<String, Object>> ls = new ArrayList<>();
         // 取第一行标题
-        XSSFRow heard = sheet.getRow(0);
+        XSSFRow heard = sheet.getRow(headRow);
         String[] title = new String[heard.getLastCellNum()];
         for (int y = heard.getFirstCellNum(); y < heard.getLastCellNum(); y++) {
             title[y] = heard.getCell(y).getStringCellValue();
         }
         // 遍历当前sheet中剩下的所有行
-        for (int j = 1; j < sheet.getLastRowNum() + 1; j++) {
+        for (int j = headRow + 1; j < sheet.getLastRowNum() + 1; j++) {
             XSSFRow row = sheet.getRow(j);
             Map<String, Object> m = new LinkedHashMap<>();
             // 遍历所有的列
@@ -78,7 +88,9 @@ public class ExcelUtil {
                     m.put(title[y], getCellValue(row.getCell(y)));
                 }
             }
-            ls.add(m);
+            if (m.size() > 0) {
+                ls.add(m);
+            }
         }
 
         return ls;
