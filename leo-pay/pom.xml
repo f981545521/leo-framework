@@ -5,7 +5,7 @@
     <parent>
         <groupId>cn.acyou</groupId>
         <artifactId>leo-framework</artifactId>
-        <version>1.5.0.RELEASE</version>
+        <version>1.6.0.RELEASE</version>
     </parent>
 
     <artifactId>leo-pay</artifactId>
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-commons</artifactId>
-            <version>1.5.0.RELEASE</version>
+            <version>1.6.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-generator</artifactId>
-            <version>1.5.0.RELEASE</version>
+            <version>1.6.0.RELEASE</version>
             <scope>test</scope>
         </dependency>
         <!--模板引擎，引入模版引擎会导致默认/sys/common/error 无法自定义处理-->
@@ -74,17 +74,17 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-fs-starter</artifactId>
-            <version>1.5.0.RELEASE</version>
+            <version>1.6.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-wx-starter</artifactId>
-            <version>1.5.0.RELEASE</version>
+            <version>1.6.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-push-starter</artifactId>
-            <version>1.5.0.RELEASE</version>
+            <version>1.6.0.RELEASE</version>
         </dependency>
     </dependencies>
 
