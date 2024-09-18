@@ -8,6 +8,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
@@ -21,13 +22,16 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author youfang
  * @version [1.0.0, 2022/8/17 17:35]
  **/
+@Slf4j
 public class MainTest1234V3 {
 
     @Test
@@ -187,46 +191,101 @@ public class MainTest1234V3 {
     }
 
     @Test
-    public void test1234(){
-        //String res = HttpUtil.createPost("https://zh.api.guiji.cn/avatar2c/tool/sec_tts")
-        //        .header("token", "754d6f8d032f401a85aa7914c679e462")
-        //        .body("{\n" +
-        //                "  \"text\":\"自信是我最好的配饰，魅力是我与生俱来的光环。我以身体为画布，展现时尚的无限可能。每一次镜头前的定格，都是对美的追求和对自我的超越。\",\n" +
-        //                "  \"speaker_id\":\"100958\"\n" +
-        //                "}").execute().body();
-        //JSONObject jsonObject = JSON.parseObject(res);
-        //String audioUrl = jsonObject.getString("data");
-        //System.out.println("发起合成：" + audioUrl);
+    public void test1234() throws Exception{
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\Guiji.cn-待上架模板视频\\Guiji.cn公共模特+声音_202409.xlsx"));
+        List<Map<String, Object>> dataListTts = ExcelUtil.importData(workbook.getSheet("新增-公共音色"), 1);
+        Map<String, String> ttsMap = new HashMap<>();
+        for (Map<String, Object> objectMap : dataListTts) {
+            String speaker_id =StringUtils.toStr(objectMap.get("音色ID"));
+            String tts_name =StringUtils.toStr(objectMap.get("上线名称"));
+            ttsMap.put(tts_name.trim(), speaker_id);
+        }
 
-        JSONObject param = new JSONObject();
-        param.put("customerId", "0");
-        param.put("audioUrl", "https://digital-public.obs.myhuaweicloud.com/vcm_server/20240914/dYwDud97bjPabrmw_ms/XPByIBi70ZrQkVs6.wav");
-        param.put("videoUrl", "https://anylang.obs.ap-southeast-3.myhuaweicloud.com/anylang-video/resources/robot_public/index/avatar/cn/w1_16_9.mp4");
-        param.put("captureVideoFrame", 1);
-        param.put("hasWater", 0);
-        param.put("digitalAuth", 0);
-        param.put("chaofen", 0);
-        param.put("groupName", "");
+        List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheet("初筛选-待确认"), 1);
+        Map<String, String[]> introMap = new HashMap<>();
 
-        String res = HttpUtil.createPost("https://zh.api.guiji.cn/vpp-toc/vShow/3/vShowFace2FaceSynthProduct")
-                .body(param.toJSONString()).execute().body();
-        System.out.println(res);
-        JSONObject jsonObject = JSON.parseObject(res);
-        String workCode = jsonObject.getString("data");
+        for (Map<String, Object> objectMap : dataList) {
+            String name =  StringUtils.toStr(objectMap.get("模特名称"));
+            String tts_name =  StringUtils.toStr(objectMap.get("配音"));
+            String intro =  StringUtils.toStr(objectMap.get("首页介绍话术"));
+            if (StringUtils.isBlank(name)) {
+                continue;
+            }
+            introMap.put(name, new String[]{ttsMap.get(tts_name), intro});
+        }
 
-        while (true) {
-            WorkUtil.trySleep5000();
-            String body = HttpUtil.createGet("https://zh.api.guiji.cn/vpp-toc/sys/queryWorkOrder?workCode=" + workCode).execute().body();
-            JSONObject jsonObject1 = JSON.parseObject(body);
-            JSONObject data = jsonObject1.getJSONObject("data");
-            String coverUrl = data.getString("videoFrameImageUrl");
-            String videoUrl = data.getString("videoUrl");
-            if (StringUtils.isNotBlank(videoUrl)) {
-                System.out.println("合成成功 ===" + videoUrl + " | " + coverUrl);
+        AtomicBoolean hasError = new AtomicBoolean(false);
+        introMap.forEach((k,v)->{
+            String tts = v[0];
+            String intro = v[1];
+            if (StringUtils.isBlank(tts) || StringUtils.isBlank(intro)) {
+                log.error("校验失败" + "[" + k + "("+tts+")]: " + intro);
+                hasError.set(true);
+            }
+        });
+        if (hasError.get()) {
+            return;
+        }
+
+        List<File> fileList = FileUtil.listFiles(new File("D:\\Guiji.cn-待上架模板视频\\营销达人\\"));
+        //File mp4Path = new File("D:\\Guiji.cn-待上架模板视频\\营销达人\\Layla.mp4");
+        for (File mp4Path : fileList) {
+            if (mp4Path.getAbsolutePath().contains("_demo.mp4")) {
+                continue;
+            }
+            File mp4PathDemo = new File(mp4Path.getAbsolutePath().replaceAll(".mp4", "_demo.mp4"));
+            if (mp4PathDemo.exists()) {
+                continue;
+            }
+            String name = FileUtil.getBaseName(mp4Path.getAbsolutePath());
+            String[] v = introMap.get(name);
+            String tts = v[0];
+            String intro = v[1];
+            System.out.println("[" + name + "("+tts+")]: " + intro);
+            String video = "https://gy.cdn.guiji.cn/resources/v1/%E8%90%A5%E9%94%80%E8%BE%BE%E4%BA%BA/"+name+".mp4";
+
+            String res = HttpUtil.createPost("https://zh.api.guiji.cn/avatar2c/tool/sec_tts")
+                    .header("token", "754d6f8d032f401a85aa7914c679e462")
+                    .body("{\n" +
+                            "  \"text\":\""+intro+"\",\n" +
+                            "  \"speaker_id\":\""+tts+"\"\n" +
+                            "}").execute().body();
+            JSONObject jsonObject = JSON.parseObject(res);
+            String audioUrl = jsonObject.getString("data");
+            System.out.println("音频地址：" + audioUrl);
+
+            if (StringUtils.isBlank(audioUrl)) {
+                log.error("音频合成失败！" + "[" + name + "("+tts+")]: " + intro);
                 return;
+            }
+
+            JSONObject param = new JSONObject();
+            param.put("customerId", "0");
+            param.put("audioUrl", audioUrl);
+            param.put("videoUrl", video);
+            param.put("captureVideoFrame", 1);
+            param.put("hasWater", 0);
+            param.put("digitalAuth", 0);
+            param.put("chaofen", 0);
+            param.put("groupName", "");
+            String resV2 = HttpUtil.createPost("https://zh.api.guiji.cn/vpp-toc/vShow/3/vShowFace2FaceSynthProduct").body(param.toJSONString()).execute().body();
+            System.out.println(resV2);
+            JSONObject jsonObjectV2 = JSON.parseObject(resV2);
+            String workCode = jsonObjectV2.getString("data");
+            while (true) {
+                WorkUtil.trySleep5000();
+                String body = HttpUtil.createGet("https://zh.api.guiji.cn/vpp-toc/sys/queryWorkOrder?workCode=" + workCode).execute().body();
+                JSONObject jsonObject1 = JSON.parseObject(body);
+                JSONObject data = jsonObject1.getJSONObject("data");
+                String coverUrl = data.getString("videoFrameImageUrl");
+                String videoUrl = data.getString("videoUrl");
+                if (StringUtils.isNotBlank(videoUrl)) {
+                    System.out.println("合成成功 ===" + videoUrl + " | " + coverUrl);
+                    HttpUtil.downloadFile(videoUrl, mp4PathDemo);
+                    System.out.println("下载完成");
+                    break;
+                }
             }
         }
     }
-
-
 }
