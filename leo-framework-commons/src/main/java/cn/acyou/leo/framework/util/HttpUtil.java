@@ -328,6 +328,19 @@ public class HttpUtil {
         return new URL(url).openConnection().getContentLengthLong();
     }
 
+    public static boolean reachable(String url) {
+        try {
+            getContentLength(url);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean notReachable(String url){
+        return !reachable(url);
+    }
+
     public void setSocketTimeout(int socketTimeout) {
         this.configBuilder.setSocketTimeout(socketTimeout);
     }
