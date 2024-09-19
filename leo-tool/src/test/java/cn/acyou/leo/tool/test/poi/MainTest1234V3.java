@@ -196,8 +196,8 @@ public class MainTest1234V3 {
         List<Map<String, Object>> dataListTts = ExcelUtil.importData(workbook.getSheet("新增-公共音色"), 1);
         Map<String, String> ttsMap = new HashMap<>();
         for (Map<String, Object> objectMap : dataListTts) {
-            String speaker_id =StringUtils.toStr(objectMap.get("音色ID"));
-            String tts_name =StringUtils.toStr(objectMap.get("上线名称"));
+            String speaker_id =StringUtils.toStr(objectMap.get("音色ID")).trim();
+            String tts_name =StringUtils.toStr(objectMap.get("上线名称")).trim();
             ttsMap.put(tts_name.trim(), speaker_id);
         }
 
@@ -205,29 +205,29 @@ public class MainTest1234V3 {
         Map<String, String[]> introMap = new HashMap<>();
 
         for (Map<String, Object> objectMap : dataList) {
-            String name =  StringUtils.toStr(objectMap.get("模特名称"));
-            String tts_name =  StringUtils.toStr(objectMap.get("配音"));
-            String intro =  StringUtils.toStr(objectMap.get("首页介绍话术"));
+            String name =  StringUtils.toStr(objectMap.get("模特名称")).trim();
+            String tts_name =  StringUtils.toStr(objectMap.get("配音")).trim();
+            String intro =  StringUtils.toStr(objectMap.get("首页介绍话术")).trim();
             if (StringUtils.isBlank(name)) {
                 continue;
             }
             introMap.put(name, new String[]{ttsMap.get(tts_name), intro});
         }
 
-        AtomicBoolean hasError = new AtomicBoolean(false);
-        introMap.forEach((k,v)->{
-            String tts = v[0];
-            String intro = v[1];
-            if (StringUtils.isBlank(tts) || StringUtils.isBlank(intro)) {
-                log.error("校验失败" + "[" + k + "("+tts+")]: " + intro);
-                hasError.set(true);
-            }
-        });
-        if (hasError.get()) {
-            return;
-        }
+        //AtomicBoolean hasError = new AtomicBoolean(false);
+        //introMap.forEach((k,v)->{
+        //    String tts = v[0];
+        //    String intro = v[1];
+        //    if (StringUtils.isBlank(tts) || StringUtils.isBlank(intro)) {
+        //        log.error("校验失败" + "[" + k + "("+tts+")]: " + intro);
+        //        hasError.set(true);
+        //    }
+        //});
+        //if (hasError.get()) {
+        //    return;
+        //}
 
-        List<File> fileList = FileUtil.listFiles(new File("D:\\Guiji.cn-待上架模板视频\\营销达人\\"));
+        List<File> fileList = FileUtil.listFiles(new File("D:\\Guiji.cn-待上架模板视频\\知识博主\\"));
         //File mp4Path = new File("D:\\Guiji.cn-待上架模板视频\\营销达人\\Layla.mp4");
         for (File mp4Path : fileList) {
             if (mp4Path.getAbsolutePath().contains("_demo.mp4")) {
@@ -239,10 +239,17 @@ public class MainTest1234V3 {
             }
             String name = FileUtil.getBaseName(mp4Path.getAbsolutePath());
             String[] v = introMap.get(name);
+            if (v == null) {
+                continue;
+            }
             String tts = v[0];
             String intro = v[1];
+            if (StringUtils.isBlank(tts) || StringUtils.isBlank(intro)) {
+                log.warn( name + "[" + tts + "]:" + intro);
+                continue;
+            }
             System.out.println("[" + name + "("+tts+")]: " + intro);
-            String video = "https://gy.cdn.guiji.cn/resources/v1/%E8%90%A5%E9%94%80%E8%BE%BE%E4%BA%BA/"+name+".mp4";
+            String video = "https://gy.cdn.guiji.cn/resources/v1/知识博主/"+name+".mp4";
 
             String res = HttpUtil.createPost("https://zh.api.guiji.cn/avatar2c/tool/sec_tts")
                     .header("token", "754d6f8d032f401a85aa7914c679e462")
@@ -256,7 +263,7 @@ public class MainTest1234V3 {
 
             if (StringUtils.isBlank(audioUrl)) {
                 log.error("音频合成失败！" + "[" + name + "("+tts+")]: " + intro);
-                return;
+                continue;
             }
 
             JSONObject param = new JSONObject();
