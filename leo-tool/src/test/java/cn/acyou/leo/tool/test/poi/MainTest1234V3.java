@@ -21,10 +21,7 @@ import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -54,15 +51,18 @@ public class MainTest1234V3 {
 
     @Test
     public void ttsSQLGenerate() throws Exception{
-        XSSFWorkbook workbook = new XSSFWorkbook(new File("C:\\Users\\1\\Downloads\\Guiji.cn公共模特.xlsx"));
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\Guiji.cn-待上架模板视频\\Guiji.cn公共模特+声音_202409.xlsx"));
         List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheet("新增-公共音色"), 1);
-        PrintWriter printWriter = FileUtil.getPrintWriter("C:\\Users\\1\\Downloads\\Guiji.cn公共模特_export1.sql", StandardCharsets.UTF_8, false);
+        PrintWriter printWriter = FileUtil.getPrintWriter("D:\\Guiji.cn-待上架模板视频\\Guiji.cn公共模特+声音_202409_exportTTS.sql", StandardCharsets.UTF_8, false);
+        Set<String> classifySet = new HashSet<>();
         for (Map<String, Object> objectMap : dataList) {
             String speaker_id = objectMap.get("音色ID").toString();
             if (StringUtils.isBlank(speaker_id)) {
                 continue;
             }
-            String classifyName = objectMap.get("所属分类").toString();
+            classifySet.add(objectMap.get("所属分类").toString());
+        }
+        for (String classifyName : classifySet) {
             //分类SQL
             String sql = "INSERT INTO `ffo-toc`.`user_video_classify` ( `name`, `type`, `platform`, `status`) select '"+classifyName+"', 2, 'cn', 1 from dual WHERE NOT EXISTS ( SELECT id FROM `ffo-toc`.`user_video_classify` WHERE name = '"+classifyName+"' and type = 2);";
             printWriter.write(sql);
@@ -114,21 +114,25 @@ public class MainTest1234V3 {
 
     @Test
     public void robotSQLGenerate() throws Exception{
-        XSSFWorkbook workbook = new XSSFWorkbook(new File("C:\\Users\\1\\Downloads\\Guiji.cn公共模特.xlsx"));
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\Guiji.cn-待上架模板视频\\Guiji.cn公共模特+声音_202409.xlsx"));
         List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheet("初筛选-待确认"), 1);
-        PrintWriter printWriter = FileUtil.getPrintWriter("C:\\Users\\1\\Downloads\\Guiji.cn公共模特_export2.sql", StandardCharsets.UTF_8, false);
+        PrintWriter printWriter = FileUtil.getPrintWriter("D:\\Guiji.cn-待上架模板视频\\Guiji.cn公共模特+声音_202409_exportRobot.sql", StandardCharsets.UTF_8, false);
+        Set<String> classifySet = new HashSet<>();
         for (Map<String, Object> objectMap : dataList) {
             String name =  StringUtils.toStr(objectMap.get("模特名称"));
             if (StringUtils.isBlank(name)) {
                 continue;
             }
-            String classifyName = objectMap.get("所属分类").toString();
+            classifySet.add(objectMap.get("所属分类").toString());
+        }
+        for (String classifyName : classifySet) {
             //分类SQL
             String sql = "INSERT INTO `ffo-toc`.`user_video_classify` ( `name`, `type`, `platform`, `status`) select '"+classifyName+"', 1, 'cn', 1 from dual WHERE NOT EXISTS ( SELECT id FROM `ffo-toc`.`user_video_classify` WHERE name = '"+classifyName+"' and type = 1);";
             printWriter.write(sql);
             printWriter.write("\r\n");
         }
         printWriter.write("--  数据\r\n");
+        printWriter.flush();
         long currentTimeMillis = System.currentTimeMillis();
         for (Map<String, Object> objectMap : dataList) {
             String format = DateUtil.format(new Date(currentTimeMillis), "yyyy-MM-dd HH:mm:ss");
@@ -136,7 +140,7 @@ public class MainTest1234V3 {
             if (StringUtils.isBlank(name)) {
                 continue;
             }
-            String age = objectMap.get("年龄").toString();
+            String age = objectMap.get("年龄").toString().replaceAll("岁", "");
             String classifyName = objectMap.get("所属分类").toString();
             String countryStr = objectMap.get("中模/外模").toString();
             String country = (countryStr.contains("中")?"中国":"外国");
@@ -145,6 +149,7 @@ public class MainTest1234V3 {
             String demoText = objectMap.get("首页介绍话术").toString();
             String sex = (sexStr.contains("男")?"male":"female");
             String attitudeStr = objectMap.get("姿态").toString();
+            String tts_match =  StringUtils.toStr(objectMap.get("配音")).trim();
             String attitude = "0";
             if ("站姿".equals(attitudeStr)) {
                 attitude = "1";
@@ -161,9 +166,14 @@ public class MainTest1234V3 {
                 screenType = "2";
             }
 
-            String videoPath = name + ".mp4";
-            String videoUrl = "https://digital-public.obs.cn-east-3.myhuaweicloud.com/anylang/anylang-video/resources/robot_public/20240914/" + videoPath.replaceAll("\\\\", "/");
+            String videoUrl = "https://gy.cdn.guiji.cn/resources/v1/"+classifyName+"/" + name + ".mp4";
+            if (!cn.acyou.leo.framework.util.HttpUtil.reachable(videoUrl)) {
+                log.error("地址不可达：" + videoUrl);
+                continue;
+            }
             String coverUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + "_cover.png";
+            String videoDemoUrl = "https://gy.cdn.guiji.cn/resources/v1/"+classifyName+"/" + name + "_demo.mp4";
+            String coverDemoUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + "_demo_cover.png";
             MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo(videoUrl);
             VideoSize realVideoSize = MediaUtil.getRealVideoSize(mediaInfo);
 
@@ -173,16 +183,14 @@ public class MainTest1234V3 {
                     " `ext`, `del_flag`, `create_time`, `update_time`, `remark`) VALUES " +
                     "( -1, '"+name+"', NULL, NULL, '"+sex+"', '"+label+"', '"+country+"', '"+attitude+"', '"+age+"', '"+screenType+"', '"+coverUrl+"', '"+videoUrl+"', '"+mediaInfo.getDuration()+"', " +
                     "'" + realVideoSize.getHeight() + "', '" + realVideoSize.getWidth() + "', " +
-                    "20, '', '20', 'demo_cover.png', 'demo_video.mp4', 2, 1, '"+videoUrl+"', '{\"demo_text\":\"" + demoText + "\"}', 0, '" + format + "', '" + format + "', NULL);\n";
+                    "20, NULL, '20', '"+coverDemoUrl+"', '"+videoDemoUrl+"', 2, 1, '"+videoUrl+"', '{\"demo_text\":\"" + demoText + "\",\"tts_match\":\"" + tts_match + "\"}', 0, '" + format + "', '" + format + "', NULL);\n";
             printWriter.write(sql);
-            printWriter.write("\r\n");
-
             String sql2 = "INSERT INTO `ffo-toc`.`user_video_classify_relation` (`classify_id`, `bind_id`) " +
                     "SELECT * from ( SELECT id as classify_id FROM `ffo-toc`.`user_video_classify` WHERE name = '"+classifyName+"' and type = 1) t1, ( SELECT id as bind_id FROM `ffo-toc`.`user_video_robot` WHERE robot_name = '"+name+"' and type = 2) t2;\n";
 
             printWriter.write(sql2);
             printWriter.write("\r\n");
-
+            printWriter.flush();
             currentTimeMillis = currentTimeMillis - (5 * 60 * 1000);
         }
         printWriter.flush();
@@ -227,7 +235,7 @@ public class MainTest1234V3 {
         //    return;
         //}
 
-        List<File> fileList = FileUtil.listFiles(new File("D:\\Guiji.cn-待上架模板视频\\知识博主\\"));
+        List<File> fileList = FileUtil.listFiles(new File("D:\\Guiji.cn-待上架模板视频\\历史名人\\"));
         //File mp4Path = new File("D:\\Guiji.cn-待上架模板视频\\营销达人\\Layla.mp4");
         for (File mp4Path : fileList) {
             if (mp4Path.getAbsolutePath().contains("_demo.mp4")) {
@@ -249,7 +257,7 @@ public class MainTest1234V3 {
                 continue;
             }
             System.out.println("[" + name + "("+tts+")]: " + intro);
-            String video = "https://gy.cdn.guiji.cn/resources/v1/知识博主/"+name+".mp4";
+            String video = "https://gy.cdn.guiji.cn/resources/v1/历史名人/"+name+".mp4";
 
             String res = HttpUtil.createPost("https://zh.api.guiji.cn/avatar2c/tool/sec_tts")
                     .header("token", "754d6f8d032f401a85aa7914c679e462")
