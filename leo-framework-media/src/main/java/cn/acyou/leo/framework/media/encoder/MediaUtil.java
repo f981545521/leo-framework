@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.FileSystemUtils;
 import ws.schild.jave.Encoder;
+import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
@@ -514,6 +515,48 @@ public class MediaUtil {
         commands.add(targetPath);
         exec(commands);
     }
+
+    /**
+     * 视频压缩
+     * @param source 源文件
+     * @param target 目标文件
+     * @param rate 压缩比
+     */
+    public void compressVideo(String source , File target , Integer rate)  {
+        try {
+            // 音频编码属性配置
+            AudioAttributes audio= new AudioAttributes();
+            audio.setCodec("libmp3lame");
+            // 设置音频比特率,单位:b (比特率越高，清晰度/音质越好，当然文件也就越大 56000 = 56kb)
+            // audio.setBitRate(new Integer(56_000));
+            audio.setBitRate(10);
+            // 设置重新编码的音频流中使用的声道数（1 =单声道，2 = 双声道（立体声））
+            audio.setChannels(1);
+            // 采样率越高声音的还原度越好，文件越大
+            // audio.setSamplingRate(new Integer(44100));
+            audio.setSamplingRate(22050);
+            // 视频编码属性配置
+            VideoAttributes video=new VideoAttributes();
+            // 设置编码
+            video.setCodec("mpeg4");
+            //设置音频比特率,单位:b (比特率越高，清晰度/音质越好，当然文件也就越大 5600000 = 5600kb)
+            // video.setBitRate(new Integer(5_600_000 / rate));
+            video.setBitRate(10 / rate);
+            // 设置视频帧率（帧率越低，视频会出现断层，越高让人感觉越连续）,这里 除1000是为了单位转换
+            video.setFrameRate(15);
+            // 编码设置
+            EncodingAttributes attr=new EncodingAttributes();
+            attr.setOutputFormat("mp4");
+            attr.setAudioAttributes(audio);
+            attr.setVideoAttributes(video);
+            // 设置值编码
+            Encoder ec = new Encoder();
+            ec.encode(getMediaObject(source), target, attr);
+        } catch (EncoderException | IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 获取媒体时长信息

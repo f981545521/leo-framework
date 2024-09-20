@@ -69,7 +69,7 @@ public class ImageUtil {
         Graphics g = bi.getGraphics();
         g.drawImage(img, 0, 0, width, height, Color.LIGHT_GRAY, null);
         g.dispose();
-        ImageIO.write(bi, "jpg", os);
+        ImageIO.write(bi, "jpg", os);//默认使用JPG格式 因为PNG格式比较大
         is.close();
         os.close();
     }
