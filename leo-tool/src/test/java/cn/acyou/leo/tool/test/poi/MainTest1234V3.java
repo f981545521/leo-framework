@@ -73,7 +73,11 @@ public class MainTest1234V3 {
         for (Map<String, Object> objectMap : dataList) {
             String format = DateUtil.format(new Date(currentTimeMillis), "yyyy-MM-dd HH:mm:ss");
             String speaker_id = objectMap.get("音色ID").toString();
+            String status = StringUtils.toStr(objectMap.get("状态")).trim();
             if (StringUtils.isBlank(speaker_id)) {
+                continue;
+            }
+            if (!status.contains("待上架")) {
                 continue;
             }
             String lang = objectMap.get("语种简称").toString();
@@ -136,8 +140,12 @@ public class MainTest1234V3 {
         long currentTimeMillis = System.currentTimeMillis();
         for (Map<String, Object> objectMap : dataList) {
             String format = DateUtil.format(new Date(currentTimeMillis), "yyyy-MM-dd HH:mm:ss");
-            String name =  StringUtils.toStr(objectMap.get("模特名称"));
+            String name =  StringUtils.toStr(objectMap.get("模特名称")).trim();
             if (StringUtils.isBlank(name)) {
+                continue;
+            }
+            String status = StringUtils.toStr(objectMap.get("是否上架")).trim();
+            if (!status.contains("√")) {
                 continue;
             }
             String age = objectMap.get("年龄").toString().replaceAll("岁", "");
@@ -146,7 +154,7 @@ public class MainTest1234V3 {
             String country = (countryStr.contains("中")?"中国":"外国");
             String sexStr = objectMap.get("性别").toString();
             String label = objectMap.get("标签").toString();
-            String demoText = objectMap.get("首页介绍话术").toString();
+            String demoText = "";//StringUtils.toStr(objectMap.get("首页介绍话术")).trim().replaceAll("'", "\\'");
             String sex = (sexStr.contains("男")?"male":"female");
             String attitudeStr = objectMap.get("姿态").toString();
             String tts_match =  StringUtils.toStr(objectMap.get("配音")).trim();
@@ -171,13 +179,15 @@ public class MainTest1234V3 {
                 log.error("地址不可达：" + videoUrl);
                 continue;
             }
-            String coverUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + "_cover.png";
+            String coverUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + ".png";
             String videoDemoUrl = "https://gy.cdn.guiji.cn/resources/v1/"+classifyName+"/" + name + "_demo.mp4";
-            String coverDemoUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + "_demo_cover.png";
+            String coverDemoUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + ".png";
             MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo(videoUrl);
             VideoSize realVideoSize = MediaUtil.getRealVideoSize(mediaInfo);
 
 
+            // TODO {"demo_text":"","tts_match":"Tom"} ->  {"demoVideoDuration":4440} demo_duration单独字段
+            // TODO 图片 or 视频 压缩JPG
             String sql = "INSERT INTO `ffo-toc`.`user_video_robot` (`user_id`, `robot_name`, `robot_code`, `scene_code`, `sex`, `label`, `country`, `attitude`, `age`, `screen_type`, `cover_url`," +
                     " `video_url`, `duration`, `vertical`, `horizontal`, `train_status`, `tts_id`, `demo_video_make_status`, `demo_cover_url`, `demo_video_url`, `type`, `free_type`, `silent_video_url`," +
                     " `ext`, `del_flag`, `create_time`, `update_time`, `remark`) VALUES " +
@@ -191,6 +201,43 @@ public class MainTest1234V3 {
             printWriter.write(sql2);
             printWriter.write("\r\n");
             printWriter.flush();
+            currentTimeMillis = currentTimeMillis - (5 * 60 * 1000);
+        }
+        printWriter.flush();
+        printWriter.close();
+        System.out.println("解析完成");
+    }
+
+    @Test
+    public void robotSQLGenerateV2() throws Exception{
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\Guiji.cn-待上架模板视频\\Guiji.cn公共模特+声音_202409.xlsx"));
+        List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheet("初筛选-待确认"), 1);
+        PrintWriter printWriter = FileUtil.getPrintWriter("D:\\Guiji.cn-待上架模板视频\\Guiji.cn公共模特+声音_202409_exportRecommend.sql", StandardCharsets.UTF_8, false);
+        printWriter.write("--  数据\r\n");
+        printWriter.flush();
+        long currentTimeMillis = System.currentTimeMillis();
+        for (Map<String, Object> objectMap : dataList) {
+            String format = DateUtil.format(new Date(currentTimeMillis), "yyyy-MM-dd HH:mm:ss");
+            String name =  StringUtils.toStr(objectMap.get("模特名称")).trim();
+            String tts_match =  StringUtils.toStr(objectMap.get("配音")).trim();
+            String recommend =  StringUtils.toStr(objectMap.get("是否推荐")).trim();
+            if (StringUtils.isBlank(name)) {
+                continue;
+            }
+            if (recommend.contains("是")) {
+                //1是形象
+                String sql1 = "INSERT INTO `ffo-toc`.`user_video_classify_relation` (`classify_id`, `bind_id`) " +
+                        "SELECT * from ( SELECT id as classify_id FROM `ffo-toc`.`user_video_classify` WHERE name = '推荐' and type = 1) t1, ( SELECT id as bind_id FROM `ffo-toc`.`user_video_robot` WHERE robot_name = '"+name+"' and type = 2) t2;\n";
+
+                //2是音色
+                String sql2 = "INSERT INTO `ffo-toc`.`user_video_classify_relation` (`classify_id`, `bind_id`) " +
+                        "SELECT * from ( SELECT id as classify_id FROM `ffo-toc`.`user_video_classify` WHERE name = '推荐' and type = 2) t1, ( SELECT id as bind_id FROM `ffo-toc`.`user_video_tts` WHERE speaker = '"+tts_match+"' and type = 2) t2;\n";
+
+                printWriter.write(sql1);
+                printWriter.write(sql2);
+                printWriter.write("\r\n");
+                printWriter.flush();
+            }
             currentTimeMillis = currentTimeMillis - (5 * 60 * 1000);
         }
         printWriter.flush();
