@@ -5,6 +5,7 @@ import cn.acyou.leo.framework.exception.ConcurrentException;
 import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.util.function.CallTask;
 import cn.acyou.leo.framework.util.function.Task;
+import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.data.redis.connection.SortParameters;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.core.query.SortQueryBuilder;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -1553,6 +1556,45 @@ public class RedisUtils {
         } finally {
             unLock(key, lockId);
         }
+    }
+
+    /**
+     * 限流
+     * @param key 资源 key
+     * @param count 限制访问次数
+     * @param period 时间，单位秒
+     * @return boolean
+     */
+    public boolean accessLimit(String key, Integer count, Integer period){
+        ImmutableList<Object> keys = ImmutableList.of(key);
+        String luaScript = buildLuaScript();
+        RedisScript<Number> redisScript = new DefaultRedisScript<>(luaScript, Number.class);
+        Number resCnt = redisObjTemplate.execute(redisScript, keys, count , period);
+        if (null != resCnt && resCnt.intValue() <= count) {
+            log.info("[访问成功] 第{}次访问key为 {}的接口", resCnt, keys);
+            return true;
+        } else {
+            log.warn("[访问次数受限制] 第{}次访问key为 {}的接口", resCnt, keys);
+            return false;
+        }
+    }
+
+
+
+    /**
+     * 限流脚本
+     */
+    private String buildLuaScript() {
+        return "local c" +
+                "\nc = redis.call('get',KEYS[1])" +
+                "\nif c and tonumber(c) > tonumber(ARGV[1]) then" +
+                "\nreturn c;" +
+                "\nend" +
+                "\nc = redis.call('incr',KEYS[1])" +
+                "\nif tonumber(c) == 1 then" +
+                "\nredis.call('expire',KEYS[1],ARGV[2])" +
+                "\nend" +
+                "\nreturn c;";
     }
 
 }

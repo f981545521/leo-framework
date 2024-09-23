@@ -29,4 +29,17 @@ public class RedisTestCase extends ApplicationBaseTests {
         LoginUser user = redisUtils.getObject("sys:token:5");
         System.out.println(user);
     }
+    @Test
+    public void test3(){
+        int count = 5;
+        int time = 5;
+        System.out.println(redisUtils.accessLimit("book", count, time));
+        System.out.println(redisUtils.accessLimit("book", count, time));
+        System.out.println(redisUtils.accessLimit("book", count, time));
+        System.out.println(redisUtils.accessLimit("book", count, time));
+        System.out.println(redisUtils.accessLimit("book", count, time));
+        System.out.println(redisUtils.accessLimit("book", count, time));
+        System.out.println(redisUtils.accessLimit("book", count, time));
+        System.out.println(redisUtils.accessLimit("book", count, time));
+    }
 }
