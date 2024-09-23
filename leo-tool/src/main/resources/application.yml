@@ -56,7 +56,7 @@ leo:
     print-performance-sql: true
     print-to-result: true
     print-request-info: true
-    token-verify: true
+    token-verify: false
     ignore-uri-list:
       - ${server.servlet.context-path}/doc.html
       - ${server.servlet.context-path}/swagger-resources
