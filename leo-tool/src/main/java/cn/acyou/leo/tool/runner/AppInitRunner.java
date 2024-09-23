@@ -42,7 +42,8 @@ public class AppInitRunner implements ApplicationRunner {
                 log.error("定时器 {} 不存在，请检查", scheduleJob.getBeanName());
             }
         }
-        Result.setDefaultSuccess(0, "SUCCESS");
-        Result.setDefaultError(-1, "ERROR");
+        //在这里修改默认的返回code与返回信息
+        //Result.setDefaultSuccess(0, "SUCCESS");
+        //Result.setDefaultError(-1, "ERROR");
     }
 }
