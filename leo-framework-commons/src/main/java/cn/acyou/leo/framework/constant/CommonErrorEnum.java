@@ -101,7 +101,7 @@ public enum CommonErrorEnum implements ErrorEnum {
      */
     E_UNAUTHENTICATED(102001, "未登录，请先登录！"),
     E_INSUFFICIENT_PERMISSIONS(102100, "权限不足，请联系管理员！"),
-    E_LOGIN_TIMEOUT(102002, "登录超时，请重新登录！"),
+    E_LOGIN_TIMEOUT(102002, "登录已过期，请重新登录！"),
     E_LOGIN_AT_OTHER_WHERE(102003, "账号在别处登录，已被迫下线！"),
     E_MINI_PROGRAM_FAIL(102004, "微信登录失败，请获取手机号登录！"),
     E_CODE_BEEN_USE(102005, "小程序登录Code已经被使用，请退出后重新登录。"),
