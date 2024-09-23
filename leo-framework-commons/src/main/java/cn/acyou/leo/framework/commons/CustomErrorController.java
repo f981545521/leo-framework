@@ -3,6 +3,7 @@ package cn.acyou.leo.framework.commons;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.BeanUtil;
+import cn.acyou.leo.framework.util.StringUtils;
 import io.swagger.annotations.Api;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
@@ -42,7 +43,10 @@ public class CustomErrorController extends BasicErrorController {
         Integer status = (Integer) originalMsgMap.get("status");
         String error = (String) originalMsgMap.get("error");
         String message = (String) originalMsgMap.get("message");
-        Result<Object> resultError = Result.error(status, error + "|" +  message);
+        if (StringUtils.isNotBlank(message)) {
+            error = error + "|" +  message;
+        }
+        Result<Object> resultError = Result.error(status, error);
         if (HttpStatus.NOT_FOUND.equals(httpStatus)) {
             resultError = Result.error(CommonErrorEnum.E_NOT_FOUNT);
         }
