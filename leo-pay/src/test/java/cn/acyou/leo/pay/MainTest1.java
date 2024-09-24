@@ -42,14 +42,15 @@ public class MainTest1 {
     public void test224() {
         File targetFile = new File("E:\\media\\file1.mov");
         HttpUtil.downloadFile("https://guiyu-tici.oss-cn-shanghai.aliyuncs.com/tici/643-1-202204221851007.MOV", targetFile, new StreamProgress() {
+
             @Override
             public void start() {
 
             }
 
             @Override
-            public void progress(long l) {
-                Console.log("已下载：{}", FileUtil.readableFileSize(l));
+            public void progress(long l, long l1) {
+
             }
 
             @Override
