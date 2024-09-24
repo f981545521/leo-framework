@@ -47,7 +47,15 @@ spring:
       mail:
         smtp:
           auth: true
-
+  flyway:
+    # 开启Flyway
+    enabled: true
+    # 自动生成的flyway_schema_history表
+    baseline-on-migrate: true
+    # 检查迁移脚本位置是否存在。
+    check-location: false
+    # 是否允许无序迁移
+    out-of-order: false
 leo:
   xxl-job:
     enable: false
