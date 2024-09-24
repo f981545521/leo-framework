@@ -30,6 +30,7 @@ public class UserService implements UserDetailsService {
         List<String> roleCodeList = new ArrayList<>();
 
         authoritySet.add("demo:list");
+        authoritySet.add("order:get");
         roleCodeList.add("ROLE_ADMIN");
         roleCodeList.add("ROLE_AUDITOR");
 
