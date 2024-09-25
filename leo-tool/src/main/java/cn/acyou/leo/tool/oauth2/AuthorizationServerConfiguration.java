@@ -1,22 +1,33 @@
 package cn.acyou.leo.tool.oauth2;
 
+import cn.acyou.leo.framework.model.Result;
+import cn.acyou.leo.framework.util.StringUtils;
 import cn.acyou.leo.tool.security.ClientService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
+import org.springframework.security.oauth2.common.exceptions.InvalidScopeException;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.common.exceptions.UnsupportedGrantTypeException;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * @author youfang
  * @version [1.0.0, 2024/9/23 16:48]
  **/
+@Slf4j
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
@@ -43,12 +54,37 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-/*                .exceptionTranslator(new WebResponseExceptionTranslator<OAuth2Exception>() {
+                .exceptionTranslator(new WebResponseExceptionTranslator() {
                     @Override
-                    public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
-                        return null;
+                    public ResponseEntity<Result<?>> translate(Exception e) throws Exception {
+                        ResponseEntity.BodyBuilder status = ResponseEntity.status(HttpStatus.UNAUTHORIZED);
+                        String message = "认证失败";
+                        log.error(message, e);
+                        if (e instanceof UnsupportedGrantTypeException) {
+                            message = "不支持该认证类型";
+                        }
+                        if (e instanceof InvalidTokenException
+                                && StringUtils.containsIgnoreCase(e.getMessage(), "Invalid refresh token (expired)")) {
+                            message = "刷新令牌已过期，请重新登录";
+                        }
+                        if (e instanceof InvalidScopeException) {
+                            message = "不是有效的scope值";
+                        }
+                        if (e instanceof InvalidGrantException) {
+                            if (StringUtils.containsIgnoreCase(e.getMessage(), "Invalid refresh token")) {
+                                message = "refresh token无效";
+                            }
+                            if (StringUtils.containsIgnoreCase(e.getMessage(), "Invalid authorization code")) {
+                                message = "authorization code无效";
+                            }
+                            if (StringUtils.containsIgnoreCase(e.getMessage(), "locked")) {
+                                message = "用户已被锁定，请联系管理员";
+                            }
+                            message = "用户名或密码错误";
+                        }
+                        return status.body(Result.error(message));
                     }
-                })*/
+                })
                 .tokenStore(new RedisTokenStore(redisConnectionFactory))
                 .authenticationManager(authenticationManager);
     }
