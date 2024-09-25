@@ -1,0 +1,1 @@
+-- INSERT INTO `student` (`id`, `name`, `age`, `birth`, `ext`) VALUES (default, '关羽', 2, now(), NULL);
