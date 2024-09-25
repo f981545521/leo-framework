@@ -54,8 +54,8 @@ spring:
     baseline-on-migrate: true
     # 检查迁移脚本位置是否存在。
     check-location: false
-    # 是否允许无序迁移
-    out-of-order: false
+    # 是否允许无序迁移[开发true 生产false]（执行了新版本SQL再提交旧版本SQL会启动失败）
+    out-of-order: true
 leo:
   xxl-job:
     enable: false
