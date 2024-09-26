@@ -1,5 +1,7 @@
 package cn.acyou.leo.tool.test;
 
+import cn.acyou.leo.framework.util.FileUtil;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -18,16 +20,19 @@ import java.util.regex.Pattern;
 public class AvatarHelper {
 
     public static void main(String[] args) throws IOException {
-        generateImg("M", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "1");
-        generateImg("H", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "2");
-        generateImg("HH", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "3");
-        generateImg("张", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "4");
-        generateImg("张飞", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "5");
-        generateImg("阿Q", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "6");
-        generateImg("张三丰", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "7");
-        generateImg("宫本武藏", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "8");
-        generateImg("OK", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "9");
-        generateImg("O了", "C:\\Users\\1\\Pictures\\QQ浏览器截图", "10");
+        String userHomePath = FileUtil.getUserHomePath();
+        String path = userHomePath + "\\Pictures\\Avatar";
+        FileUtil.mkdir(path);
+        generateImg("M", path, "1");
+        generateImg("H", path, "2");
+        generateImg("HH", path, "3");
+        generateImg("张", path, "4");
+        generateImg("张飞", path, "5");
+        generateImg("阿Q", path, "6");
+        generateImg("张三丰", path, "7");
+        generateImg("宫本武藏", path, "8");
+        generateImg("OK", path, "9");
+        generateImg("O了", path, "10");
     }
 
 
