@@ -55,6 +55,14 @@ public class ApplicationTests {
     private HttpbinClient httpbinClient;
 
     @Test
+    public void test33443(){
+        //执行SQL：[UPDATE t_dict SET sort = sort + 1 WHERE (id = 3191)]
+        dictService.lambdaUpdate()
+                .setSql("sort = sort + 1")
+                .eq(Dict::getId, 3191)
+                .update();
+    }
+    @Test
     public void test3344(){
         String ip = httpbinClient.ip();
         System.out.println(ip);
