@@ -17,7 +17,9 @@ import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DataAnalysisService;
 import cn.acyou.leo.tool.service.DictService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +56,87 @@ public class ApplicationTests {
     @Autowired
     private HttpbinClient httpbinClient;
 
+    /**
+     * 在设计数据库和应用程序时，考虑是否需要允许某些字段被更新为 null。有时，将字段设置为 null 可能是不必要的，或者可能违反业务规则。在这种情况下，最好在应用程序层面进行检查，防止将 null 值传递给 MyBatis Plus 进行更新。
+     */
+
     @Test
-    public void test33443(){
+    public void 测试更新为NULL值(){
+        Dict dict = dictService.getById(3191);
+        dict.setName(dict.getName() + "1");
+        dict.setRemark(null);
+        dictMapper.updateRemark(dict);
+    }
+
+    @Test
+    public void 测试更新为NULL值2(){
         //执行SQL：[UPDATE t_dict SET sort = sort + 1 WHERE (id = 3191)]
         dictService.lambdaUpdate()
                 .setSql("sort = sort + 1")
                 .eq(Dict::getId, 3191)
                 .update();
+    }
+
+    @Test
+    public void 测试更新为NULL值3(){
+        Dict dict = dictService.getById(3191);
+        dict.setName(dict.getName() + "1");
+        UpdateWrapper<Dict> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("remark", null);
+        updateWrapper.eq("id", dict.getId());
+        // 执行SQL： [UPDATE t_dict SET name='主任医师1', code='主任医师', parent_id=2667, sort=1, remark='GGG', status=1, create_time='2024-10-12 09:35:28',  update_time='2024-10-12 10:07:54', remark=null WHERE (id = 3191)]
+        dictService.saveOrUpdate(dict, updateWrapper);
+    }
+
+    @Test
+    public void 测试更新为NULL值4(){
+        Dict dict = dictService.getById(3191);
+        dict.setId(null);
+        dict.setName(dict.getName() + "1");
+        dict.setRemark(null);
+        UpdateWrapper<Dict> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("remark", null);
+        updateWrapper.eq("id", dict.getId());
+        //执行SQL：[UPDATE t_dict SET name='主任医师11', code='主任医师', parent_id=2667, sort=1, remark='ooo', status=1, create_time='2024-10-12 09:35:28', update_time='2024-10-12 10:11:44', remark=null WHERE (id = null)]
+        //执行SQL：[INSERT INTO t_dict ( name, code, parent_id, sort, remark, status, create_time, update_time ) VALUES ( '主任医师11', '主任医师', 2667, 1, 'ooo', 1, '2024-10-12 09:35:28', '2024-10-12 10:11:44' )]
+        //先根据updateWrapper尝试更新，否继续执行saveOrUpdate(T)方法。（存在性验证之后的saveOrUpdate操作）
+        dictService.saveOrUpdate(dict, updateWrapper);
+        //
+        //dictService.update(dict, updateWrapper);
+    }
+
+
+    @Test
+    public void 测试更新为NULL值5(){
+        Dict dict = dictService.getById(3191);
+        dict.setName(dict.getName() + "1");
+        //执行SQL：[UPDATE t_dict SET name='主任医师11', code='主任医师', parent_id=2667, sort=1, remark='FFFF', status=1, create_time='2024-10-12 09:35:28', update_time='2024-10-12 10:29:52', remark=null WHERE (id = 3191)]
+        dictService.lambdaUpdate()
+                .set(Dict::getRemark, null)
+                .eq(Dict::getId, dict.getId())
+                .update(dict);
+    }
+
+    @Test
+    public void test33442(){
+        Dict dict = dictService.getById(3191);
+        dict.setName(dict.getName() + "1");
+        //dict.setRemark(null);
+        //dictService.saveOrUpdate(dict);
+        //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        UpdateWrapper<Dict> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("remark", null);
+        //条件为空 更新所有表！！！！！！！！
+        dictService.saveOrUpdate(dict, updateWrapper);
+        //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    }
+
+    @Test
+    public void test334342(){
+        Dict dict = dictService.getById(3191);
+        dict.setId(null);
+        dict.setRemark(null);
+        dictService.saveOrUpdate(dict);
     }
     @Test
     public void test3344(){

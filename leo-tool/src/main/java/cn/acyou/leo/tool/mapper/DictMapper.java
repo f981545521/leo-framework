@@ -5,6 +5,7 @@ import cn.acyou.leo.tool.dto.dict.DictSo;
 import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.entity.Dict;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -42,4 +43,8 @@ public interface DictMapper extends Mapper<Dict> {
      * @return {@link Dict}
      */
     Dict selectDict(@Param("dictCode") String dictCode, @Param("value") String value);
+
+
+    @Update("UPDATE t_dict SET remark = #{remark} WHERE id = #{id}")
+    int updateRemark(Dict user);
 }
