@@ -19,7 +19,6 @@ import cn.acyou.leo.tool.service.DictService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +128,22 @@ public class ApplicationTests {
         //条件为空 更新所有表！！！！！！！！
         dictService.saveOrUpdate(dict, updateWrapper);
         //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    }
+
+    @Test
+    public void 测试删除(){
+        dictService.lambdaUpdate()
+                .eq(Dict::getCode, "主任医师")
+                .eq(Dict::getStatus, "0")
+                .remove();
+    }
+
+    @Test
+    public void 测试删除2(){
+        LambdaQueryWrapper<Dict> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dict::getCode, "主任医师");
+        queryWrapper.eq(Dict::getStatus, "0");
+        dictService.remove(queryWrapper);
     }
 
     @Test
