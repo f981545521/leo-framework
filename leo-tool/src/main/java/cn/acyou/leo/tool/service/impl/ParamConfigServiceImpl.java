@@ -11,6 +11,7 @@ import cn.acyou.leo.tool.dto.param.ParamConfigVo;
 import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.mapper.ParamConfigMapper;
 import cn.acyou.leo.tool.service.ParamConfigService;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -51,12 +52,15 @@ public class ParamConfigServiceImpl extends ServiceImpl<ParamConfigMapper, Param
     @Override
     //@Cacheable(value="leo:pay:paramConfig#-1", key="#namespace + '-' + #code")
     public List<ParamConfigVo> getConfigList(String namespace, String code) {
-        List<ParamConfig> list = lambdaQuery()
+        LambdaQueryChainWrapper<ParamConfig> queryChainWrapper = lambdaQuery()
                 .in(StringUtils.isNotBlank(namespace), ParamConfig::getNamespace, (Object[]) namespace.split(","))
-                .in(StringUtils.isNotBlank(code), ParamConfig::getCode, (Object[]) code.split(","))
-                .eq(ParamConfig::getIsDelete, Constant.FLAG_FALSE_0)
-                .orderByDesc(ParamConfig::getSort)
-                .list();
+                //.in(StringUtils.isNotEmpty(code), ParamConfig::getCode, (Object[]) code.split(","))
+                .eq(ParamConfig::getDeleted, Constant.FLAG_FALSE_0)
+                .orderByDesc(ParamConfig::getSort);
+        if (StringUtils.isNotBlank(code)) {
+            queryChainWrapper.in(StringUtils.isNotEmpty(code), ParamConfig::getCode, (Object[]) code.split(","));
+        }
+        List<ParamConfig> list = queryChainWrapper.list();
         return BeanCopyUtil.copyList(list, ParamConfigVo.class);
     }
 

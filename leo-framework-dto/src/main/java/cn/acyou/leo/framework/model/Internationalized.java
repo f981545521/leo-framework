@@ -15,6 +15,6 @@ public class Internationalized implements Serializable {
      * 国际化
      *
      */
-    private String internationalLang;
+    private String international;
 
 }

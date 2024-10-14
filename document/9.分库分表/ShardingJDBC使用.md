@@ -48,7 +48,7 @@ spring:
         #  sharding-column: user_id
         #  algorithm-expression: ds$->{user_id % 2}
       binding-tables: t_order # 绑定表 • 绑定表适用于具有相同结构和访问模式的表
-      broadcast-tables: t_param_config # 广播表 • 在分库分表以后，比如数据库1有配置表，数据库2有个配置表，数据库3也有个配置表，需要我们把配置同时写入三个数据库的配置表中， 在这样的情况下这里的配置表就是一种广播表，要求就是数据同步和一致。
+      broadcast-tables: sys_param_config # 广播表 • 在分库分表以后，比如数据库1有配置表，数据库2有个配置表，数据库3也有个配置表，需要我们把配置同时写入三个数据库的配置表中， 在这样的情况下这里的配置表就是一种广播表，要求就是数据同步和一致。
       tables:
         t_order:
           actual-data-nodes: ds$->{0..1}.t_order_$->{0..1} # 分表： t_order_0 跟 t_order_1

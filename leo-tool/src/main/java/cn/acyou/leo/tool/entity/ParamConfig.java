@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("t_param_config")
+@TableName("sys_param_config")
 @ApiModel(value="ParamConfig对象", description="参数配置表")
 public class ParamConfig implements Serializable {
 
@@ -62,9 +62,12 @@ public class ParamConfig implements Serializable {
     @ApiModelProperty(value = "排序值")
     private Integer sort;
 
+    @ApiModelProperty(value = "版本号")
+    private Integer version;
+
     @ApiModelProperty(value = "是否删除  0-正常 1-删除")
     @TableLogic
-    private Integer isDelete;
+    private Integer deleted;
 
     @ApiModelProperty(value = "创建时间，默认当前创建时间")
     private Date createTime;

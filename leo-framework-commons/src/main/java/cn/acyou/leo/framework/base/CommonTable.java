@@ -88,7 +88,7 @@ public class CommonTable implements Serializable {
     private Integer sort;
 
     @ApiModelProperty(value = "是否删除  0-正常 1-删除")
-    private Integer isDelete;
+    private Integer deleted;
 
     @ApiModelProperty(value = "创建时间，默认当前创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")

@@ -47,6 +47,9 @@ public class ParamConfigVo implements Serializable {
     @ApiModelProperty(value = "参数详细描述")
     private String description;
 
+    @ApiModelProperty(value = "版本号")
+    private Integer version;
+
     @ApiModelProperty(value = "备注")
     private String remark;
 

@@ -42,7 +42,7 @@ public interface CommonTableMapper {
             "            `text`          varchar(500) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '描述',\n" +
             "            `remark`        varchar(500) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',\n" +
             "            `sort`          int(11) DEFAULT NULL COMMENT '排序值',\n" +
-            "            `is_delete`     int(11) DEFAULT '0' COMMENT '是否删除  0-正常 1-删除',\n" +
+            "            `deleted`       int(11) DEFAULT '0' COMMENT '是否删除  0-正常 1-删除',\n" +
             "            `create_time`   datetime NOT NULL                DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间，默认当前创建时间',\n" +
             "            `create_user`   bigint(20) DEFAULT NULL COMMENT '创建人',\n" +
             "            `update_time`   datetime NOT NULL                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',\n" +
@@ -55,7 +55,7 @@ public interface CommonTableMapper {
     @Insert("<script>" +
             "        INSERT INTO ${tableName}\n" +
             "            <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">\n" +
-            "                abbr,name,code,content,amount,price,type,field1,field2,field3,field4,field5,number_field1,number_field2,number_field3,number_field4,number_field5,field6,field7,field8,field9,field10,text,remark,sort,is_delete,create_time,create_user,update_time,update_user,\n" +
+            "                abbr,name,code,content,amount,price,type,field1,field2,field3,field4,field5,number_field1,number_field2,number_field3,number_field4,number_field5,field6,field7,field8,field9,field10,text,remark,sort,deleted,create_time,create_user,update_time,update_user,\n" +
             "            </trim>\n" +
             "        VALUES\n" +
             "        <foreach collection=\"list\" item=\"record\" separator=\",\">\n" +
@@ -96,7 +96,7 @@ public interface CommonTableMapper {
             "            <if test=\"record.text != null and record.text != '' \">text,</if>\n" +
             "            <if test=\"record.remark != null and record.remark != '' \">remark,</if>\n" +
             "            <if test=\"record.sort != null\">sort,</if>\n" +
-            "            <if test=\"record.isDelete != null\">is_delete,</if>\n" +
+            "            <if test=\"record.isDelete != null\">deleted,</if>\n" +
             "            <if test=\"record.createTime != null\">create_time,</if>\n" +
             "            <if test=\"record.createUser != null\">create_user,</if>\n" +
             "            <if test=\"record.updateTime != null\">update_time,</if>\n" +
@@ -168,7 +168,7 @@ public interface CommonTableMapper {
             "                <if test=\"it.text != null and it.text != '' \">text = #{it.text},</if>\n" +
             "                <if test=\"it.remark != null and it.remark != '' \">remark = #{it.remark},</if>\n" +
             "                <if test=\"it.sort != null\">sort = #{it.sort},</if>\n" +
-            "                <if test=\"it.isDelete != null\">is_delete = #{it.isDelete},</if>\n" +
+            "                <if test=\"it.deleted != null\">deleted = #{it.deleted},</if>\n" +
             "                <if test=\"it.createTime != null\">create_time = #{it.createTime},</if>\n" +
             "                <if test=\"it.createUser != null\">create_user = #{it.createUser},</if>\n" +
             "                <if test=\"it.updateTime != null\">update_time = #{it.updateTime},</if>\n" +
@@ -181,7 +181,7 @@ public interface CommonTableMapper {
 
     @Select("<script>" +
             "        SELECT\n" +
-            "        id,abbr,name,code,content,amount,price,type,field1,field2,field3,field4,field5,number_field1,number_field2,number_field3,number_field4,number_field5,field6,field7,field8,field9,field10,text,remark,sort,is_delete,create_time,create_user,update_time,update_user\n" +
+            "        id,abbr,name,code,content,amount,price,type,field1,field2,field3,field4,field5,number_field1,number_field2,number_field3,number_field4,number_field5,field6,field7,field8,field9,field10,text,remark,sort,deleted,create_time,create_user,update_time,update_user\n" +
             "        FROM ${tableName} where id in\n" +
             "        <foreach collection=\"list\" item=\"id\" open=\"(\" separator=\",\" close=\")\">#{id}</foreach>"+
             "</script>")

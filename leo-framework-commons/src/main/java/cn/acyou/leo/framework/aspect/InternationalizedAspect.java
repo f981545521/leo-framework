@@ -82,9 +82,9 @@ public class InternationalizedAspect {
     }
 
     public void processInternationalizedData(Internationalized obj){
-        String internationalLang = obj.getInternationalLang();
-        if (StringUtils.isNotBlank(internationalLang)) {
-            JSONObject jsonObject = JSON.parseObject(internationalLang);
+        String international = obj.getInternational();
+        if (StringUtils.isNotBlank(international)) {
+            JSONObject jsonObject = JSON.parseObject(international);
             ClientLanguage clientLanguage = AppContext.getClientLanguage();
             String clientLanguageName = clientLanguage.getName();
             ReflectionUtils.doWithFields(obj.getClass(), (t)->{
