@@ -18,7 +18,7 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("t_area")
+@TableName("sys_area")
 @ApiModel(value = "Area对象", description = "地区信息表")
 public class Area implements Serializable {
 

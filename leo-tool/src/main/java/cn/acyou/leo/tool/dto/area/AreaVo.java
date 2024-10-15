@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * t_area 实体类
+ * sys_area 实体类
  * 2020-10-27 10:17:15 地区信息表
  *
  * @author youfang

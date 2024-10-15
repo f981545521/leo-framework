@@ -21,7 +21,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("t_schedule_job_log")
+@TableName("sys_schedule_job_log")
 @ApiModel(value = "ScheduleJobLog对象", description = "定时任务日志")
 public class ScheduleJobLog implements Serializable {
 

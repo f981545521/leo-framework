@@ -14,5 +14,5 @@
 建表脚本：
 
 - [1. 通用表](../document/0.files/通用表.sql)
-- [2. 地区表](../document/0.files/t_area.sql)
+- [2. 地区表](../document/0.files/sys_area.sql)
 

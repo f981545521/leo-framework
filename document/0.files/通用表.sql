@@ -1,26 +1,7 @@
-
-drop table if exists data_analysis;
-CREATE TABLE `data_analysis` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `code` varchar(32) NOT NULL COMMENT 'code',
-  `day_time` date DEFAULT NULL COMMENT '统计日期',
-  `content` text COLLATE utf8mb4_bin COMMENT '数据JSON',
-  `content_old` text COLLATE utf8mb4_bin COMMENT '数据JSON',
-  `content_new` text COLLATE utf8mb4_bin COMMENT '数据JSON',
-  `field1` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '扩展字段1',
-  `field2` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '扩展字段2',
-  `field3` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '扩展字段3',
-  `platform` varchar(50) DEFAULT 'guixiu' COMMENT '平台 (H5)/(APP)' ,
-  `ext` text COLLATE utf8mb4_bin COMMENT '扩展参数JSON',
-  `del_flag` int DEFAULT '0' COMMENT '删除标识 0.有效 1.无效',
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `remark` text COLLATE utf8mb4_bin COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_day_time` (`day_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='数据统计';
-
-
+-- ----------------------------
+-- 参数配置表
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_param_config`;
 CREATE TABLE `sys_param_config` (
     `id`          bigint                                                 NOT NULL AUTO_INCREMENT COMMENT '参数主键(PK)',
     `namespace`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '命名空间/组',
@@ -65,10 +46,7 @@ CREATE TABLE `sys_dict`
     `create_time` timestamp                                              NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` timestamp                                              NULL     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 100
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_bin COMMENT = '数据字典表';
+) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '数据字典表';
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
@@ -125,13 +103,11 @@ VALUES (3190, '主任护师', '主任护师', 2667, 1, NULL, 1, NULL, now(), now
 INSERT INTO `sys_dict`
 VALUES (3191, '主任医师', '主任医师', 2667, 1, NULL, 1, NULL, now(), now());
 
-
 -- ----------------------------
--- Table structure for t_task_schedule_job
+-- 定时任务
 -- ----------------------------
-DROP TABLE IF EXISTS `t_schedule_job`;
-CREATE TABLE `t_schedule_job`
-(
+DROP TABLE IF EXISTS `sys_schedule_job`;
+CREATE TABLE `sys_schedule_job` (
     `job_id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '任务id',
     `bean_name`       varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL     DEFAULT NULL COMMENT 'spring bean名称',
     `params`          varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL     DEFAULT NULL COMMENT '参数',
@@ -140,23 +116,14 @@ CREATE TABLE `t_schedule_job`
     `remark`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL     DEFAULT NULL COMMENT '备注',
     `create_time`     datetime                                                NULL     DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`job_id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1000
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_bin COMMENT = '定时任务';
+) ENGINE = InnoDB AUTO_INCREMENT = 1000 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '定时任务';
+INSERT INTO `sys_schedule_job` VALUES (10, 'myDynamicTask', NULL, '0/5 * * * * *', 0, '测试', '2020-04-04 21:56:48');
 
 -- ----------------------------
--- Records of t_task_schedule_job
+-- 定时任务日志
 -- ----------------------------
-INSERT INTO `t_schedule_job`
-VALUES (10, 'myDynamicTask', NULL, '0/5 * * * * *', 0, '测试', '2020-04-04 21:56:48');
-
--- ----------------------------
--- Table structure for t_task_schedule_job_log
--- ----------------------------
-DROP TABLE IF EXISTS `t_schedule_job_log`;
-CREATE TABLE `t_schedule_job_log`
-(
+DROP TABLE IF EXISTS `sys_schedule_job_log`;
+CREATE TABLE `sys_schedule_job_log` (
     `log_id`      bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '任务日志id',
     `job_id`      bigint(20)                                              NOT NULL COMMENT '任务id',
     `bean_name`   varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL DEFAULT NULL COMMENT 'spring bean名称',
@@ -170,7 +137,4 @@ CREATE TABLE `t_schedule_job_log`
     `local_ip`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NULL DEFAULT NULL COMMENT '运行设备IP',
     PRIMARY KEY (`log_id`) USING BTREE,
     INDEX `job_id` (`job_id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 100
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_bin COMMENT = '定时任务日志';
+) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '定时任务日志';
