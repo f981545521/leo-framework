@@ -143,6 +143,18 @@ public class ApplicationTests {
     }
 
     @Test
+    public void 测试查询2(){
+        //Dict dict = new Dict();
+        Dict dict = null;
+        Dict one = dictService.lambdaQuery()
+                .eq(Dict::getId, 1132)
+                //.eq(dict != null && dict.getParentId() != null, Dict::getParentId, dict.getParentId())//value会直接执行计算
+                .eq(dict != null && dict.getParentId() != null, Dict::getParentId, dict !=null? dict.getParentId():0)
+                .one();
+        System.out.println(one);
+    }
+
+    @Test
     public void test334342(){
         Dict dict = dictService.getById(3191);
         dict.setId(null);
