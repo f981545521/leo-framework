@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 国际化切面
  *  example:
- *  INSERT INTO scorpio.t_dict (id, name, code, parent_id, sort, remark, status, international_lang, create_time, update_time)
+ *  INSERT INTO scorpio.sys_dict (id, name, code, parent_id, sort, remark, status, international_lang, create_time, update_time)
  *  VALUES(2155, '计量单位', 'unit', 0, 1, NULL, 1, '{''name_en'':''unit'',''name_jp'':''けいりょうたんい''}', '2024-04-25 15:09:57', '2024-04-25 16:05:51');
  *
  *  说明：通过international_lang字段固定配置，不过存在问题：**搜索时无法使用字段搜索**

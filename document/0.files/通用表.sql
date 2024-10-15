@@ -51,8 +51,8 @@ INSERT INTO `sys_param_config` (`id`, `namespace`, `code`, `value`, `ext_value`,
 -- ----------------------------
 -- 数据字典表
 -- ----------------------------
-DROP TABLE IF EXISTS `t_dict`;
-CREATE TABLE `t_dict`
+DROP TABLE IF EXISTS `sys_dict`;
+CREATE TABLE `sys_dict`
 (
     `id`          bigint(20)                                             NOT NULL AUTO_INCREMENT COMMENT '字典ID',
     `name`        varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '字典名称',
@@ -70,59 +70,59 @@ CREATE TABLE `t_dict`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT = '数据字典表';
 -- ----------------------------
--- Records of t_dict
+-- Records of sys_dict
 -- ----------------------------
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (1132, '测试', '111', 1131, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2155, '计量单位', 'unit', 0, 1, NULL, 1, '{"name_en":"unit","name_jp":"けいりょうたんい"}', now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2156, '把', '把', 2155, 0, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2157, '板', '板', 2155, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2159, '包', '包', 2155, 3, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2175, '个', '个', 2155, 19, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2176, '根', '根', 2155, 20, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2180, '盒', '盒', 2155, 24, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2181, '件', '件', 2155, 25, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2206, '瓶', '瓶', 2155, 50, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2229, 'kg', 'kg', 2155, 73, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2230, 'ml', 'ml', 2155, 74, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2232, '杯', '杯', 2155, 76, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2667, '职称', 'pro_title', 0, 1, NULL, 1, '{"name_en":"Professional title","name_jp":"役職名"}', now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (2668, '主任', '主任', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3179, '副主任', '副主任', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3180, '副主任护师', '副主任护师', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3181, '主治医师', '主治医师', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3182, '副主任医师', '副主任医师', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3183, '主管护师', '主管护师', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3186, '护师', '护师', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3187, '护士', '护士', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3188, '讲师', '讲师', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3189, '医师', '医师', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3190, '主任护师', '主任护师', 2667, 1, NULL, 1, NULL, now(), now());
-INSERT INTO `t_dict`
+INSERT INTO `sys_dict`
 VALUES (3191, '主任医师', '主任医师', 2667, 1, NULL, 1, NULL, now(), now());
 
 

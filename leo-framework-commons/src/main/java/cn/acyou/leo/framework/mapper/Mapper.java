@@ -29,7 +29,7 @@ public interface Mapper<T> extends BaseMapper<T> {
      *  dict.setParentId(0L);
      *  dict.setName("单位");
      *  dict.setStatus(0);
-     *  int i = dictMapper.insertWhereNotExist(dict, "select name from t_dict where id = 21560");
+     *  int i = dictMapper.insertWhereNotExist(dict, "select name from sys_dict where id = 21560");
      * </pre>
      *
      * @param entity 实体类

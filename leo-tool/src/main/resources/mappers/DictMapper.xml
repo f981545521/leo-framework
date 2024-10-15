@@ -31,14 +31,14 @@
     <select id="listDictByCode" resultType="cn.acyou.leo.tool.dto.dict.DictVo">
         select
         <include refid="Alisa_Column_List"/>
-        from t_dict t left join t_dict ptd on t.parent_id = ptd.id
+        from sys_dict t left join sys_dict ptd on t.parent_id = ptd.id
         where ptd.code = #{code} order by t.sort desc
     </select>
 
     <select id="selectDicts" resultType="cn.acyou.leo.tool.dto.dict.DictVo">
         select
         <include refid="Base_Column_List"/>
-        from t_dict
+        from sys_dict
         <where>
             <if test="name!=null and name!=''">and name like CONCAT('%',#{name},'%')</if>
             <if test="code!=null and code!=''">and code like CONCAT('%',#{code},'%')</if>
@@ -50,8 +50,8 @@
     <select id="selectDict" resultType="cn.acyou.leo.tool.entity.Dict">
         SELECT
         <include refid="Alisa_Column_List"/>
-        FROM t_dict t
-        LEFT JOIN t_dict tp on t.parent_id = tp.id
+        FROM sys_dict t
+        LEFT JOIN sys_dict tp on t.parent_id = tp.id
         WHERE t.code = #{value} and tp.code = #{dictCode}
     </select>
 

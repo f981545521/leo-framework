@@ -8,13 +8,11 @@ import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.component.EmailUtil;
 import cn.acyou.leo.framework.util.component.EmailUtil2;
 import cn.acyou.leo.tool.entity.Area;
-import cn.acyou.leo.tool.entity.DataAnalysis;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.feign.HttpbinClient;
 import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.service.AreaService;
-import cn.acyou.leo.tool.service.DataAnalysisService;
 import cn.acyou.leo.tool.service.DictService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -51,8 +49,6 @@ public class ApplicationTests {
     @Autowired
     private CommonTableMapper commonTableMapper;
     @Autowired
-    private DataAnalysisService dataAnalysisService;
-    @Autowired
     private HttpbinClient httpbinClient;
 
     /**
@@ -69,7 +65,7 @@ public class ApplicationTests {
 
     @Test
     public void 测试更新为NULL值2(){
-        //执行SQL：[UPDATE t_dict SET sort = sort + 1 WHERE (id = 3191)]
+        //执行SQL：[UPDATE sys_dict SET sort = sort + 1 WHERE (id = 3191)]
         dictService.lambdaUpdate()
                 .setSql("sort = sort + 1")
                 .eq(Dict::getId, 3191)
@@ -83,7 +79,7 @@ public class ApplicationTests {
         UpdateWrapper<Dict> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("remark", null);
         updateWrapper.eq("id", dict.getId());
-        // 执行SQL： [UPDATE t_dict SET name='主任医师1', code='主任医师', parent_id=2667, sort=1, remark='GGG', status=1, create_time='2024-10-12 09:35:28',  update_time='2024-10-12 10:07:54', remark=null WHERE (id = 3191)]
+        // 执行SQL： [UPDATE sys_dict SET name='主任医师1', code='主任医师', parent_id=2667, sort=1, remark='GGG', status=1, create_time='2024-10-12 09:35:28',  update_time='2024-10-12 10:07:54', remark=null WHERE (id = 3191)]
         dictService.saveOrUpdate(dict, updateWrapper);
     }
 
@@ -96,8 +92,8 @@ public class ApplicationTests {
         UpdateWrapper<Dict> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("remark", null);
         updateWrapper.eq("id", dict.getId());
-        //执行SQL：[UPDATE t_dict SET name='主任医师11', code='主任医师', parent_id=2667, sort=1, remark='ooo', status=1, create_time='2024-10-12 09:35:28', update_time='2024-10-12 10:11:44', remark=null WHERE (id = null)]
-        //执行SQL：[INSERT INTO t_dict ( name, code, parent_id, sort, remark, status, create_time, update_time ) VALUES ( '主任医师11', '主任医师', 2667, 1, 'ooo', 1, '2024-10-12 09:35:28', '2024-10-12 10:11:44' )]
+        //执行SQL：[UPDATE sys_dict SET name='主任医师11', code='主任医师', parent_id=2667, sort=1, remark='ooo', status=1, create_time='2024-10-12 09:35:28', update_time='2024-10-12 10:11:44', remark=null WHERE (id = null)]
+        //执行SQL：[INSERT INTO sys_dict ( name, code, parent_id, sort, remark, status, create_time, update_time ) VALUES ( '主任医师11', '主任医师', 2667, 1, 'ooo', 1, '2024-10-12 09:35:28', '2024-10-12 10:11:44' )]
         //先根据updateWrapper尝试更新，否继续执行saveOrUpdate(T)方法。（存在性验证之后的saveOrUpdate操作）
         dictService.saveOrUpdate(dict, updateWrapper);
         //
@@ -109,7 +105,7 @@ public class ApplicationTests {
     public void 测试更新为NULL值5(){
         Dict dict = dictService.getById(3191);
         dict.setName(dict.getName() + "1");
-        //执行SQL：[UPDATE t_dict SET name='主任医师11', code='主任医师', parent_id=2667, sort=1, remark='FFFF', status=1, create_time='2024-10-12 09:35:28', update_time='2024-10-12 10:29:52', remark=null WHERE (id = 3191)]
+        //执行SQL：[UPDATE sys_dict SET name='主任医师11', code='主任医师', parent_id=2667, sort=1, remark='FFFF', status=1, create_time='2024-10-12 09:35:28', update_time='2024-10-12 10:29:52', remark=null WHERE (id = 3191)]
         dictService.lambdaUpdate()
                 .set(Dict::getRemark, null)
                 .eq(Dict::getId, dict.getId())
@@ -162,17 +158,11 @@ public class ApplicationTests {
     }
 
     @Test
-    public void test34453(){
-        List<DataAnalysis> list = dataAnalysisService.lambdaQuery().list();
-        System.out.println(list);
-    }
-
-    @Test
     public void test3445(){
         Map<String, Object> param = new HashMap<>();
         param.put("name", "讲师");
         param.put("sort", "10");
-        dictService.removeByMap(param);//DELETE FROM t_dict WHERE name = '讲师' AND sort = '10'
+        dictService.removeByMap(param);//DELETE FROM sys_dict WHERE name = '讲师' AND sort = '10'
     }
 
     @Test
@@ -180,7 +170,7 @@ public class ApplicationTests {
         LambdaQueryChainWrapper<Dict> lambdaQuery = dictService.lambdaQuery();
         lambdaQuery.eq(Dict::getName, "讲师");
         lambdaQuery.gt(Dict::getSort, 10);
-        dictService.remove(lambdaQuery.getWrapper());//DELETE FROM t_dict WHERE (name = '讲师' AND sort > 10)
+        dictService.remove(lambdaQuery.getWrapper());//DELETE FROM sys_dict WHERE (name = '讲师' AND sort > 10)
     }
 
     @Test
@@ -188,7 +178,7 @@ public class ApplicationTests {
         LambdaQueryWrapper<Dict> lambdaQuery = new LambdaQueryWrapper<>();
         lambdaQuery.eq(Dict::getName, "讲师");
         lambdaQuery.gt(Dict::getSort, 10);
-        dictService.remove(lambdaQuery);//DELETE FROM t_dict WHERE (name = '讲师' AND sort > 10)
+        dictService.remove(lambdaQuery);//DELETE FROM sys_dict WHERE (name = '讲师' AND sort > 10)
     }
 
     @Test
@@ -267,7 +257,7 @@ public class ApplicationTests {
 
     @Test
     public void testExecuteMapper3(){
-        int res = executeMapper.executeDDLSql("alter table t_dict_v1 rename t_dict");
+        int res = executeMapper.executeDDLSql("alter table sys_dict_v1 rename sys_dict");
         System.out.println(res);
     }
 
@@ -467,7 +457,7 @@ public class ApplicationTests {
         dict.setParentId(0L);
         dict.setName("好");
         dict.setStatus(0);
-        int i = dictMapper.insertWhereNotExist(dict, "select name from t_dict where id = 21560");
+        int i = dictMapper.insertWhereNotExist(dict, "select name from sys_dict where id = 21560");
         System.out.println(i);
     }
 

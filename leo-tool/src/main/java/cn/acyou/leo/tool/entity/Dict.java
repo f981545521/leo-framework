@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("t_dict")
+@TableName("sys_dict")
 @ApiModel(value = "Dict对象", description = "数据字典表")
 public class Dict extends Internationalized {
 

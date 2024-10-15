@@ -45,6 +45,6 @@ public interface DictMapper extends Mapper<Dict> {
     Dict selectDict(@Param("dictCode") String dictCode, @Param("value") String value);
 
 
-    @Update("UPDATE t_dict SET remark = #{remark} WHERE id = #{id}")
+    @Update("UPDATE sys_dict SET remark = #{remark} WHERE id = #{id}")
     int updateRemark(Dict user);
 }

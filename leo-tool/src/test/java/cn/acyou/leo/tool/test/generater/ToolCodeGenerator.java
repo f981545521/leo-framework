@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
  **/
 public class ToolCodeGenerator {
     public static void main(String[] args) {
-        CustomCodeGenerator.instance("t_dict", "t_")
+        CustomCodeGenerator.instance("sys_dict", "t_")
                 .author("youfang")
                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
                 .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false")
