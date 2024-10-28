@@ -193,7 +193,7 @@ public class MainTest1234V3 {
         }
         printWriter.write("--  数据\r\n");
         printWriter.flush();
-        long currentTimeMillis = DateUtil.parseDateTime("2024-09-19 21:37:29").getTime();
+        long currentTimeMillis = new Date().getTime();// DateUtil.parseDateTime("2024-09-19 21:37:29").getTime();
         for (Map<String, Object> objectMap : dataList) {
             String format = DateUtil.format(new Date(currentTimeMillis), "yyyy-MM-dd HH:mm:ss");
             String name =  StringUtils.toStr(objectMap.get("模特名称")).trim();
@@ -231,13 +231,13 @@ public class MainTest1234V3 {
                 screenType = "2";
             }
 
-            String videoUrl = "https://digital-public-toc.obs.cn-east-3.myhuaweicloud.com/resources/v5/" + name + ".mp4";
+            String videoUrl = "https://digital-public-toc.obs.cn-east-3.myhuaweicloud.com/resources/v6/" + name + ".mp4";
             if (!cn.acyou.leo.framework.util.HttpUtil.reachable(videoUrl)) {
                 log.error("地址不可达：" + videoUrl);
                 continue;
             }
             String coverUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + ".jpg";
-            String videoDemoUrl = "https://digital-public-toc.obs.cn-east-3.myhuaweicloud.com/resources/v5/" + name + "_demo.mp4";
+            String videoDemoUrl = "https://digital-public-toc.obs.cn-east-3.myhuaweicloud.com/resources/v6/" + name + "_demo.mp4";
             String coverDemoUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + ".jpg";
             //String coverDemoUrl = videoUrl.substring(0, videoUrl.lastIndexOf(".")) + "_demo_cover.jpg";
             MultimediaInfo mediaInfo = MediaUtil.instance().getMediaInfo(videoUrl);
