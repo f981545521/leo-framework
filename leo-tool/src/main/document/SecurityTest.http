@@ -1,35 +1,35 @@
 ### 登录
-POST http://192.168.4.239:8076/leo-tool/sys/auth/login?username=admin3&password=123
+POST http://localhost:8076/leo-tool/sys/auth/login?username=admin3&password=123
 Content-Type: application/json
 
 > {% client.global.set("token", response.body.data.token); %}
 
 
 ### 获取登录用户信息
-GET http://192.168.4.239:8076/leo-tool/sys/auth/userInfo
+GET http://localhost:8076/leo-tool/sys/auth/userInfo
 Content-Type: application/json
 token: {{token}}
 
 ### 登出
-POST http://192.168.4.239:8076/leo-tool/sys/auth/logout
+POST http://localhost:8076/leo-tool/sys/auth/logout
 Content-Type: application/json
 token: {{token}}
 
 ### 允许匿名访问接
-POST http://192.168.4.239:8076/leo-tool/demo/page
+POST http://localhost:8076/leo-tool/demo/page
 Content-Type: application/json
 token: {{token}}
 
 ### 授权接口 操作权限1
-POST http://192.168.4.239:8076/leo-tool/demo/list
+POST http://localhost:8076/leo-tool/demo/list
 Content-Type: application/json
 token: {{token}}
 
 ### 授权接口 操作权限2
-POST http://192.168.4.239:8076/leo-tool/demo/get
+POST http://localhost:8076/leo-tool/demo/get
 Content-Type: application/json
 
 ### 授权接口 角色权限
-POST http://192.168.4.239:8076/leo-tool/demo/rolePermission
+POST http://localhost:8076/leo-tool/demo/rolePermission
 Content-Type: application/json
 token: {{token}}
