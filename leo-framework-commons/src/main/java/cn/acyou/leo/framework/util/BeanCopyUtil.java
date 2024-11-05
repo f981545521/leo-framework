@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.util.CollectionUtils;
 
 import java.beans.BeanInfo;
@@ -13,6 +15,8 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Bean 之间的拷贝
@@ -91,39 +95,74 @@ public class BeanCopyUtil {
 
 
     /**
-     * 合并属性 (不会使用null覆盖目标)
+     * 合并同一个对象的属性 (不会使用null覆盖目标)
      *
-     * @param <M>         对象类型
-     * @param target      目标
-     * @param destination 目的
+     * @param <M> 对象类型
+     * @param source 被合并对象
+     * @param target 合并到
      */
-    public static <M> void merge(M target, M destination) {
-        merge(target, destination, false);
+    public static <M> void merge(M source, M target) {
+        merge(source, target, false);
     }
 
     /**
-     * 合并属性
+     * 合并同一个对象的属性
      *
-     * @param <M>   对象类型
-     * @param target          目标
-     * @param destination     目的地
+     * @param <M> 对象类型
+     * @param source 被合并对象
+     * @param target 合并到
      * @param nullCoverTarget 使用null覆盖目标
      */
-    public static <M> void merge(M target, M destination, boolean nullCoverTarget) {
+    public static <M> void merge(M source, M target, boolean nullCoverTarget) {
         try {
-            BeanInfo beanInfo = Introspector.getBeanInfo(target.getClass());
+            BeanInfo beanInfo = Introspector.getBeanInfo(source.getClass());
             for (PropertyDescriptor descriptor : beanInfo.getPropertyDescriptors()) {
                 if (descriptor.getWriteMethod() != null) {
-                    Object defaultValue = descriptor.getReadMethod().invoke(destination);
+                    Object defaultValue = descriptor.getReadMethod().invoke(target);
                     if (defaultValue == null && !nullCoverTarget) {
                         continue;
                     }
-                    descriptor.getWriteMethod().invoke(target, defaultValue);
+                    descriptor.getWriteMethod().invoke(source, defaultValue);
                 }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    /**
+     * 复制Bean属性
+     * @param source 源
+     * @param target 目标
+     */
+    public static void copyProperties(Object source, Object target) {
+        BeanUtils.copyProperties(source, target);
+    }
+
+    /**
+     * 复制Bean属性（null值不复制）
+     * @param source 源
+     * @param target 目标
+     */
+    public static void copyPropertiesIgnoreNull(Object source, Object target) {
+        BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
+    }
+
+    /**
+     * 获取对象所有null属性的名称
+     * @param source 对象
+     * @return 所有null属性的名称
+     */
+    public static String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+        Set<String> emptyNames = new HashSet<>();
+        for (java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
     }
 
 }
