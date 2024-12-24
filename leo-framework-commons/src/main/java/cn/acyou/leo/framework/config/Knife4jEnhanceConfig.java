@@ -10,12 +10,18 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author youfang
@@ -46,6 +52,14 @@ public class Knife4jEnhanceConfig {
     @Bean(value = "defaultApi2")
     @ConditionalOnProperty(value = "leo.api.enable", havingValue = "true")
     public Docket defaultApi2() {
+        List<Parameter> parameters = new ArrayList<>();
+        parameters.add(new ParameterBuilder()
+                .name("token")
+                .description("用户token")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                .defaultValue("1")
+                .build());
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(new ApiInfoBuilder()
                         .title(apiDocProperty.getTitle())
@@ -59,6 +73,7 @@ public class Knife4jEnhanceConfig {
                 .apis(RequestHandlerSelectors.basePackage(apiDocProperty.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build();
+        docket.globalOperationParameters(parameters);
         if (openApiExtensionResolver != null) {
             docket.extensions(openApiExtensionResolver.buildExtensions(GROUP_NAME));
         }

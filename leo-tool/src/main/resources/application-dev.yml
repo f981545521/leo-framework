@@ -37,3 +37,29 @@ spring:
 api:
   leo-pay-api-url: http://192.168.4.65:8075/leo-pay/
   access-token: 88888888
+
+# jetcache配置参考文档 https://github.com/alibaba/jetcache/blob/master/docs/CN/Config.md
+jetcache:
+  statIntervalMinutes: 15 # 统计间隔，0表示不统计
+  areaInCacheName: false # 默认false(2.7+)
+  hidePackages: cn.acyou # @Cached和@CreateCache自动生成name的时候，为了不让name太长，hiddenPackages指定的包名前缀被截掉
+  local:
+    default:
+      type: caffeine # 本地缓存类型(linkedhashmap/caffeine)
+      limit: 100 # 每个缓存实例的最大元素的全局配置，仅local类型的缓存需要指定。注意是每个缓存实例的限制，而不是全部，比如这里指定100，然后用@CreateCache创建了两个缓存实例（并且注解上没有设置localLimit属性），那么每个缓存实例的限制都是100
+      keyConvertor: fastjson2 #key转换器的全局配置其他可选：fastjson/jackson
+      expireAfterWriteInMillis: 100000 # 以毫秒为单位指定超时时间的全局配置
+  remote:
+    default:
+      type: redis.lettuce # 远程缓存类型(redis)
+      keyPrefix: 'LEO_TOOL:CACHE:'
+      keyConvertor: fastjson2 #其他可选：fastjson/jackson
+      broadcastChannel: leo #jetcahe2.7的两级缓存支持更新以后失效其他JVM中的local cache，但多个服务共用redis同一个channel可能会造成广播风暴，需要在这里指定channel，你可以决定多个不同的服务是否共用同一个channel。如果没有指定则不开启。
+      valueEncoder: java #其他可选：kryo/kryo5
+      valueDecoder: java #其他可选：kryo/kryo5
+      poolConfig:
+        minIdle: 5
+        maxIdle: 20
+        maxTotal: 50
+      uri: redis://${spring.redis.host}:${spring.redis.port}/
+      defaultExpireInMillis: 5000

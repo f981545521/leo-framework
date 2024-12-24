@@ -1,12 +1,14 @@
 package cn.acyou.leo.tool.test;
 
+import cn.acyou.leo.framework.util.BeanCopyUtil;
 import cn.acyou.leo.framework.util.RegexUtil;
-import cn.acyou.leo.framework.util.XMLUtil;
+import cn.acyou.leo.tool.dto.dict.DictSo;
+import cn.acyou.leo.tool.dto.dict.DictVo;
+import cn.acyou.leo.tool.entity.Dict;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * @author youfang
@@ -15,6 +17,35 @@ import java.util.regex.Pattern;
 public class MainTest501 {
 
     public static void main(String[] args) {
+        Dict dict = new Dict();
+        dict.setCode("1");
+        dict.setName("你好");
+        dict.setId(1L);
+        List<DictSo> dictSoList = new ArrayList<>();
+        DictSo dictSo = new DictSo();
+        dictSo.setCode("1");
+        dictSo.setName("SUB");
+        dictSoList.add(dictSo);
+        //dict.setDictSoList(dictSoList);
+        System.out.println(dict);
+        DictVo copy = BeanCopyUtil.copy(dict, DictVo.class);
+        System.out.println(copy);
+        //DictVo dictVo = CopyUtil.to(dict, DictVo.class);
+        //System.out.println(dictVo);
+    }
+
+    public static void main3(String[] args) {
+        // JVM试图使用额最大内存量 (单位是字节)
+        System.out.println("最大内存量:" + Runtime.getRuntime().maxMemory() / 1024 / 1024 + "M");
+        //的JVM内存总量(单位是字节)
+        System.out.println("目前初始内存量:" + Runtime.getRuntime().totalMemory() / 1024 / 1024 + "M");
+        //得到JVM中的空闲内存量(单位是字节)
+        System.out.println("目前可用的内存量:" + Runtime.getRuntime().freeMemory() / 1024 / 1024 + "M");
+        //可用处理器的数目
+        System.out.println("可用处理器的数目:" + Runtime.getRuntime().availableProcessors());
+    }
+
+    public static void main2(String[] args) {
         String s = "(scratchpad) \n1. Introduction: Welcoming the audience and introducing the topic of Mother's Day.\n2. Person1's View: Emphasizing the importance of thoughtful gifts.\n3. Person2's View: Arguing that simple, easily accessible gifts can be just as meaningful.\n4. Fierce Debate: Discussing the pros and cons of different types of gifts.\n5. Conclusion: Wrapping up the conversation with final thoughts and a goodbye message.\n```\n\n<Person1> \"欢迎来到硅基播客！今天我们要讨论一个非常特别的话题——母亲节。你知道吗？今天就是母亲节了！你给妈妈准备礼物了吗？\"</Person1>\n\n<Person2> \"哦，我猜你还没给妈妈买礼物吧？其实有一样东西不费劲，又很轻易买得到。\"</Person2>\n\n<Person1> \"嗯，我觉得母亲节的礼物应该是特别的，不能随便应付。妈妈为我们付出了那么多，难道不应该用心准备吗？\"</Person1>\n\n<Person2> \"我不同意！有时候简单的礼物反而更能打动人心。比如一束鲜花或者一张亲手写的卡片，这些都能表达我们的心意。\"</Person2>\n\n<Person1> \"但是，鲜花和卡片太普通了，妈妈可能会觉得我们不够用心。为什么不花点时间，挑选一件她真正需要或者喜欢的东西呢？\"</Person1>\n\n<Person2> \"你说的也有道理，但并不是所有人都有时间和精力去精心挑选礼物。生活节奏这么快，简单的礼物也能传达我们的爱和感激。\"</Person2>\n\n<Person1> \"可是，母亲节一年就一次，难道不值得我们花点心思吗？比如带妈妈去她喜欢的餐厅吃饭，或者陪她度过一个愉快的下午，这些都比简单的礼物更有意义。\"</Person1>\n\n<Person2> \"嗯，我明白你的意思，但我还是觉得心意最重要。无论礼物贵重与否，只要能让妈妈感受到我们的爱，就足够了。\"</Person2>\n\n<Person1> \"好吧，或许我们可以找到一个平衡点。既有心意，又不需要太多时间和精力。比如，提前准备一些小惊喜，或者在母亲节当天给妈妈一个大大的拥抱。\"</Person1>\n\n<Person2> \"对，这样的想法不错！其实，母亲节的意义就在于表达对妈妈的爱和感激，无论礼物是什么，只要用心就好。\"</Person2>\n\n<Person1> \"没错！希望大家都能在这个特别的日子里，让妈妈感受到我们的爱。感谢大家收听硅基播客，祝所有的妈妈们母亲节快乐！\"</Person1>\n\n<Person2> \"是的，祝所有的妈妈们节日快乐！再见！\"</Person2>";
         String[] split = s.split("\n\n");
         List<JSONObject> talkList = new ArrayList<>();

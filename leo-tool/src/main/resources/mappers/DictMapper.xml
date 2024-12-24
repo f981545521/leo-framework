@@ -28,6 +28,15 @@
         , t.name, t.code, t.parent_id, t.sort, t.remark, t.status, t.create_time, t.update_time
     </sql>
 
+
+    <insert id="insertListNotExists">
+        <foreach collection="list" item="item">
+            INSERT INTO `t_dict` (`name`, `code`, `parent_id`) select  #{item.name}, #{item.code}, #{item.parentId} FROM DUAL
+            where not exists (select 1 from t_dict where parent_id = #{item.parentId} and code = #{item.code});
+        </foreach>
+    </insert>
+
+
     <select id="listDictByCode" resultType="cn.acyou.leo.tool.dto.dict.DictVo">
         select
         <include refid="Alisa_Column_List"/>

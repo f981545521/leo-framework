@@ -49,4 +49,17 @@ public interface DictService extends IService<Dict> {
      * @return {@link PageData<DictVo>}
      */
     PageData<DictTreeVo> treeSelectDicts(DictSo dictSo);
+
+    /**
+     * 测试 JetCache多级缓存
+     * @param id id
+     * @return {@link DictVo }
+     */
+    DictVo loadDict(long id);
+    /**
+     * 测试 SpringCache缓存
+     * @param id id
+     * @return {@link DictVo }
+     */
+    DictVo loadDictSpring(long id);
 }

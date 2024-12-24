@@ -47,4 +47,10 @@ public interface DictMapper extends Mapper<Dict> {
 
     @Update("UPDATE sys_dict SET remark = #{remark} WHERE id = #{id}")
     int updateRemark(Dict user);
+
+    /**
+     * 在查询不到的时候新增
+     * @param dictList list
+     */
+    void insertListNotExists(List<Dict> dictList);
 }

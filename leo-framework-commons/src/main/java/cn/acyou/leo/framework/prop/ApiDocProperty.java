@@ -35,7 +35,7 @@ public class ApiDocProperty {
      */
     private String version;
     /**
-     * 联系人
+     * 接口包路径
      */
     private String basePackage;
 }

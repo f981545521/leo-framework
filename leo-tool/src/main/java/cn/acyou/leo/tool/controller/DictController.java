@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.controller;
 
 import cn.acyou.leo.framework.constant.Constant;
+import cn.acyou.leo.framework.model.IdReq;
 import cn.acyou.leo.framework.model.IdsReq;
 import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.model.Result;
@@ -97,6 +98,21 @@ public class DictController {
     public Result<?> delete(@Validated @RequestBody IdsReq idsReq) {
         dictService.removeByIds(idsReq.getIds());
         return Result.success();
+    }
+
+
+    @ApiOperation(value = "JetCache使用")
+    @PostMapping("/loadDict")
+    public Result<DictVo> loadDict(@Validated @RequestBody IdReq idReq) {
+        DictVo dictVo = dictService.loadDict(idReq.getId());
+        return Result.success(dictVo);
+    }
+
+    @ApiOperation(value = "SpringCache使用")
+    @PostMapping("/loadDictSpring")
+    public Result<DictVo> loadDictSpring(@Validated @RequestBody IdReq idReq) {
+        DictVo dictVo = dictService.loadDictSpring(idReq.getId());
+        return Result.success(dictVo);
     }
 
 }

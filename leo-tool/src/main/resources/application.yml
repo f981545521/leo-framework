@@ -19,6 +19,8 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+    #default-property-inclusion: non_null
+    #property-naming-strategy: SNAKE_CASE #对于fastjson缺省使用SnakeCase策略(统一对象参数下划线形式)
   thymeleaf:
     cache: false
     enabled: true

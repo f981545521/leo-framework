@@ -13,7 +13,11 @@ import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.service.DictService;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -28,6 +32,7 @@ import java.util.stream.Collectors;
  * @author youfang
  * @since 2022-04-27
  */
+@Slf4j
 @Service
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
     /**
@@ -105,5 +110,27 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     public boolean validDictValue(String dictCode, String value) {
         Dict dict = baseMapper.selectDict(dictCode, value);
         return dict != null;
+    }
+
+    @Override
+    @Cached(name = "loadDictV", key = "#id", cacheType = CacheType.BOTH, expire = 100)
+    public DictVo loadDict(long id) {
+        log.info("使用数据库加载");
+        DictVo dictVo = new DictVo();
+        dictVo.setId(id);
+        dictVo.setParentId(0L);
+        dictVo.setName("load");
+        return dictVo;
+    }
+
+    @Override
+    @Cacheable(value = "TOOL:loadDictSpringV#200", key = "#id")
+    public DictVo loadDictSpring(long id) {
+        log.info("使用数据库加载");
+        DictVo dictVo = new DictVo();
+        dictVo.setId(id);
+        dictVo.setParentId(0L);
+        dictVo.setName("load");
+        return dictVo;
     }
 }

@@ -245,6 +245,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
             <!-- 打源码包 -->
