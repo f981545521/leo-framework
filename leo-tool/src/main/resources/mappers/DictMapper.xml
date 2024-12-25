@@ -53,6 +53,14 @@
             <if test="code!=null and code!=''">and code like CONCAT('%',#{code},'%')</if>
             <if test="parentId!=null">and parent_id = #{parentId}</if>
             <if test="status!=null">and status = #{status}</if>
+            <if test="createDates!=null and createDates.size() == 2">and create_time between #{createDates[0]} and DATE_FORMAT(#{createDates[1]}, '%Y-%m-%d 23:59:59') </if>
+            <if test="createDateArray!=null and createDateArray.length== 2">and create_time between #{createDateArray[0],javaType=java.util.Date,jdbcType=TIMESTAMP} and #{createDateArray[1],javaType=java.util.Date,jdbcType=TIMESTAMP}</if>
+            <if test="createDateArray2 != null and createDateArray2.length == 2">
+                and create_time between
+                DATE_FORMAT(#{createDateArray2[0], jdbcType=TIMESTAMP,typeHandler=org.apache.ibatis.type.DateTypeHandler} , '%Y-%m-%d 00:00:00')
+                and
+                DATE_FORMAT(#{createDateArray2[1], jdbcType=TIMESTAMP,typeHandler=org.apache.ibatis.type.DateTypeHandler} , '%Y-%m-%d 23:59:59')
+            </if>
         </where>
         order by create_time desc
     </select>
