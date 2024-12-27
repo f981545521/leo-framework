@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ScheduleJobMapper extends BaseMapper<ScheduleJob> {
 
+    ScheduleJob selectByJobId(Long jobId);
+
+    ScheduleJob selectByJobIdV2(Long jobId);
 }

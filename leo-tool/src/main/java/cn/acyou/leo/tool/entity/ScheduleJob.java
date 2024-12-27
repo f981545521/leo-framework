@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -10,6 +11,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -48,6 +50,12 @@ public class ScheduleJob implements Serializable {
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
+
+    @TableField(exist = false)
+    private List<ScheduleJobLog> logs;
+
+    @TableField(exist = false)
+    private Dict dict;
 
 
 }

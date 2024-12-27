@@ -13,10 +13,50 @@
         <result column="create_time" property="createTime"/>
     </resultMap>
 
+    <resultMap id="DetailResultMap" type="cn.acyou.leo.tool.entity.ScheduleJob" extends="BaseResultMap">
+        <association property="dict" javaType="cn.acyou.leo.tool.entity.Dict" select="selectDict" column="job_id"/>
+        <collection property="logs" javaType="ArrayList" ofType="cn.acyou.leo.tool.entity.ScheduleJobLog" select="selectDetails" column="job_id"/>
+    </resultMap>
+
+
+    <resultMap id="DetailResultMapV2" type="cn.acyou.leo.tool.entity.ScheduleJob" extends="BaseResultMap">
+        <collection property="logs" ofType="cn.acyou.leo.tool.entity.ScheduleJobLog">
+            <id column="log_id" property="logId"/>
+            <result column="job_id" property="jobId"/>
+            <result column="bean_name" property="beanName"/>
+            <result column="params" property="params"/>
+            <result column="status" property="status"/>
+            <result column="error" property="error"/>
+            <result column="times" property="times"/>
+            <result column="create_time" property="createTime"/>
+            <result column="remark" property="remark"/>
+            <result column="local_ip" property="localIp"/>
+        </collection>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         job_id
         , bean_name, params, cron_expression, status, remark, create_time
     </sql>
+
+    <select id="selectDict" resultType="cn.acyou.leo.tool.entity.Dict">
+        select * from sys_dict where parent_id = 1131 and code = #{jobId}
+    </select>
+
+    <select id="selectDetails" resultType="cn.acyou.leo.tool.entity.ScheduleJobLog">
+        select * from sys_schedule_job_log where job_id = #{jobId}
+    </select>
+
+    <select id="selectByJobId" resultMap="DetailResultMap">
+        select * from sys_schedule_job where job_id = #{jobId}
+    </select>
+
+    <select id="selectByJobIdV2" resultMap="DetailResultMapV2">
+        <!-- 查询多条数据，Mybatis会自动封装 -->
+        select t.*, t1.* from sys_schedule_job t
+            left join sys_schedule_job_log t1 on t.job_id = t1.job_id
+        where t1.job_id = #{jobId}
+    </select>
 
 </mapper>

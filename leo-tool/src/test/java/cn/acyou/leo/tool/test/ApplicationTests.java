@@ -9,9 +9,11 @@ import cn.acyou.leo.framework.util.component.EmailUtil;
 import cn.acyou.leo.framework.util.component.EmailUtil2;
 import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
+import cn.acyou.leo.tool.entity.ScheduleJob;
 import cn.acyou.leo.tool.feign.HttpbinClient;
 import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
+import cn.acyou.leo.tool.mapper.ScheduleJobMapper;
 import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DictService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -50,6 +52,27 @@ public class ApplicationTests {
     private CommonTableMapper commonTableMapper;
     @Autowired
     private HttpbinClient httpbinClient;
+    @Autowired
+    private ScheduleJobMapper scheduleJobMapper;
+
+    @Test
+    public void testResultMap查询() {
+        ScheduleJob scheduleJob = scheduleJobMapper.selectByJobId(10L);
+        System.out.println(scheduleJob);
+        ScheduleJob scheduleJobV2 = scheduleJobMapper.selectByJobIdV2(10L);
+        System.out.println(scheduleJobV2);
+    }
+
+    @Test
+    public void test获取单个字段() {
+        List<Object> objects = dictService.listObjs(new LambdaQueryWrapper<Dict>().select(Dict::getName).eq(Dict::getParentId, 0));
+        System.out.println(objects);
+        LambdaQueryWrapper<Dict> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(Dict::getId);
+        queryWrapper.eq(Dict::getParentId, 0);
+        List<Object> objects1 = dictService.listObjs(queryWrapper);
+        System.out.println(objects1);
+    }
 
     /**
      * 在设计数据库和应用程序时，考虑是否需要允许某些字段被更新为 null。有时，将字段设置为 null 可能是不必要的，或者可能违反业务规则。在这种情况下，最好在应用程序层面进行检查，防止将 null 值传递给 MyBatis Plus 进行更新。
@@ -61,6 +84,11 @@ public class ApplicationTests {
         dict.setName(dict.getName() + "1");
         dict.setRemark(null);
         dictMapper.updateRemark(dict);
+
+        //注解方法：
+        //@TableField(updateStrategy = FieldStrategy.IGNORED)
+        //updateStrategy = FieldStrategy.IGNORED 表示在更新操作时忽略更新策略，允许将 NULL 值更新到数据库中。
+
     }
 
     @Test
