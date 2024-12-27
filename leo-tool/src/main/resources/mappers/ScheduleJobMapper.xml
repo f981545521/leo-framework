@@ -34,11 +34,46 @@
         </collection>
     </resultMap>
 
+    <resultMap id="DetailResultMapV3" type="cn.acyou.leo.tool.entity.ScheduleJob" extends="BaseResultMap">
+        <association property="dict" javaType="cn.acyou.leo.tool.entity.Dict" columnPrefix="dict_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="code" property="code"/>
+            <result column="parent_id" property="parentId"/>
+            <result column="sort" property="sort"/>
+            <result column="remark" property="remark"/>
+            <result column="status" property="status"/>
+            <result column="create_time" property="createTime"/>
+            <result column="update_time" property="updateTime"/>
+        </association>
+        <collection property="logs" resultMap="ScheduleJobLog_BaseResultMap" columnPrefix="logs_"/>
+    </resultMap>
+
+    <resultMap id="ScheduleJobLog_BaseResultMap" type="cn.acyou.leo.tool.entity.ScheduleJobLog">
+        <id column="log_id" property="logId"/>
+        <result column="job_id" property="jobId"/>
+        <result column="bean_name" property="beanName"/>
+        <result column="params" property="params"/>
+        <result column="status" property="status"/>
+        <result column="error" property="error"/>
+        <result column="times" property="times"/>
+        <result column="create_time" property="createTime"/>
+        <result column="remark" property="remark"/>
+        <result column="local_ip" property="localIp"/>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        job_id
-        , bean_name, params, cron_expression, status, remark, create_time
+        job_id, bean_name, params, cron_expression, status, remark, create_time
     </sql>
+
+    <sql id="alisaColumns"> ${alias}.job_id, ${alias}.bean_name, ${alias}.params, ${alias}.cron_expression, ${alias}.status, ${alias}.remark, ${alias}.create_time </sql>
+
+    <select id="selectLimit10" resultType="cn.acyou.leo.tool.entity.ScheduleJob">
+      select <include refid="alisaColumns"><property name="alias" value="t1"/></include>
+      from sys_schedule_job t1 limit 10
+    </select>
+
 
     <select id="selectDict" resultType="cn.acyou.leo.tool.entity.Dict">
         select * from sys_dict where parent_id = 1131 and code = #{jobId}
@@ -56,6 +91,33 @@
         <!-- 查询多条数据，Mybatis会自动封装 -->
         select t.*, t1.* from sys_schedule_job t
             left join sys_schedule_job_log t1 on t.job_id = t1.job_id
+        where t1.job_id = #{jobId}
+    </select>
+
+    <select id="selectByJobIdV3" resultMap="DetailResultMapV3">
+        select t.*,
+            t1.log_id as logs_log_id,
+            t1.job_id as logs_job_id,
+            t1.bean_name as logs_bean_name,
+            t1.params as logs_params,
+            t1.status as logs_status,
+            t1.error as logs_error,
+            t1.times as logs_times,
+            t1.create_time as logs_create_time,
+            t1.remark as logs_remark,
+            t1.local_ip as logs_local_ip,
+            t2.id as dict_id,
+            t2.name as dict_name,
+            t2.code as dict_code,
+            t2.parent_id as dict_parent_id,
+            t2.sort as dict_sort,
+            t2.remark as dict_remark,
+            t2.status as dict_status,
+            t2.create_time as dict_create_time,
+            t2.update_time as dict_update_time
+        from sys_schedule_job t
+            left join sys_schedule_job_log t1 on t.job_id = t1.job_id
+            left join sys_dict t2 on t2.parent_id = 1131 and t.job_id = t2.code
         where t1.job_id = #{jobId}
     </select>
 

@@ -19,6 +19,8 @@ import cn.acyou.leo.tool.service.DictService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,13 +59,31 @@ public class ApplicationTests {
     private HttpbinClient httpbinClient;
     @Autowired
     private ScheduleJobMapper scheduleJobMapper;
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
+    @Test
+    public void contextLoads() throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        Connection connection = sqlSession.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from sys_dict limit 1");
+        preparedStatement.execute();
+        ResultSet resultSet = preparedStatement.getResultSet();
+        System.out.println(resultSet);
+        connection.close();
+        sqlSession.close();
+    }
 
     @Test
     public void testResultMap查询() {
+        List<ScheduleJob> scheduleJobs = scheduleJobMapper.selectLimit10();
+        System.out.println(scheduleJobs);
         ScheduleJob scheduleJob = scheduleJobMapper.selectByJobId(10L);
         System.out.println(scheduleJob);
         ScheduleJob scheduleJobV2 = scheduleJobMapper.selectByJobIdV2(10L);
         System.out.println(scheduleJobV2);
+        ScheduleJob scheduleJobV3 = scheduleJobMapper.selectByJobIdV3(10L);
+        System.out.println(scheduleJobV3);
     }
 
     @Test
