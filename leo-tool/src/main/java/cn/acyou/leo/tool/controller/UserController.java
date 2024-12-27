@@ -37,7 +37,6 @@ public class UserController {
 
     @PostMapping("/loginInfo")
     @ApiOperation(value = "获取当前登录用户详细信息")
-    @RequiresRoles("1")
     public Result<LoginUser> loginInfo() {
         LoginUser loginUser = AppContext.getLoginUser();
         return Result.success(loginUser);

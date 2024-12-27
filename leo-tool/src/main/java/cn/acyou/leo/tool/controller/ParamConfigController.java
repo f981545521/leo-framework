@@ -11,6 +11,7 @@ import cn.acyou.leo.tool.service.ParamConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,7 +63,8 @@ public class ParamConfigController {
 
     @ApiOperation("清除所有缓存")
     @GetMapping("clearAllCache")
-    @RequiresRoles("1")
+    @RequiresRoles("ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
     public Result<Void> clearAllCache() {
         paramConfigService.clearAllCache();
         return Result.success();
@@ -70,7 +72,7 @@ public class ParamConfigController {
 
     @ApiOperation("修改状态")
     @PostMapping("status")
-    @RequiresRoles("1")
+    @RequiresRoles("ADMIN")
     public Result<Void> status(@RequestParam Long id, @RequestParam Integer status) {
         paramConfigService.updateStatus(id, status);
         return Result.success();

@@ -67,6 +67,7 @@
     </springProfile>
 
     <!-- 配置框架的过滤级别 -->
+    <logger name="org.redisson" level="INFO"/>
     <logger name="springfox" level="INFO"/>
     <logger name="org.thymeleaf" level="INFO"/>
     <logger name="org.apache.http" level="INFO"/>

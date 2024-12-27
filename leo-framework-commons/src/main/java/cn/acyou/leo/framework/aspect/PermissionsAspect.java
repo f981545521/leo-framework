@@ -32,8 +32,8 @@ import java.util.Set;
  * @version [1.0.0, 2021-09-27 15:28]
  */
 @Slf4j
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class PermissionsAspect {
 
     /** 所有权限标识 */

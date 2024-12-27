@@ -2,8 +2,6 @@ package cn.acyou.leo.tool.config;
 
 import cn.acyou.leo.framework.commons.RedisKeyConstant;
 import cn.acyou.leo.framework.constant.CommonErrorEnum;
-import cn.acyou.leo.framework.constant.Constant;
-import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.SourceUtil;
 import cn.acyou.leo.framework.util.SpringHelper;
