@@ -1,17 +1,13 @@
 package cn.acyou.leo.tool.config;
 
 import cn.acyou.leo.framework.constant.Constant;
-import cn.acyou.leo.framework.interceptor.SpringMvcInterceptor;
 import cn.acyou.leo.tool.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +19,21 @@ import java.util.List;
 @Configuration
 @Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    /**
+     * 自动创建数据库
+     * <p/></p>
+     * <pre>
+     * ### 方法1：使用连接参数 createDatabaseIfNotExist=true
+     *     url: jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+     *
+     * ### 方法2： 参照DBCreateInitializer
+     * </pre>
+     **/
+    @Bean
+    public DBCreateInitializer dbCreateInitializer(DataSource dataSource) throws Exception {
+        return new DBCreateInitializer(dataSource);
+    }
 
     @Bean
     public List<User> dbUserList() {
