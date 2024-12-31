@@ -38,4 +38,6 @@ public class DictSaveReq implements Serializable {
      * 状态:  1-正常
      */
     private Integer status;
+
+    private String exThrow;
 }

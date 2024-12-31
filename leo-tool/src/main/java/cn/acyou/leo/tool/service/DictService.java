@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.service;
 
 import cn.acyou.leo.framework.model.PageData;
+import cn.acyou.leo.tool.dto.dict.DictSaveReq;
 import cn.acyou.leo.tool.dto.dict.DictSo;
 import cn.acyou.leo.tool.dto.dict.DictTreeVo;
 import cn.acyou.leo.tool.dto.dict.DictVo;
@@ -62,4 +63,6 @@ public interface DictService extends IService<Dict> {
      * @return {@link DictVo }
      */
     DictVo loadDictSpring(long id);
+
+    void testExceptionSaveDict(DictSaveReq saveReq) throws Exception;
 }
