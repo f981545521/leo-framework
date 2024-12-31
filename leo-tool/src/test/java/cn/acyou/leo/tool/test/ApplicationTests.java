@@ -27,6 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.mail.internet.MimeMessage;
 import java.io.File;
@@ -61,9 +66,33 @@ public class ApplicationTests {
     private ScheduleJobMapper scheduleJobMapper;
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     @Test
-    public void contextLoads() throws Exception {
+    public void test手动管理事务() {
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setName("MyTransaction");
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus transaction = transactionManager.getTransaction(def);
+        try {
+            List<Dict> forUpdate = dictService.lambdaQuery().in(Dict::getId, Arrays.asList(2175, 2176, 2177)).last("for update").list();
+            System.out.println(forUpdate);
+            transactionManager.commit(transaction);
+        } catch (Exception e) {
+            transactionManager.rollback(transaction);
+        }
+    }
+
+    @Test
+    @Rollback
+    public void test悲观锁ForUpdate(){
+        List<Dict> forUpdate = dictService.lambdaQuery().in(Dict::getId, Arrays.asList(2175, 2176, 2177)).last("for update").list();
+        System.out.println(forUpdate);
+    }
+
+    @Test
+    public void test手动执行SQL() throws Exception {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         Connection connection = sqlSession.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("select * from sys_dict limit 1");

@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -167,6 +167,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Override
     @Transactional
     public void testExceptionSaveDict(DictSaveReq dictSaveReq) throws Exception {
+        List<Dict> forUpdate = lambdaQuery().in(Dict::getId, Arrays.asList(2175, 2176, 2177)).last("for update").list();
+        System.out.println(forUpdate);
         save(BeanCopyUtil.copy(dictSaveReq, Dict.class));
         if ("Unchecked".equals(dictSaveReq.getExThrow())) {
             int i = 1/0;
