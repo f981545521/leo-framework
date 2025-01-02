@@ -67,7 +67,7 @@ public class EnumTool {
         List<EnumEntity> statusEntities = listAllField();
         for (EnumEntity statusEntity : statusEntities) {
             if (code.equals(statusEntity.getCode())) {
-                return statusEntity.getName();
+                return statusEntity.getDescription();
             }
         }
         return null;

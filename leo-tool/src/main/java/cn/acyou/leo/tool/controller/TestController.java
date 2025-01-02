@@ -5,7 +5,7 @@ import cn.acyou.leo.framework.annotation.authz.RequiresLogin;
 import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
 import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.commons.AsyncManager;
-import cn.acyou.leo.framework.commons.ThreadAsyncCall;
+import cn.acyou.leo.framework.constant.ClientEnum;
 import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.*;
@@ -15,6 +15,8 @@ import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.common.AsyncService;
 import cn.acyou.leo.tool.service.common.CommonService;
+import cn.hutool.core.util.EnumUtil;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -65,6 +67,14 @@ public class TestController {
     private RedisUtils redisUtils;
     @Autowired
     private ParamConfigService paramConfigService;
+
+    @ApiOperationSupport(order = 1)
+    @ApiOperation(value = "测试枚举类型")
+    @GetMapping("testEnum")
+    @RequiresLogin
+    public Result<?> testEnum() {
+        return Result.success(ClientEnum.entities());
+    }
 
     @ApiOperation(value = "测试权限 - 登录")
     @GetMapping("perm1")

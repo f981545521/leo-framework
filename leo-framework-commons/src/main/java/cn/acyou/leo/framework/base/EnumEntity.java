@@ -1,80 +1,41 @@
 package cn.acyou.leo.framework.base;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * @author youfang
  * @version [1.0.0, 2020/7/28]
  **/
+@Data
 public class EnumEntity implements Serializable {
 
-    private static final long serialVersionUID = -444792519303908950L;
+    private static final long serialVersionUID = 1L;
+
     /**
-     * 编码
+     * 枚举名称
+     */
+    private String name;
+    /**
+     * 枚举编码
      */
     public String code;
     /**
-     * 名称
+     * 枚举描述
      */
-    public String name;
+    public String description;
     /**
-     * 备注
+     * 枚举备注
      */
     public String remark;
 
     public EnumEntity() {
     }
 
-    public EnumEntity(String code, String name) {
+    public EnumEntity(String code, String description) {
         this.code = code;
-        this.name = name;
+        this.description = description;
     }
 
-    public EnumEntity(Integer code, String name) {
-        this.code = String.valueOf(code);
-        this.name = name;
-    }
-
-    public EnumEntity(String code, String name, String remark) {
-        this.code = code;
-        this.name = name;
-        this.remark = remark;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public Integer getIntegerCode() {
-        return Integer.valueOf(code);
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    @Override
-    public String toString() {
-        return "StatusEntity{" +
-                "code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", remark='" + remark + '\'' +
-                '}';
-    }
 }
