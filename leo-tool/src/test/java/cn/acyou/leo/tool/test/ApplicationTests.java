@@ -7,6 +7,7 @@ import cn.acyou.leo.framework.model.IdReq;
 import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.component.EmailUtil;
 import cn.acyou.leo.framework.util.component.EmailUtil2;
+import cn.acyou.leo.framework.util.function.Task;
 import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.entity.ScheduleJob;
@@ -78,6 +79,28 @@ public class ApplicationTests {
         try {
             List<Dict> forUpdate = dictService.lambdaQuery().in(Dict::getId, Arrays.asList(2175, 2176, 2177)).last("for update").list();
             System.out.println(forUpdate);
+            transactionManager.commit(transaction);
+        } catch (Exception e) {
+            transactionManager.rollback(transaction);
+        }
+    }
+
+    @Test
+    public void test手动管理事务2() {
+        doTransaction(() -> {
+            List<Dict> forUpdate = dictService.lambdaQuery().in(Dict::getId, Arrays.asList(2175, 2176, 2177)).last("for update").list();
+            System.out.println(forUpdate);
+        });
+    }
+
+
+    void doTransaction(Task task){
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setName("MyTransaction");
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus transaction = transactionManager.getTransaction(def);
+        try {
+            task.run();
             transactionManager.commit(transaction);
         } catch (Exception e) {
             transactionManager.rollback(transaction);
