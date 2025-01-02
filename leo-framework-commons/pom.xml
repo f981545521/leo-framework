@@ -6,7 +6,7 @@
     <parent>
         <artifactId>leo-framework</artifactId>
         <groupId>cn.acyou</groupId>
-        <version>1.6.0.RELEASE</version>
+        <version>1.7.0.RELEASE</version>
     </parent>
 
     <artifactId>leo-framework-commons</artifactId>

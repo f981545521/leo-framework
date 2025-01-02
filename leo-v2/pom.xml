@@ -5,7 +5,7 @@
     <parent>
         <artifactId>leo-framework</artifactId>
         <groupId>cn.acyou</groupId>
-        <version>1.6.0.RELEASE</version>
+        <version>1.7.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-commons</artifactId>
-            <version>1.6.0.RELEASE</version>
+            <version>1.7.0.RELEASE</version>
         </dependency>
         <!-- 使用单元测试 -->
         <dependency>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>cn.acyou</groupId>
             <artifactId>leo-framework-generator</artifactId>
-            <version>1.6.0.RELEASE</version>
+            <version>1.7.0.RELEASE</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
