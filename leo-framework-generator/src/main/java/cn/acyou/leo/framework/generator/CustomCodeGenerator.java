@@ -26,7 +26,8 @@ import java.util.Map;
  *
  * public class PayCodeGenerator {
  *     public static void main(String[] args) {
- *         CustomCodeGenerator.instance("t_point_rule", "t_")
+ *
+ *         CustomCodeGenerator.instance("t_point_rule", "t_")//t_point_rule,t_point 支持英文逗号分割生成多表
  *                 .author("youfang")
  *                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
  *                 .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false")
@@ -50,7 +51,7 @@ public final class CustomCodeGenerator {
     /**
      * 要生成的表名
      */
-    private String tableName = "student";
+    private String tableNames = "student";
     /**
      * 移除表前缀
      */
@@ -119,10 +120,10 @@ public final class CustomCodeGenerator {
     /**
      * 设置生成的表
      *
-     * @param tableName 表名
+     * @param tableNames 表名
      */
-    public static CustomCodeGenerator instance(String tableName) {
-        return new CustomCodeGenerator(tableName, "");
+    public static CustomCodeGenerator instance(String tableNames) {
+        return new CustomCodeGenerator(tableNames, "");
     }
 
 
@@ -133,10 +134,10 @@ public final class CustomCodeGenerator {
      * <code>使t_user -> User</code>
      * </pre>
      *
-     * @param tableName 表名
+     * @param tableNames 表名
      */
-    public static CustomCodeGenerator instance(String tableName, String removeTablePrefix) {
-        return new CustomCodeGenerator(tableName, removeTablePrefix);
+    public static CustomCodeGenerator instance(String tableNames, String removeTablePrefix) {
+        return new CustomCodeGenerator(tableNames, removeTablePrefix);
     }
 
     /**
@@ -145,11 +146,11 @@ public final class CustomCodeGenerator {
      * <code>使t_user -> User</code>
      * </pre>
      *
-     * @param tableName         表名
+     * @param tableNames         表名
      * @param removeTablePrefix 需要移除的前缀
      */
-    private CustomCodeGenerator(String tableName, String removeTablePrefix) {
-        this.tableName = tableName;
+    private CustomCodeGenerator(String tableNames, String removeTablePrefix) {
+        this.tableNames = tableNames;
         this.tablePrefix = removeTablePrefix;
         initDefaultConfig(this);
     }
@@ -471,7 +472,11 @@ public final class CustomCodeGenerator {
         //strategy.setSuperControllerClass("BaseController");//父类控制器,没有就不用设置!
         // 写于父类中的公共字段
         //strategy.setSuperEntityColumns("id");
-        strategy.setInclude(tableName);
+        if (tableNames.contains(",")) {
+            strategy.setInclude(tableNames.split(","));
+        }else {
+            strategy.setInclude(tableNames);
+        }
         //自定义文件的父类
         if (StringUtils.isNotBlank(superMapperClass)) {
             strategy.setSuperMapperClass(superMapperClass);
