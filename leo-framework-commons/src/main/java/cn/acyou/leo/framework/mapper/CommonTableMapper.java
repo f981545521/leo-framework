@@ -60,7 +60,7 @@ public interface CommonTableMapper {
             "        VALUES\n" +
             "        <foreach collection=\"list\" item=\"record\" separator=\",\">\n" +
             "            <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">\n" +
-            "                #{record.abbr},#{record.name},#{record.code},#{record.content},#{record.amount},#{record.price},#{record.type},#{record.field1},#{record.field2},#{record.field3},#{record.field4},#{record.field5},#{record.numberField1},#{record.numberField2},#{record.numberField3},#{record.numberField4},#{record.numberField5},#{record.field6},#{record.field7},#{record.field8},#{record.field9},#{record.field10},#{record.text},#{record.remark},#{record.sort},#{record.isDelete},#{record.createTime},#{record.createUser},#{record.updateTime},#{record.updateUser},\n" +
+            "                #{record.abbr},#{record.name},#{record.code},#{record.content},#{record.amount},#{record.price},#{record.type},#{record.field1},#{record.field2},#{record.field3},#{record.field4},#{record.field5},#{record.numberField1},#{record.numberField2},#{record.numberField3},#{record.numberField4},#{record.numberField5},#{record.field6},#{record.field7},#{record.field8},#{record.field9},#{record.field10},#{record.text},#{record.remark},#{record.sort},#{record.deleted},#{record.createTime},#{record.createUser},#{record.updateTime},#{record.updateUser},\n" +
             "            </trim>\n" +
             "        </foreach>"+
             "</script>")
@@ -96,7 +96,7 @@ public interface CommonTableMapper {
             "            <if test=\"record.text != null and record.text != '' \">text,</if>\n" +
             "            <if test=\"record.remark != null and record.remark != '' \">remark,</if>\n" +
             "            <if test=\"record.sort != null\">sort,</if>\n" +
-            "            <if test=\"record.isDelete != null\">deleted,</if>\n" +
+            "            <if test=\"record.deleted != null\">deleted,</if>\n" +
             "            <if test=\"record.createTime != null\">create_time,</if>\n" +
             "            <if test=\"record.createUser != null\">create_user,</if>\n" +
             "            <if test=\"record.updateTime != null\">update_time,</if>\n" +
@@ -129,7 +129,7 @@ public interface CommonTableMapper {
             "            <if test=\"record.text != null and record.text != '' \">#{record.text},</if>\n" +
             "            <if test=\"record.remark != null and record.remark != '' \">#{record.remark},</if>\n" +
             "            <if test=\"record.sort != null\">#{record.sort},</if>\n" +
-            "            <if test=\"record.isDelete != null\">#{record.isDelete},</if>\n" +
+            "            <if test=\"record.deleted != null\">#{record.},</if>\n" +
             "            <if test=\"record.createTime != null\">#{record.createTime},</if>\n" +
             "            <if test=\"record.createUser != null\">#{record.createUser},</if>\n" +
             "            <if test=\"record.updateTime != null\">#{record.updateTime},</if>\n" +
@@ -168,7 +168,7 @@ public interface CommonTableMapper {
             "                <if test=\"it.text != null and it.text != '' \">text = #{it.text},</if>\n" +
             "                <if test=\"it.remark != null and it.remark != '' \">remark = #{it.remark},</if>\n" +
             "                <if test=\"it.sort != null\">sort = #{it.sort},</if>\n" +
-            "                <if test=\"it.deleted != null\">deleted = #{it.deleted},</if>\n" +
+            "                <if test=\"it. != null\"> = #{it.},</if>\n" +
             "                <if test=\"it.createTime != null\">create_time = #{it.createTime},</if>\n" +
             "                <if test=\"it.createUser != null\">create_user = #{it.createUser},</if>\n" +
             "                <if test=\"it.updateTime != null\">update_time = #{it.updateTime},</if>\n" +
