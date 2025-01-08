@@ -38,7 +38,7 @@
 </#if>
 <#if baseColumnList>
     <!-- 通用别名查询结果列 -->
-    <sql id="Alisa_Base_Column_List">
+    <sql id="Alisa_Column_List">
 <#list table.commonFields as field>
     ${field.columnName},
 </#list>

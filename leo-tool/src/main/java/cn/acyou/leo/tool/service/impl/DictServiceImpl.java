@@ -179,4 +179,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
         log.info("保存成功");
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void testSaveReadOnly(DictSaveReq saveReq) {
+        saveOrUpdate(BeanCopyUtil.copy(saveReq, Dict.class));
+    }
 }

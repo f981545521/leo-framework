@@ -65,4 +65,6 @@ public interface DictService extends IService<Dict> {
     DictVo loadDictSpring(long id);
 
     void testExceptionSaveDict(DictSaveReq saveReq) throws Exception;
+
+    void testSaveReadOnly(DictSaveReq saveReq);
 }

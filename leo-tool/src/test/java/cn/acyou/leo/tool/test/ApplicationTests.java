@@ -8,6 +8,7 @@ import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.component.EmailUtil;
 import cn.acyou.leo.framework.util.component.EmailUtil2;
 import cn.acyou.leo.framework.util.function.Task;
+import cn.acyou.leo.tool.dto.dict.DictSaveReq;
 import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.entity.ScheduleJob;
@@ -69,6 +70,24 @@ public class ApplicationTests {
     private SqlSessionFactory sqlSessionFactory;
     @Autowired
     private PlatformTransactionManager transactionManager;
+
+
+
+    @Test
+    public void testReadOnly() {
+        DictSaveReq dictSaveReq = new DictSaveReq();
+        dictSaveReq.setParentId(0L);
+        dictSaveReq.setCode("ok111");
+        dictSaveReq.setName("OK");
+        /*
+         * 在只读事务里进行写操作会报错
+         *
+         * org.springframework.dao.TransientDataAccessResourceException:
+         * ### Error updating database.  Cause: java.sql.SQLException: Connection is read-only. Queries leading to data modification are not allowed
+         *
+         */
+        dictService.testSaveReadOnly(dictSaveReq);
+    }
 
     @Test
     public void test手动管理事务() {
