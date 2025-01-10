@@ -27,6 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.test.annotation.Rollback;
@@ -70,8 +71,14 @@ public class ApplicationTests {
     private SqlSessionFactory sqlSessionFactory;
     @Autowired
     private PlatformTransactionManager transactionManager;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-
+    @Test
+    public void testJdbcTemplate() {
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from sys_dict");
+        System.out.println(maps);
+    }
 
     @Test
     public void testReadOnly() {
