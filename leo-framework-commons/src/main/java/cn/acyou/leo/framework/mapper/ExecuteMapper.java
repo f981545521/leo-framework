@@ -1,5 +1,6 @@
 package cn.acyou.leo.framework.mapper;
 
+import cn.acyou.leo.framework.base.TableFields;
 import cn.acyou.leo.framework.model.IdReq;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -62,6 +63,14 @@ public interface ExecuteMapper {
      */
     @Select("SELECT COUNT(1) as isExist FROM information_schema.tables WHERE table_schema=database() AND table_name='${tableName}'")
     int tableIsExist(@Param("tableName") String tableName);
+
+    /**
+     * 使用`DESCRIBE`命令获取表的信息
+     * @param tableName 表
+     * @return 查询结果 表字段信息
+     */
+    @Select("DESCRIBE ${tableName}")
+    List<TableFields> executeDescribe(@Param("tableName") String tableName);
 
     /**
      * 执行insert语句
