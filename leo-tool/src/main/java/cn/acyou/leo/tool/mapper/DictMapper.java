@@ -44,6 +44,12 @@ public interface DictMapper extends Mapper<Dict> {
      */
     Dict selectDict(@Param("dictCode") String dictCode, @Param("value") String value);
 
+    /**
+     * 查询字典
+     * @return {@link Dict}
+     */
+    Dict selectDictV2();
+
 
     @Update("UPDATE sys_dict SET remark = #{remark} WHERE id = #{id}")
     int updateRemark(Dict user);

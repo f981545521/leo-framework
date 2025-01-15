@@ -66,6 +66,22 @@
         </root>
     </springProfile>
 
+    <!-- JetCache日志信息单独文件 -->
+    <appender name="JETCACHE_LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${rootPath}/jetcache.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${rootPath}/jetcache.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern2}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.alicp.jetcache" level="INFO" additivity="false">
+        <appender-ref ref="JETCACHE_LOGFILE" />
+    </logger>
+
     <!-- 配置框架的过滤级别 -->
     <logger name="org.redisson" level="INFO"/>
     <logger name="springfox" level="INFO"/>

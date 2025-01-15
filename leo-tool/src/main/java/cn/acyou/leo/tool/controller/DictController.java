@@ -38,42 +38,42 @@ public class DictController {
 
     @ApiOperation(value = "查询所有顶级数据字典")
     @PostMapping("/allType")
-    public Result<?> allType() {
+    public Result<List<DictVo>> allType() {
         List<DictVo> dictVoList = dictService.selectAllParentType();
         return Result.success(dictVoList);
     }
 
     @ApiOperation(value = "根据code查询所有数据字典值")
     @PostMapping("/list")
-    public Result<?> listDictByCode(@RequestParam String code) {
+    public Result<List<DictVo>> listDictByCode(@RequestParam String code) {
         List<DictVo> dictVoList = dictService.listDictByCode(code);
         return Result.success(dictVoList);
     }
 
     @ApiOperation(value = "分页查询所有数据字典", nickname = Constant.ALL)
     @PostMapping("/page")
-    public Result<?> page(@RequestBody DictSo dictSo) {
+    public Result<PageData<DictVo>> page(@RequestBody DictSo dictSo) {
         PageData<DictVo> pageData = dictService.pageSelectDicts(dictSo);
         return Result.success(pageData);
     }
 
     @ApiOperation(value = "分页查询所有数据字典(树形结构)")
     @PostMapping("/tree")
-    public Result<?> tree(@RequestBody DictSo dictSo) {
+    public Result<PageData<DictTreeVo>> tree(@RequestBody DictSo dictSo) {
         PageData<DictTreeVo> pageData = dictService.treeSelectDicts(dictSo);
         return Result.success(pageData);
     }
 
     @ApiOperation(value = "根据数据字典ID查询单条记录")
     @PostMapping("/get")
-    public Result<?> get(Long id) {
+    public Result<DictVo> get(Long id) {
         Dict dict = dictService.getById(id);
         return Result.success(BeanCopyUtil.copy(dict, DictVo.class));
     }
 
     @ApiOperation(value = "保存数据字典")
     @PostMapping("/saveOrUpdate")
-    public Result<?> saveOrUpdate(@Validated @RequestBody DictSaveReq dictSaveReq) throws Exception {
+    public Result<Void> saveOrUpdate(@Validated @RequestBody DictSaveReq dictSaveReq) throws Exception {
         if (dictSaveReq.getId() != null) {
             Assert.notNull(dictSaveReq.getId(), "修改数据字典，主键不能为空");
             Assert.ifTrue(dictSaveReq.getId().equals(dictSaveReq.getParentId()), "上级不能是自己！");
@@ -86,7 +86,7 @@ public class DictController {
 
     @ApiOperation(value = "修改数据字典")
     @PostMapping("/update")
-    public Result<?> update(@Validated @RequestBody DictSaveReq dictSaveReq) {
+    public Result<Void> update(@Validated @RequestBody DictSaveReq dictSaveReq) {
         Assert.notNull(dictSaveReq.getId(), "修改数据字典，主键不能为空");
         Assert.ifTrue(dictSaveReq.getId().equals(dictSaveReq.getParentId()), "上级不能是自己！");
         dictService.updateById(BeanCopyUtil.copy(dictSaveReq, Dict.class));
@@ -95,7 +95,7 @@ public class DictController {
 
     @ApiOperation(value = "删除数据字典")
     @PostMapping("/delete")
-    public Result<?> delete(@Validated @RequestBody IdsReq idsReq) {
+    public Result<Void> delete(@Validated @RequestBody IdsReq idsReq) {
         dictService.removeByIds(idsReq.getIds());
         return Result.success();
     }

@@ -2,6 +2,8 @@ package cn.acyou.leo.tool.config;
 
 import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.tool.entity.User;
+import com.alicp.jetcache.support.StatInfo;
+import com.alicp.jetcache.support.StatInfoLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author youfang
@@ -34,6 +37,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public DBCreateInitializer dbCreateInitializer(DataSource dataSource) throws Exception {
         return new DBCreateInitializer(dataSource);
     }
+
+    /**
+     * Jetcache日志：https://github.com/alibaba/jetcache/blob/master/docs/CN/Stat.md
+     * 当yml中的jetcache.statIntervalMinutes大于0时，通过@CreateCache和@Cached配置出来的Cache自带监控。JetCache会按指定的时间定期通过logger输出统计信息。
+     *
+     *
+     */
+    @Bean
+    public Consumer<StatInfo> metricsCallback() {
+        return new StatInfoLogger(false);
+    }
+
+
 
     @Bean
     public List<User> dbUserList() {

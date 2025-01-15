@@ -72,5 +72,12 @@
         WHERE t.code = #{value} and tp.code = #{dictCode}
     </select>
 
+    <select id="selectDictV2" resultType="cn.acyou.leo.tool.entity.Dict">
+        SELECT
+        <include refid="Alisa_Column_List"/>
+        FROM sys_dict t where code = '${@cn.acyou.leo.tool.config.Constants@CODE_1}'
+        -- FROM sys_dict t where code = '${@cn.acyou.leo.tool.config.Constants@CODE_1}'
+    </select>
+
 
 </mapper>

@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.base.CommonTable;
+import cn.acyou.leo.framework.base.TableFields;
 import cn.acyou.leo.framework.mapper.CommonTableMapper;
 import cn.acyou.leo.framework.mapper.ExecuteMapper;
 import cn.acyou.leo.framework.model.IdReq;
@@ -73,6 +74,12 @@ public class ApplicationTests {
     private PlatformTransactionManager transactionManager;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Test
+    public void tst() {
+        Dict dict = dictMapper.selectDictV2();
+        System.out.println(dict);
+    }
 
     @Test
     public void testJdbcTemplate() {
@@ -454,6 +461,12 @@ public class ApplicationTests {
         idItem = executeMapper.executeQuerySql(StringUtils.formatTemplate("select * from student where id = {id}", maxId));
         System.out.println("根据ID查询：" + idItem);
 
+    }
+
+    @Test
+    public void test123424(){
+        List<TableFields> student = executeMapper.executeDescribe("sys_user");
+        System.out.println(student);
     }
 
     @Test
