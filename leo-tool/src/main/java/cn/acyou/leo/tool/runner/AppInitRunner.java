@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.runner;
 
 import cn.acyou.leo.framework.constant.Constant;
+import cn.acyou.leo.framework.model.ApiStatusCode;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.SpringHelper;
 import cn.acyou.leo.tool.entity.ScheduleJob;
@@ -43,7 +44,7 @@ public class AppInitRunner implements ApplicationRunner {
             }
         }
         //在这里修改默认的返回code与返回信息
-        //Result.setDefaultSuccess(0, "SUCCESS");
-        //Result.setDefaultError(-1, "ERROR");
+        ApiStatusCode.setDefaultSuccess(0, "SUCCESS");
+        ApiStatusCode.setDefaultError(-1, "ERROR");
     }
 }

@@ -226,7 +226,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
                         .params(AppContext.getRequestBody())
                         .startTime(new Date(AppContext.getRequestTimeStamp()))
                         .execTime(System.currentTimeMillis() - AppContext.getRequestTimeStamp())
-                        .errorMessage(exceptionResult != null ? exceptionResult.getMessage() : null)
+                        .errorMessage(exceptionResult != null ? exceptionResult.getMsg() : null)
                         .errorStackTrace(exceptionResult != null && exceptionResult.getData() != null ? JSON.toJSONString(exceptionResult.getData()) : null)
                         .clientType(AppContext.getClientType().getMessage())
                         .ip(AppContext.getIp())

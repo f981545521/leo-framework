@@ -129,11 +129,11 @@ public enum CommonErrorEnum implements ErrorEnum {
     // 成员变量
     private final int code;
 
-    private final String message;
+    private final String msg;
 
-    CommonErrorEnum(int code, String message) {
+    CommonErrorEnum(int code, String msg) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
     }
 
     /**
@@ -142,10 +142,10 @@ public enum CommonErrorEnum implements ErrorEnum {
      * @param code 代码
      * @return 提示信息
      */
-    public static String getMessage(int code) {
+    public static String getMsg(int code) {
         for (CommonErrorEnum c : CommonErrorEnum.values()) {
             if (c.getCode() == code) {
-                return c.message;
+                return c.msg;
             }
         }
         return null;
@@ -155,7 +155,7 @@ public enum CommonErrorEnum implements ErrorEnum {
         return code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 }

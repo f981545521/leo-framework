@@ -11,46 +11,32 @@ public class Result<T> extends DTO {
     @ApiModelProperty("编码(默认成功：200)")
     private int code;
     @ApiModelProperty("描述")
-    private String message;
+    private String msg;
     @ApiModelProperty("响应内容")
     private T data;
 
-    private static int SUCCESS_CODE = 200;
-    private static String SUCCESS_MESSAGE = "处理成功";
-    private static int ERROR_CODE = 500;
-    private static String ERROR_MESSAGE = "服务繁忙，请稍后再试";
-
-    public static void setDefaultSuccess(int SUCCESS_CODE, String SUCCESS_MESSAGE) {
-        Result.SUCCESS_CODE = SUCCESS_CODE;
-        Result.SUCCESS_MESSAGE = SUCCESS_MESSAGE;
-    }
-
-    public static void setDefaultError(int ERROR_CODE, String ERROR_MESSAGE) {
-        Result.ERROR_CODE = ERROR_CODE;
-        Result.ERROR_MESSAGE = ERROR_MESSAGE;
-    }
 
     private Result() {
 
     }
 
-    private Result(int code, String message) {
+    private Result(int code, String msg) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
     }
 
-    private Result(int code, String message, T data) {
+    private Result(int code, String msg, T data) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
         this.data = data;
     }
 
     public static <T> Result<T> error() {
-        return error(ERROR_CODE, ERROR_MESSAGE);
+        return error(ApiStatusCode.ERROR.getCode(), ApiStatusCode.ERROR.getMsg());
     }
 
     public static <T> Result<T> error(String message) {
-        return error(ERROR_CODE, message);
+        return error(ApiStatusCode.ERROR.getCode(), message);
     }
 
     public static <T> Result<T> error(int code, String message) {
@@ -62,10 +48,10 @@ public class Result<T> extends DTO {
     }
 
     public static <T> Result<T> error(ErrorEnum errorEnum) {
-        return error(errorEnum.getCode(), errorEnum.getMessage());
+        return error(errorEnum.getCode(), errorEnum.getMsg());
     }
     public static <T> Result<T> error(ErrorEnum errorEnum, T data) {
-        return error(errorEnum.getCode(), errorEnum.getMessage(), data);
+        return error(errorEnum.getCode(), errorEnum.getMsg(), data);
     }
 
     public static <T> Result<T> error(int code, String message, T data) {
@@ -73,15 +59,15 @@ public class Result<T> extends DTO {
     }
 
     public static <T> Result<T> success() {
-        return success(SUCCESS_MESSAGE, null);
+        return success(ApiStatusCode.SUCCESS.getMsg(), null);
     }
 
     public static <T> Result<T> success(T data) {
-        return success(SUCCESS_MESSAGE, data);
+        return success(ApiStatusCode.SUCCESS.getMsg(), data);
     }
 
     public static <T> Result<T> success(String message, T data) {
-        return new Result<>(SUCCESS_CODE, message, data);
+        return new Result<>(ApiStatusCode.SUCCESS.getCode(), message, data);
     }
 
     public static <T> Result<T> custom(int code, String message, T data) {
@@ -96,20 +82,20 @@ public class Result<T> extends DTO {
         this.code = code;
     }
 
-    public String getMessage() {
-        return this.message;
+    public String getMsg() {
+        return this.msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public boolean successful() {
-        return this.code == SUCCESS_CODE;
+        return this.code == ApiStatusCode.SUCCESS.getCode();
     }
 
     public boolean unsuccessful() {
-        return this.code != SUCCESS_CODE;
+        return this.code != ApiStatusCode.SUCCESS.getCode();
     }
 
     public T getData() {
@@ -124,7 +110,7 @@ public class Result<T> extends DTO {
     public String toString() {
         return "Result{" +
                 "code=" + code +
-                ", message='" + message + '\'' +
+                ", msg ='" + msg + '\'' +
                 ", data=" + data +
                 '}';
     }

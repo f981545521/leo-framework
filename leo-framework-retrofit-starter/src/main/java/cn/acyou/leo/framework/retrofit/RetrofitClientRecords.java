@@ -80,7 +80,7 @@ public class RetrofitClientRecords extends BaseLoggingInterceptor {
             if (checkResult) {
                 Result<?> resObj = JSON.parseObject(responseStr, Result.class);
                 if (resObj.unsuccessful()) {
-                    throw new RetrofitApiCheckException(resObj.getMessage());
+                    throw new RetrofitApiCheckException(resObj.getMsg());
                 }
             }
         } else {

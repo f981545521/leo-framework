@@ -24,8 +24,8 @@ public class ServiceException extends RuntimeException {
     }
 
     public ServiceException(ErrorEnum errorEnum){
-        super(errorEnum.getMessage());
-        this.result = Result.error(errorEnum.getCode(), errorEnum.getMessage());
+        super(errorEnum.getMsg());
+        this.result = Result.error(errorEnum.getCode(), errorEnum.getMsg());
     }
 
     /**
@@ -68,7 +68,7 @@ public class ServiceException extends RuntimeException {
      * @param result result信息
      */
     public ServiceException(Result<Object> result) {
-        super(result.getMessage());
+        super(result.getMsg());
         this.result = result;
     }
 

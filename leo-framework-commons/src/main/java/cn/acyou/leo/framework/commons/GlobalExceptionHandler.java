@@ -132,7 +132,7 @@ public class GlobalExceptionHandler {
                 firstMessage = constraintViolation.getMessageTemplate();
             }
         }
-        error.setMessage(firstMessage);
+        error.setMsg(firstMessage);
         error.setData(map);
         return error;
     }
@@ -172,7 +172,7 @@ public class GlobalExceptionHandler {
                 }
             }
         }
-        //error.setMessage(firstMessage);
+        //error.setMsg(firstMessage);
         error.setData(map);
         return error;
     }
@@ -199,7 +199,7 @@ public class GlobalExceptionHandler {
     public Result<Object> handleHttpRequestMethodNotSupportedException(HttpServletRequest request, Exception e){
         Result<Object> resultInfo = Result.error();
         //org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' not supported
-        resultInfo.setMessage(e.getMessage());
+        resultInfo.setMsg(e.getMessage());
         AppContext.setExceptionResult(resultInfo);
         log.error("请求接口 [{}] {}", request.getRequestURI(), e.getMessage());
         return resultInfo;
@@ -227,7 +227,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result<Object> handleAssertException(HttpServletRequest request, Exception e){
         Result<Object> resultInfo = Result.error();
-        resultInfo.setMessage(e.getMessage());
+        resultInfo.setMsg(e.getMessage());
         AppContext.setExceptionResult(resultInfo);
         return resultInfo;
     }
@@ -242,7 +242,7 @@ public class GlobalExceptionHandler {
         if (rootMessage.matches("Duplicate entry(.*)")) {
             Matcher m = MESSAGE_MATCHER.matcher(rootMessage);
             if (m.find()) {
-                resultInfo.setMessage(m.group() + "已经存在，请更换重试！");
+                resultInfo.setMsg(m.group() + "已经存在，请更换重试！");
             }
         }
         printErrorStackTraceInResultData(e, resultInfo);
@@ -253,7 +253,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result<Object> handleDataIntegrityViolationException(HttpServletRequest request, Exception e) {
         Result<Object> resultInfo = Result.error();
-        resultInfo.setMessage("违反数据完整性异常，请检查！");
+        resultInfo.setMsg("违反数据完整性异常，请检查！");
         log.error(e.getMessage(), e);
         printErrorStackTraceInResultData(e, resultInfo);
         return resultInfo;
@@ -270,7 +270,7 @@ public class GlobalExceptionHandler {
         int start = message.indexOf("parameter '") + 11;
         int end = message.indexOf("'", start);
         String realMsg = message.substring(start, end) + " 不能为空，请检查！";
-        resultInfo.setMessage(realMsg);
+        resultInfo.setMsg(realMsg);
         log.error(realMsg);
         printErrorStackTraceInResultData(e, resultInfo);
         return resultInfo;
@@ -280,7 +280,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result<Object> handleNeedSureException(HttpServletRequest request, Exception e) {
         Result<Object> resultInfo = Result.error(CommonErrorEnum.E_NEED_SURE);
-        resultInfo.setMessage(e.getMessage());
+        resultInfo.setMsg(e.getMessage());
         AppContext.setExceptionResult(resultInfo);
         return resultInfo;
     }
@@ -289,7 +289,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result<Object> handleDoRefreshException(HttpServletRequest request, Exception e) {
         Result<Object> resultInfo = Result.error(CommonErrorEnum.E_DO_REFRESH);
-        resultInfo.setMessage(e.getMessage());
+        resultInfo.setMsg(e.getMessage());
         AppContext.setExceptionResult(resultInfo);
         return resultInfo;
     }
@@ -304,7 +304,7 @@ public class GlobalExceptionHandler {
                 return serviceException.getResult();
             }else {
                 if (StringUtils.isNotBlank(e.getMessage())) {
-                    resultInfo.setMessage(e.getMessage());
+                    resultInfo.setMsg(e.getMessage());
                 }
                 printErrorStackTraceInResultData(e, resultInfo);
             }
@@ -329,7 +329,7 @@ public class GlobalExceptionHandler {
             resultInfo = Result.error(CommonErrorEnum.E_DATA_PERMISSION_DENIED);
             String message = rootCause.getMessage();
             if (StringUtils.isNotBlank(message)) {
-                resultInfo.setMessage(message);
+                resultInfo.setMsg(message);
             }
         }
         printErrorStackTraceInResultData(e, resultInfo);

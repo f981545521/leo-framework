@@ -20,6 +20,6 @@ public interface ErrorEnum {
      *
      * @return {@link String}
      */
-    String getMessage();
+    String getMsg();
 
 }
