@@ -1,4 +1,4 @@
-package cn.acyou.leo.tool.config;
+package cn.acyou.leo.framework.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

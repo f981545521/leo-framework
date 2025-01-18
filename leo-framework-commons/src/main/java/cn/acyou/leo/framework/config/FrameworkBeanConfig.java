@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import javax.sql.DataSource;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
@@ -66,5 +67,22 @@ public class FrameworkBeanConfig {
     @ConditionalOnProperty(value = "leo.debug.print-performance-sql", havingValue = "true")
     public PerformanceInterceptor performanceInterceptor() {
         return new PerformanceInterceptor();
+    }
+
+
+    /**
+     * 自动创建数据库
+     * <p/></p>
+     * <pre>
+     * ### 方法1：使用连接参数 createDatabaseIfNotExist=true
+     *     url: jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+     *
+     * ### 方法2： 参照DBCreateInitializer
+     * </pre>
+     **/
+    @Bean
+    @ConditionalOnProperty(value = "leo.auto-create-db", havingValue = "true")
+    public DBCreateInitializer dbCreateInitializer(DataSource dataSource) throws Exception {
+        return new DBCreateInitializer(dataSource);
     }
 }

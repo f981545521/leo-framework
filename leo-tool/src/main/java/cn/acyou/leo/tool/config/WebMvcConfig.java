@@ -23,20 +23,6 @@ import java.util.function.Consumer;
 @Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    /**
-     * 自动创建数据库
-     * <p/></p>
-     * <pre>
-     * ### 方法1：使用连接参数 createDatabaseIfNotExist=true
-     *     url: jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
-     *
-     * ### 方法2： 参照DBCreateInitializer
-     * </pre>
-     **/
-    @Bean
-    public DBCreateInitializer dbCreateInitializer(DataSource dataSource) throws Exception {
-        return new DBCreateInitializer(dataSource);
-    }
 
     /**
      * Jetcache日志：https://github.com/alibaba/jetcache/blob/master/docs/CN/Stat.md

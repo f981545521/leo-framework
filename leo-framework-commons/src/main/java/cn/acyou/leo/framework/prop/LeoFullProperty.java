@@ -20,4 +20,8 @@ public class LeoFullProperty {
      */
     private String extendPropertiesPaths;
 
+    /**
+     * 自动创建数据库
+     */
+    private boolean autoCreateDb = true;
 }

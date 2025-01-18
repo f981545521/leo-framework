@@ -94,6 +94,7 @@ leo:
       smtp-port: 25
   extend-properties-paths: 'D:\workspace\work\private_account.properties'
   #extend-properties-paths: 'http://qiniu.acyou.cn/***/private_account1.properties'
+  auto-create-db: true
 # knife4j增强模式
 knife4j:
   enable: true
