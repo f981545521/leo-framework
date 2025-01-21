@@ -11,11 +11,12 @@ import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.dto.dict.DictVo;
+import cn.acyou.leo.tool.dto.dict.ParamA;
 import cn.acyou.leo.tool.entity.ParamConfig;
 import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.common.AsyncService;
 import cn.acyou.leo.tool.service.common.CommonService;
-import cn.hutool.core.util.EnumUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -67,6 +68,19 @@ public class TestController {
     private RedisUtils redisUtils;
     @Autowired
     private ParamConfigService paramConfigService;
+
+    @ApiOperationSupport(order = 1)
+    @ApiOperation(value = "测试动态参数")
+    @PostMapping("dynamicsParam")
+    public Result<?> dynamicsParam(@RequestBody JSONObject req) {
+        //
+        ParamA paramA = req.toJavaObject(ParamA.class);
+        paramA.setKey("what");
+        paramA.setValue("cat");
+        JSONObject res = new JSONObject(req);
+        res.putAll(BeanUtil.beanToMap(paramA));
+        return Result.success(res);
+    }
 
     @ApiOperationSupport(order = 1)
     @ApiOperation(value = "测试枚举类型")
