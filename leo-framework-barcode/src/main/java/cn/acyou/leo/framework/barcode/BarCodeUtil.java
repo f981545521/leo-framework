@@ -5,6 +5,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.pdf417.PDF417Writer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -208,6 +209,16 @@ public class BarCodeUtil {
         BitMatrix bitMatrix = pdf417Writer.encode(content, BarcodeFormat.PDF_417, 1000, 300, hints);
         BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);
         pressText(content, image);
+        return ImageIO.write(image, DEFAULT_IMAGE_FORMAT, outputStream);
+    }
+
+
+    public static boolean createCode128Code(OutputStream outputStream, String content) throws WriterException, IOException {
+        Code128Writer code128Writer = new Code128Writer();
+        Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
+        hints.put(EncodeHintType.MARGIN, 10);
+        BitMatrix bitMatrix = code128Writer.encode(content, BarcodeFormat.CODE_128, 1000, 300, hints);
+        BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);
         return ImageIO.write(image, DEFAULT_IMAGE_FORMAT, outputStream);
     }
 
