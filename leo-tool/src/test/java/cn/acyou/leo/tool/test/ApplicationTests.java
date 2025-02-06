@@ -20,6 +20,7 @@ import cn.acyou.leo.tool.mapper.ScheduleJobMapper;
 import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DictService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import org.apache.ibatis.session.SqlSession;
@@ -74,6 +75,16 @@ public class ApplicationTests {
     private PlatformTransactionManager transactionManager;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Test
+    public void contextLoads() {
+        List<Dict> list = dictService.lambdaQuery().select(Dict::getId).list();
+        System.out.println(list);
+        List<Object> objects = dictMapper.selectObjs(new QueryWrapper<Dict>().select("name").eq("parent_id", 0));
+        System.out.println("end");
+        Dict one = dictService.lambdaQuery().eq(Dict::getParentId, 2220).last("limit 1").one();
+        System.out.println(one);
+    }
 
     @Test
     public void tst() {
