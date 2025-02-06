@@ -89,6 +89,18 @@ content-Type: application/json
 GET {{api_url}}/leo-tool/test/testGetDate?createTime=2100-10-01
 content-Type: application/json
 
+### 查询可用字体
+GET {{api_url}}/leo-tool/sys/common/fontNames
+content-Type: application/json
+
+### 注册字体
+POST {{api_url}}/leo-tool/sys/common/registerFont
+content-Type: application/json
+
+{
+  "url": "http://qiniu.acyou.cn/fonts/%E9%98%BF%E6%9C%B1%E6%B3%A1%E6%B3%A1%E4%BD%93.ttf"
+}
+
 
 
 

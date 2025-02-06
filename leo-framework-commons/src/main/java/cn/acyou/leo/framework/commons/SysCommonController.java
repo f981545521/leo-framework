@@ -24,13 +24,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.io.File;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,13 +55,56 @@ public class SysCommonController {
     @GetMapping(value = "/status")
     @ApiOperation(value = "状态检查")
     @ResponseBody
+    @PermitAll
     public String check() {
         return "ok";
     }
 
+    @GetMapping(value = "/fontNames")
+    @ApiOperation(value = "字体列表")
+    @ResponseBody
+    @PermitAll
+    public Result<List<String>> fontNames() {
+        String[] fontNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        return Result.success(Arrays.asList(fontNames));
+    }
+
+    @PostMapping(value = "/registerFont")
+    @ApiOperation(value = "注册字体")
+    @ResponseBody
+    @PermitAll
+    public Result<Void> registerFont(@RequestBody JSONObject req) {
+        String url = req.getString("url");
+        File fontFile = null;
+        try {
+            if (StringUtils.isNotBlank(url)) {
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                fontFile = FileUtil.createTempFile("font", ".ttf");
+                HttpUtil.downloadFile(url, fontFile);
+                log.info("字体下载成功：{}", fontFile.getAbsolutePath());
+                Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+                boolean b = ge.registerFont(font);
+                log.info("注册字体 {} 结果：{}", url, b);
+                if (!b) {
+                    return Result.error("加载失败");
+                }
+            }
+        }catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return Result.error("加载失败");
+        } finally {
+            if (fontFile != null) {
+                fontFile.deleteOnExit();
+            }
+        }
+        return Result.success();
+    }
+
+
     @GetMapping(value = "/unauthorized")
     @ApiOperation(value = "没有权限")
     @ResponseBody
+    @PermitAll
     public Result<Void> unauthorized() {
         return Result.error(CommonErrorEnum.E_UNAUTHORIZED);
     }
@@ -68,6 +112,7 @@ public class SysCommonController {
     @ApiOperation("打印请求信息")
     @RequestMapping(value = "print", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
+    @PermitAll
     public Result<JSONObject> printRequest(HttpServletRequest request, @RequestBody(required = false) Object requestBody, @RequestHeader Map<String, Object> requestHeader) {
         Map<String, String[]> requestParameter = request.getParameterMap();
         JSONObject response = new JSONObject();
@@ -80,6 +125,7 @@ public class SysCommonController {
     @ApiOperation("获取服务器外网IP")
     @GetMapping("ip")
     @ResponseBody
+    @PermitAll
     public Result<JSONObject> ip() {
         String s = HttpUtil.get("http://httpbin.org/ip");
         log.info("服务器外网IP：{}", s);
@@ -92,6 +138,7 @@ public class SysCommonController {
     @ApiOperation("获取IP属地")
     @GetMapping("ipAddr")
     @ResponseBody
+    @PermitAll
     public Result<JSONObject> ipAddr(String ip) {
         if (tencentMapUtil == null) {
             throw new ServiceException("please create key at [https://lbs.qq.com/service/webService/webServiceGuide/webServiceIp]");
@@ -107,6 +154,7 @@ public class SysCommonController {
     @ApiOperation("获取IP属地V2")
     @GetMapping("ipAddrV2")
     @ResponseBody
+    @PermitAll
     public Result<JSONObject> ipAddrV2(String ip) {
         return WorkUtil.doRetryWork(3, () -> {
             JSONObject res = new JSONObject(true);
@@ -134,6 +182,7 @@ public class SysCommonController {
     @GetMapping(value = "/color")
     @ApiOperation(value = "获取随机颜色")
     @ResponseBody
+    @PermitAll
     public Result<List<ColorVo>> color(@RequestParam(value = "count", defaultValue = "1") Integer count, Boolean hasAlpla) {
         List<ColorVo> res = new ArrayList<>();
         for (int i = 0; i < count; i++) {
@@ -144,6 +193,7 @@ public class SysCommonController {
 
     @GetMapping(value = "/hashAvatar")
     @ApiOperation(value = "Hash头像生成")
+    @PermitAll
     public void hashAvatar(@RequestParam(value = "num", required = false) Integer num, HttpServletResponse response) throws Exception {
         response.setContentType("image/gif");
         response.setHeader("Pragma", "No-cache");
@@ -156,6 +206,7 @@ public class SysCommonController {
     @GetMapping(value = "/rsa")
     @ApiOperation(value = "获取公钥")
     @ResponseBody
+    @PermitAll
     public Result<String> rsa() throws Exception {
         String token = AppContext.getToken();
         Map<Integer, String> key = RSAUtils.genKeyPair();
@@ -166,6 +217,7 @@ public class SysCommonController {
     @GetMapping(value = "/idempotent")
     @ApiOperation(value = "获取幂等序列 prefix前缀（必传）。sequence：空时生成，非空时判断。operate：校验并删除")
     @ResponseBody
+    @PermitAll
     public Result<String> idempotent(@RequestParam("prefix") String prefix, String sequence, String operate) {
         if (sequence == null || StringUtils.isBlank(sequence)) {
             String uuid = IdUtil.uuidStrWithoutLine();
@@ -192,6 +244,7 @@ public class SysCommonController {
     @PostMapping("curl_request")
     @ApiOperation("接口测试请求")
     @ResponseBody
+    @PermitAll
     public Result<?> curlRequest(@RequestBody(required = false) JSONObject param) {
         log.info("接口测试请求 {}", param);
         String httpType = param.getString("httpType");
@@ -241,6 +294,7 @@ public class SysCommonController {
     @GetMapping(value = "/error")
     @ApiOperation(value = "MV错误页面")
     @ResponseBody
+    @PermitAll
     public Result<?> error(HttpServletRequest request) {
         int status = (Integer) request.getAttribute("status");
         String error = (String) request.getAttribute("error");
