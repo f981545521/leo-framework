@@ -36,13 +36,15 @@ public class GoogleBarCodeUtils {
     /**
      * 条形码右下角第一段文字
      */
-    private static final String RIGHT_DOWN_FIRST_WORDS = "所属单位: xxxxx公司";
-    private static final String RIGHT_DOWN_SECOND_WORDS = "生产厂家: xxxxxxxx有限公司";
+    private static final String RIGHT_DOWN_FIRST_WORDS = "所属单位: 南京万得资讯科技有限公司";
+    private static final String RIGHT_DOWN_SECOND_WORDS = "生产厂家: 南京万得资讯科技有限公司";
     /**
      * 条形码左下角第一段文字
      */
-    private static final String LEFT_DOWN_FIRST_WORDS = "设备类型: xxxxxx";
-    private static final String LEFT_DOWN_SECOND_WORDS = "准确度等级: xxxxx";
+    private static final String LEFT_DOWN_FIRST_WORDS = "设备类型: 通用型";
+    private static final String LEFT_DOWN_SECOND_WORDS = "准确度等级: 高级";
+
+    public static Font font = new Font("Consolas", Font.PLAIN, 12);
 
     /**
      * 设置 条形码参数
@@ -112,7 +114,7 @@ public class GoogleBarCodeUtils {
         Color color = new Color(0, 0, 0);
         g2d.setColor(color);
         // 字体、字型、字号
-        g2d.setFont(new Font("微软雅黑", Font.PLAIN, 12));
+        g2d.setFont(font);
         //文字长度
         String str = equipNo.replace("", "  ").trim();
         int strWidth = g2d.getFontMetrics().stringWidth(str);
