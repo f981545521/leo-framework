@@ -51,11 +51,11 @@ public final class CustomCodeGenerator {
     /**
      * 要生成的表名
      */
-    private String tableNames = "student";
+    private final String tableNames;
     /**
      * 移除表前缀
      */
-    private String tablePrefix = "";
+    private final String tablePrefix;
     /**
      * 数据库驱动
      */
@@ -99,9 +99,9 @@ public final class CustomCodeGenerator {
     //项目地址，无需关心
     private final String projectPath = System.getProperty("user.dir");
     //Module 文件存放项目配置，无需关心
-    private Map<String, String[]> modulesMap = new HashMap<>();
+    private final Map<String, String[]> modulesMap = new HashMap<>();
     //包信息，无需关心
-    private Map<String, String> packageInfo = CollectionUtils.newHashMapWithExpectedSize(7);
+    private final Map<String, String> packageInfo = CollectionUtils.newHashMapWithExpectedSize(7);
 
     /**
      * 初始化默认配置
@@ -134,7 +134,7 @@ public final class CustomCodeGenerator {
      * <code>使t_user -> User</code>
      * </pre>
      *
-     * @param tableNames 表名
+     * @param tableNames 表名，支持多表,分割
      */
     public static CustomCodeGenerator instance(String tableNames, String removeTablePrefix) {
         return new CustomCodeGenerator(tableNames, removeTablePrefix);
@@ -382,14 +382,13 @@ public final class CustomCodeGenerator {
      * 执行
      */
     public void doGenerator() {
-        if (modulesMap.size() == 0) {
+        if (modulesMap.isEmpty()) {
             return;
         }
         // 代码生成器
         AutoGenerator autoGenerator = new AutoGenerator();
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig();
-
         globalConfig.setOutputDir(projectPath);//生成文件的输出目录
         globalConfig.setAuthor(AUTHOR);//作者
         globalConfig.setOpen(false);//是否打开输出目录

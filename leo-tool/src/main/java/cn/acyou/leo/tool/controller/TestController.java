@@ -300,26 +300,29 @@ public class TestController {
     }
 
     /**
-     * function test4(url) {
-     * var xhr = new XMLHttpRequest();
-     * xhr.open('POST', url, true);
-     * xhr.setRequestHeader("Content-Type", "application/json")
-     * xhr.responseType = 'blob';
-     * xhr.onload = function() {
-     * if (xhr.readyState === 4 && xhr.status === 200) {
-     * var blob = new Blob([xhr.response], { type: 'application/octet-stream' });
-     * //var responseHeader = xhr.getResponseHeader("Content-disposition"); 无法获取文件名
-     * var downloadUrl = URL.createObjectURL(blob);
-     * var a = document.createElement('a');
-     * a.href = downloadUrl;
-     * a.download = 'filename.xlsx';
-     * document.body.appendChild(a);
-     * a.click();
-     * document.body.removeChild(a);
+     * 使用Ajax Post下载文件
+     * <pre>{@code
+     *     function test4(url) {
+     *     var xhr = new XMLHttpRequest();
+     *     xhr.open('POST', url, true);
+     *     xhr.setRequestHeader("Content-Type", "application/json")
+     *     xhr.responseType = 'blob';
+     *     xhr.onload = function() {
+     *         if (xhr.readyState === 4 && xhr.status === 200) {
+     *             var blob = new Blob([xhr.response], { type: 'application/octet-stream' });
+     *             //var responseHeader = xhr.getResponseHeader("Content-disposition"); 无法获取文件名
+     *             var downloadUrl = URL.createObjectURL(blob);
+     *             var a = document.createElement('a');
+     *             a.href = downloadUrl;
+     *             a.download = 'filename.xlsx';
+     *             document.body.appendChild(a);
+     *             a.click();
+     *             document.body.removeChild(a);
+     *         }
+     *     };
+     *     xhr.send('{"name":"李世明"}');
      * }
-     * };
-     * xhr.send('{"name":"李世明"}');
-     * }
+     * }</pre>
      */
     @ApiOperation(value = "测试AJAX下载文件 (不推荐)")
     @PostMapping("downloadExcel")
