@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>SPD</contextName>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
+    </appender>
+
+
+    <!-- 分环境日志等级：开发、测试 -->
+    <springProfile name="dev,dev1,test,pre,test001,beta">
+        <root>
+            <level value="debug"/>
+            <appender-ref ref="console"/>
+        </root>
+    </springProfile>
+
+    <!-- 分环境日志等级：生产 -->
+    <springProfile name="prod">
+
+        <appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>../logs/sys-error.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>../logs/sys-error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <maxHistory>30</maxHistory>
+                <totalSizeCap>5GB</totalSizeCap>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>50MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${log.pattern}</pattern>
+            </encoder>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>ERROR</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+        </appender>
+
+        <root>
+            <level value="info"/>
+            <appender-ref ref="console"/>
+            <appender-ref ref="file_error"/>
+        </root>
+    </springProfile>
+
+
+    <!-- 配置框架的过滤级别 -->
+    <logger name="springfox" level="INFO"/>
+    <logger name="org.thymeleaf" level="INFO"/>
+    <logger name="io.lettuce.core.protocol" level="INFO"/>
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="io.lettuce.core" level="INFO"/>
+    <logger name="com.apache.ibatis" level="TRACE"/>
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+    <!-- NACOS 日志级别 -->
+    <logger name="com.alibaba.nacos" level="WARN"/>
+    <logger name="com.alibaba.cloud.nacos" level="WARN"/>
+    <!-- dubbo 日志级别 -->
+    <logger name="org.apache.dubbo" level="WARN"/>
+    <logger name="com.alibaba.cloud.dubbo" level="WARN"/>
+
+
+</configuration>

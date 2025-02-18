@@ -22,6 +22,7 @@
         <module>leo-order-service</module>
         <module>leo-order-service-impl</module>
         <module>leo-order-web</module>
+        <module>leo-order-manager</module>
     </modules>
 
     <properties>

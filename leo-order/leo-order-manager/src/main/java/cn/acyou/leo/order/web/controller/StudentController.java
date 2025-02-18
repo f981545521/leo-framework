@@ -31,7 +31,6 @@ public class StudentController {
         PageData<Student> convertType =  PageQuery.startPage(pageNum, pageSize).selectMapper(studentService.list());
         return Result.success(convertType);
     }
-
     @PostMapping(value = "pageSo")
     @ApiOperation("测试分页")
     public Result<PageData<Student>> pageSo(@RequestBody StudentSo studentSo) {
