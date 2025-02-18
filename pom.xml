@@ -66,7 +66,7 @@
         <module>leo-tool</module>
         <module>leo-v1</module>
         <module>leo-v2</module>
-        <module>leo-product</module>
+        <module>leo-productv1</module>
     </modules>
 
     <dependencyManagement>

@@ -1,0 +1,86 @@
+server:
+  port: 8056
+spring:
+  application:
+    name: product-service
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      discovery:
+        enabled: true
+        group: DEFAULT_GROUP
+        service: ${spring.application.name}
+        # 服务的权重。- 取值范围 1 到 100，数值越大，权重越大
+        weight: 1
+        watch:
+          enabled: true
+        watch-delay: 30000
+        # 如果您只想订阅，但不想注册您的服务，请将其设置为 false。
+        register-enabled: true
+        namespace: leo-namespace
+      config:
+        enabled: true
+        file-extension: yml
+        encode: UTF-8
+        # 启用动态刷新
+        refresh-enabled: true
+        extension-configs:
+          - dataId: user-service-ext-${spring.profiles.active}.yml
+            group: REFRESH_GROUP
+            refresh: true
+      username: nacos
+      password: nacos
+    alibaba:
+      seata:
+        tx-service-group: my_test_tx_group
+  sleuth:
+    enabled: true
+    rpc:
+      enabled: true
+  zipkin:
+    enabled: true
+    base-url: http://localhost:9411/
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: localhost:9200
+dubbo:
+  application:
+    name: ${spring.application.name}
+    version: 1.0.0
+  scan:
+    base-packages: cn.acyou.leo.product.service
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://${spring.cloud.nacos.server-addr}/?username=${spring.cloud.nacos.username}&password=${spring.cloud.nacos.password}
+  consumer:
+    # 关闭所有服务的启动时检查（没有提供者时会报错）
+    check: false
+    # Dubbo在调用时出现非业务异常，重试2次（不含第一次）
+    retries: 2
+    filter: tracing
+  provider:
+    filter: tracing
+rocketmq:
+  name-server: localhost:9876
+  producer:
+    group: LEO-GROUP
+    send-message-timeout: 300000
+    retry-next-server: true
+    retry-times-when-send-failed: 1
+    retry-times-when-send-async-failed: 1
+    ## Producer 端要想使用消息轨迹，需要多配置两个配置项:
+    enable-msg-trace: true
+    customized-trace-topic: trace-topic
+    ## ACL 功能
+    access-key: leo-rocketmq
+    secret-key: leo-rocketmq
+  consumer:
+    ## ACL 功能
+    access-key: leo-rocketmq
+    secret-key: leo-rocketmq
