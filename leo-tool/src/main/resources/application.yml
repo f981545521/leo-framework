@@ -58,6 +58,8 @@ spring:
     check-location: false
     # 是否允许无序迁移[开发true 生产false]（执行了新版本SQL再提交旧版本SQL会启动失败）
     out-of-order: true
+  main:
+    lazy-initialization: false # 延迟初始化（Bean懒加载）
 leo:
   xxl-job:
     enable: false
