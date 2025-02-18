@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.acyou</groupId>
+        <artifactId>leo-framework</artifactId>
+        <version>1.7.0.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <artifactId>leo-order</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>leo-order-dto</module>
+        <module>leo-order-client</module>
+        <module>leo-order-commons</module>
+        <module>leo-order-mapper</module>
+        <module>leo-order-service</module>
+        <module>leo-order-service-impl</module>
+        <module>leo-order-web</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cn.acyou</groupId>
+                <artifactId>leo-framework</artifactId>
+                <version>1.7.0.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>cn.acyou</groupId>
+                <artifactId>leo-framework-dto</artifactId>
+                <version>1.7.0.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.acyou</groupId>
+                <artifactId>leo-framework-commons-dubbo</artifactId>
+                <version>1.7.0.RELEASE</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
