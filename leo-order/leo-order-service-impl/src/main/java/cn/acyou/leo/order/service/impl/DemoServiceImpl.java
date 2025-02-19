@@ -1,6 +1,7 @@
 package cn.acyou.leo.order.service.impl;
 
 import cn.acyou.leo.order.client.DemoService;
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -13,6 +14,9 @@ public class DemoServiceImpl implements DemoService {
 
     @Value("${dubbo.application.name}")
     private String serviceName;
+
+    @NacosValue(value = "${config.key:}", autoRefreshed = true)
+    private String configKey;
 
     @Override
     public String sayHello(String name) {
