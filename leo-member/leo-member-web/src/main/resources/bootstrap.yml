@@ -39,14 +39,6 @@ spring:
     enabled: true
     rpc:
       enabled: true
-  zipkin:
-    enabled: true
-    base-url: http://localhost:9411/
-  data:
-    elasticsearch:
-      client:
-        reactive:
-          endpoints: localhost:9200
 dubbo:
   application:
     name: ${spring.application.name}
@@ -66,21 +58,23 @@ dubbo:
     filter: tracing
   provider:
     filter: tracing
-rocketmq:
-  name-server: localhost:9876
-  producer:
-    group: LEO-GROUP
-    send-message-timeout: 300000
-    retry-next-server: true
-    retry-times-when-send-failed: 1
-    retry-times-when-send-async-failed: 1
-    ## Producer 端要想使用消息轨迹，需要多配置两个配置项:
-    enable-msg-trace: true
-    customized-trace-topic: trace-topic
-    ## ACL 功能
-    access-key: leo-rocketmq
-    secret-key: leo-rocketmq
-  consumer:
-    ## ACL 功能
-    access-key: leo-rocketmq
-    secret-key: leo-rocketmq
+leo:
+  debug:
+    interface-call-statistics: false
+    print-request-body: true
+    print-response-body: false
+    print-to-result: false
+    token-verify: false
+    ignore-uri-list:
+      - ${server.servlet.context-path}/doc.html
+      - ${server.servlet.context-path}/swagger-resources
+      - ${server.servlet.context-path}/v2/api-docs
+      - ${server.servlet.context-path}/webjars/**
+  api:
+    enable: true
+    title: Leo member 接口文档
+    description: \# 接口调试页面。✍
+    termsOfServiceUrl: http://www.acyou.cn/
+    version: 1.0
+    basePackage: cn.acyou.leo.member.controller
+    contact: youfang

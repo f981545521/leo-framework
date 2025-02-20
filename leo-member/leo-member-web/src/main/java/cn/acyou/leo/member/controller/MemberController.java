@@ -1,4 +1,4 @@
-package cn.acyou.leo.member.web.controller;
+package cn.acyou.leo.member.controller;
 
 import cn.acyou.leo.framework.model.Result;
 import io.swagger.annotations.Api;

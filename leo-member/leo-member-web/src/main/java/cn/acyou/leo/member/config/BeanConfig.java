@@ -1,4 +1,4 @@
-package cn.acyou.leo.member.web.config;
+package cn.acyou.leo.member.config;
 
 import cn.acyou.leo.framework.commons.SnowFlake;
 import org.springframework.context.annotation.Bean;
