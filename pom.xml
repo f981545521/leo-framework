@@ -68,6 +68,7 @@
         <module>leo-v2</module>
         <module>leo-product</module>
         <module>leo-order</module>
+        <module>leo-member</module>
     </modules>
 
     <dependencyManagement>
