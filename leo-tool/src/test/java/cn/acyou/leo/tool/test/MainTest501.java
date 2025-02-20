@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.util.BeanCopyUtil;
 import cn.acyou.leo.framework.util.RegexUtil;
+import cn.acyou.leo.framework.util.StringUtils;
 import cn.acyou.leo.tool.dto.dict.DictSo;
 import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.entity.Dict;
@@ -17,6 +18,24 @@ import java.util.List;
 public class MainTest501 {
 
     public static void main(String[] args) {
+        List<String> stringList = new ArrayList<>();
+        System.out.println(stringList.get(0));
+    }
+    public static void main333(String[] args) {
+        String s = "        id, company_id, level, name, state, icon_url, bg_color, upgrade_condition, downgrade, enable_upgrade_gift, details, create_by, update_by, create_time, update_time";
+        s = s.trim();
+        String[] split = s.split(",");
+        List<String> list = new ArrayList<>();
+        for (String string : split) {
+            string = string.trim();
+            list.add("t."+string);
+            //list.add("l."+string+" as level_" + string);
+        }
+        String join = StringUtils.join(list, ", ");
+        System.out.println(join);
+    }
+
+    public static void main33(String[] args) {
         Dict dict = new Dict();
         dict.setCode("1");
         dict.setName("你好");
