@@ -87,7 +87,6 @@ public class ApplicationTests {
     public void test() {
         User u2 = userMapper.getByIdV2(1000L);
         System.out.println(u2);
-
         User byId = userService.getById(1000);
         System.out.println(byId);
         User u = userMapper.getById(1000L);
