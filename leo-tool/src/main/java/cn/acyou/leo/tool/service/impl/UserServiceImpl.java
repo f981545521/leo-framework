@@ -70,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             loginUser.setRoleCodes(Sets.newHashSet("USER"));
         }
         if (user.getPerms() != null) {
-            loginUser.setPermsList(Sets.newHashSet(user.getPerms().split(",")));
+            //loginUser.setPermsList(Sets.newHashSet(user.getPerms().split(",")));
         }
         return loginUser;
     }

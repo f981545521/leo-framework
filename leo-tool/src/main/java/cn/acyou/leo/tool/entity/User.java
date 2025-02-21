@@ -1,8 +1,12 @@
 package cn.acyou.leo.tool.entity;
 
+import cn.acyou.leo.tool.handler.JsonTypeHandlerV2;
+import cn.acyou.leo.tool.handler.StringListStringTypeHandler;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,6 +15,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -22,7 +27,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_user")
+@TableName(value = "sys_user", autoResultMap = true)
 @ApiModel(value = "User对象", description = "系统用户表")
 public class User implements Serializable {
 
@@ -60,7 +65,7 @@ public class User implements Serializable {
     private Integer age;
 
     @ApiModelProperty(value = "用户来源")
-    private String source;
+    private SourceEnum source;
 
     @ApiModelProperty(value = "生日")
     private LocalDate birthday;
@@ -78,7 +83,18 @@ public class User implements Serializable {
     private Integer type;
 
     @ApiModelProperty(value = "权限列表")
-    private String perms;
+    @TableField(typeHandler = StringListStringTypeHandler.class)
+    private List<String> perms;
+
+    //{"point": 100, "growthValue": 100}
+    //@ApiModelProperty(value = "详情扩展信息")
+    //@TableField(typeHandler = JsonTypeHandler.class)
+    //private UserSummaryDetails details;
+
+    @ApiModelProperty(value = "详情扩展信息")
+    //@TableField(typeHandler = JsonTypeHandler.class)
+    @TableField(typeHandler = JsonTypeHandlerV2.class)
+    private List<Long> details;
 
     @ApiModelProperty(value = "创建人")
     private Long createUser;
@@ -92,5 +108,18 @@ public class User implements Serializable {
     @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
+    public enum SourceEnum {
+        H5, PC, MINI_PROGRAM, WECHAT, ANDROID, IOS
+    }
+
+    @Data
+    public static class UserSummaryDetails {
+        @ApiModelProperty(value = "积分")
+        private Integer point;
+
+        @ApiModelProperty(value = "成长值")
+        private Integer growthValue;
+
+    }
 
 }

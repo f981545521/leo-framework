@@ -120,6 +120,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     # 结果集设置为HashMap，返回的字段值为null时，不会显示key，因为callSettersOnNulls默认为false
     call-setters-on-nulls: true
+  type-handlers-package: cn.acyou.leo.tool.handler #注册全局的typehandler
 #分页pageHelper
 pagehelper:
   helperDialect: mysql

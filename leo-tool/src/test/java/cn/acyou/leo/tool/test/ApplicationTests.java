@@ -18,6 +18,7 @@ import cn.acyou.leo.tool.feign.HttpbinClient;
 import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.mapper.ScheduleJobMapper;
+import cn.acyou.leo.tool.mapper.UserMapper;
 import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DictService;
 import cn.acyou.leo.tool.service.UserService;
@@ -79,11 +80,19 @@ public class ApplicationTests {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserMapper userMapper;
 
     @Test
     public void test() {
+        User u2 = userMapper.getByIdV2(1000L);
+        System.out.println(u2);
+
         User byId = userService.getById(1000);
         System.out.println(byId);
+        User u = userMapper.getById(1000L);
+        System.out.println(u);
+        System.out.println("end");
     }
 
     @Test
