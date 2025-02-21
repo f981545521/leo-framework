@@ -13,12 +13,14 @@ import cn.acyou.leo.tool.dto.dict.DictSaveReq;
 import cn.acyou.leo.tool.entity.Area;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.entity.ScheduleJob;
+import cn.acyou.leo.tool.entity.User;
 import cn.acyou.leo.tool.feign.HttpbinClient;
 import cn.acyou.leo.tool.mapper.AreaMapper;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.mapper.ScheduleJobMapper;
 import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DictService;
+import cn.acyou.leo.tool.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -75,6 +77,14 @@ public class ApplicationTests {
     private PlatformTransactionManager transactionManager;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private UserService userService;
+
+    @Test
+    public void test() {
+        User byId = userService.getById(1000);
+        System.out.println(byId);
+    }
 
     @Test
     public void contextLoads() {

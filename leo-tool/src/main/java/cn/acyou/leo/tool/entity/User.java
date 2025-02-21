@@ -35,8 +35,14 @@ public class User implements Serializable {
     @ApiModelProperty(value = "角色ID")
     private Long roleId;
 
-    @ApiModelProperty(value = "用户真实姓名")
+    @ApiModelProperty(value = "用户名")
     private String userName;
+
+    @ApiModelProperty(value = "用户昵称")
+    private String nickName;
+
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 
     @ApiModelProperty(value = "用户签名")
     private String signature;
@@ -44,11 +50,17 @@ public class User implements Serializable {
     @ApiModelProperty(value = "性别 1男 2女")
     private Integer sex;
 
+    @ApiModelProperty(value = "用户手机号区号")
+    private String areaCode;
+
     @ApiModelProperty(value = "用户手机号")
     private String phone;
 
     @ApiModelProperty(value = "年龄")
     private Integer age;
+
+    @ApiModelProperty(value = "用户来源")
+    private String source;
 
     @ApiModelProperty(value = "生日")
     private LocalDate birthday;
@@ -58,6 +70,12 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "状态 0禁用 1正常")
     private Integer status;
+
+    @ApiModelProperty(value = "账号过期时间")
+    private Date expirationTime;
+
+    @ApiModelProperty(value = "账号类型")
+    private Integer type;
 
     @ApiModelProperty(value = "权限列表")
     private String perms;

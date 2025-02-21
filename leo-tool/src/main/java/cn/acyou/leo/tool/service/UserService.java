@@ -4,6 +4,7 @@ import cn.acyou.leo.framework.base.LoginUser;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.tool.dto.req.UserLoginAccountReq;
 import cn.acyou.leo.tool.entity.User;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -13,7 +14,7 @@ import cn.acyou.leo.tool.entity.User;
  * @author youfang
  * @since 2022-08-16
  */
-public interface UserService {
+public interface UserService extends IService<User> {
 
     Result<?> doLoginValid(UserLoginAccountReq loginAuth);
 
