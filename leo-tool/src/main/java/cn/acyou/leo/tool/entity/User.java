@@ -1,7 +1,7 @@
 package cn.acyou.leo.tool.entity;
 
-import cn.acyou.leo.tool.handler.JsonTypeHandler;
 import cn.acyou.leo.tool.handler.StringListStringTypeHandler;
+import cn.acyou.leo.tool.handler.global.JsonTypeHandler;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -83,7 +83,7 @@ public class User implements Serializable {
     private Integer type;
 
     @ApiModelProperty(value = "权限列表")
-    //@TableField(typeHandler = StringListStringTypeHandler.class)
+    @TableField(typeHandler = StringListStringTypeHandler.class)
     private List<String> perms;
 
     //{"point": 100, "growthValue": 100}
@@ -92,8 +92,12 @@ public class User implements Serializable {
     //private UserSummaryDetails details;
 
     @ApiModelProperty(value = "详情扩展信息")
-    //@TableField(typeHandler = JsonTypeHandler.class)
+    @TableField(typeHandler = JsonTypeHandler.class)
     private JSONArray details;
+
+    //@ApiModelProperty(value = "详情扩展信息")
+    //@TableField(typeHandler = JsonTypeHandler.class)
+    //private List<Long> details;
 
     @ApiModelProperty(value = "创建人")
     private Long createUser;

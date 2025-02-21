@@ -1,4 +1,4 @@
-package cn.acyou.leo.tool.handler;
+package cn.acyou.leo.tool.handler.global;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

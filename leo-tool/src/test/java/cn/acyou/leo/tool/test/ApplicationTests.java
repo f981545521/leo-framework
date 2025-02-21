@@ -85,12 +85,17 @@ public class ApplicationTests {
 
     @Test
     public void test() {
-        User u2 = userMapper.getByIdV2(1000L);
-        System.out.println(u2);
-        User byId = userService.getById(1000);
-        System.out.println(byId);
+        User mpDefault = userService.getById(1000);
+        System.out.println(mpDefault);
+        //@select annotation
         User u = userMapper.getById(1000L);
         System.out.println(u);
+        //resultType
+        User u2 = userMapper.getByIdV2(1000L);
+        System.out.println(u2);
+        //resultMap
+        User u3 = userMapper.getByIdV3(1000L);
+        System.out.println(u3);
         System.out.println("end");
     }
 

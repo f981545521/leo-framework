@@ -18,4 +18,6 @@ public interface UserMapper extends BaseMapper<User> {
     User getById(@Param("userId") Long userId);
 
     User getByIdV2(@Param("userId") Long userId);
+
+    User getByIdV3(@Param("userId") Long userId);
 }
