@@ -3,10 +3,7 @@ package cn.acyou.leo.tool.entity;
 import cn.acyou.leo.tool.handler.StringListStringTypeHandler;
 import cn.acyou.leo.tool.handler.global.JsonTypeHandler;
 import com.alibaba.fastjson.JSONArray;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -112,7 +109,20 @@ public class User implements Serializable {
     private Date updateTime;
 
     public enum SourceEnum {
-        H5, PC, MINI_PROGRAM, WECHAT, ANDROID, IOS
+        H5("H5", "H5网页"),
+        PC("PC", "电脑端"),
+        MINI_PROGRAM("MINI_PROGRAM", "小程序端"),
+        WECHAT("WECHAT", "微信公众号"),
+        ANDROID("ANDROID", "安卓APP"),
+        IOS("IOS","苹果APP");
+
+        @EnumValue // 标记该字段为数据库中存储的值
+        private final String value;
+        private final String name;
+        SourceEnum(String value, String name) {
+            this.value = value;
+            this.name = name;
+        }
     }
 
     @Data
