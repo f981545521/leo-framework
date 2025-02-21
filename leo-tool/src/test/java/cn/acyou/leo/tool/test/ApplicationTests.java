@@ -84,7 +84,7 @@ public class ApplicationTests {
     private UserMapper userMapper;
 
     @Test
-    public void test() {
+    public void test_typeHandler() {
         User mpDefault = userService.getById(1000);
         System.out.println(mpDefault);
         //@select annotation

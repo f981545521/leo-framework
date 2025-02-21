@@ -4,15 +4,16 @@ import cn.acyou.leo.tool.handler.StringListStringTypeHandler;
 import cn.acyou.leo.tool.handler.global.JsonTypeHandler;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -108,6 +109,7 @@ public class User implements Serializable {
     @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
+    @AllArgsConstructor
     public enum SourceEnum {
         H5("H5", "H5网页"),
         PC("PC", "电脑端"),
@@ -116,13 +118,24 @@ public class User implements Serializable {
         ANDROID("ANDROID", "安卓APP"),
         IOS("IOS","苹果APP");
 
-        @EnumValue // 标记该字段为数据库中存储的值
-        private final String value;
+        @EnumValue
         private final String name;
-        SourceEnum(String value, String name) {
-            this.value = value;
-            this.name = name;
+
+        //@JsonValue
+        private final String description;
+
+        @JsonValue
+        private Map<String, Object> info(){
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("value", this.name);
+            Map<String, Object> options = new LinkedHashMap<>();
+            for (SourceEnum value : SourceEnum.values()) {
+                options.put(value.name(), value.description);
+            }
+            map.put("options", options);
+            return map;
         }
+
     }
 
     @Data

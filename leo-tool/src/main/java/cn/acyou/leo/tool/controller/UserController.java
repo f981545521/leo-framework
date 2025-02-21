@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.base.LoginUser;
 import cn.acyou.leo.framework.context.AppContext;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.tool.dto.req.UserLoginAccountReq;
+import cn.acyou.leo.tool.entity.User;
 import cn.acyou.leo.tool.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +41,13 @@ public class UserController {
     public Result<LoginUser> loginInfo() {
         LoginUser loginUser = AppContext.getLoginUser();
         return Result.success(loginUser);
+    }
+
+    @PostMapping("/get")
+    @ApiOperation(value = "获取当前登录用户详细信息")
+    public Result<User> get(Long id) {
+        User user = userService.getById(id);
+        return Result.success(user);
     }
 
 }
