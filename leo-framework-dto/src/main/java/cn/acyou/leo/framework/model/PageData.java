@@ -1,6 +1,7 @@
 package cn.acyou.leo.framework.model;
 
 import cn.acyou.leo.framework.model.base.DTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
@@ -91,6 +92,25 @@ public class PageData<T> extends DTO {
 
     public Integer getTotalPage() {
         return totalPage;
+    }
+
+    public static <T> PageData<T> emptyPage() {
+        return new PageData<>(1, 10);
+    }
+
+    @JsonIgnore
+    public boolean isEmpty(){
+        return list == null || list.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean notEmpty(){
+        return !isEmpty();
+    }
+
+    @JsonIgnore
+    public T getFirst() {
+        return notEmpty() ? list.get(0) : null;
     }
 
     /**
