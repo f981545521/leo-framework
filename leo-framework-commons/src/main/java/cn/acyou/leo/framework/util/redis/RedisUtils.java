@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.util.function.CallTask;
 import cn.acyou.leo.framework.util.function.Task;
 import com.google.common.collect.ImmutableList;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +54,10 @@ public class RedisUtils {
      */
     private static final int DEFAULT_CACHE_SECONDS = 60;
     @Autowired(required = false)
+    @Getter
     private StringRedisTemplate redisTemplate;
     @Autowired(required = false)
+    @Getter
     private RedisTemplate<Object, Object> redisObjTemplate;
 
     //私有化构造方法，无法通过new创建。而不影响Spring通过反射创建Bean
