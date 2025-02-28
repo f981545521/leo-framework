@@ -1,3 +1,4 @@
+### 查询所有文档数据
 POST es-boot/_search
 {
   "query": {
@@ -6,6 +7,35 @@ POST es-boot/_search
     }
   }
 }
+### 获取索引的文档类型
+GET es-boot/_mapping
+
+### 查询与排序
+POST es-boot/_search
+{
+  "query" : {
+    "bool" : {
+      "must": [
+        {
+          "match": {
+            "name": "王"
+          }
+        },
+        {
+          "match": {
+            "age": 23
+          }
+        }
+      ]
+    }
+  },
+  "from" : 0,
+  "size" : 100,
+  "sort" : [{
+    "age": "desc"
+  }]
+}
+
 ## https://zhuanlan.zhihu.com/p/677053620
 POST es-boot/_search
 {
