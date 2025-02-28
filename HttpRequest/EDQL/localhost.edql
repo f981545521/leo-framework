@@ -39,11 +39,33 @@ POST es-boot/_search
 ## https://zhuanlan.zhihu.com/p/677053620
 POST es-boot/_search
 {
+  "aggs" : {
+    "group_by_name":{
+      "aggs":{
+        "sum_age":{
+          "sum":{
+            "field":"age"
+          }
+        }
+      },
+      "terms":{
+        "field":"name.keyword",
+        "size":"10"
+      }
+    }
+  }
+}
+
+## https://zhuanlan.zhihu.com/p/677053620
+POST es-boot/_search
+{
+  "from": 2,
   "size": 0,
   "aggs": {
     "group_by_name": {
       "terms": {
-        "field": "name.keyword"
+        "field": "name.keyword",
+        "size":"10"
       },
       "aggs": {
         "average_age": {
