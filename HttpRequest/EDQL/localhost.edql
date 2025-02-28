@@ -1,0 +1,55 @@
+POST es-boot/_search
+{
+  "query": {
+    "bool": {
+      "must": []
+    }
+  }
+}
+## https://zhuanlan.zhihu.com/p/677053620
+POST es-boot/_search
+{
+  "size": 0,
+  "aggs": {
+    "group_by_name": {
+      "terms": {
+        "field": "name.keyword"
+      },
+      "aggs": {
+        "average_age": {
+          "avg": {
+            "field": "age"
+          }
+        }
+      }
+    }
+  }
+}
+### 分页查询
+POST es-boot/_search
+{
+  "size": 2,
+  "query": {
+    "bool": {
+      "must": []
+    }
+  }
+}
+### 分页查询
+POST es-boot/_search
+{
+  "size": 2,
+  "query": {
+    "bool": {
+      "must": []
+    }
+  }
+}
+POST es-boot/_search
+{
+  "query": {
+    "bool": {
+      "must": []
+    }
+  }
+}
