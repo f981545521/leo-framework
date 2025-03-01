@@ -1,0 +1,52 @@
+### 根据手机号查找
+POST order-2025/_search
+{
+  "from": 0,
+  "size": 100,
+  "query": {
+    "match": {
+      "phone": "13102035624"
+    }
+  }
+}
+
+##
+POST order-2025/_search
+{
+  "size": 0,
+  "aggs": {
+    "composite_aggs": {
+      "composite": {
+        "after": {
+          "group_by_phone": "13101616120"
+        },
+        "sources": [
+          {
+            "group_by_phone": {
+              "terms": {
+                "field": "phone"
+              }
+            }
+          }
+        ],
+        "size": 100
+      },
+      "aggs": {
+        "sum_money": {
+          "sum": {
+            "field": "money"
+          }
+        }
+      }
+    }
+  }
+}
+##
+POST order-2025/_search
+{
+  "query": {
+    "bool": {
+      "must": []
+    }
+  }
+}

@@ -1,7 +1,10 @@
 package cn.acyou.leo.order.web.tests.es;
 
+import cn.acyou.leo.framework.util.DateUtil;
 import cn.acyou.leo.framework.util.IdUtil;
+import cn.acyou.leo.framework.util.RandomUtil;
 import cn.acyou.leo.order.web.tests.es.bo.Order;
+import cn.acyou.leo.order.web.tests.es.bo.Order2025;
 import cn.acyou.leo.product.entity.Student;
 import com.alibaba.fastjson.JSON;
 import org.apache.http.HttpHost;
@@ -63,19 +66,19 @@ public class RestHighLevelClient3Tests {
     //1. 创建索引请求
     @Test
     void testCreateIndexMapping() throws IOException {
-        CreateIndexRequest request = new CreateIndexRequest("retail-pos-order-query-2025");
+        CreateIndexRequest request = new CreateIndexRequest("order-2025");
         // 定义映射
         String mapping = "{\n" +
                 "  \"mappings\": {\n" +
                 "    \"properties\": {\n" +
-                "      \"fid\": { \"type\": \"keyword\" },\n" +
-                "      \"operateTime\": { \"type\": \"date\" },\n" +
-                "      \"operator\": { \"type\": \"keyword\" },\n" +
+                "      \"id\": { \"type\": \"keyword\" },\n" +
+                "      \"createTime\": { \"type\": \"date\" },\n" +
+                "      \"userId\": { \"type\": \"long\" },\n" +
                 "      \"money\": { \"type\": \"scaled_float\", \"scaling_factor\": 100 },\n" +
                 "      \"memo\": { \"type\": \"text\" },\n" +
                 "      \"point\": { \"type\": \"integer\" },\n" +
-                "      \"customerPhone\": { \"type\": \"keyword\" },\n" +
-                "      \"storeName\": { \"type\": \"keyword\" }\n" +
+                "      \"phone\": { \"type\": \"keyword\" },\n" +
+                "      \"storeName\": { \"type\": \"text\" }\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
@@ -88,19 +91,42 @@ public class RestHighLevelClient3Tests {
     //2. 判断索引库是够存在
     @Test
     void testExistIndex() throws IOException {
-        GetIndexRequest es = new GetIndexRequest("retail-pos-order-query-2025");
+        GetIndexRequest es = new GetIndexRequest("order-2025");
         boolean exists = client.indices().exists(es, RequestOptions.DEFAULT);
         System.out.println(exists);
     }
 
     @Test
     void testAddDocument() throws IOException {
+        for (int i = 0; i < 10000; i++) {
+            Order2025 order = new Order2025();
+            order.setId(IdUtil.objectId());
+            order.setCreateTime(DateUtil.randomRangeDate("1990-01-01", "2018-12-31"));
+            order.setUserId(RandomUtil.randomRangeLong(10000L, 20000L));
+            order.setMoney(new BigDecimal(RandomUtil.randomRangeNumber(1, 99) + "." + RandomUtil.randomRangeNumber(1, 99)));
+            order.setMemo("");
+            order.setPoint(RandomUtil.randomAge());
+            order.setPhone(RandomUtil.randomTelephone());
+            order.setStoreName(RandomUtil.randomUserName());
+            IndexRequest indexRequest = new IndexRequest("order-2025");
+            indexRequest.id(order.getId());
+            indexRequest.timeout(TimeValue.timeValueSeconds(60));
+            indexRequest.timeout("60s");
+            IndexRequest source = indexRequest.source(JSON.toJSONString(order), XContentType.JSON);
+            IndexResponse index = client.index(source, RequestOptions.DEFAULT);
+            System.out.println(index.toString());
+            System.out.println(index.status());
+        }
+    }
+
+    @Test
+    public void testAddDocument2() throws IOException {
         Order order = new Order();
         order.setFid(IdUtil.objectId());
         order.setCustomerPhone("18205166201");
-        order.setMoney(new BigDecimal("10.00"));
+        order.setMoney(new BigDecimal("-15.00"));
         order.setPoint(10);
-        IndexRequest indexRequest = new IndexRequest("retail-pos-order-query-2025");
+        IndexRequest indexRequest = new IndexRequest("order-2025");
         indexRequest.id(order.getFid());
         indexRequest.timeout(TimeValue.timeValueSeconds(60));
         indexRequest.timeout("60s");
