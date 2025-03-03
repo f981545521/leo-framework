@@ -178,8 +178,24 @@ public class PageQuery {
      * @return 开启查询
      */
     public static PageQuery startPage(PageSo pageSo, Boolean pageSizeZero) {
+        return startPage(pageSo, true, pageSizeZero);
+    }
+
+    /**
+     * 参考： {@link #startPage(Integer, Integer)}
+     *
+     * @param pageSo       分页参数
+     * @param countQuery   true     时支持包含count查询
+     *                     false    时不包含count查询
+     *                     null     时用按照默认{false}配置
+     * @param pageSizeZero true     时支持pageSize=0查全部
+     *                     false    时pageSize=0没有结果
+     *                     null     时用按照默认{false}配置
+     * @return 开启查询
+     */
+    public static PageQuery startPage(PageSo pageSo, boolean countQuery, Boolean pageSizeZero) {
         judgeNotNull(pageSo.getPageNum(), pageSo.getPageSize());
-        PageHelper.startPage(pageSo.getPageNum(), pageSo.getPageSize(), true, null, pageSizeZero);
+        PageHelper.startPage(pageSo.getPageNum(), pageSo.getPageSize(), countQuery, null, pageSizeZero);
         PageHelper.orderBy(convertOrderBy(pageSo));
         return new PageQuery();
     }
