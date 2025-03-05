@@ -20,19 +20,13 @@ public class PageData<T> extends DTO {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("当前页")
-    private final Integer pageNum;
+    private final int pageNum;
 
     @ApiModelProperty("每页显示条数")
-    private final Integer pageSize;
-
-    @ApiModelProperty("总页数")
-    private Integer totalPage;
+    private final int pageSize;
 
     @ApiModelProperty("总记录数")
-    private Long total;
-
-    @ApiModelProperty("有下一页")
-    private boolean hasNextPage = false;
+    private final long total;
 
     @ApiModelProperty("返回数据")
     private List<T> list = new ArrayList<>();
@@ -47,9 +41,10 @@ public class PageData<T> extends DTO {
      * @param pageNum  页码
      * @param pageSize 页面大小
      */
-    public PageData(Integer pageNum, Integer pageSize) {
+    public PageData(int pageNum, int pageSize, long total) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
+        this.total = total;
     }
 
     /* GET AND SET **/
@@ -63,11 +58,6 @@ public class PageData<T> extends DTO {
 
     public Long getTotal() {
         return total;
-    }
-
-    public void setTotal(Long total) {
-        this.total = total;
-        processNextPage();
     }
 
     public List<T> getList() {
@@ -86,16 +76,8 @@ public class PageData<T> extends DTO {
         this.extData = extData;
     }
 
-    public boolean isHasNextPage() {
-        return hasNextPage;
-    }
-
-    public Integer getTotalPage() {
-        return totalPage;
-    }
-
     public static <T> PageData<T> emptyPage() {
-        return new PageData<>(1, 10);
+        return new PageData<>(1, 10, 0);
     }
 
     @JsonIgnore
@@ -113,23 +95,15 @@ public class PageData<T> extends DTO {
         return notEmpty() ? list.get(0) : null;
     }
 
-    /**
-     * 处理 hasNextPage 值
-     */
-    public void processNextPage() {
-        if (this.pageNum != null && this.pageSize != null && this.total != null) {
-            long totalPage;
-            if (pageSize == 0) {
-                totalPage = this.total;
-                this.hasNextPage = false;
-            } else {
-                totalPage = ((total + pageSize - 1) / pageSize);
-                if (pageNum < totalPage) {
-                    this.hasNextPage = true;
-                }
-            }
-            this.totalPage = (int) totalPage;
+    public int totalPage() {
+        if (pageSize > 0) {
+            return (int) ((total + pageSize - 1) / pageSize);
         }
+        return (int) this.total;
+    }
+
+    public boolean hasNextPage() {
+        return totalPage() > pageNum;
     }
 
     /**
@@ -143,7 +117,6 @@ public class PageData<T> extends DTO {
                 .append("第 ").append(pageNum).append(" 页, ")
                 .append("每页显示 ").append(pageSize).append(" 条, ")
                 .append("当前页 ").append(list != null ? list.size() : 0).append(" 条记录，")
-                .append("共 ").append(totalPage).append(" 页，")
                 .append("共 ").append(total).append(" 条记录")
                 .append("]").toString();
     }

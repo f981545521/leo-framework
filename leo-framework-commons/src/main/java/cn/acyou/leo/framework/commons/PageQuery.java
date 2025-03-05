@@ -39,8 +39,7 @@ public class PageQuery {
      */
     public static <T> PageData<T> convert(Page<T> springPage) {
         Integer pageNum = springPage.getNumber() != 0 ? springPage.getNumber() : 1;
-        PageData<T> resultData = new PageData<>(pageNum, springPage.getSize());
-        resultData.setTotal(springPage.getTotalElements());
+        PageData<T> resultData = new PageData<>(pageNum, springPage.getSize(), springPage.getTotalElements());
         resultData.setList(springPage.getContent());
         return resultData;
     }
@@ -62,8 +61,7 @@ public class PageQuery {
     public static <T> PageData<T> convert(PageInfo<T> pageInfo) {
         //这里没有数据的时候pageNum是0
         Integer pageNum = pageInfo.getPageNum() != 0 ? pageInfo.getPageNum() : 1;
-        PageData<T> resultData = new PageData<>(pageNum, pageInfo.getPageSize());
-        resultData.setTotal(pageInfo.getTotal());
+        PageData<T> resultData = new PageData<>(pageNum, pageInfo.getPageSize(), pageInfo.getTotal());
         resultData.setList(pageInfo.getList());
         return resultData;
     }
@@ -80,8 +78,7 @@ public class PageQuery {
     public static <E, T> PageData<T> convert(PageInfo<E> pageInfo, Class<T> tarClass) {
         //这里没有数据的时候pageNum是0
         Integer pageNum = pageInfo.getPageNum() != 0 ? pageInfo.getPageNum() : 1;
-        PageData<T> resultData = new PageData<>(pageNum, pageInfo.getPageSize());
-        resultData.setTotal(pageInfo.getTotal());
+        PageData<T> resultData = new PageData<>(pageNum, pageInfo.getPageSize(), pageInfo.getTotal());
         resultData.setList(BeanCopyUtil.copyList(pageInfo.getList(), tarClass));
         return resultData;
     }
@@ -231,9 +228,7 @@ public class PageQuery {
      * @return 空分页数据
      */
     public static <T> PageData<T> empty() {
-        PageData<T> pageData = new PageData<>(1, 10);
-        pageData.setTotal(0L);
-        return pageData;
+        return new PageData<>(1, 10, 0L);
     }
 
     /**
@@ -242,9 +237,7 @@ public class PageQuery {
      * @return 空分页数据
      */
     public static <T> PageData<T> empty(int pageSize) {
-        PageData<T> pageData = new PageData<>(1, pageSize);
-        pageData.setTotal(0L);
-        return pageData;
+        return new PageData<>(1, pageSize, 0L);
     }
 
     /**
