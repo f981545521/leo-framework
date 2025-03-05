@@ -1,25 +1,16 @@
---[[
-KEYS‌:ml-citation{ref="1" data="citationList"}：商品库存键
-KEYS‌:ml-citation{ref="2" data="citationList"}：用户购买记录键
-KEYS‌:ml-citation{ref="3" data="citationList"}：黑名单键
-ARGV‌:ml-citation{ref="1" data="citationList"}：用户ID
-ARGV‌:ml-citation{ref="2" data="citationList"}：购买数量
-ARGV‌:ml-citation{ref="3" data="citationList"}：最大库存阈值
-ARGV‌:ml-citation{ref="4" data="citationList"}：用户限购次数
---]]
-
+-- 秒杀LUA
 -- 参数校验
 if #KEYS ~= 3 or #ARGV ~= 4 then
     return {-10, "参数数量错误"}
 end
 
-local product_key = KEYS[1]
-local user_record_key = KEYS[2]
-local blacklist_key = KEYS[3]
-local user_id = ARGV[1]
-local quantity = tonumber(ARGV[2])
-local max_stock = tonumber(ARGV[3])
-local user_limit = tonumber(ARGV[4])
+local product_key = KEYS[1]         -- 商品库存键
+local user_record_key = KEYS[2]     -- 用户购买记录键
+local blacklist_key = KEYS[3]       -- 黑名单键
+local user_id = ARGV[1]             -- 用户ID
+local quantity = tonumber(ARGV[2])  -- 购买数量
+local max_stock = tonumber(ARGV[3]) -- 最大库存阈值
+local user_limit = tonumber(ARGV[4])-- 用户限购次数
 
 -- 检查用户是否在黑名单中
 if redis.call('SISMEMBER', blacklist_key, user_id) == 1 then

@@ -40,6 +40,7 @@ public class AppCheckRunner implements ApplicationRunner {
         //用户抢购记录
         redisUtils.getRedisTemplate().delete("LEO:USER_RECORD");
         //开始
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD"), "100", "1", "10"));
         System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "100", "1", "10", "1"));
         System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1000", "1", "10", "1"));
         System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1000", "1", "10", "1"));
