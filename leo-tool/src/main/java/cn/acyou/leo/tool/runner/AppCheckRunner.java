@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.runner;
 
 import cn.acyou.leo.framework.util.redis.RedisUtils;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -21,19 +22,76 @@ public class AppCheckRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        //测试返回多个值
         //test1();
         //test2();
+        //test3();
+        //test4();
+        test5();
+    }
+
+    private void test5() {
+        DefaultRedisScript<List> script = new DefaultRedisScript<>();
+        script.setLocation(new ClassPathResource("lua/sale.lua"));
+        script.setResultType(List.class);
+        //黑名单
+        redisUtils.getRedisTemplate().opsForSet().add("LEO:BLACK_LIST", "100");
+        //抢购商品ID为10001，库存数量为5
+        redisUtils.getRedisTemplate().opsForValue().set("LEO:PRODUCT:10001", "5");
+        //用户抢购记录
+        redisUtils.getRedisTemplate().delete("LEO:USER_RECORD");
+        //开始
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "100", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1000", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1000", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1001", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1002", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1003", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1004", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1005", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1006", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1007", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1008", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "1009", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "10010", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "10011", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "10012", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "10013", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "10014", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "10015", "1", "10", "1"));
+        System.out.println(redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:PRODUCT:10001", "LEO:USER_RECORD", "LEO:BLACK_LIST"), "10016", "1", "10", "1"));
+    }
+
+
+    private void test4(){
+        DefaultRedisScript<String> script = new DefaultRedisScript<>();
+        script.setLocation(new ClassPathResource("lua/rate_limit.lua"));
+        script.setResultType(String.class);
+        redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:ACCESS_LIMIT:100"), "30","1", System.currentTimeMillis() + "");
+        redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:ACCESS_LIMIT:100"), "30","1", System.currentTimeMillis() + "");
+        redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:ACCESS_LIMIT:100"), "30","1", System.currentTimeMillis() + "");
+        redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:ACCESS_LIMIT:100"), "30","1", System.currentTimeMillis() + "");
+        redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:ACCESS_LIMIT:100"), "30","1", System.currentTimeMillis() + "");
+    }
+
+    private void test3(){
+        DefaultRedisScript<String> script = new DefaultRedisScript<>();
+        script.setLocation(new ClassPathResource("lua/rate_limit.lua"));
+        script.setResultType(String.class);
+        redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:ACCESS_LIMIT:100"), 1000, 50);
+        redisUtils.getRedisTemplate().execute(script, Lists.newArrayList("LEO:ACCESS_LIMIT:100"), 1000, 50);
     }
 
     private void test2(){
         //直接执行脚本返回
-        redisUtils.getRedisTemplate().execute(new DefaultRedisScript<>("" +
+        redisUtils.getRedisTemplate().execute(new DefaultRedisScript<>("return {1, 'ok'}", List.class), new ArrayList<>());
+
+        redisUtils.getRedisTemplate().execute(new DefaultRedisScript<>(
                 "local v = tonumber(ARGV[1])\r\n" +
                 "return v", String.class), new ArrayList<>(), "202503");
     }
 
     private void test1() {
+        //测试返回多个值
         DefaultRedisScript<List> script = new DefaultRedisScript<>();
         script.setLocation(new ClassPathResource("lua/member_growth.lua"));
         script.setResultType(List.class);

@@ -7,7 +7,7 @@ if score_value > 0 then
 end
 if score_value < 0 then
     local tmp = redis.call('ZSCORE', cache_key, year_month_str)
-    if tmp == nil then
+    if tmp == nil then  -- 这里语法上可以 if tmp then  / if not tmp then
         return -1
     end
     local score = tonumber(tmp)
@@ -45,4 +45,5 @@ for i = 1, #members_with_scores, 2 do
     end
 end
 
+-- 返回多个值
 return {total_score, table.concat(res, ',')}
