@@ -9,6 +9,7 @@ import cn.acyou.leo.product.entity.Student;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -19,6 +20,7 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -64,6 +66,9 @@ public class RestHighLevelClient4Tests {
         );
     }
 
+
+    public static List<String> indexsList = Lists.newArrayList("order-2022","order-2023","order-2024","order-2025");
+
     //1. 创建索引请求
     @Test
     void testCreateIndexMapping() throws IOException {
@@ -98,7 +103,47 @@ public class RestHighLevelClient4Tests {
         System.out.println(exists);
     }
 
-    public static List<String> indexsList = Lists.newArrayList("order-2022","order-2023","order-2024","order-2025");
+    //2. 判断索引库是够存在
+    @Test
+    void testDeleteIndex() throws IOException {
+        for (String indexName : indexsList) {
+            DeleteIndexRequest request = new DeleteIndexRequest(indexName);
+            AcknowledgedResponse delete = client.indices().delete(request, RequestOptions.DEFAULT);
+            System.out.println(delete.isAcknowledged());
+        }
+    }
+
+    @Test
+    void testAddDocumentBatch() throws IOException {
+        for (String name : indexsList) {
+            BulkRequest bulkRequest = new BulkRequest();
+            for (int i = 0; i < 100; i++) {
+                Order2025 order = new Order2025();
+                order.setId(IdUtil.objectId());
+                order.setCreateTime(DateUtil.randomRangeDate("1990-01-01", "2018-12-31"));
+                order.setUserId(RandomUtil.randomRangeLong(10000L, 20000L));
+                order.setMoney(new BigDecimal(RandomUtil.randomRangeNumber(1, 99) + "." + RandomUtil.randomRangeNumber(1, 99)));
+                order.setMemo("");
+                order.setPoint(RandomUtil.randomAge());
+                order.setPhone(RandomUtil.randomTelephone());
+                if (i%20==0) {
+                    order.setPhone("18205166207");
+                }
+                order.setStoreName(RandomUtil.randomUserName());
+                IndexRequest indexRequest = new IndexRequest(name);
+                indexRequest.id(order.getId());
+                indexRequest.timeout(TimeValue.timeValueSeconds(60));
+                indexRequest.timeout("60s");
+                indexRequest.source(JSON.toJSONString(order), XContentType.JSON);
+                bulkRequest.add(indexRequest);
+            }
+            BulkResponse bulkResponse = client.bulk(bulkRequest, RequestOptions.DEFAULT);
+            if (bulkResponse.hasFailures()) {
+                String errorMsg = bulkResponse.buildFailureMessage();
+                System.err.println("批量插入失败: " + errorMsg);
+            }
+        }
+    }
 
     @Test
     void testAddDocument() throws IOException {
@@ -271,6 +316,7 @@ public class RestHighLevelClient4Tests {
                 .sort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC))
                 .from(0)
                 .size(100);
+        searchSourceBuilder.trackTotalHits(true);
         SearchRequest searchRequest = new SearchRequest("order-*").source(searchSourceBuilder);
         SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
         SearchHits searchHits = response.getHits();
