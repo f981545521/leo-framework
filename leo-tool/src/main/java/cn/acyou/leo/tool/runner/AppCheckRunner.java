@@ -1,7 +1,11 @@
 package cn.acyou.leo.tool.runner;
 
 import cn.acyou.leo.framework.util.redis.RedisUtils;
+import cn.hutool.core.io.IoUtil;
 import com.google.common.collect.Lists;
+import org.redisson.api.RScript;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -9,6 +13,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -19,6 +24,8 @@ import java.util.*;
 public class AppCheckRunner implements ApplicationRunner {
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private RedissonClient redissonClient;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -27,6 +34,27 @@ public class AppCheckRunner implements ApplicationRunner {
         //test3();
         //test4();
         test5();
+    }
+
+    private void test7() throws Exception {
+        RScript script2 = redissonClient.getScript(StringCodec.INSTANCE);
+        ClassPathResource resource = new ClassPathResource("lua/member_growth.lua");
+        String read = IoUtil.read(resource.getInputStream(), StandardCharsets.UTF_8);
+        String memberGrowthLuaSha = script2.scriptLoad(read);
+        Object o = script2.evalSha(RScript.Mode.READ_WRITE, memberGrowthLuaSha, RScript.ReturnType.VALUE, Lists.newArrayList(), "202403", "10", "USER_GROWTH_KEY:1000");
+        System.out.println(o);
+    }
+
+    private void test6() throws Exception {
+        ClassPathResource resource = new ClassPathResource("lua/member_growth.lua");
+        String luaScript = IoUtil.read(resource.getInputStream(), StandardCharsets.UTF_8);
+        Long v = redissonClient.getScript().eval(
+                RScript.Mode.READ_WRITE,
+                luaScript,
+                RScript.ReturnType.VALUE,
+                Lists.newArrayList(), "202403", "10", "USER_GROWTH_KEY:1000"
+        );
+        System.out.println(v);
     }
 
     private void test5() {

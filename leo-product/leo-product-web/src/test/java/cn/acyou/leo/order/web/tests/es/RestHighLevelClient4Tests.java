@@ -6,6 +6,7 @@ import cn.acyou.leo.framework.util.RandomUtil;
 import cn.acyou.leo.order.web.tests.es.bo.Order;
 import cn.acyou.leo.order.web.tests.es.bo.Order2025;
 import cn.acyou.leo.product.entity.Student;
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.apache.http.HttpHost;
@@ -37,6 +38,9 @@ import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.composite.CompositeAggregationBuilder;
+import org.elasticsearch.search.aggregations.bucket.composite.CompositeValuesSourceBuilder;
+import org.elasticsearch.search.aggregations.bucket.composite.TermsValuesSourceBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
@@ -72,6 +76,7 @@ public class RestHighLevelClient4Tests {
     //1. 创建索引请求
     @Test
     void testCreateIndexMapping() throws IOException {
+        testDeleteIndex();
         for (String s : indexsList) {
             CreateIndexRequest request = new CreateIndexRequest(s);
             // 定义映射
@@ -117,7 +122,7 @@ public class RestHighLevelClient4Tests {
     void testAddDocumentBatch() throws IOException {
         for (String name : indexsList) {
             BulkRequest bulkRequest = new BulkRequest();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10000; i++) {
                 Order2025 order = new Order2025();
                 order.setId(IdUtil.objectId());
                 order.setCreateTime(DateUtil.randomRangeDate("1990-01-01", "2018-12-31"));
@@ -126,17 +131,31 @@ public class RestHighLevelClient4Tests {
                 order.setMemo("");
                 order.setPoint(RandomUtil.randomAge());
                 order.setPhone(RandomUtil.randomTelephone());
-                if (i%20==0) {
-                    order.setPhone("18205166207");
-                }
                 order.setStoreName(RandomUtil.randomUserName());
+                if (i%20==0) {  // 1000->200(4*50)   , 2 : 10000 -> 2000(4*500)
+                    order.setUserId(666L);
+                    order.setPhone("18205166207");
+                    order.setStoreName("南京中心仓");
+                }
                 IndexRequest indexRequest = new IndexRequest(name);
                 indexRequest.id(order.getId());
                 indexRequest.timeout(TimeValue.timeValueSeconds(60));
                 indexRequest.timeout("60s");
                 indexRequest.source(JSON.toJSONString(order), XContentType.JSON);
                 bulkRequest.add(indexRequest);
+
+                //批量保存
+                if (bulkRequest.requests().size() == 100) {
+                    doSaveDocumentBatch(bulkRequest);
+                    bulkRequest = new BulkRequest();
+                }
             }
+            doSaveDocumentBatch(bulkRequest);
+        }
+    }
+
+    void doSaveDocumentBatch(BulkRequest bulkRequest) throws IOException {
+        if (CollectionUtil.isNotEmpty(bulkRequest.requests())) {
             BulkResponse bulkResponse = client.bulk(bulkRequest, RequestOptions.DEFAULT);
             if (bulkResponse.hasFailures()) {
                 String errorMsg = bulkResponse.buildFailureMessage();
@@ -281,23 +300,27 @@ public class RestHighLevelClient4Tests {
     @Test
     void testSearch2() throws IOException {
         //搜索请求
-        SearchRequest searchRequest = new SearchRequest("es-boot");
+        SearchRequest searchRequest = new SearchRequest("order-*");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 
         final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery()
-                .must(QueryBuilders.existsQuery("name"))
-                .mustNot(QueryBuilders.termQuery("name", ""));
-        TermsAggregationBuilder aggregation = AggregationBuilders.terms("group_by_name")
-                .field("name.keyword")                   // 按name分组‌:ml-citation{ref="1" data="citationList"}
-                .size(10000);                            // 设置足够大的分组数
+                .must(QueryBuilders.existsQuery("phone"))
+                //.must(QueryBuilders.termQuery("phone", "18205166207"))
+                .mustNot(QueryBuilders.termQuery("phone", ""))
+                ;
+        TermsAggregationBuilder aggregation = AggregationBuilders.terms("group_by_phone")
+                .field("phone")                   // 按name分组‌:ml-citation{ref="1" data="citationList"}
+                .size(1000);                            // 设置足够大的分组数
+        //{"error":{"root_cause":[{"type":"too_many_buckets_exception","reason":"Trying to create too many buckets. Must be less than or equal to: [10000] but was [10001]. This limit can be set by changing the [search.max_buckets] cluster level setting.","max_buckets":10000}
         aggregation.subAggregation(
-                AggregationBuilders.sum("sum_age").field("age")  // sum(score)计算‌:ml-citation{ref="4" data="citationList"}
+                AggregationBuilders.sum("sum_money").field("money")  // sum(score)计算‌:ml-citation{ref="4" data="citationList"}
         );
         sourceBuilder.query(queryBuilder);
         sourceBuilder.timeout(TimeValue.timeValueSeconds(20));
         sourceBuilder.aggregation(aggregation);// 设置聚合和返回参数
         sourceBuilder.size(0);  // 不返回原始文档‌:ml-citation{ref="3" data="citationList"}
-
+        sourceBuilder.trackTotalHits(true);
+        searchRequest.source(sourceBuilder);
         SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
         SearchHits hits = search.getHits();
         System.out.println(JSON.toJSONString(hits));
@@ -325,6 +348,39 @@ public class RestHighLevelClient4Tests {
         for (SearchHit hit : hits) {
             String json = hit.getSourceAsString();
             System.out.println(json);
+        }
+    }
+
+
+    //11. 查询4
+    @Test
+    void testSearch4() throws IOException {
+        List<CompositeValuesSourceBuilder<?>> sources = new ArrayList<>();
+        sources.add(new TermsValuesSourceBuilder("group_by_phone").field("phone"));
+        CompositeAggregationBuilder compositeAggs = AggregationBuilders.composite(
+                        "composite_aggs", sources)
+                .subAggregation(
+                        AggregationBuilders.sum("sum_money").field("money")
+                )
+                .size(100);
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
+                .must(QueryBuilders.existsQuery("phone"))
+                .mustNot(QueryBuilders.termQuery("phone", ""))
+                ;
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+                .query(boolQueryBuilder)
+                .size(0)
+                .trackTotalHits(true)
+                .aggregation(compositeAggs);
+
+        SearchRequest searchRequest = new SearchRequest("order-*");
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        SearchHits hits = search.getHits();
+        System.out.println(JSON.toJSONString(hits));
+        for (SearchHit hit : hits.getHits()) {
+            System.out.println(JSON.toJSONString(hit));
         }
     }
 }
