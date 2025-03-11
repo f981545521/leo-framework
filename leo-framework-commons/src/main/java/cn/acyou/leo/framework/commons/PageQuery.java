@@ -261,6 +261,11 @@ public class PageQuery {
      *
      * <p>示例: createTime-desc,roleCode-asc</p>
      *
+     * 注意：
+     * 1. 如果这里存在排序，则会覆盖Mapper.xml中的orderBy以及MP中的orderBy
+     * 2. 排序字段要是SQL中的返回字段，在Mapper.xml中使用别名来区分不同表：ct.name as card_name
+     *
+     *
      * @param pageSo 分页参数
      * @return order by sql
      */
