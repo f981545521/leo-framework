@@ -7,6 +7,7 @@ import cn.acyou.leo.framework.model.PageSo;
 import cn.acyou.leo.framework.util.BeanCopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.CaseFormat;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 
@@ -120,7 +121,6 @@ public class PageQuery {
      * @return 开启查询
      */
     public static PageQuery startPage(Integer pageNum, Integer pageSize) {
-        judgeNotNull(pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize);
         return new PageQuery();
     }
@@ -136,7 +136,6 @@ public class PageQuery {
      * @return 开启查询
      */
     public static PageQuery startPage(Integer pageNum, Integer pageSize, Boolean pageSizeZero) {
-        judgeNotNull(pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize, true, null, pageSizeZero);
         return new PageQuery();
     }
@@ -150,7 +149,6 @@ public class PageQuery {
      * @return 开启查询
      */
     public static PageQuery startPage(Integer pageNum, Integer pageSize, String orderBy) {
-        judgeNotNull(pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize, orderBy);
         return new PageQuery();
     }
@@ -191,7 +189,6 @@ public class PageQuery {
      * @return 开启查询
      */
     public static PageQuery startPage(PageSo pageSo, boolean countQuery, Boolean pageSizeZero) {
-        judgeNotNull(pageSo.getPageNum(), pageSo.getPageSize());
         PageHelper.startPage(pageSo.getPageNum(), pageSo.getPageSize(), countQuery, null, pageSizeZero);
         PageHelper.orderBy(convertOrderBy(pageSo));
         return new PageQuery();
@@ -240,21 +237,6 @@ public class PageQuery {
         return new PageData<>(1, pageSize, 0L);
     }
 
-    /**
-     * 判断非空
-     *
-     * @param pageNum  页面num
-     * @param pageSize 页面大小
-     */
-    private static void judgeNotNull(Integer pageNum, Integer pageSize) {
-        if (pageNum == null) {
-            throw new ServiceException("[pageNum]不能为空！");
-        }
-        if (pageSize == null) {
-            throw new ServiceException("[pageSize]不能为空！");
-        }
-    }
-
 
     /**
      * 转换为OrderBy 条件
@@ -271,21 +253,19 @@ public class PageQuery {
      */
     public static String convertOrderBy(PageSo pageSo) {
         List<String> orderBySqlList = new ArrayList<>();
-        Map<String, String> supportFieldMap = pageSo.supportField();
         String sortsStr = pageSo.getSorts();
         //非法的sort参数
         boolean illegalOrderBy = false;
-        if (StringUtils.hasText(sortsStr) && (supportFieldMap != null && !supportFieldMap.isEmpty())) {
-            Set<String> supportKeys = supportFieldMap.keySet();
+        if (StringUtils.hasText(sortsStr)) {
             String[] orderItems = sortsStr.split(",");
             for (String orderItem : orderItems) {
                 String[] split = orderItem.split("-");
                 if (split.length % 2 == 0) {
                     String key = split[0];
                     String type = split[1];
-                    if (StringUtils.hasText(key) && StringUtils.hasText(type) &&
-                            supportKeys.contains(key) && isOrderByType(type)) {
-                        orderBySqlList.add(supportFieldMap.get(key) + " " + type.toLowerCase());
+                    if (StringUtils.hasText(key) && StringUtils.hasText(type)&& isOrderByType(type)) {
+                        //key 转为下划线命名
+                        orderBySqlList.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, key) + " " + type.toLowerCase());
                     } else {
                         illegalOrderBy = true;
                     }

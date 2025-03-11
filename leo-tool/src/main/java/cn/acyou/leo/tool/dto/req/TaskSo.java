@@ -20,11 +20,4 @@ public class TaskSo extends PageSo {
     @ApiModelProperty(value = "任务状态    0：失败    1：成功")
     private Integer status;
 
-    @Override
-    public Map<String, String> supportField() {
-        Map<String, String> supportFieldMap = new HashMap<>();
-        supportFieldMap.put("createTime", "create_time");
-        supportFieldMap.put("times", "times");
-        return supportFieldMap;
-    }
 }

@@ -30,40 +30,17 @@ public class PageSo extends DTO {
     @ApiModelProperty("排序规则")
     private String sorts;
 
-    /**
-     * 支持排序的字段与对应数据库字段
-     * <p>
-     * example:
-     * <pre>
-     *         Map&lt;String, String&gt; supportFieldMap = new HashMap&lt;&gt;();
-     *         supportFieldMap.put("createTime", "create_time");
-     *         supportFieldMap.put("roleCode", "role_code");
-     * </pre>
-     * example2 支持别名:
-     * <pre>
-     *         Map&lt;String, String&gt; supportFieldMap = new HashMap&lt;&gt;();
-     *         supportFieldMap.put("createTime", "p.create_time");
-     *         supportFieldMap.put("roleCode", "p.role_code");
-     * </pre>
-     *
-     * @return Map k:页面字段 v:排序的数据库字段
-     */
-    public Map<String, String> supportField() {
-        return null;
-    }
-
     public Integer getPageNum() {
         return pageNum;
     }
 
     public void setPageNum(Integer pageNum) {
-        if (pageNum == null) {
-            throw new IllegalPageArgumentException("pageNum 不能为空！");
+        if (pageNum != null) {
+            if (pageNum < 0) {
+                throw new IllegalPageArgumentException("pageNum 必须大于0！");
+            }
+            this.pageNum = pageNum;
         }
-        if (pageNum < 0) {
-            throw new IllegalPageArgumentException("pageNum 必须大于0！");
-        }
-        this.pageNum = pageNum;
     }
 
     public Integer getPageSize() {
@@ -71,13 +48,12 @@ public class PageSo extends DTO {
     }
 
     public void setPageSize(Integer pageSize) {
-        if (pageSize == null) {
-            throw new IllegalPageArgumentException("pageSize 不能为空！");
+        if (pageSize != null) {
+            if (pageSize < 0 || pageSize > 100) {
+                throw new IllegalPageArgumentException("pageSize 取值范围不正确！合法范围：[0~100]");
+            }
+            this.pageSize = pageSize;
         }
-        if (pageSize < 0 || pageSize > 100) {
-            throw new IllegalPageArgumentException("pageSize 取值范围不正确！合法范围：[0~100]");
-        }
-        this.pageSize = pageSize;
     }
 
     public String getSorts() {

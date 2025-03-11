@@ -60,8 +60,16 @@ public class GlobalExceptionHandler {
      */
     @ResponseBody
     @ExceptionHandler(value = BadSqlGrammarException.class)
-    public Result<Object> handleBadSqlGrammarException(HttpServletRequest request, Exception e) {
+    public Result<Object> handleBadSqlGrammarException(HttpServletRequest request, BadSqlGrammarException e) {
         Result<Object> resultInfo = Result.error(CommonErrorEnum.BAD_SQL_ERROR);
+        Throwable rootCause = Throwables.getRootCause(e);
+        String rootMessage = rootCause.getMessage();
+        if (rootMessage.matches("Unknown column '.*' in 'order clause'")) {
+            Matcher m = MESSAGE_MATCHER.matcher(rootMessage);
+            if (m.find()) {
+                resultInfo.setMsg(m.group() + "排序字段错误！");
+            }
+        }
         log.error(e.getMessage());
         AppContext.setExceptionResult(resultInfo);
         return resultInfo;

@@ -19,12 +19,4 @@ public class ParamConfigSo extends PageSo {
 
     private String code;
 
-    @Override
-    public Map<String, String> supportField() {
-        Map<String, String> supportFieldMap = new HashMap<>();
-        supportFieldMap.put("createTime", "create_time");
-        supportFieldMap.put("sort", "sort");
-        return supportFieldMap;
-    }
-
 }
