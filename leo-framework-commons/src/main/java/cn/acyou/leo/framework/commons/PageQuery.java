@@ -13,8 +13,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * 分页查询工具
@@ -39,7 +37,7 @@ public class PageQuery {
      * @return 分页数据
      */
     public static <T> PageData<T> convert(Page<T> springPage) {
-        Integer pageNum = springPage.getNumber() != 0 ? springPage.getNumber() : 1;
+        int pageNum = springPage.getNumber() != 0 ? springPage.getNumber() : 1;
         PageData<T> resultData = new PageData<>(pageNum, springPage.getSize(), springPage.getTotalElements());
         resultData.setList(springPage.getContent());
         return resultData;
@@ -61,7 +59,7 @@ public class PageQuery {
      */
     public static <T> PageData<T> convert(PageInfo<T> pageInfo) {
         //这里没有数据的时候pageNum是0
-        Integer pageNum = pageInfo.getPageNum() != 0 ? pageInfo.getPageNum() : 1;
+        int pageNum = pageInfo.getPageNum() != 0 ? pageInfo.getPageNum() : 1;
         PageData<T> resultData = new PageData<>(pageNum, pageInfo.getPageSize(), pageInfo.getTotal());
         resultData.setList(pageInfo.getList());
         return resultData;
@@ -78,7 +76,7 @@ public class PageQuery {
      */
     public static <E, T> PageData<T> convert(PageInfo<E> pageInfo, Class<T> tarClass) {
         //这里没有数据的时候pageNum是0
-        Integer pageNum = pageInfo.getPageNum() != 0 ? pageInfo.getPageNum() : 1;
+        int pageNum = pageInfo.getPageNum() != 0 ? pageInfo.getPageNum() : 1;
         PageData<T> resultData = new PageData<>(pageNum, pageInfo.getPageSize(), pageInfo.getTotal());
         resultData.setList(BeanCopyUtil.copyList(pageInfo.getList(), tarClass));
         return resultData;
