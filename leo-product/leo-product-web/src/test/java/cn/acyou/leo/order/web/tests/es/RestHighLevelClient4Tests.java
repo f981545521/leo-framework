@@ -363,11 +363,16 @@ public class RestHighLevelClient4Tests {
                         AggregationBuilders.sum("sum_money").field("money")
                 )
                 .size(100);
+        //term      不分词     精确匹配    无相关性评分                  keyword、数值、日期等
+        //精确匹配，不对查询内容进行分词，直接使用原始值匹配倒排索引。例如：查询 "apple pie" 时，只会匹配完整包含 "apple pie" 的文档‌
+        //match     分词      模糊匹配    基于匹配度计算相关性评分         text 等需要分词的字段
+        //全文检索，先对查询内容分词，再用分词结果匹配倒排索引。例如：查询 "apple pie" 会被拆分为 "apple" 和 "pie"，匹配包含任一词汇的文档‌2
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
                 .must(QueryBuilders.existsQuery("phone"))
                 .mustNot(QueryBuilders.termQuery("phone", ""))
                 ;
-
+        //must  所有条件必须同时满足，类似 AND 逻辑
+        //should  条件满足其一即可，类似 OR 逻辑，
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(boolQueryBuilder)
                 .size(0)
