@@ -100,7 +100,7 @@ public class IdCardValidUtil {
         }
         // 校验出生日期
         String birthday = idcard.substring(6, 14);
-        Date birthDate = DateUtil.parseDate(birthday, DateUtil.FORMAT_SHORT_DATE);
+        Date birthDate = DateUtil.parseDate(birthday, DateUtil.FORMAT_DATE_SHORT);
         // 获取第18位  
         String idcard18Code = idcard.substring(17, 18);
         char[] c = idcard17.toCharArray();
@@ -144,7 +144,7 @@ public class IdCardValidUtil {
         }
         String birthday = idcard.substring(6, 12);
         try {
-            DateUtil.parseDate(birthday, DateUtil.FORMAT_SHORT_DATE);
+            DateUtil.parseDate(birthday, DateUtil.FORMAT_DATE_SHORT);
         }catch (Exception e) {
             return false;
         }

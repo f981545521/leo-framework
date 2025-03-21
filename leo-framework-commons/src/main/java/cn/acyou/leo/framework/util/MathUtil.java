@@ -1,5 +1,7 @@
 package cn.acyou.leo.framework.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
@@ -10,6 +12,7 @@ import java.util.OptionalDouble;
  * @author youfang
  * @version [1.0.0, 2020/4/3]
  **/
+@Slf4j
 public class MathUtil {
 
     public static final BigDecimal HUNDRED = new BigDecimal("100");
@@ -44,12 +47,15 @@ public class MathUtil {
      * @return 平均数
      */
     public static Double averageDouble(Collection<Object> sourceNumbers) {
-        OptionalDouble average = Arrays.stream(sourceNumbers.toArray()).mapToDouble(o -> Double.parseDouble(o.toString())).average();
-        if (average.isPresent()) {
-            return average.getAsDouble();
-        } else {
-            throw new IllegalArgumentException("calculation average faild !");
+        try {
+            OptionalDouble average = Arrays.stream(sourceNumbers.toArray()).mapToDouble(o -> Double.parseDouble(o.toString())).average();
+            if (average.isPresent()) {
+                return average.getAsDouble();
+            }
+        }catch (Exception e) {
+            log.warn("计算平均数失败 {} | {}", e.getMessage(), Arrays.toString(sourceNumbers.toArray()));
         }
+        return null;
     }
 
     /**
@@ -58,7 +64,7 @@ public class MathUtil {
      * @param sourceNumbers 数据源
      * @return 平均数
      */
-    public static Double averageDouble(Object[] sourceNumbers) {
+    public static Double averageDouble(Object... sourceNumbers) {
         return averageDouble(Arrays.asList(sourceNumbers));
     }
 

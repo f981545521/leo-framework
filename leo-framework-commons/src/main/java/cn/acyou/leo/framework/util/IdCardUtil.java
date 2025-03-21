@@ -3297,7 +3297,7 @@ public class IdCardUtil {
      */
     public static Date getBirthDate(String idCard) {
         final String birthByIdCard = getBirth(idCard);
-        return null == birthByIdCard ? null : DateUtil.parseDate(birthByIdCard, DateUtil.FORMAT_SHORT_DATE);
+        return null == birthByIdCard ? null : DateUtil.parseDate(birthByIdCard, DateUtil.FORMAT_DATE_SHORT);
     }
 
     /**

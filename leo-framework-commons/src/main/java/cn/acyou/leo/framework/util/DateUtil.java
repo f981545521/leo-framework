@@ -21,12 +21,13 @@ import java.util.regex.Pattern;
 public final class DateUtil {
     private static final Logger log = LoggerFactory.getLogger(DateUtil.class);
 
-    public static final String FORMAT_SHORT_DATE = "yyyyMMdd";
-    public static final String FORMAT_DEFAULT_DATE = "yyyy-MM-dd";
-    public static final String FORMAT_DEFAULT_TIME = "HH:mm:ss";
+    public static final String FORMAT_DATE_SHORT = "yyyyMMdd";
+    public static final String FORMAT_DATE = "yyyy-MM-dd";
+    public static final String FORMAT_TIME = "HH:mm:ss";
     public static final String FORMAT_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
     public static final String FORMAT_DATE_TIME_2 = "yyyy-M-d HH:mm:ss";
     public static final String FORMAT_DATE_TIME_UNSIGNED = "yyyyMMddHHmmss";
+    public static final String FORMAT_DATE_TIME_UTC = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String DATE_DAY_MIN_TIME = " 00:00:00";
     public static final String DATE_DAY_MAX_TIME = " 23:59:59";
     public static final char[] UPPER_NUMBER = "〇一二三四五六七八九十".toCharArray();
@@ -70,7 +71,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getDateShortFormat(Date date) {
-        return getDateFormat(date, FORMAT_SHORT_DATE);
+        return getDateFormat(date, FORMAT_DATE_SHORT);
     }
     /**
      * 获取指定日期   yyyy-MM-dd格式
@@ -79,7 +80,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getDateDefaultFormat(Date date) {
-        return getDateFormat(date, FORMAT_DEFAULT_DATE);
+        return getDateFormat(date, FORMAT_DATE);
     }
     /**
      * 获得当前日期    yyyyMMdd格式
@@ -87,7 +88,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getCurrentDateShortFormat() {
-        return getDateFormat(new Date(), FORMAT_SHORT_DATE);
+        return getDateFormat(new Date(), FORMAT_DATE_SHORT);
     }
     /**
      * 获得当前日期    yyyy-MM-dd格式
@@ -95,7 +96,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getCurrentDateDefaultFormat() {
-        return getDateFormat(new Date(), FORMAT_DEFAULT_DATE);
+        return getDateFormat(new Date(), FORMAT_DATE);
     }
     /**
      * 获得当前日期   指定格式
@@ -126,7 +127,7 @@ public final class DateUtil {
      * @return {@link Date}
      */
     public static Date parseDefaultDate(String dateStr) {
-        return parseDate(dateStr, FORMAT_DEFAULT_DATE);
+        return parseDate(dateStr, FORMAT_DATE);
     }
 
     /**
@@ -169,7 +170,7 @@ public final class DateUtil {
      */
     public static Date newDate(String dateStr) {
         if (!dateStr.contains(" ")) {
-            return DateUtil.parseDate(dateStr, FORMAT_DEFAULT_DATE);
+            return DateUtil.parseDate(dateStr, FORMAT_DATE);
         }
         return DateUtil.parseSpecificDateTime(dateStr);
     }
@@ -621,7 +622,7 @@ public final class DateUtil {
      * @return  yyyy-MM-dd 23:59:59
      */
     public static String getDateFormatMaxTime(Date date) {
-        String dateFormat = getDateFormat(date, FORMAT_DEFAULT_DATE);
+        String dateFormat = getDateFormat(date, FORMAT_DATE);
         return dateFormat + DATE_DAY_MAX_TIME;
     }
 
@@ -632,7 +633,7 @@ public final class DateUtil {
      * @return  yyyy-MM-dd 00:00:00
      */
     public static String getDateFormatMinTime(Date date) {
-        String dateFormat = getDateFormat(date, FORMAT_DEFAULT_DATE);
+        String dateFormat = getDateFormat(date, FORMAT_DATE);
         return dateFormat + DATE_DAY_MIN_TIME;
     }
 
@@ -796,7 +797,7 @@ public final class DateUtil {
      * @return 中文月份名称
      */
     public static String getMonthZh(String ymd) {
-        int monthOfYear = DateTimeFormat.forPattern(FORMAT_DEFAULT_DATE).parseDateTime(ymd).getMonthOfYear();
+        int monthOfYear = DateTimeFormat.forPattern(FORMAT_DATE).parseDateTime(ymd).getMonthOfYear();
         return getMonthZh(monthOfYear);
     }
 
@@ -842,7 +843,7 @@ public final class DateUtil {
     public static boolean nowInTimeRange(String timeStart, String timeEnd){
         if (RegexUtil.isTime(timeStart) && RegexUtil.isTime(timeEnd)){
             Date nowDate = new Date();
-            String dateFormat = getDateFormat(nowDate, FORMAT_DEFAULT_DATE);
+            String dateFormat = getDateFormat(nowDate, FORMAT_DATE);
             Date startDate = parseSpecificDateTime(dateFormat + " " + timeStart);
             Date endDate = parseSpecificDateTime(dateFormat + " " + timeEnd);
             return nowDate.after(startDate) && nowDate.before(endDate);
@@ -874,7 +875,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getPreviousMonthFirstDayToString() {
-        return new DateTime(getPreviousMonthFirstDayToDate()).toString(FORMAT_DEFAULT_DATE);
+        return new DateTime(getPreviousMonthFirstDayToDate()).toString(FORMAT_DATE);
     }
     /**
      * 获取上月的最后一天
@@ -882,7 +883,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getPreviousMonthLastDayToString() {
-        return new DateTime(getPreviousMonthLastDayToDate()).toString(FORMAT_DEFAULT_DATE);
+        return new DateTime(getPreviousMonthLastDayToDate()).toString(FORMAT_DATE);
     }
     /**
      * 获取当月的第一天
@@ -906,7 +907,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getCurrentMonthFirstDayToString() {
-        return new DateTime(getCurrentMonthFirstDayToDate()).toString(FORMAT_DEFAULT_DATE);
+        return new DateTime(getCurrentMonthFirstDayToDate()).toString(FORMAT_DATE);
     }
     /**
      * 获取当月的最后一天
@@ -914,7 +915,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getCurrentMonthLastDayToString() {
-        return new DateTime(getCurrentMonthLastDayToDate()).toString(FORMAT_DEFAULT_DATE);
+        return new DateTime(getCurrentMonthLastDayToDate()).toString(FORMAT_DATE);
     }
     /**
      * 获取下月的第一天
@@ -938,7 +939,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getNextMonthFirstDayToString() {
-        return new DateTime(getNextMonthFirstDayToDate()).toString(FORMAT_DEFAULT_DATE);
+        return new DateTime(getNextMonthFirstDayToDate()).toString(FORMAT_DATE);
     }
     /**
      * 获取下月的最后一天
@@ -946,7 +947,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getNextMonthLastDayToString() {
-        return new DateTime(getNextMonthLastDayToDate()).toString(FORMAT_DEFAULT_DATE);
+        return new DateTime(getNextMonthLastDayToDate()).toString(FORMAT_DATE);
     }
     /**
      * 解析时间
@@ -956,7 +957,7 @@ public final class DateUtil {
      * @return {@link Date}
      */
     public static Date parseTime(Date date, String timeStr) {
-        String dateFormat = getDateFormat(date, FORMAT_DEFAULT_DATE);
+        String dateFormat = getDateFormat(date, FORMAT_DATE);
         return parseSpecificDateTime(dateFormat + " " + timeStr);
     }
 
@@ -1029,15 +1030,15 @@ public final class DateUtil {
      */
     public static List<String> monthFirstDayInRange(String startDate, String endDate) {
         List<String> stringList = new ArrayList<>();
-        DateTime startDateTime = DateTimeFormat.forPattern(FORMAT_DEFAULT_DATE).parseDateTime(startDate).dayOfMonth().withMinimumValue();
-        DateTime endDateTime = DateTimeFormat.forPattern(FORMAT_DEFAULT_DATE).parseDateTime(endDate).dayOfMonth().withMinimumValue();
-        stringList.add(startDateTime.toString(FORMAT_DEFAULT_DATE));
+        DateTime startDateTime = DateTimeFormat.forPattern(FORMAT_DATE).parseDateTime(startDate).dayOfMonth().withMinimumValue();
+        DateTime endDateTime = DateTimeFormat.forPattern(FORMAT_DATE).parseDateTime(endDate).dayOfMonth().withMinimumValue();
+        stringList.add(startDateTime.toString(FORMAT_DATE));
         if (endDateTime.compareTo(startDateTime) < 0){
             return stringList;
         }
         while (startDateTime.plusMonths(1).compareTo(endDateTime) < 0){
             startDateTime = startDateTime.plusMonths(1);
-            stringList.add(startDateTime.toString(FORMAT_DEFAULT_DATE));
+            stringList.add(startDateTime.toString(FORMAT_DATE));
         }
         return stringList;
     }
@@ -1050,8 +1051,8 @@ public final class DateUtil {
      * @return 去年的今天的月份
      */
     public static String lastYearTodayMonth(String todayMonth) {
-        return DateTimeFormat.forPattern(DateUtil.FORMAT_DEFAULT_DATE).parseDateTime(todayMonth)
-                .minusYears(1).dayOfMonth().withMinimumValue().toString(DateUtil.FORMAT_DEFAULT_DATE);
+        return DateTimeFormat.forPattern(DateUtil.FORMAT_DATE).parseDateTime(todayMonth)
+                .minusYears(1).dayOfMonth().withMinimumValue().toString(DateUtil.FORMAT_DATE);
     }
 
 
@@ -1077,7 +1078,7 @@ public final class DateUtil {
      * @return boolean
      */
     public static boolean isLegalTime(String time){
-        return isLegalTime(FORMAT_DEFAULT_TIME, time);
+        return isLegalTime(FORMAT_TIME, time);
     }
 
     /**
