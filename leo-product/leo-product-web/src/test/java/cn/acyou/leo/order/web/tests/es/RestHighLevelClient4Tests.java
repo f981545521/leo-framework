@@ -373,6 +373,9 @@ public class RestHighLevelClient4Tests {
                 ;
         //must  所有条件必须同时满足，类似 AND 逻辑
         //should  条件满足其一即可，类似 OR 逻辑，
+        //QueryBuilders.matchQuery("phone", "18205166207");//分词匹配
+        //QueryBuilders.matchPhraseQuery("phone", "18205166207");//分词段落匹配
+        //多条件查询: bool
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(boolQueryBuilder)
                 .size(0)

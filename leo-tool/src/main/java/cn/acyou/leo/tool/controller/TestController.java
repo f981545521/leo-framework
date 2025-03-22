@@ -10,6 +10,7 @@ import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
+import cn.acyou.leo.tool.dto.TaskState;
 import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.dto.dict.ParamA;
 import cn.acyou.leo.tool.entity.ParamConfig;
@@ -24,6 +25,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -40,6 +42,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 
 /**
  * @author youfang
@@ -60,7 +63,7 @@ public class TestController {
      * 2. 如果写name，会根据name匹配
      * 3. 如果写name+type，会根据name和type匹配
      * 源码：
-     * {@link org.springframework.context.annotation.CommonAnnotationBeanPostProcessor#fallbackToDefaultTypeMatch}
+     * {@link CommonAnnotationBeanPostProcessor#fallbackToDefaultTypeMatch}
      */
     @Resource
     private CommonService commonService8888;
@@ -68,6 +71,51 @@ public class TestController {
     private RedisUtils redisUtils;
     @Autowired
     private ParamConfigService paramConfigService;
+
+    Semaphore semaphore = new Semaphore(1);
+
+    @ApiOperation(value = "测试返回状态V1")
+    @PostMapping("taskStateV1")
+    public Result<?> taskStateV1() {
+        if (semaphore.tryAcquire()) {
+            new Thread(() -> {
+                int randomInt = 0;
+                try {
+                    while ((randomInt = RandomUtil.randomAge()) > 20) {
+                        System.out.println(randomInt);
+                        WorkUtil.trySleep5000();
+                    }
+                }finally {
+                    log.info("结束：" + randomInt);
+                    semaphore.release();
+                }
+            }).start();
+            return Result.success();
+        }else {
+            return Result.error("正在运行中...");
+        }
+    }
+    @ApiOperation(value = "测试返回状态")
+    @PostMapping("taskState")
+    public Result<?> taskState() {
+        final TaskState.State state = TaskState.state;
+        if (state.isRunning()){
+            return Result.success(state);
+        }
+        state.setRunning(true);
+        new Thread(() -> {
+            try {
+                int randomInt;
+                while ((randomInt = RandomUtil.randomAge()) > 10) {
+                    state.setInfo(randomInt);
+                    WorkUtil.trySleep5000();
+                }
+            }finally {
+                state.setRunning(false);
+            }
+        }).start();
+        return Result.success();
+    }
 
     @ApiOperationSupport(order = 1)
     @ApiOperation(value = "测试动态参数")
