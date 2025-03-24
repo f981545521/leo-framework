@@ -89,6 +89,13 @@ public class WorkUtil {
     }
 
     /**
+     * 尝试阻塞线程 1s
+     */
+    public static void trySleep1000() {
+        trySleep(1000);
+    }
+
+    /**
      * 尝试阻塞线程
      *
      * @param millis 毫秒

@@ -5,6 +5,7 @@ import cn.acyou.leo.framework.annotation.authz.RequiresLogin;
 import cn.acyou.leo.framework.annotation.authz.RequiresPermissions;
 import cn.acyou.leo.framework.annotation.authz.RequiresRoles;
 import cn.acyou.leo.framework.commons.AsyncManager;
+import cn.acyou.leo.framework.commons.StateSemaphore;
 import cn.acyou.leo.framework.constant.ClientEnum;
 import cn.acyou.leo.framework.constant.Constant;
 import cn.acyou.leo.framework.model.Result;
@@ -72,6 +73,32 @@ public class TestController {
     @Autowired
     private ParamConfigService paramConfigService;
 
+    StateSemaphore stateSemaphore = new StateSemaphore( 5, true);
+
+    @ApiOperation(value = "测试返回状态V1")
+    @PostMapping("taskStateV2")
+    public Result<?> taskStateV2() {
+        if (stateSemaphore.tryAcquire()) {
+            new Thread(() -> {
+                int randomInt = 0;
+                try {
+                    do {
+                        randomInt = RandomUtil.randomAge();
+                        stateSemaphore.setInfo(randomInt);
+                        System.out.println(randomInt);
+                        WorkUtil.trySleep1000();
+                    }while (randomInt > 50);
+                }finally {
+                    log.info("结束：" + randomInt);
+                    stateSemaphore.release();
+                }
+            }).start();
+            return Result.success();
+        }else {
+            return Result.error("正在运行中..." + stateSemaphore.getInfo());
+        }
+    }
+
     Semaphore semaphore = new Semaphore(1);
 
     @ApiOperation(value = "测试返回状态V1")
@@ -95,6 +122,7 @@ public class TestController {
             return Result.error("正在运行中...");
         }
     }
+
     @ApiOperation(value = "测试返回状态")
     @PostMapping("taskState")
     public Result<?> taskState() {
