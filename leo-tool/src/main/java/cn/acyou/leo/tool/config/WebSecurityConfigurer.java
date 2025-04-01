@@ -88,7 +88,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 // 过滤请求
                 .authorizeRequests()
                 // 允许匿名访问
-                .antMatchers("/sys/auth/login", "/sys/auth/logout").permitAll()
+                .antMatchers("/sys/auth/login", "/sys/auth/logout", "/ws/**").permitAll()
                 .antMatchers(anonymousUrls.toArray(new String[0])).permitAll()
                 // 静态资源，可匿名访问
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
