@@ -1,11 +1,14 @@
 package cn.acyou.leo.tool.ws;
 
+import cn.acyou.leo.framework.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,8 +20,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 public class MessageWebSocket extends TextWebSocketHandler {
-    //Session列表
+    //缓存 session_id -> session
     private static final Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
+    //缓存 client_id -> session_id
+    private static final Map<String, String> clientIdMap = new ConcurrentHashMap<>();
 
     /**
      * 收到客户端发送的消息
@@ -35,23 +40,56 @@ public class MessageWebSocket extends TextWebSocketHandler {
     }
 
     /**
+     * 收到消息时触发的回调 （这个方法会进行匹配到对应的类型）
+     * handleTextMessage
+     * handleBinaryMessage
+     * handlePongMessage
+     */
+    //@Override
+    //public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+    //    log.info("handleMessage : " + message.getPayload());
+    //    super.handleMessage(session, message);
+    //}
+
+
+    private String getQuery(WebSocketSession session, String key) {
+        return getQueryMap(session).get(key);
+    }
+
+    private Map<String, String> getQueryMap(WebSocketSession session) {
+        Map<String, String> paramsMap = new HashMap<>();
+        URI uri = session.getUri();
+        if (uri != null) {
+            String query = uri.getQuery();
+            if (query != null) {
+                String[] split = query.split("&");
+                for (String s : split) {
+                    String[] kv = s.split("=");
+                    paramsMap.put(kv[0], kv[1]);
+                }
+            }
+        }
+        return paramsMap;
+    }
+
+    /**
      * 建立连接后触发的回调
      */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        log.info("成功建立连接");
+        log.info("建立连接中...");
+        String clientId = getQuery(session, "clientId");
+        if (StringUtils.isBlank(clientId)) {
+            session.sendMessage(new TextMessage("clientId不能为空"));
+            session.close();
+            return;
+        }
         sessionMap.put(session.getId(), session);
-        session.sendMessage(new TextMessage("成功建立socket连接，sessionId:" + session.getId()));
+        clientIdMap.put(clientId, session.getId());
+        session.sendMessage(new TextMessage("成功建立socket连接！ -> clientId: " + clientId + " sessionId:" + session.getId()));
         log.info(session.toString());
     }
 
-    /**
-     * 收到消息时触发的回调
-     */
-    @Override
-    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        super.handleMessage(session, message);
-    }
 
     /**
      * 处理接收的Pong类型的消息
@@ -70,6 +108,7 @@ public class MessageWebSocket extends TextWebSocketHandler {
             session.close();
         }
         sessionMap.remove(session.getId());
+        clientIdMap.remove(getQuery(session, "clientId"));
         log.error("连接出错");
     }
 
@@ -80,6 +119,7 @@ public class MessageWebSocket extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         log.error("连接已关闭：" + status);
         sessionMap.remove(session.getId());
+        clientIdMap.remove(getQuery(session, "clientId"));
     }
 
     /**
@@ -93,17 +133,18 @@ public class MessageWebSocket extends TextWebSocketHandler {
     /**
      * 发送信息给指定用户
      */
-    public boolean sendMessageToUser(String sessionId, TextMessage message) {
-        if (sessionMap.get(sessionId) == null) return false;
-        WebSocketSession session = sessionMap.get(sessionId);
-        if (!session.isOpen()) return false;
-        try {
-            session.sendMessage(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+    public boolean sendMessageToUser(String clientId, TextMessage message) {
+        if (clientIdMap.containsKey(clientId)) {
+            WebSocketSession session = sessionMap.get(clientIdMap.get(clientId));
+            if (!session.isOpen()) return false;
+            try {
+                session.sendMessage(message);
+                return true;
+            } catch (IOException e) {
+                log.error("发送消息失败", e);
+            }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -120,7 +161,7 @@ public class MessageWebSocket extends TextWebSocketHandler {
                     session.sendMessage(message);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("发送消息失败", e);
                 allSendSuccess = false;
             }
         }

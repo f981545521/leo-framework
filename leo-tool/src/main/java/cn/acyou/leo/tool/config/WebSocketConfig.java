@@ -23,7 +23,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        //地址：   ws://192.168.4.239:8076/leo-tool/messages
+        //地址：   ws://192.168.4.239:8076/leo-tool/ws/messages
         registry.addHandler(messageWebSocket, "/ws/messages")
                 .setAllowedOrigins("*")
                 .addInterceptors(new WebSocketInterceptor());
