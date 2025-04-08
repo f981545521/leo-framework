@@ -585,4 +585,14 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return sb.toString();
     }
 
+    public static String concat(Object... args) {
+        if (args != null && args.length > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (Object arg : args) {
+                sb.append(Optional.ofNullable(arg).orElse(""));
+            }
+            return sb.toString();
+        }
+        return "";
+    }
 }

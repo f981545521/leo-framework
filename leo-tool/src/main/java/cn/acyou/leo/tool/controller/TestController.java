@@ -15,6 +15,7 @@ import cn.acyou.leo.tool.dto.TaskState;
 import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.dto.dict.ParamA;
 import cn.acyou.leo.tool.entity.ParamConfig;
+import cn.acyou.leo.tool.entity.User;
 import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.common.AsyncService;
 import cn.acyou.leo.tool.service.common.CommonService;
@@ -74,6 +75,15 @@ public class TestController {
     private ParamConfigService paramConfigService;
 
     StateSemaphore stateSemaphore = new StateSemaphore( 5, true);
+
+    @ApiOperation(value = "test234")
+    @PostMapping("test234")
+    public Result<User> test234() {
+        User user = new User();
+        user.setPhone("18205166207");
+        return Result.success(user);
+    }
+
 
     @ApiOperation(value = "测试返回状态V1")
     @PostMapping("taskStateV2")

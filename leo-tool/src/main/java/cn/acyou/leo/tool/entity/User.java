@@ -1,5 +1,6 @@
 package cn.acyou.leo.tool.entity;
 
+import cn.acyou.leo.framework.annotation.Sensitive;
 import cn.acyou.leo.tool.handler.StringListStringTypeHandler;
 import cn.acyou.leo.tool.handler.global.JsonTypeHandler;
 import com.alibaba.fastjson.JSONArray;
@@ -57,6 +58,7 @@ public class User implements Serializable {
     private String areaCode;
 
     @ApiModelProperty(value = "用户手机号")
+    @Sensitive(type = Sensitive.Type.PHONE)
     private String phone;
 
     @ApiModelProperty(value = "年龄")
