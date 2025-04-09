@@ -14,6 +14,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
@@ -32,7 +33,7 @@ public class KafkaConfig {
     private KafkaProperties kafkaProperties;
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<?, ?> kafkaListenerContainerFactory(ConcurrentKafkaListenerContainerFactoryConfigurer configurer, ObjectProvider<ConsumerFactory<Object, Object>> kafkaConsumerFactory) {
+    public ConcurrentKafkaListenerContainerFactory<?, ?> retryListenerFactory(ConcurrentKafkaListenerContainerFactoryConfigurer configurer, ObjectProvider<ConsumerFactory<Object, Object>> kafkaConsumerFactory) {
         ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         configurer.configure(factory, kafkaConsumerFactory.getIfAvailable(() -> new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties())));
         // 配置重试模板
@@ -53,6 +54,16 @@ public class KafkaConfig {
             }
             return null;
         });
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<?, ?> batchListenerFactory(ConsumerFactory<String, String> consumerFactory) {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory);
+        factory.setBatchListener(true);
+        factory.getContainerProperties().setPollTimeout(3000);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         return factory;
     }
 
