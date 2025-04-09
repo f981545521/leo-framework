@@ -14,6 +14,7 @@ import cn.acyou.leo.tool.dto.dict.DictVo;
 import cn.acyou.leo.tool.entity.Dict;
 import cn.acyou.leo.tool.mapper.DictMapper;
 import cn.acyou.leo.tool.service.DictService;
+import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -118,7 +119,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    @Cached(name = "loadDictV", key = "#id", cacheType = CacheType.BOTH, expire = 100)
+    @Cached(name = "loadDictV", key = "#id", cacheType = CacheType.BOTH, expire = 120) //120s
+    @CacheRefresh(refresh = 100, stopRefreshAfterLastAccess = 100)
     public DictVo loadDict(long id) {
         log.info("使用数据库加载");
         DictVo dictVo = new DictVo();
