@@ -58,7 +58,7 @@ public class User implements Serializable {
     private String areaCode;
 
     @ApiModelProperty(value = "用户手机号")
-    @Sensitive(type = Sensitive.Type.PHONE)
+    @Sensitive(Sensitive.Type.PHONE)
     private String phone;
 
     @ApiModelProperty(value = "年龄")

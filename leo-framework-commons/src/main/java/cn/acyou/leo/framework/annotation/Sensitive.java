@@ -17,9 +17,9 @@ import java.lang.annotation.Target;
 @JsonSerialize(using = SensitiveSerializer.class)
 public @interface Sensitive {
 
-    String mark() default "*";
+    char mark() default '*';
 
-    Type type();
+    Type value();
 
     enum Type {
         PHONE, EMAIL;

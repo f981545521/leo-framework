@@ -22,19 +22,32 @@ import java.io.IOException;
 public class SensitiveSerializer extends JsonSerializer<String> implements ContextualSerializer {
     private Sensitive sensitive;
 
+
+    /**
+     * 用户信息脱敏:      s.replaceAll("(\S)\S(\S*)", "$1*$2")
+     * 身份证信息脱敏:    s.replaceAll("(\d{4})\d{10}(\w{4})", "$1****$2")
+     * 手机号脱敏:       s.replaceAll("(\d{3})\d{4}(\d{4})", "$1****$2")
+     *
+     * @param s
+     * @param jsonGenerator
+     * @param serializerProvider
+     * @throws IOException
+     */
     @Override
     public void serialize(String s, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        Sensitive.Type type = sensitive.type();
+        Sensitive.Type type = sensitive.value();
         switch (type) {
             case EMAIL:
-                jsonGenerator.writeString(DesensitizedUtil.email(s));
+                s = DesensitizedUtil.email(s);
                 break;
             case PHONE:
-                jsonGenerator.writeString(DesensitizedUtil.mobilePhone(s));
+                s = s.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
                 break;
-            default:
-                jsonGenerator.writeString(s);
         }
+        if ('*' != sensitive.mark()) {
+            s = s.replaceAll("\\*", sensitive.mark() + "");
+        }
+        jsonGenerator.writeString(s);
     }
 
     @Override
