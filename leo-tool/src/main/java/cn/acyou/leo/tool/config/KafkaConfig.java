@@ -3,12 +3,16 @@ package cn.acyou.leo.tool.config;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.ConcurrentKafkaListenerContainerFactoryConfigurer;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.retry.backoff.ExponentialBackOffPolicy;
@@ -24,8 +28,35 @@ public class KafkaConfig {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
+    @Autowired
+    private KafkaProperties kafkaProperties;
 
     @Bean
+    public ConcurrentKafkaListenerContainerFactory<?, ?> kafkaListenerContainerFactory(ConcurrentKafkaListenerContainerFactoryConfigurer configurer, ObjectProvider<ConsumerFactory<Object, Object>> kafkaConsumerFactory) {
+        ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        configurer.configure(factory, kafkaConsumerFactory.getIfAvailable(() -> new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties())));
+        // 配置重试模板
+        factory.setRetryTemplate(retryTemplate());
+        // 设置重试完成后的恢复回调
+        factory.setRecoveryCallback(context -> {
+            ConsumerRecord<String, String> record = (ConsumerRecord<String, String>) context.getAttribute("record");
+            Acknowledgment ack = (Acknowledgment) context.getAttribute("acknowledgment");
+            // 记录重试失败信息
+            final Throwable rootCause = Throwables.getRootCause(context.getLastThrowable());
+            log.error("最终消息处理失败 topic: " + record.topic() + "，msg:" + record.value() + ", exception: " + rootCause.getMessage(), rootCause);
+
+            // 可以将消息发送到死信主题
+            kafkaTemplate.send("retry-failed-topic", record.value());
+            // 手动确认消息，防止重复消费
+            if (ack != null) {
+                ack.acknowledge();
+            }
+            return null;
+        });
+        return factory;
+    }
+
+    //@Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(ConsumerFactory<String, String> consumerFactory) {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);

@@ -4,6 +4,7 @@ package cn.acyou.leo.tool.mq;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,13 +16,14 @@ import org.springframework.stereotype.Component;
 public class UserConsumer {
 
     @KafkaListener(topics = "user_log", groupId = "user_group", containerFactory = "kafkaListenerContainerFactory")
-    public void handleUserLog(ConsumerRecord<String, String> record) {
+    public void handleUserLog(ConsumerRecord<String, String> record, Acknowledgment ack) {
         String key = record.key();
         String value = record.value();
         log.info("UserConsumer消息 user_group [topic]={}, [partition]={}, [offset]={}, [value]={}", record.topic(), record.partition(), record.offset(), value);
         if ("error".equals(key)) {
             throw new RuntimeException("error");
         }
+        ack.acknowledge();
     }
 
     @KafkaListener(topics = "user_log_history", groupId = "user_group_db", containerFactory = "kafkaListenerContainerFactory")

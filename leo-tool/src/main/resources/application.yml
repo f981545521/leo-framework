@@ -64,7 +64,7 @@ spring:
     consumer:
       bootstrap-servers: 127.0.0.1:9092
       group-id: default-group
-      enable-auto-commit: true # 是否自动提交offset
+      enable-auto-commit: false # 是否自动提交offset
       auto-commit-interval: 1000 # 提交offset延时（接收到消息后多久提交offset）
       # 当kafka中没有初始offset或offset超出范围时，将自动重置offset
       # earliest：第一次从头开始消费，以后按照消费offset记录继续消费
@@ -82,7 +82,7 @@ spring:
         security.protocol: PLAINTEXT
       fetch-min-size: 2048
     listener:
-      ack-mode: RECORD # 每处理一条commit一次
+      ack-mode: MANUAL
 
 leo:
   xxl-job:
