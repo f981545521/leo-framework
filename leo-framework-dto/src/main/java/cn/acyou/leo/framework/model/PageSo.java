@@ -30,6 +30,9 @@ public class PageSo extends DTO {
     @ApiModelProperty("排序规则")
     private String sorts;
 
+    @ApiModelProperty(value = "包含总数查询", notes = "默认包含总数查询 如果设置为false则不执行count查询，返回总页数为-1", hidden = true)
+    private Boolean includeCountQuery = true;
+
     public Integer getPageNum() {
         return pageNum;
     }
@@ -47,10 +50,18 @@ public class PageSo extends DTO {
         return pageSize;
     }
 
+    public Boolean getIncludeCountQuery() {
+        return includeCountQuery;
+    }
+
+    public void setIncludeCountQuery(Boolean includeCountQuery) {
+        this.includeCountQuery = includeCountQuery;
+    }
+
     public void setPageSize(Integer pageSize) {
         if (pageSize != null) {
-            if (pageSize < 0 || pageSize > 100) {
-                throw new IllegalPageArgumentException("pageSize 取值范围不正确！合法范围：[0~100]");
+            if (pageSize < 0 || pageSize > 500) {
+                throw new IllegalPageArgumentException("pageSize 取值范围不正确！合法范围：[0~500]");
             }
             this.pageSize = pageSize;
         }

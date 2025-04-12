@@ -146,8 +146,11 @@ public class PageQuery {
      * @param orderBy  排序
      * @return 开启查询
      */
-    public static PageQuery startPage(Integer pageNum, Integer pageSize, String orderBy) {
-        PageHelper.startPage(pageNum, pageSize, orderBy);
+    public static PageQuery startPage(Integer pageNum, Integer pageSize, String orderBy, Boolean count) {
+        com.github.pagehelper.Page<Object> startedPage = PageHelper.startPage(pageNum, pageSize, orderBy);
+        if (count != null) {
+            startedPage.setCount(count);
+        }
         return new PageQuery();
     }
 
@@ -158,7 +161,7 @@ public class PageQuery {
      * @return 开启查询
      */
     public static PageQuery startPage(PageSo pageSo) {
-        return startPage(pageSo.getPageNum(), pageSo.getPageSize(), convertOrderBy(pageSo));
+        return startPage(pageSo.getPageNum(), pageSo.getPageSize(), convertOrderBy(pageSo), pageSo.getIncludeCountQuery());
     }
 
     /**
