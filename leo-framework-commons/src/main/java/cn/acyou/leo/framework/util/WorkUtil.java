@@ -241,4 +241,24 @@ public class WorkUtil {
             return null;
         }
     }
+
+    /**
+     * 执行方法返回true
+     * @param task 先执行的方法
+     * @return boolean
+     */
+    public static boolean runTrue(Task task) {
+        task.run();
+        return true;
+    }
+
+    /**
+     * 执行方法返回false
+     * @param task 先执行的方法
+     * @return boolean
+     */
+    public static boolean runFalse(Task task) {
+        task.run();
+        return false;
+    }
 }

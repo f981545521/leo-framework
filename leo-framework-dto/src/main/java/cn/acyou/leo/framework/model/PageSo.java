@@ -33,6 +33,13 @@ public class PageSo extends DTO {
     @ApiModelProperty(value = "包含总数查询", notes = "默认包含总数查询 如果设置为false则不执行count查询，返回总页数为-1", hidden = true)
     private Boolean includeCountQuery = true;
 
+    @ApiModelProperty(value = "偏移量", hidden = true)
+    private Integer pageOffset;
+
+    public Integer getOffset() {
+        return (pageNum - 1) * pageSize;
+    }
+
     public Integer getPageNum() {
         return pageNum;
     }
