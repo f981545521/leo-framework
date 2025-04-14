@@ -8,6 +8,7 @@ import cn.hutool.core.util.EnumUtil;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 /**
@@ -17,12 +18,22 @@ import java.util.stream.Collectors;
 public class MainTest502 {
 
     public static void main(String[] args) throws Exception {
-        Class<?> clientEnum = Class.forName("cn.acyou.leo.framework.constant.ClientEnum");
-        System.out.println(clientEnum);
+        //Class<?> clientEnum = Class.forName("cn.acyou.leo.framework.constant.ClientEnum");
+        //System.out.println(clientEnum);
+        //Class<?> clientEnum2 = Class.forName("cn.acyou.leo.*.*.ClientEnum");
+        //System.out.println(clientEnum2);
+        //Class.forName("ClientEnum", false, MainTest502.class.getClassLoader());
 
-        Class<?> clientEnum2 = Class.forName("cn.acyou.leo.*.*.ClientEnum");
-        System.out.println(clientEnum2);
-        Class.forName("ClientEnum", false, MainTest502.class.getClassLoader());
+        List<String> strings = Arrays.asList("1e213131432_8", "1e213131432_18", "1e213131432_27");
+        OptionalInt max = strings.stream()
+                .filter(x->x.contains("_"))
+                .mapToInt(x -> Integer.parseInt(x.substring(x.lastIndexOf("_") + 1)))
+                .max();
+        int serialCount = (max.orElse(1)) + 1;
+        System.out.println(serialCount);
+
+        String  x = "1e213131432_8";
+        System.out.println(Integer.parseInt(x.substring(x.lastIndexOf("_") + 1)));
     }
 
 
