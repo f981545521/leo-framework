@@ -38,6 +38,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -81,6 +82,7 @@ public class TestController {
     public Result<User> test234() {
         User user = new User();
         user.setPhone("18205166207");
+        user.setBalance(new BigDecimal("200"));
         return Result.success(user);
     }
 

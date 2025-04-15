@@ -1,11 +1,14 @@
 package cn.acyou.leo.tool.entity;
 
 import cn.acyou.leo.framework.annotation.Sensitive;
+import cn.acyou.leo.framework.commons.SerializerGlobalFeature;
 import cn.acyou.leo.tool.handler.StringListStringTypeHandler;
 import cn.acyou.leo.tool.handler.global.JsonTypeHandler;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -13,6 +16,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -110,6 +114,10 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "修改时间")
     private Date updateTime;
+
+    @ApiModelProperty(value = "账户余额")
+    //@JsonSerialize(using = SerializerGlobalFeature.BigDecimalJsonSerializer.class)//指定自定义序列化器或内置类：
+    private BigDecimal balance;
 
     @AllArgsConstructor
     public enum SourceEnum {

@@ -9,13 +9,27 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
+ *
+ * 此方式会全局生效，所有BigDecimal字段自动保留两位小数‌
+ *
+ * <pre>
+ * ### 指定字段
+ * {@code
+ *     @ApiModelProperty(value = "账户余额")
+ *     //@JsonSerialize(using = SerializerGlobalFeature.BigDecimalJsonSerializer.class)//指定自定义序列化器或内置类：
+ *     private BigDecimal balance;
+ * }
+ * </pre>
+ *
  * @author youfang
  * @version [1.0.0, 2021/1/20]
  **/
-@JsonComponent
+//@JsonComponent
 public class SerializerGlobalFeature {
     /**
      * BigDecimal Json 序列化器
+     *
+     *
      */
     public static class BigDecimalJsonSerializer extends JsonSerializer<BigDecimal> {
         @Override
