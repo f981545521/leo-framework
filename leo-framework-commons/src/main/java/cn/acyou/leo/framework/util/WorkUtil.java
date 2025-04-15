@@ -243,6 +243,15 @@ public class WorkUtil {
     }
 
     /**
+     * 执行方法返回bool
+     * @param supplier 先执行的方法
+     * @return boolean
+     */
+    public static boolean runBool(Supplier<Boolean> supplier) {
+        return supplier.get() != null ? supplier.get() : false;
+    }
+
+    /**
      * 执行方法返回true
      * @param task 先执行的方法
      * @return boolean

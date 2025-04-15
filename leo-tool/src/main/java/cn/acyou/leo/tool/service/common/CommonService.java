@@ -93,4 +93,10 @@ public class CommonService {
     //    WorkUtil.trySleep(3000);
     //    log.info("testSynchronized end.");
     //}
+
+    public void test23(){
+        while (WorkUtil.runBool(()-> true)) {
+            log.info("ok...");
+        }
+    }
 }
