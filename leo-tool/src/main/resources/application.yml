@@ -87,6 +87,9 @@ spring:
 leo:
   xxl-job:
     enable: false
+    admin-addresses: http://127.0.0.1:8080/xxl-job-admin
+    admin-token: default_token
+    appname: xxl-job-executor
   debug:
     interface-call-statistics: false
     print-performance-sql: true
