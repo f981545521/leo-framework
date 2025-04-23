@@ -80,10 +80,10 @@ public class Test2 {
     public void test3() {
         //01天19小时11分钟
         Date add = DateUtil.add(new Date(), 0, 0, 1, 19, 11, 0);
-        System.out.println(DateUtil.getDateFormat(add));
+        System.out.println(DateUtil.getDateTimeFormat(add));
         //01天06小时37分钟
         Date add2 = DateUtil.add(new Date(), 0, 0, 1, 6, 37, 0);
-        System.out.println(DateUtil.getDateFormat(add2));
+        System.out.println(DateUtil.getDateTimeFormat(add2));
     }
 
     @Test

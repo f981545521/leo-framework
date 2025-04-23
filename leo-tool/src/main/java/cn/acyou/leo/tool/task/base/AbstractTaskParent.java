@@ -145,7 +145,7 @@ public abstract class AbstractTaskParent {
         scheduleJob = job;
         final CronTrigger cronTrigger = new CronTrigger(job.getCronExpression());
         future = threadPoolTaskScheduler.schedule(() -> recordLogStart(true), cronTrigger);
-        log.info("resume job start : {} | next exec time: {}", job.getBeanName(), DateUtil.getDateFormat(cronTrigger.nextExecutionTime(triggerContext)));
+        log.info("resume job start : {} | next exec time: {}", job.getBeanName(), DateUtil.getDateTimeFormat(cronTrigger.nextExecutionTime(triggerContext)));
     }
 
     /**

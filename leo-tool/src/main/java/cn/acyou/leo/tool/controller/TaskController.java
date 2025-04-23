@@ -14,12 +14,16 @@ import cn.acyou.leo.tool.entity.ScheduleJobLog;
 import cn.acyou.leo.tool.service.ScheduleJobLogService;
 import cn.acyou.leo.tool.service.ScheduleJobService;
 import cn.acyou.leo.tool.task.base.AbstractTaskParent;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,12 +110,15 @@ public class TaskController {
     @PostMapping("/logs")
     @ApiOperation(value = "获取定时任务执行日志")
     public Result<PageData<ScheduleJobLog>> logs(@RequestBody TaskSo taskSo) {
-        PageData<ScheduleJobLog> scheduleJobLogPageData = PageQuery.startPage(taskSo)
-                .selectMapper(scheduleJobLogService.lambdaQuery()
-                        .eq(taskSo.getJobId() != null, ScheduleJobLog::getJobId, taskSo.getJobId())
-                        .eq(taskSo.getStatus() != null, ScheduleJobLog::getStatus, taskSo.getStatus())
-                        .list());
+        PageData<ScheduleJobLog> scheduleJobLogPageData = scheduleJobLogService.page(taskSo);
         return Result.success(scheduleJobLogPageData);
+    }
+
+    @PostMapping("/logs/export")
+    @ApiOperation(value = "获取定时任务执行日志")
+    public void logsExport(@RequestBody TaskSo taskSo, HttpServletResponse response) throws Exception {
+        ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).head(head()).build();
+        excelWriter.finish();
     }
 
     @PostMapping("/resetTime")
@@ -121,4 +128,17 @@ public class TaskController {
         return Result.success();
     }
 
+    private List<List<String>> head() {
+        List<List<String>> list = new ArrayList<List<String>>();
+        List<String> head0 = new ArrayList<String>();
+        head0.add("字符串" + System.currentTimeMillis());
+        List<String> head1 = new ArrayList<String>();
+        head1.add("数字" + System.currentTimeMillis());
+        List<String> head2 = new ArrayList<String>();
+        head2.add("日期" + System.currentTimeMillis());
+        list.add(head0);
+        list.add(head1);
+        list.add(head2);
+        return list;
+    }
 }

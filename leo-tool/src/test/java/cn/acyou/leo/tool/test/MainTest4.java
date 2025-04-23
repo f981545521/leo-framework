@@ -111,14 +111,14 @@ public class MainTest4 {
             System.out.print(i + "小时|转换工时：" + Calculator.val(i).divide(8) + " -> ");
             if (endDate.before(noonBreakStart)) {
                 lastDate = endDate;
-                System.out.print(DateUtil.getDateFormat(endDate));
+                System.out.print(DateUtil.getDateTimeFormat(endDate));
             } else if (endDate.after(noonBreakStart) && endDate.before(noonBreakEnd)) {
                 BigDecimal diff = DateUtil.getDiff(noonBreakStart, endDate, DateUtil.Unit.MINUTE);
                 lastDate = DateUtil.addMinutes(noonBreakEnd, diff.intValue());
-                System.out.print(DateUtil.getDateFormat(lastDate));
+                System.out.print(DateUtil.getDateTimeFormat(lastDate));
             } else if (endDate.after(noonBreakEnd) && endDate.before(eveningBreakStart)) {
                 lastDate = DateUtil.addHour(lastDate, 1);
-                System.out.print(DateUtil.getDateFormat(lastDate));
+                System.out.print(DateUtil.getDateTimeFormat(lastDate));
             }
             System.out.println();
         }
@@ -137,15 +137,15 @@ public class MainTest4 {
             Date endDate = DateUtil.addHour(startDate, i);
             System.out.print(i + "小时|转换工时：" + Calculator.val(i).divide(8) + " -> ");
             if (endDate.before(noonBreakStart)) {
-                System.out.print(DateUtil.getDateFormat(endDate));
+                System.out.print(DateUtil.getDateTimeFormat(endDate));
             } else if (endDate.after(noonBreakStart) && endDate.before(noonBreakEnd)) {
                 BigDecimal diff = DateUtil.getDiff(noonBreakStart, endDate, DateUtil.Unit.MINUTE);
                 Date lastDate = DateUtil.addMinutes(noonBreakEnd, diff.intValue());
-                System.out.print(DateUtil.getDateFormat(lastDate));
+                System.out.print(DateUtil.getDateTimeFormat(lastDate));
             } else if (endDate.after(noonBreakEnd) && endDate.before(eveningBreakStart)) {
-                System.out.print(DateUtil.getDateFormat(DateUtil.addMinutes(endDate, 90)));
+                System.out.print(DateUtil.getDateTimeFormat(DateUtil.addMinutes(endDate, 90)));
             } else if (endDate.after(eveningBreakStart) && endDate.before(eveningBreakEnd)) {
-                System.out.print(DateUtil.getDateFormat(DateUtil.addMinutes(endDate, 90)));
+                System.out.print(DateUtil.getDateTimeFormat(DateUtil.addMinutes(endDate, 90)));
             }
             System.out.println();
         }

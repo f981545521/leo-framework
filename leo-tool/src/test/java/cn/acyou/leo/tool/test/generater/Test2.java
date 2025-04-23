@@ -12,10 +12,8 @@ import org.springframework.scheduling.support.CronSequenceGenerator;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.SimpleTriggerContext;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -65,7 +63,7 @@ public class Test2 {
 
     public static void main1(String[] args) {
         final CronTrigger cronTrigger = new CronTrigger("0 0/10 * * * ? ");
-        System.out.println("下一次执行时间：" + DateUtil.getDateFormat(cronTrigger.nextExecutionTime(new SimpleTriggerContext())));
+        System.out.println("下一次执行时间：" + DateUtil.getDateTimeFormat(cronTrigger.nextExecutionTime(new SimpleTriggerContext())));
     }
 
     public static void main2(String[] args) {
@@ -75,7 +73,7 @@ public class Test2 {
         Date nextExecutionTime = new Date();
         for (int i = 0; i < 50; i++) {
             nextExecutionTime = generator.next(nextExecutionTime);
-            System.out.println("Next execution time: " + DateUtil.getDateFormat(nextExecutionTime));
+            System.out.println("Next execution time: " + DateUtil.getDateTimeFormat(nextExecutionTime));
         }
     }
 

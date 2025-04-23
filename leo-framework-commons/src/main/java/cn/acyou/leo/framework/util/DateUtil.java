@@ -53,8 +53,8 @@ public final class DateUtil {
      * @param date 日期
      * @return {@link String}
      */
-    public static String getDateFormat(Date date) {
-        return getDateFormat(date, FORMAT_DATE_TIME);
+    public static String getDateTimeFormat(Date date) {
+        return getDateTimeFormat(date, FORMAT_DATE_TIME);
     }
     /**
      * 获得当前日期   yyyy-MM-dd HH:mm:ss格式
@@ -62,7 +62,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getCurrentDateFormat() {
-        return getDateFormat(new Date(), FORMAT_DATE_TIME);
+        return getDateTimeFormat(new Date(), FORMAT_DATE_TIME);
     }
     /**
      * 获取指定日期   yyyyMMdd格式
@@ -71,7 +71,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getDateShortFormat(Date date) {
-        return getDateFormat(date, FORMAT_DATE_SHORT);
+        return getDateTimeFormat(date, FORMAT_DATE_SHORT);
     }
     /**
      * 获取指定日期   yyyy-MM-dd格式
@@ -80,7 +80,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getDateDefaultFormat(Date date) {
-        return getDateFormat(date, FORMAT_DATE);
+        return getDateTimeFormat(date, FORMAT_DATE);
     }
     /**
      * 获得当前日期    yyyyMMdd格式
@@ -88,7 +88,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getCurrentDateShortFormat() {
-        return getDateFormat(new Date(), FORMAT_DATE_SHORT);
+        return getDateTimeFormat(new Date(), FORMAT_DATE_SHORT);
     }
     /**
      * 获得当前日期    yyyy-MM-dd格式
@@ -96,7 +96,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getCurrentDateDefaultFormat() {
-        return getDateFormat(new Date(), FORMAT_DATE);
+        return getDateTimeFormat(new Date(), FORMAT_DATE);
     }
     /**
      * 获得当前日期   指定格式
@@ -105,7 +105,7 @@ public final class DateUtil {
      * @return {@link String}
      */
     public static String getCurrentDateFormat(String format) {
-        return getDateFormat(new Date(), format);
+        return getDateTimeFormat(new Date(), format);
     }
     /**
      * 获取指定日期   指定格式
@@ -114,7 +114,7 @@ public final class DateUtil {
      * @param format 格式
      * @return {@link String}
      */
-    public static String getDateFormat(Date date, String format) {
+    public static String getDateTimeFormat(Date date, String format) {
         if (date == null){
             return "";
         }
@@ -566,7 +566,7 @@ public final class DateUtil {
         cal.setTime(dateToCompare);
 
         if (cal.before(birthDay)) {
-            throw new IllegalArgumentException("Birthday is after date " + getDateFormat(birthDay) + "!");
+            throw new IllegalArgumentException("Birthday is after date " + getDateTimeFormat(birthDay) + "!");
         }
 
         int year = cal.get(Calendar.YEAR);
@@ -622,7 +622,7 @@ public final class DateUtil {
      * @return  yyyy-MM-dd 23:59:59
      */
     public static String getDateFormatMaxTime(Date date) {
-        String dateFormat = getDateFormat(date, FORMAT_DATE);
+        String dateFormat = getDateTimeFormat(date, FORMAT_DATE);
         return dateFormat + DATE_DAY_MAX_TIME;
     }
 
@@ -633,7 +633,7 @@ public final class DateUtil {
      * @return  yyyy-MM-dd 00:00:00
      */
     public static String getDateFormatMinTime(Date date) {
-        String dateFormat = getDateFormat(date, FORMAT_DATE);
+        String dateFormat = getDateTimeFormat(date, FORMAT_DATE);
         return dateFormat + DATE_DAY_MIN_TIME;
     }
 
@@ -843,7 +843,7 @@ public final class DateUtil {
     public static boolean nowInTimeRange(String timeStart, String timeEnd){
         if (RegexUtil.isTime(timeStart) && RegexUtil.isTime(timeEnd)){
             Date nowDate = new Date();
-            String dateFormat = getDateFormat(nowDate, FORMAT_DATE);
+            String dateFormat = getDateTimeFormat(nowDate, FORMAT_DATE);
             Date startDate = parseSpecificDateTime(dateFormat + " " + timeStart);
             Date endDate = parseSpecificDateTime(dateFormat + " " + timeEnd);
             return nowDate.after(startDate) && nowDate.before(endDate);
@@ -957,7 +957,7 @@ public final class DateUtil {
      * @return {@link Date}
      */
     public static Date parseTime(Date date, String timeStr) {
-        String dateFormat = getDateFormat(date, FORMAT_DATE);
+        String dateFormat = getDateTimeFormat(date, FORMAT_DATE);
         return parseSpecificDateTime(dateFormat + " " + timeStr);
     }
 

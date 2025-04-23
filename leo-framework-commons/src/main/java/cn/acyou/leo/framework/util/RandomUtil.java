@@ -225,7 +225,7 @@ public class RandomUtil {
         long end = System.currentTimeMillis() - 31536000000L;
         long rtn = begin + (long) (Math.random() * (end - begin));
         Date date = new Date(rtn);
-        String birth = DateUtil.getDateFormat(date, DateUtil.FORMAT_DATE_SHORT);
+        String birth = DateUtil.getDateTimeFormat(date, DateUtil.FORMAT_DATE_SHORT);
         return randomIdCardNo(birth, male);
     }
 

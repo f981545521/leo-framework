@@ -535,7 +535,7 @@ public class ExcelUtil {
             } else if (o instanceof Boolean) {
                 cell.setCellValue(Boolean.parseBoolean(o.toString()));
             } else if (o instanceof Date) {
-                cell.setCellValue(DateUtil.getDateFormat((Date) o));
+                cell.setCellValue(DateUtil.getDateTimeFormat((Date) o));
             } else {
                 //字符串
                 final String cellValueStr = o.toString();
