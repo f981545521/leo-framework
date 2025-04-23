@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.test.poi.pojo;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.DateTimeFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -16,6 +17,7 @@ public class DemoData {
     private String name;
     @ExcelProperty("年龄")
     private Integer age;
+    @DateTimeFormat("yyyy-MM-dd")
     @ExcelProperty("生日")
     private Date birthday;
 

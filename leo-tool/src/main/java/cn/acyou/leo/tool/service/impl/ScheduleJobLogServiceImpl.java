@@ -1,7 +1,10 @@
 package cn.acyou.leo.tool.service.impl;
 
+import cn.acyou.leo.framework.commons.PageQuery;
 import cn.acyou.leo.framework.constant.Constant;
+import cn.acyou.leo.framework.model.PageData;
 import cn.acyou.leo.framework.util.IPUtil;
+import cn.acyou.leo.tool.dto.req.TaskSo;
 import cn.acyou.leo.tool.entity.ScheduleJob;
 import cn.acyou.leo.tool.entity.ScheduleJobLog;
 import cn.acyou.leo.tool.mapper.ScheduleJobLogMapper;
@@ -55,5 +58,14 @@ public class ScheduleJobLogServiceImpl extends ServiceImpl<ScheduleJobLogMapper,
         jobLog.setError(errorMessage);
         jobLog.setTimes(0);
         save(jobLog);
+    }
+
+    @Override
+    public PageData<ScheduleJobLog> page(TaskSo taskSo) {
+        return PageQuery.startPage(taskSo)
+                .selectMapper(lambdaQuery()
+                        .eq(taskSo.getJobId() != null, ScheduleJobLog::getJobId, taskSo.getJobId())
+                        .eq(taskSo.getStatus() != null, ScheduleJobLog::getStatus, taskSo.getStatus())
+                        .list());
     }
 }

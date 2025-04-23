@@ -1,5 +1,7 @@
 package cn.acyou.leo.tool.service;
 
+import cn.acyou.leo.framework.model.PageData;
+import cn.acyou.leo.tool.dto.req.TaskSo;
 import cn.acyou.leo.tool.entity.ScheduleJob;
 import cn.acyou.leo.tool.entity.ScheduleJobLog;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -29,4 +31,12 @@ public interface ScheduleJobLogService extends IService<ScheduleJobLog> {
      * @param errorMessage 错误消息
      */
     void error(ScheduleJob scheduleJob, String errorMessage);
+
+
+    /**
+     * 分页查询日志列表
+     * @param taskSo
+     * @return {@link PageData }<{@link ScheduleJobLog }>
+     */
+    PageData<ScheduleJobLog> page(TaskSo taskSo);
 }
