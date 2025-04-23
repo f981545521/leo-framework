@@ -36,7 +36,7 @@ public class MainTest2001 {
         String[] headers = {"序号", "姓名", "年龄", "生日"};
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
-            cell.setCellStyle(style(workbook));
+            cell.setCellStyle(cellStyle);
             cell.setCellValue(headers[i]);
         }
         int rowNum = 1; // 数据开始的行号
@@ -68,19 +68,19 @@ public class MainTest2001 {
         }
     }
 
+    private static void createExportExec(){
+
+    }
+
+    static class ExportExec{
+
+    }
+
     private static Cell createCell(CellStyle cellStyle, Row row,  int column) {
         Cell cell = row.createCell(column);
         cell.setCellStyle(cellStyle);
         return cell;
     }
-
-    private static CellStyle style(Workbook workbook) {
-        CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setAlignment(HorizontalAlignment.CENTER);
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        return cellStyle;
-    }
-
 
     private static List<DemoData> createDataList(int count) {
         List<DemoData> list = new ArrayList<>();
