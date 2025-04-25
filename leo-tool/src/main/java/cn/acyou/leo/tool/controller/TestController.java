@@ -21,6 +21,7 @@ import cn.acyou.leo.tool.service.common.AsyncService;
 import cn.acyou.leo.tool.service.common.CommonService;
 import com.alibaba.fastjson.JSONObject;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.sun.management.OperatingSystemMXBean;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,12 +39,15 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 
@@ -74,6 +78,43 @@ public class TestController {
     private RedisUtils redisUtils;
     @Autowired
     private ParamConfigService paramConfigService;
+
+
+    @ApiOperation(value = "获取系统信息")
+    @PostMapping("info")
+    public Result<?> info(String key) {
+        if ("jvm".equalsIgnoreCase(key)) {
+            //获取JVM参数
+            List<String> inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
+            return Result.success(inputArguments);
+        }
+        if ("memory".equalsIgnoreCase(key)) {
+            //获取内存信息
+            Runtime runtime = Runtime.getRuntime();
+            Map<String, String> data = new HashMap<>();
+            data.put("totalMemory", UnitConversionUtil.convertFileSize(runtime.totalMemory()));
+            data.put("freeMemory", UnitConversionUtil.convertFileSize(runtime.freeMemory()));
+            data.put("maxMemory", UnitConversionUtil.convertFileSize(runtime.maxMemory()));
+            return Result.success(data);
+        }
+        if ("cpu".equalsIgnoreCase(key)) {
+            OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+            return Result.success(osBean);
+        }
+        if ("env".equalsIgnoreCase(key)) {
+            return Result.success(System.getenv());
+        }
+        return Result.success(System.getProperty("leo.run.time"));
+    }
+
+
+    @ApiOperation(value = "测试OOM")
+    @PostMapping("testOOM")
+    public Result<?> testOOM() {
+        commonService8888.testOOM();
+        return Result.success();
+    }
+
 
     StateSemaphore stateSemaphore = new StateSemaphore( 5, true);
 

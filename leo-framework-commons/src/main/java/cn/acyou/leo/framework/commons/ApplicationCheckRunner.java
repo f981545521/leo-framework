@@ -2,6 +2,7 @@ package cn.acyou.leo.framework.commons;
 
 import cn.acyou.leo.framework.prop.LeoDebugProperty;
 import cn.acyou.leo.framework.service.UserTokenService;
+import cn.acyou.leo.framework.util.DateUtil;
 import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.SpringHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,7 @@ public class ApplicationCheckRunner implements ApplicationRunner {
         } catch (Exception e) {
             //ignore
         }
+        System.setProperty("leo.run.time", DateUtil.getCurrentDateFormat());
         String jvmName = environment.getProperty("java.vm.name");
         String jvmVersion = environment.getProperty("java.version");
         String osName = environment.getProperty("os.name");

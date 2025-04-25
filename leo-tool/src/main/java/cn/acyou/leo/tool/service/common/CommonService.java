@@ -10,6 +10,9 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author youfang
  * @version [1.0.0, 2022/7/28 11:18]
@@ -98,5 +101,17 @@ public class CommonService {
         while (WorkUtil.runBool(()-> true)) {
             log.info("ok...");
         }
+    }
+
+
+    public void testOOM(){
+        List<byte[]> sourceList = new ArrayList<>();
+        sourceList.add(new byte[10 * 1024 * 1024]);
+        grow(sourceList);
+    }
+
+    public static <T> void grow(List<T> sourceList){
+        sourceList.addAll(sourceList);
+        grow(sourceList);
     }
 }

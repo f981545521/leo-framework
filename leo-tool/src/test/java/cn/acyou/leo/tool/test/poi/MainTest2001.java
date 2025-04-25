@@ -16,6 +16,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -25,7 +26,18 @@ import java.util.concurrent.atomic.AtomicLong;
  * @version [1.0.0, 2025/4/23 9:50]
  **/
 public class MainTest2001 {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        System.out.println( new BigDecimal("0.01").setScale(2, BigDecimal.ROUND_DOWN).toString());
+        System.out.println( new BigDecimal("0.0123").setScale(2, BigDecimal.ROUND_DOWN).toString());
+        System.out.println( new BigDecimal("0.1123").setScale(2, BigDecimal.ROUND_DOWN).toString());
+        System.out.println( new BigDecimal("0.3").setScale(2, BigDecimal.ROUND_DOWN).toString());
+        System.out.println( new BigDecimal("0.23").setScale(2, BigDecimal.ROUND_DOWN).toString());
+    }
+
+
+
+
+    public static void ma222in(String[] args) throws Exception {
         SXSSFWorkbook workbook = new SXSSFWorkbook(100);//表示内存中最多保留100行数据，超过的部分会写入临时文件，节省内存。
         workbook.setCompressTempFiles(true); // 启用临时文件压缩，进一步减少磁盘空间占用。
         CellStyle cellStyle = workbook.createCellStyle();

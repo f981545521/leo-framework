@@ -98,6 +98,7 @@ leo:
     token-verify: false
     ignore-uri-list:
       - ${server.servlet.context-path}/doc.html
+      - ${server.servlet.context-path}/actuator/**
       - ${server.servlet.context-path}/swagger-resources
       - ${server.servlet.context-path}/v2/api-docs
       - ${server.servlet.context-path}/webjars/**
@@ -180,3 +181,9 @@ captcha:
     enabled: false
   # 不初始化默认的资源文件
   init-default-resource: false
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: "*"
