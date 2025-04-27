@@ -3,8 +3,12 @@ package cn.acyou.leo.framework.commons;
 import cn.acyou.leo.framework.prop.LeoDebugProperty;
 import cn.acyou.leo.framework.service.UserTokenService;
 import cn.acyou.leo.framework.util.DateUtil;
+import cn.acyou.leo.framework.util.FileUtil;
 import cn.acyou.leo.framework.util.IPUtil;
 import cn.acyou.leo.framework.util.SpringHelper;
+import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -12,6 +16,10 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author youfang
@@ -45,7 +53,27 @@ public class ApplicationCheckRunner implements ApplicationRunner {
         } catch (Exception e) {
             //ignore
         }
-        System.setProperty("leo.run.time", DateUtil.getCurrentDateFormat());
+        String currentStartDateTime = DateUtil.getCurrentDateFormat();
+        System.setProperty("leo.run.time", currentStartDateTime);
+        try {
+            File startLogFile = FileUtil.createTempFileFullName("leo_tool_start_log.txt");
+            List<String> startInfos = new ArrayList<>();
+            if (startLogFile.exists()) {
+                startInfos = FileUtil.readLines(startLogFile, "utf-8");
+            }else {
+                FileUtil.touch(startLogFile);
+            }
+            int serialVersion = 0;
+            if (CollectionUtil.isNotEmpty(startInfos)) {
+                serialVersion = Integer.parseInt(startInfos.get(startInfos.size() - 1).split(":")[0]);
+            }
+            serialVersion++;
+            startInfos.add(serialVersion + ":" + currentStartDateTime);
+            FileUtil.appendLines(Lists.newArrayList(serialVersion + ":" + currentStartDateTime), startLogFile, "utf-8");
+            System.setProperty("leo.run.startInfo", JSON.toJSONString(startInfos));
+        }catch (Exception e) {
+            log.error("ApplicationCheckRunner startInfo写入失败" + e.getMessage(), e);
+        }
         String jvmName = environment.getProperty("java.vm.name");
         String jvmVersion = environment.getProperty("java.version");
         String osName = environment.getProperty("os.name");

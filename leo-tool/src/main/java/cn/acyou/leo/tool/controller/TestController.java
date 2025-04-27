@@ -19,6 +19,7 @@ import cn.acyou.leo.tool.entity.User;
 import cn.acyou.leo.tool.service.ParamConfigService;
 import cn.acyou.leo.tool.service.common.AsyncService;
 import cn.acyou.leo.tool.service.common.CommonService;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.sun.management.OperatingSystemMXBean;
@@ -38,6 +39,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.math.BigDecimal;
@@ -82,7 +84,7 @@ public class TestController {
 
     @ApiOperation(value = "获取系统信息")
     @PostMapping("info")
-    public Result<?> info(String key) {
+    public Result<?> info(String key, String opt) {
         if ("jvm".equalsIgnoreCase(key)) {
             //获取JVM参数
             List<String> inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
@@ -103,6 +105,13 @@ public class TestController {
         }
         if ("env".equalsIgnoreCase(key)) {
             return Result.success(System.getenv());
+        }
+        if ("startInfo".equalsIgnoreCase(key)) {
+            if ("delete".equalsIgnoreCase(opt)) {
+                File startLogFile = FileUtil.createTempFileFullName("leo_tool_start_log.txt");
+                FileUtil.deleteRecursively(startLogFile);
+            }
+            return Result.success(JSON.parseArray(System.getProperty("leo.run.startInfo")));
         }
         return Result.success(System.getProperty("leo.run.time"));
     }
