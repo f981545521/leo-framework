@@ -103,6 +103,9 @@ public class CommonService {
         }
     }
 
+    public String sayHello(String name) {
+        return "hello - " + name;
+    }
 
     public void testOOM(){
         List<byte[]> sourceList = new ArrayList<>();

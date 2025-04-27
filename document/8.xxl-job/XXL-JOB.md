@@ -1,7 +1,6 @@
 ## XXL-JOB
 XXL-JOB是一个分布式任务调度平台
 
-
 - 中文文档：https://www.xuxueli.com/xxl-job/
 
 - 源码地址：https://gitee.com/xuxueli0323/xxl-job
@@ -11,7 +10,8 @@ XXL-JOB是一个分布式任务调度平台
 sql: [XXL-JOB的内置表SQL](tables_xxl_job.sql)
 
 ### 第二步：下载打好的包
-https://gitee.com/f981545521/dev-tools/blob/master/xxl-job-admin-2.4.2-SNAPSHOT.jar
+https://gitee.com/f981545521/developer_tool/releases/tag/v1
+下载文件：xxl-job-admin-3.0.1-SNAPSHOT.jar
 
 执行命令启动Admin
 ```shell
@@ -44,4 +44,7 @@ public class XxlTask {
 leo:
   xxl-job:
     enable: true
+    admin-addresses: http://127.0.0.1:8080/xxl-job-admin
+    admin-token: default_token
+    appname: xxl-job-executor
 ```
