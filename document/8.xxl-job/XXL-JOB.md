@@ -16,6 +16,7 @@ https://gitee.com/f981545521/developer_tool/releases/tag/v1
 执行命令启动Admin
 ```shell
 PS D:\workspace\dev-tools> java -jar .\xxl-job-admin-2.4.2-SNAPSHOT.jar --spring.datasource.username=root --spring.datasource.password=root123 --spring.datasource.url='jdbc:mysql://127.0.0.1:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai'
+PS D:\workspace\dev-tools> java -jar .\xxl-job-admin-3.0.1-SNAPSHOT.jar --spring.datasource.username=root --spring.datasource.password=root123 --spring.datasource.url='jdbc:mysql://127.0.0.1:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai'
 ```
 完成后访问：http://localhost:8080/xxl-job-admin/
 
