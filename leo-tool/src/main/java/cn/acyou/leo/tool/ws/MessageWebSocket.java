@@ -2,6 +2,7 @@ package cn.acyou.leo.tool.ws;
 
 import cn.acyou.leo.framework.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -10,8 +11,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author youfang
@@ -20,10 +22,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 public class MessageWebSocket extends TextWebSocketHandler {
-    //缓存 session_id -> session
-    private static final Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
-    //缓存 client_id -> session_id
-    private static final Map<String, String> clientIdMap = new ConcurrentHashMap<>();
+    /**
+     * 用户 WebSocket 会话
+     * key1：用户ID
+     * key2：SessionID
+     */
+    private final ConcurrentMap<String, Pair<String, WebSocketSession>> userSessions = new ConcurrentHashMap<>();
 
     /**
      * 收到客户端发送的消息
@@ -84,8 +88,7 @@ public class MessageWebSocket extends TextWebSocketHandler {
             session.close();
             return;
         }
-        sessionMap.put(session.getId(), session);
-        clientIdMap.put(clientId, session.getId());
+        userSessions.put(clientId, Pair.of(session.getId(), session));
         session.sendMessage(new TextMessage("成功建立socket连接！ -> clientId: " + clientId + " sessionId:" + session.getId()));
         log.info(session.toString());
     }
@@ -107,8 +110,7 @@ public class MessageWebSocket extends TextWebSocketHandler {
         if (session.isOpen()) {
             session.close();
         }
-        sessionMap.remove(session.getId());
-        clientIdMap.remove(getQuery(session, "clientId"));
+        userSessions.remove(getQuery(session, "clientId"));
         log.error("连接出错");
     }
 
@@ -118,8 +120,7 @@ public class MessageWebSocket extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         log.error("连接已关闭：" + status);
-        sessionMap.remove(session.getId());
-        clientIdMap.remove(getQuery(session, "clientId"));
+        userSessions.remove(getQuery(session, "clientId"));
     }
 
     /**
@@ -134,8 +135,9 @@ public class MessageWebSocket extends TextWebSocketHandler {
      * 发送信息给指定用户
      */
     public boolean sendMessageToUser(String clientId, TextMessage message) {
-        if (clientIdMap.containsKey(clientId)) {
-            WebSocketSession session = sessionMap.get(clientIdMap.get(clientId));
+        if (userSessions.containsKey(clientId)) {
+            Pair<String, WebSocketSession> sessionPair = userSessions.get(clientId);
+            WebSocketSession session = sessionPair.getValue();
             if (!session.isOpen()) return false;
             try {
                 session.sendMessage(message);
@@ -151,21 +153,18 @@ public class MessageWebSocket extends TextWebSocketHandler {
      * 广播信息
      */
     public boolean sendMessageToAllUsers(TextMessage message) {
-        boolean allSendSuccess = true;
-        Set<String> sessionIds = sessionMap.keySet();
-        WebSocketSession session = null;
-        for (String sessionId : sessionIds) {
-            try {
-                session = sessionMap.get(sessionId);
-                if (session.isOpen()) {
-                    session.sendMessage(message);
+        AtomicBoolean allSendSuccess = new AtomicBoolean(true);
+        userSessions.forEach((k, v) -> {
+            if (v.getValue().isOpen()) {
+                try {
+                    v.getValue().sendMessage(message);
+                } catch (IOException e) {
+                    log.error("发送消息失败", e);
+                    allSendSuccess.set(false);
                 }
-            } catch (IOException e) {
-                log.error("发送消息失败", e);
-                allSendSuccess = false;
             }
-        }
-        return allSendSuccess;
+        });
+        return allSendSuccess.get();
     }
 
 }
