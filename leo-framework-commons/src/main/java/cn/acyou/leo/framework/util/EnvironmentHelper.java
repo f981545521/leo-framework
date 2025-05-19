@@ -52,15 +52,15 @@ public class EnvironmentHelper {
         return System.getProperty(key);
     }
 
-    public static String getPropertySystem(String key, String defaultValue) {
+    public static String getSystemProperty(String key, String defaultValue) {
         return System.getProperty(key, defaultValue);
     }
 
-    public static Properties getPropertiesSystem() {
+    public static Properties getSystemProperties() {
         return System.getProperties();
     }
 
-    public static Map<String, String> getenvSystem() {
+    public static Map<String, String> getSystemEnv() {
         return System.getenv();
     }
 

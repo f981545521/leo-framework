@@ -83,7 +83,7 @@ public class TestController {
 
 
     @ApiOperation(value = "获取系统信息")
-    @PostMapping("info")
+    @GetMapping("info")
     public Result<?> info(String key, String opt) {
         if ("jvm".equalsIgnoreCase(key)) {
             //获取JVM参数

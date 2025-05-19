@@ -1,0 +1,13 @@
+### 获取系统运行信息-CPU
+GET http://localhost:8076/leo-tool/test/info?key=cpu
+Content-Type: application/json
+token: 1
+### 获取系统运行信息-JVM
+GET http://localhost:8076/leo-tool/test/info?key=jvm
+Content-Type: application/json
+token: 1
+
+### 获取系统运行信息-memory-env
+GET http://localhost:8076/leo-tool/test/info?key=env
+Content-Type: application/json
+token: 1
