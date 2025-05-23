@@ -8,7 +8,7 @@ import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.commons.StateSemaphore;
 import cn.acyou.leo.framework.constant.ClientEnum;
 import cn.acyou.leo.framework.constant.Constant;
-import cn.acyou.leo.framework.model.LeoEvent;
+import cn.acyou.leo.framework.base.LeoEvent;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
@@ -51,7 +51,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 
