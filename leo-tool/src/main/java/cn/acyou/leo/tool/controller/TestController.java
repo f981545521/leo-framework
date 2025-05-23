@@ -8,6 +8,7 @@ import cn.acyou.leo.framework.commons.AsyncManager;
 import cn.acyou.leo.framework.commons.StateSemaphore;
 import cn.acyou.leo.framework.constant.ClientEnum;
 import cn.acyou.leo.framework.constant.Constant;
+import cn.acyou.leo.framework.model.LeoEvent;
 import cn.acyou.leo.framework.model.Result;
 import cn.acyou.leo.framework.util.*;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
@@ -29,6 +30,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
@@ -80,6 +82,23 @@ public class TestController {
     private RedisUtils redisUtils;
     @Autowired
     private ParamConfigService paramConfigService;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    @ApiOperation(value = "发布事件")
+    @GetMapping("publishEvent")
+    public Result<?> publishEvent(String key, String opt) {
+        eventPublisher.publishEvent(new LeoEvent<>(opt));
+        return Result.success();
+    }
+    @ApiOperation(value = "发布事件2")
+    @GetMapping("publishEvent2")
+    public Result<?> publishEvent2(String key) {
+        DictVo dictVo = new DictVo();
+        dictVo.setName("发布事件2");
+        eventPublisher.publishEvent(new LeoEvent<>(dictVo));
+        return Result.success();
+    }
 
 
     @ApiOperation(value = "获取系统信息")
