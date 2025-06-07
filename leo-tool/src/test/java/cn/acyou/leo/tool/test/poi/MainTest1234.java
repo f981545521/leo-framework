@@ -11,6 +11,8 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
 import lombok.Data;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
@@ -29,20 +31,117 @@ import java.util.*;
  **/
 public class MainTest1234 {
 
-    public static void main(String[] args) throws Exception {
-        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\temp\\poi\\TTS导入-模版.xlsx"));
-        int numberOfSheets = workbook.getNumberOfSheets();
-        System.out.println("共有 " + numberOfSheets + " Sheet页");
-        List<String> sheetNameList = new ArrayList<>();
-        for (int i = 0; i < numberOfSheets; i++) {
-            sheetNameList.add(workbook.getSheetAt(i).getSheetName());
+    public static void main123(String[] args) throws Exception {
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\poi\\分段1.xlsx"));
+        XSSFSheet sheet = workbook.getSheet("Sheet1");
+        List<String> s = new ArrayList<>();
+        for (int i = 1; i < sheet.getLastRowNum(); i++) {
+            XSSFRow row = sheet.getRow(1);
+            if (row != null) {
+                XSSFCell cell = row.getCell(0);
+                String o = cell.getStringCellValue();
+                if (o != null && !o.toString().isEmpty()) {
+                    s.add(o.toString());
+                }
+            }
+
         }
-        System.out.println(sheetNameList);
-        XSSFSheet sheet = workbook.getSheet(sheetNameList.get(0));
-        // 返回数据
-        List<Map<String, Object>> ls = ExcelUtil.importData(sheet);
-        System.out.println(ls);
+        System.out.println("'" + StringUtils.join(s, "','") + "'");
     }
+
+
+
+
+    public static void main(String[] args) throws Exception {
+        Map<String, String> table1Map = new HashMap<>();
+
+        XSSFWorkbook workbook2 = new XSSFWorkbook(new File("D:\\poi2\\uni1.xlsx"));
+        List<Map<String, Object>> dataList2 = ExcelUtil.importData(workbook2.getSheetAt(0));
+        PrintWriter printWriter = FileUtil.getPrintWriter("D:\\poi2\\数据修正_ALL.sql", StandardCharsets.UTF_8, false);
+        for (int i = 0; i < dataList2.size(); i++) {
+            String openid = dataList2.get(i).get("openid").toString();
+            String unionid = dataList2.get(i).get("unionid").toString();
+            table1Map.put(openid, unionid);
+        }
+
+
+        for (int i = 1; i <= 5; i++) {
+            XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\poi2\\"+i+".xlsx"));
+            List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheetAt(0));
+
+            for (int j = 0; j < dataList.size(); j++) {
+                String openid = dataList.get(j).get("openid").toString();
+                String customer_id = dataList.get(j).get("customer_id").toString();
+                String unionid = "";
+                String s = table1Map.get(openid);
+                if (s != null) {
+                    unionid = s;
+                }
+                String sql = "update member set openid = '%s', unionid = '%s' where external_member_id = %s;\r\n";
+                String format = String.format(sql, openid, unionid, customer_id);
+                printWriter.write(format);
+
+            }
+        }
+
+        printWriter.flush();
+        printWriter.close();
+        System.out.println("解析完成");
+    }
+
+
+
+    public static void main1(String[] args) throws Exception {
+        Map<String, String> table1Map = new HashMap<>();
+
+        for (int i = 1; i <= 5; i++) {
+            XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\poi2\\"+i+".xlsx"));
+            List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheetAt(0));
+
+            for (int j = 0; j < dataList.size(); j++) {
+                String openid = dataList.get(j).get("openid").toString();
+                String customer_id = dataList.get(j).get("customer_id").toString();
+                table1Map.put(openid, customer_id);
+            }
+        }
+
+
+        XSSFWorkbook workbook2 = new XSSFWorkbook(new File("D:\\poi2\\uni1.xlsx"));
+        List<Map<String, Object>> dataList2 = ExcelUtil.importData(workbook2.getSheetAt(0));
+        PrintWriter printWriter = FileUtil.getPrintWriter("D:\\poi2\\数据修正.sql", StandardCharsets.UTF_8, false);
+
+        for (int i = 0; i < dataList2.size(); i++) {
+            String openid = dataList2.get(i).get("openid").toString();
+            String unionid = dataList2.get(i).get("unionid").toString();
+            String customer_id = "";
+            String s = table1Map.get(openid);
+            if (s != null) {
+                customer_id = s;
+            }
+            String sql = "update member set openid = '%s', unionid = '%s' where external_member_id = %s;\r\n";
+            String format = String.format(sql, openid, unionid, customer_id);
+            printWriter.write(format);
+        }
+
+        printWriter.flush();
+        printWriter.close();
+        System.out.println("解析完成");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Test
     public void test32324() throws Exception {

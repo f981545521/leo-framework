@@ -46,8 +46,10 @@ public class KafkaConfig {
             final Throwable rootCause = Throwables.getRootCause(context.getLastThrowable());
             log.error("最终消息处理失败 topic: " + record.topic() + "，msg:" + record.value() + ", exception: " + rootCause.getMessage(), rootCause);
 
-            // 可以将消息发送到死信主题
+            //1.  可以将消息发送到死信主题
             kafkaTemplate.send("retry-failed-topic", record.value());
+            //2.  发送飞书消息来手动处理
+
             // 手动确认消息，防止重复消费
             if (ack != null) {
                 ack.acknowledge();
