@@ -39,6 +39,28 @@ public final class DateUtil {
     public static final int WEEK_START = DateTimeConstants.MONDAY;
     public static final int WEEK_END = DateTimeConstants.FRIDAY;
 
+    public static Date parse(String dateStr) {
+        if (dateStr == null) {
+            return null;
+        }
+        String[] split = dateStr.split(" ");
+        String date = "";
+        String time = "00:00:00";
+        if (split.length == 1) {
+            date = split[0];
+        }
+        if (split.length == 2) {
+            date = split[0];
+            time = split[1];
+            date = date.replaceAll("[/.年月]", "-").replaceAll("日", "");
+            if (time.indexOf(".") > 0) {
+                time = time.substring(0, time.indexOf("."));
+            }
+            time = time.replaceAll("[时分]", ":").replaceAll("秒", "");
+        }
+        return parseDate(date + " " + time, FORMAT_DATE_TIME);
+    }
+
     public enum Unit {
         YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECOND;
     }

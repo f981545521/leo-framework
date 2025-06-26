@@ -4,6 +4,7 @@ import cn.acyou.leo.framework.util.WorkUtil;
 import cn.acyou.leo.framework.util.function.Task;
 import cn.acyou.leo.framework.util.redis.RedisUtils;
 import cn.acyou.leo.tool.test.ApplicationBaseTests;
+import cn.acyou.leo.tool.util.RedissonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RLock;
@@ -62,6 +63,28 @@ public class RedissonTestCase extends ApplicationBaseTests {
         }
     }
 
+    public void outStock7() {
+        RLock lock = redissonClient.getLock("activity:100");
+        try {
+            boolean b = lock.tryLock(5, TimeUnit.MINUTES);
+            if (b) {
+                WorkUtil.trySleep(500);
+                stock = stock - 5;
+            }
+        } catch (InterruptedException e) {
+            log.error("获取锁等待中断");
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void outStock8(){
+        RedissonUtils.lock("activity:100", 60*1000, 60*1000, ()->{
+            WorkUtil.trySleep(1000);
+            stock = stock - 5;
+        });
+    }
+
     public void outStock5(){
         redisUtils.doWork("activity:100", ()->{
             WorkUtil.trySleep(500);
@@ -94,6 +117,10 @@ public class RedissonTestCase extends ApplicationBaseTests {
     public void test4(){
         execTask(this::outStock4);
     }
+    @Test
+    public void test7(){
+        execTask(this::outStock7);
+    }
 
     @Test
     public void test5(){
@@ -103,6 +130,11 @@ public class RedissonTestCase extends ApplicationBaseTests {
     @Test
     public void test6(){
         execTask(this::outStock6);
+    }
+
+    @Test
+    public void test8(){
+        execTask(this::outStock8);
     }
 
     public void execTask(Task task) {

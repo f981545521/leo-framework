@@ -1,6 +1,7 @@
 package cn.acyou.leo.tool.test.http;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,10 +20,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+
 /**
  * @author youfang
  * @version [1.0.0, 2025/6/9 16:50]
  **/
+@Slf4j
 public class OkHttpUtil {
     private static volatile OkHttpClient okHttpClient = null;
     private static volatile Semaphore semaphore = null;
@@ -75,27 +78,47 @@ public class OkHttpUtil {
         return semaphore;
     }
 
+    public static OkHttpClient client() {
+        return okHttpClient;
+    }
+
+
+    private static String execNewCall(Request request) {
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            String responseBody = Objects.requireNonNull(response.body()).string();
+            if (response.isSuccessful()) {
+                return responseBody;
+            } else {
+                log.info("OkHttpUtil请求失败 url：{} response: {}", request.url(), responseBody);
+            }
+        } catch (Exception e) {
+            log.error("OkHttpUtil请求错误 error >> " + e.getMessage(), e);
+        }
+        return null;
+    }
+
     /**
      * 创建OkHttpUtils
      *
      */
-    public static OkHttpUtil create() {
+    public static OkHttpUtil instance() {
         return new OkHttpUtil(null);
     }
     /**
      * 创建OkHttpUtils
      *
      */
-    public static OkHttpUtil createWithProxy(Proxy proxy) {
+    public static OkHttpUtil instanceWithProxy(Proxy proxy) {
         return new OkHttpUtil(proxy);
     }
     /**
      * 创建OkHttpUtils
      *
      */
-    public static OkHttpUtil createWithProxy(String inetSocketAddress) {
+    public static OkHttpUtil instanceWithProxy(String inetSocketAddress) {
         String[] split = inetSocketAddress.split(":");
-        return createWithProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(split[0], Integer.parseInt(split[1]))));
+        return instanceWithProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(split[0], Integer.parseInt(split[1]))));
     }
 
     /**
