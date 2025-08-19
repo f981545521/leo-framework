@@ -1,6 +1,8 @@
 package cn.acyou.leo.tool.test;
 
 import cn.acyou.leo.framework.util.DateUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
@@ -9,6 +11,17 @@ import java.util.Date;
  * @version [1.0.0, 2025/6/12 13:47]
  **/
 public class MainTest601 {
+
+    @Test
+    public void test1(){
+        Long memberId = 66600142586655L;
+        System.out.println(StringUtils.substring(memberId + "", 5));
+        System.out.println(StringUtils.removeStart(memberId + "", "66600"));
+        System.out.println(StringUtils.removeStart(memberId + "", "1000"));
+        System.out.println(StringUtils.substringAfter(memberId + "", 5));
+    }
+
+
     public static void main(String[] args) {
         System.out.println(new Date().toString());
         System.out.println(DateUtil.parse("2024-12-21"));
