@@ -1,7 +1,8 @@
 package cn.acyou.leo.tool.test.poi;
 
 import cn.acyou.leo.framework.util.ExcelUtil;
-import cn.acyou.leo.framework.util.StringUtils;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
@@ -20,13 +21,16 @@ public class MainTest1234V4 {
 
     @Test
     public void 数据修复() throws Exception{
-        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\temp\\fix2\\111.xlsx"));
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\temp\\fix2\\33926098912.xlsx"));
         List<Map<String, Object>> dataList = ExcelUtil.importData(workbook.getSheetAt(0), 0);
         for (Map<String, Object> objectMap : dataList) {
-            String customer_id = objectMap.get("customer_id").toString();
-            String customer_phone = StringUtils.toStr(objectMap.get("customer_phone")).trim();
-            String sql = "update member set phone = '"+customer_phone+"' where phone is null and e_id = "+customer_id + ";";
-            System.out.println(sql);
+            String openId = objectMap.get("openId").toString();
+            String body = HttpUtil.createPost("").body("{\n" +
+                    "  \"company_id\": 1,\n" +
+                    "  \"member_id\": "+openId+"\n" +
+                    "}").execute().body();
+            String string = JSON.parseObject(body).getJSONObject("data").getString("phone");
+            System.out.println(openId + " -> 手机号:" + string);
         }
         System.out.println("解析完成");
     }
