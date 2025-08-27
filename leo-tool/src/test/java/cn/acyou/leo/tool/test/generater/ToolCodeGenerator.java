@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
  **/
 public class ToolCodeGenerator {
     public static void main(String[] args) {
-        CustomCodeGenerator.instance("temp_lm_card_balance", "t_")
+        CustomCodeGenerator.instance("t_order_1", "t_")
                 .author("youfang")
                 .templateNew()
                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")

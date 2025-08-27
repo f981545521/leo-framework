@@ -3,6 +3,8 @@ package ${package.Mapper};
 import ${package.Entity}.${entity};
 import org.apache.ibatis.annotations.Param;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 /**
  * <p>
@@ -16,18 +18,22 @@ import java.util.List;
 interface ${table.mapperName} : ${superMapperClass}<${entity}>
 <#else>
 public interface ${table.mapperName} {
-    /**
-    * 批量插入
-    * @param entityList 实体列表
-    * @return 影响行数
-    */
-    int insertBatch(@Param("list") List<${entity}> entityList);
 
-    /**
-    * 批量更新（根据主键）
-    * @param entityList 实体列表
-    * @return 影响行数
-    */
-    int updateBatch(@Param("list") List<${entity}> entityList);
+    int save(${entity} entity);
+
+    int saveBatch(@Param("list") List<${entity}> entityList);
+
+    int removeById(Serializable id);
+
+    int removeByIds(Collection<?> list);
+
+    int updateById(${entity} entity);
+
+    int updateBatchById(@Param("list") List<${entity}> entityList);
+
+    ${entity} getById(Serializable id);
+
+    List<${entity}> listByIds(Collection<? extends Serializable> idList);
+
 }
 </#if>
