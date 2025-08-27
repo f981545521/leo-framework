@@ -102,6 +102,7 @@ public final class CustomCodeGenerator {
     private final Map<String, String[]> modulesMap = new HashMap<>();
     //包信息，无需关心
     private final Map<String, String> packageInfo = CollectionUtils.newHashMapWithExpectedSize(7);
+    private TemplateConfig templateConfig = new TemplateConfig();
 
     /**
      * 初始化默认配置
@@ -162,6 +163,19 @@ public final class CustomCodeGenerator {
      */
     public CustomCodeGenerator author(String AUTHOR) {
         this.AUTHOR = AUTHOR;
+        return this;
+    }
+    /**
+     * 作者
+     */
+    public CustomCodeGenerator templateNew() {
+        TemplateConfig tc = this.templateConfig;
+        tc.setEntity("templates_new/entity.java");
+        tc.setController("templates_new/controller.java");
+        tc.setMapper("templates_new/mapper.java");
+        tc.setXml("templates_new/mapper.xml");
+        tc.setService("templates_new/service.java");
+        tc.setServiceImpl("templates_new/serviceImpl.java");
         return this;
     }
 
@@ -358,6 +372,7 @@ public final class CustomCodeGenerator {
         return this;
     }
 
+
     /**
      * 自定义类型转换
      */
@@ -407,7 +422,6 @@ public final class CustomCodeGenerator {
         dsc.setTypeConvert(typeConvert);
         autoGenerator.setDataSource(dsc);
         // 配置模板
-        TemplateConfig templateConfig = new TemplateConfig();
         autoGenerator.setTemplate(templateConfig);
         // 包配置
         PackageConfig pc = new PackageConfig();
