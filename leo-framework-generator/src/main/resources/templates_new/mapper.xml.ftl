@@ -90,11 +90,11 @@
         <set>
     <#list table.fields as field>
         <#if !field.keyFlag>
-            <if test="${field.name} != null"> ${field.name} = ${r"#"}{${field.propertyName}}, </if>
+            <if test="${field.propertyName} != null"> ${field.name} = ${r"#"}{${field.propertyName}}, </if>
         </#if>
     </#list>
         </set>
-        WHERE  <#list table.fields as field><#if field.keyFlag>${field.propertyName} = ${r"#"}{${field.name}}</#if></#list>
+        WHERE  <#list table.fields as field><#if field.keyFlag>${field.name} = ${r"#"}{${field.propertyName}}</#if></#list>
     </update>
 
     <!-- 根据主键批量更新 -->
@@ -104,11 +104,11 @@
             <set>
         <#list table.fields as field>
             <#if !field.keyFlag>
-                <if test="${field.name} != null"> ${field.name} = ${r"#"}{${field.propertyName}}, </if>
+                <if test="item.${field.propertyName} != null"> ${field.name} = ${r"#"}{item.${field.propertyName}}, </if>
             </#if>
         </#list>
             </set>
-            WHERE <#list table.fields as field><#if field.keyFlag>${field.name} = ${r"#"}{${field.propertyName}}</#if></#list>
+            WHERE <#list table.fields as field><#if field.keyFlag>${field.name} = ${r"#"}{item.${field.propertyName}}</#if></#list>
         </foreach>
     </update>
 
