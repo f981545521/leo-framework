@@ -28,7 +28,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ExcelUtil {
 
     private final static DecimalFormat df = new DecimalFormat("0"); // 格式化number String字符
-    private final static SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd"); // 日期格式化
+    private final static SimpleDateFormat sdf_date = new SimpleDateFormat("yyy-MM-dd"); // 日期格式化
+    private final static SimpleDateFormat sdf_date_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 日期格式化
     private final static DecimalFormat df2 = new DecimalFormat("0"); // 格式化数字
 
     /**
@@ -206,7 +207,7 @@ public class ExcelUtil {
                 if ("General".equals(cell.getCellStyle().getDataFormatString())) {
                     value = df.format(cell.getNumericCellValue());
                 } else if ("m/d/yy".equals(cell.getCellStyle().getDataFormatString())) {
-                    value = sdf.format(cell.getDateCellValue());
+                    value = sdf_date.format(cell.getDateCellValue());
                 } else {
                     value = df2.format(cell.getNumericCellValue());
                 }
@@ -531,11 +532,11 @@ public class ExcelUtil {
     public static void writeCell(CellBase cell, Object o){
         if (o != null) {
             if (o instanceof Number) {
-                cell.setCellValue(new Double(o.toString()));
+                cell.setCellValue(Double.parseDouble(o.toString()));
             } else if (o instanceof Boolean) {
                 cell.setCellValue(Boolean.parseBoolean(o.toString()));
             } else if (o instanceof Date) {
-                cell.setCellValue(DateUtil.getDateTimeFormat((Date) o));
+                cell.setCellValue(sdf_date_time.format((Date) o));
             } else {
                 //字符串
                 final String cellValueStr = o.toString();
