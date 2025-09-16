@@ -22,6 +22,7 @@ import cn.acyou.leo.tool.mapper.UserMapper;
 import cn.acyou.leo.tool.service.AreaService;
 import cn.acyou.leo.tool.service.DictService;
 import cn.acyou.leo.tool.service.UserService;
+import cn.acyou.leo.tool.util.MapperUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -231,6 +232,26 @@ public class ApplicationTests {
         //@TableField(updateStrategy = FieldStrategy.IGNORED)
         //updateStrategy = FieldStrategy.IGNORED 表示在更新操作时忽略更新策略，允许将 NULL 值更新到数据库中。
 
+    }
+
+    @Test
+    public void 测试批量更新(){
+        List<Dict> dicts = dictService.list();
+        for (Dict dict : dicts) {
+            dict.setRemark(RandomUtil.randomUuid());
+        }
+        int i = MapperUtils.batchUpdate(dicts, dictMapper::updateRemark);
+        System.out.println(i);
+    }
+
+    @Test
+    public void 测试批量更新2(){
+        List<Dict> dicts = dictService.list();
+        for (Dict dict : dicts) {
+            dict.setRemark(RandomUtil.randomUuid());
+        }
+        boolean b = dictService.updateBatchById(dicts);
+        System.out.println(b);
     }
 
     @Test
