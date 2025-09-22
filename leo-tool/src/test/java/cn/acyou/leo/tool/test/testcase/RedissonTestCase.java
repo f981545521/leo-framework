@@ -85,6 +85,18 @@ public class RedissonTestCase extends ApplicationBaseTests {
         });
     }
 
+
+    public void outStock9(){
+        List<String> keyList = new ArrayList<>();
+        for (int i = 0; i < 2000; i++) {
+            keyList.add("activity:" + String.valueOf(i));
+        }
+        RedissonUtils.lock(keyList, 60*1000, 60*1000, ()->{
+            WorkUtil.trySleep(1000);
+            stock = stock - 5;
+        });
+    }
+
     public void outStock5(){
         redisUtils.doWork("activity:100", ()->{
             WorkUtil.trySleep(500);
@@ -135,6 +147,21 @@ public class RedissonTestCase extends ApplicationBaseTests {
     @Test
     public void test8(){
         execTask(this::outStock8);
+    }
+
+    @Test
+    public void test9(){
+        execTask(this::outStock9);
+    }
+    @Test
+    public void test10(){
+        List<String> keyList = new ArrayList<>();
+        for (int i = 0; i < 2000; i++) {
+            keyList.add("activity:all:" + String.valueOf(i));
+        }
+        RedissonUtils.lock(keyList, 60*1000, 60*1000, ()->{
+            System.out.println("执行业务....");
+        });
     }
 
     public void execTask(Task task) {

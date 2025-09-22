@@ -4,11 +4,13 @@ import cn.acyou.leo.framework.exception.ServiceException;
 import cn.acyou.leo.framework.util.function.Task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.RedissonMultiLock;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,6 +40,23 @@ public class RedissonUtils {
             throw new ServiceException("RedissonUtils 获取锁中断", e);
         } finally {
             lock.unlock();
+        }
+    }
+
+    public static void lock(List<String> lockKeys, long waitTime, long leaseTime, Task task) {
+        RedissonMultiLock multiLock = new RedissonMultiLock(lockKeys.stream().map(k -> redissonClient.getLock(k)).toArray(RLock[]::new));
+        try {
+            long startTime = System.currentTimeMillis();
+            log.info("RedissonMultiLock 准备获取锁 : {}", startTime);
+            if (multiLock.tryLock(waitTime, leaseTime, TimeUnit.SECONDS)) {
+                log.info("RedissonMultiLock 获取到锁 耗时 : {}",  System.currentTimeMillis() - startTime);
+                task.run();
+            }
+        } catch (InterruptedException e) {
+            log.error("RedissonUtils 获取锁中断", e);
+            throw new ServiceException("RedissonUtils 获取锁中断", e);
+        } finally {
+            multiLock.unlock();
         }
     }
 
