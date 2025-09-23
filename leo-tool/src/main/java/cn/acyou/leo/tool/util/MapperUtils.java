@@ -41,6 +41,9 @@ public class MapperUtils {
      * @return 影响的行数
      */
     public static <T> int batchUpdate(List<T> list, Function<T, Integer> updateFunction) {
+        if (list == null || list.isEmpty() || updateFunction == null) {
+            return 0;
+        }
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
         int affectedRows = 0;
         try {

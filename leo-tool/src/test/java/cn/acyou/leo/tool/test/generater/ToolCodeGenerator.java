@@ -9,11 +9,11 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
  **/
 public class ToolCodeGenerator {
     public static void main(String[] args) {
-        CustomCodeGenerator.instance("t_order_1", "t_")
+        CustomCodeGenerator.instance("gift_card_purchase_order", "t_")
                 .author("youfang")
                 .templateNew()
                 .setDbConfig("com.mysql.cj.jdbc.Driver", "root", "root123")
-                .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false")
+                .setDbUrl("jdbc:mysql://localhost:3306/scorpio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&useSSL=false")
                 .packageParent("cn.acyou.leo.tool")
                 .put(ConstVal.ENTITY_PATH, "leo-tool", "entity")
                 .put(ConstVal.MAPPER_PATH, "leo-tool", "mapper")
