@@ -14,7 +14,7 @@ import java.util.List;
  * @version [1.0.0, 2025/4/3 15:22]
  **/
 @Slf4j
-@Component
+//@Component
 public class UserConsumer {
 
     @KafkaListener(topics = "user_log", groupId = "user_group", containerFactory = "retryListenerFactory")

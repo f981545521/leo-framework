@@ -25,10 +25,10 @@ public class RateLimiterExample extends ApplicationBaseTests {
         // 创建限流工具实例
         final RedissonUtils rateLimiterUtil = SpringHelper.getBean(RedissonUtils.class);
         // 示例1：简单限流
-        simpleRateLimit(rateLimiterUtil);
+        //simpleRateLimit(rateLimiterUtil);
 
         // 示例2：并发测试
-        concurrentRateLimit(rateLimiterUtil);
+        concurrentRateLimitV21(rateLimiterUtil);
 
         rateLimiterUtil.shutdown();
     }
@@ -133,28 +133,26 @@ public class RateLimiterExample extends ApplicationBaseTests {
         long startTime = System.currentTimeMillis();
 
         final RedissonUtils.RateLimiter rateLimit = rateLimiterUtil.createRateLimit(key);
-        rateLimit.setRateAsync(30, 1);
+        rateLimit.setRateAsync(1, 1);
 
         for (int i = 0; i < threadCount; i++) {
             final int threadId = i;
             executor.submit(() -> {
                 for (int j = 0; j < requestPerThread; j++) {
-                    rateLimit.tryAcquire(30, 1L, ()->{
-                        System.out.println(1);
-                        return "ok";
-                    });
-                    boolean acquired = rateLimiterUtil.tryAcquire(key, 30, 1, RateIntervalUnit.MINUTES, 1);
+                    try {
+                        boolean acquired = rateLimit.tryAcquire(1, 30L);
 
-                    if (acquired) {
-                        successCount.incrementAndGet();
-                        System.out.println("线程" + threadId + "-请求" + j + ": 成功");
-                    } else {
-                        limitCount.incrementAndGet();
-                        System.out.println("线程" + threadId + "-请求" + j + ": 被限流");
+                        if (acquired) {
+                            successCount.incrementAndGet();
+                            System.out.println("线程" + threadId + "-请求" + j + ": 成功");
+                        } else {
+                            limitCount.incrementAndGet();
+                            System.out.println("线程" + threadId + "-请求" + j + ": 被限流");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
                     latch.countDown();
-
                     // 随机间隔
                     try {
                         Thread.sleep((long) (Math.random() * 100));

@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Slf4j
 @Configuration
-@EnableKafka
+//@EnableKafka
 //@EnableTransactionManagement
 public class KafkaConfig {
 

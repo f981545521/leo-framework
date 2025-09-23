@@ -147,19 +147,12 @@ public class RedissonUtils {
             return this;
         }
 
-        public <T> T tryAcquire(long permits, Long timeout, Supplier<T> supplier) {
-            boolean b;
+        public boolean tryAcquire(long permits, Long timeout) {
             if (timeout != null && timeout > 0) {
-                b = rateLimiter.tryAcquire(permits, timeout, TimeUnit.SECONDS);
+                return rateLimiter.tryAcquire(permits, timeout, TimeUnit.SECONDS);
             } else {
-                b = rateLimiter.tryAcquire(permits);
+                return rateLimiter.tryAcquire(permits);
             }
-            if (b) {
-                return supplier.get();
-            }else {
-
-            }
-            return null;
         }
 
         public void acquire(long permits){
@@ -177,4 +170,8 @@ public class RedissonUtils {
             redissonClient.shutdown();
         }
     }
+
+
+
+
 }
