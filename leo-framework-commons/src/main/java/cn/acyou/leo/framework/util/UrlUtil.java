@@ -5,13 +5,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * URL 处理工具
@@ -576,6 +579,37 @@ public class UrlUtil {
             return url.substring(0, url.indexOf("?"));
         }
         return url;
+    }
+
+    public static String mapToQueryParamsStream(Map<String, String> params) {
+        if (params == null || params.isEmpty()) {
+            return "";
+        }
+
+        return params.entrySet().stream()
+                .filter(entry -> entry.getKey() != null && entry.getValue() != null)
+                .map(entry -> {
+                    try {
+                        return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.name()) +
+                                "=" +
+                                URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.name());
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.joining("&"));
+    }
+
+
+    public static Map<String, String> convertToSingleValueMap(Map<String, String[]> sourceMap) {
+        if (sourceMap == null) {
+            return new HashMap<>();
+        }
+        return sourceMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> {
+                    String[] values = entry.getValue();
+                    return (values != null && values.length > 0) ? values[0] : null;
+                }
+        ));
     }
 
     public static void main(String[] args) {

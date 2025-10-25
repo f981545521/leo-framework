@@ -1,0 +1,32 @@
+### 常用接口地址：
+/**
+    get请求网址：https://httpbin.org/get
+    post请求网址：https://httpbin.org/post
+    put请求网址：https://httpbin.org/put
+    patch请求网址：https://httpbin.org/patch
+    delete请求网址：https://httpbin.org/delete
+    返回headers信息：https://httpbin.org/headers
+    返回你使用的访问此链接的IP地址：https://httpbin.org/ip
+    返回USER-AGENT信息：https://httpbin.org/user-agent
+**/
+
+
+### 测试GET接口
+GET https://httpbin.org/get
+
+### 测试接口
+POST https://httpbin.org/anything?uuid={{$uuid}}
+Content-Type: application/json
+
+{
+  "uuid": {{$uuid}},
+  "timestamp": {{$timestamp}},
+  "isoTimestamp": {{$isoTimestamp}},
+  "randomInt": {{$randomInt}},
+  "randomIntRange": {{$random.integer(0, 100)}},
+  "randomFloatRange": {{$random.float(10.01, 20.99)}},
+  "randomAlphabetic": {{$random.alphabetic(5)}},
+  "randomAlphanumeric": {{$random.alphanumeric(5)}},
+  "randomHexadecimal": {{$random.hexadecimal(5)}},
+  "randomEmail": {{$random.email}}
+}

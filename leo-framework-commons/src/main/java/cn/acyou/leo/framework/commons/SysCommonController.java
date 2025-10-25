@@ -29,6 +29,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -110,11 +111,21 @@ public class SysCommonController {
     }
 
     @ApiOperation("打印请求信息")
-    @RequestMapping(value = "print", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "print")
     @ResponseBody
     @PermitAll
-    public Result<JSONObject> printRequest(HttpServletRequest request, @RequestBody(required = false) Object requestBody, @RequestHeader Map<String, Object> requestHeader) {
+    public Result<JSONObject> printRequest(HttpServletRequest request,  @RequestHeader Map<String, Object> requestHeader)  {
         Map<String, String[]> requestParameter = request.getParameterMap();
+        StringBuilder requestBody = new StringBuilder();
+        String line;
+        try (BufferedReader reader = request.getReader()) {
+            while ((line = reader.readLine()) != null) {
+                requestBody.append(line);
+            }
+        }catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        log.info("打印访问请求信息: url:{} requestParameter:{} requestBody:{} requestHeader:{}", request.getRequestURL().toString(), JSON.toJSONString(requestParameter), requestBody, requestHeader);
         JSONObject response = new JSONObject();
         response.put("requestParameter", requestParameter);
         response.put("requestBody", requestBody);
