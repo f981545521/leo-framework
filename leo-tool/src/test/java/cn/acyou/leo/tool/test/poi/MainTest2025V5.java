@@ -21,7 +21,7 @@ public class MainTest2025V5 {
 
 
     Semaphore semaphore = new Semaphore(20);
-    ExecutorService executorService = Executors.newFixedThreadPool(20);
+    ExecutorService executorService = Executors.newFixedThreadPool(semaphore.availablePermits());
 
     @Test
     public void poiReadFile() throws Exception {
