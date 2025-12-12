@@ -1,7 +1,9 @@
 package cn.acyou.leo.framework.base;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +13,8 @@ import java.util.Date;
  * @version [1.0.0, 2020/7/8]
  **/
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoleVo implements Serializable {
     private static final long serialVersionUID = 797702331484942116L;
 
