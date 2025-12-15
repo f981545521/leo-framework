@@ -1,6 +1,8 @@
 package cn.acyou.leo.tool.runner;
 
 import cn.acyou.leo.framework.util.redis.RedisUtils;
+import cn.acyou.leo.tool.mode.ModeService;
+import cn.acyou.leo.tool.mode.ServiceRouter;
 import cn.hutool.core.io.IoUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,11 @@ public class AppCheckRunner implements ApplicationRunner {
         //test3();
         //test4();
         //test5();
+
+        ModeService modeService111 = ServiceRouter.getService("A", ModeService.class);
+        log.info("modeService111: " + modeService111.getName());
+        ModeService modeService222 = ServiceRouter.getService("B", ModeService.class);
+        log.info("modeService222: " + modeService222.getName());
     }
 
     private void test7() throws Exception {
