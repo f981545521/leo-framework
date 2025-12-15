@@ -22,12 +22,13 @@ public class ServiceRouter {
             Class<? extends ModeParentService> aClass = modeService.getClass();
             Class<?>[] interfaces = aClass.getInterfaces();
             for (Class<?> anInterface : interfaces) {
-                serviceMap.put(aClass.getAnnotation(VersionedService.class).value() + "_" + anInterface.getName(), modeService);
+                VersionedService annotation = aClass.getAnnotation(VersionedService.class);
+                serviceMap.put(annotation.value() + "_" + anInterface.getName(), modeService);
             }
         }
     }
 
-    public  static <T> T getService(String mode, Class<T> modeServiceClass) {
+    public static <T> T getService(String mode, Class<T> modeServiceClass) {
         return (T) serviceMap.get(mode + "_" + modeServiceClass.getName());
     }
 }

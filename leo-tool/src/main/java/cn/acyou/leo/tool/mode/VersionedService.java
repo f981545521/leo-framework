@@ -1,6 +1,5 @@
 package cn.acyou.leo.tool.mode;
 
-
 import org.springframework.stereotype.Service;
 
 import java.lang.annotation.Documented;
@@ -19,5 +18,10 @@ import java.lang.annotation.Target;
 @Service
 public @interface VersionedService {
 
-    String value();
+    VersionType value();
+
+    enum VersionType {
+        VERSION_A, VERSION_B
+    }
+
 }

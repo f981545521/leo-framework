@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @author youfang
  * @version [1.0.0, 2025/12/15 11:01]
  **/
-@VersionedService("B")
+@VersionedService(value = VersionedService.VersionType.VERSION_B)
 @RequiredArgsConstructor
 public class ModeBServiceImpl implements ModeService {
 
