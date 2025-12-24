@@ -1,7 +1,6 @@
 package cn.acyou.leo.tool.test.poi;
 
-import cn.acyou.leo.framework.util.RandomUtil;
-import cn.acyou.leo.framework.util.WorkUtil;
+import cn.hutool.http.HttpUtil;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,15 +19,15 @@ import java.util.concurrent.TimeUnit;
 public class MainTest2025V5 {
 
 
-    Semaphore semaphore = new Semaphore(20);
+    Semaphore semaphore = new Semaphore(10);
     ExecutorService executorService = Executors.newFixedThreadPool(semaphore.availablePermits());
 
     @Test
     public void poiReadFile() throws Exception {
-        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\temp\\fix20251127\\json3.xlsx"));
+        XSSFWorkbook workbook = new XSSFWorkbook(new File("D:\\temp\\fixpoint\\pointChange.xlsx"));
         XSSFSheet sheet = workbook.getSheetAt(0);
         int lastRowIndex = sheet.getLastRowNum();
-        for (int i = 1; i <= lastRowIndex; i++) {
+        for (int i = 2; i <= lastRowIndex; i++) {
             XSSFRow row = sheet.getRow(i);
             if (row == null) {
                 break;
@@ -39,8 +38,12 @@ public class MainTest2025V5 {
                 int finalI = i;
                 executorService.submit(() -> {
                     long l = System.currentTimeMillis();
-                    WorkUtil.trySleep(RandomUtil.randomRangeLong(1000, 5000));
-                    System.out.println("【" + finalI + "】" + "请求参数" + cellValue0 + " > 请求结果：ok 耗时" + (System.currentTimeMillis() - l) + "ms");
+                    String res = "ok";
+                    res = HttpUtil.createPost("https://api_url")
+                            .body(cellValue0)
+                            .header("Access-Token", "1")
+                            .execute().body();
+                    System.out.println("【" + finalI + "】" + "请求参数" + cellValue0 + " > 请求结果："+res+" 耗时" + (System.currentTimeMillis() - l) + "ms");
                     semaphore.release(1);
                 });
             }
