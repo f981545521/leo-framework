@@ -43,9 +43,9 @@ public class AppCheckRunner implements ApplicationRunner {
         //test4();
         //test5();
 
-        ModeService modeService111 = ServiceRouter.getService("A", ModeService.class);
+        ModeService modeService111 = ServiceRouter.getService("VERSION_A", ModeService.class);
         log.info("modeService111: " + modeService111.getName());
-        ModeService modeService222 = ServiceRouter.getService("B", ModeService.class);
+        ModeService modeService222 = ServiceRouter.getService("VERSION_B", ModeService.class);
         log.info("modeService222: " + modeService222.getName());
     }
 
