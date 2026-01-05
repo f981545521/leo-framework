@@ -16,3 +16,6 @@ Authentication: {{leo_tool_token}}
 
 
 
+### websocket发送消息
+GET http://localhost:8076/leo-tool/ws/message?clientId=1000&message=1ojbk22
+Content-Type: application/json

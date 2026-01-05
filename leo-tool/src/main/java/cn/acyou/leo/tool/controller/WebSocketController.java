@@ -25,10 +25,10 @@ public class WebSocketController {
 
     @RequestMapping(value = "/message", method = {RequestMethod.GET})
     @ResponseBody
-    public String sendMessage(String sessionId, String message) {
+    public String sendMessage(String clientId, String message) {
         message = "System Message: " + message;
-        if (sessionId != null){
-            webSocket.sendMessageToUser(sessionId, new TextMessage(message));
+        if (clientId != null){
+            webSocket.sendMessageToUser(clientId, new TextMessage(message));
         }else {
             webSocket.sendMessageToAllUsers(new TextMessage(message));
         }
