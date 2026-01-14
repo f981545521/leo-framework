@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+leo-framework-private
 ### STS ###
 .apt_generated
 .classpath
@@ -32,3 +33,4 @@ build/
 
 ### VS Code ###
 .vscode/
+
